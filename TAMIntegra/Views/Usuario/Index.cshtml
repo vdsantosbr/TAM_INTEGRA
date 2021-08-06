@@ -1,0 +1,848 @@
+﻿@model Entities.Usuario
+
+@{
+    //ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>*@
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+    @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
+
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>*@
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    @*<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
+
+
+
+    <style>
+        .tableFixHead {
+            /*overflow: auto;*/
+            height: 100px;
+            width: 100%;
+        }
+
+            .tableFixHead table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            .tableFixHead th,
+            .tableFixHead td {
+                padding: 8px 16px;
+            }
+
+
+            /*td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            /*td:nth-child(2), th:nth-child(2) {
+            position: sticky;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            .tableFixHead th {
+                position: sticky;
+                top: 0;
+                background: #f9f9f9;
+                z-index: 2;
+            }
+
+        th:first-child, th:nth-child(2) {
+            z-index: 3;
+        }
+
+        .sticky-col {
+            position: sticky;
+            position: -webkit-sticky;
+            background-color: white;
+        }
+
+        .first-col {
+            width: 120px;
+            min-width: 100px;
+            max-width: 340px;
+            left: 0px;
+        }
+
+        .second-col {
+            width: 150px;
+            min-width: 20px;
+            max-width: 340px;
+            left: 100px;
+        }
+
+        .third-col {
+            width: 50px;
+            min-width: 110px;
+            max-width: 340px;
+            left: 190px;
+        }
+
+        .fourth-col {
+            width: 100px;
+            min-width: 80px;
+            max-width: 340px;
+            left: 280px;
+        }
+
+        input[type=checkbox], input[type=radio] {
+            /* margin: 4px 0 0; */
+            margin-top: 1px\9;
+            line-height: normal;
+        }
+
+        @@media screen and (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: 80px 60px 150px auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-container2 {
+                display: grid;
+                grid-template-columns: auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .page-wrapper {
+                height: 100vh;
+            }
+        }
+
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            /*border-width: 5px;
+            border-color: #3A2303 !important;*/
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        /*.modal-dialog {
+            display: flex;
+            align-items: center;
+        }*/
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+        /*.page-content {
+            height: 100vh;
+        }*/
+        body {
+            overflow: hidden;
+        }
+
+        .erroInput {
+            border: 1px solid orangered !important;
+        }
+
+        .erroDiv {
+            color: red !important;
+        }
+
+        .no-border {
+            box-shadow: none !important;
+            background: white !important;
+            border: none !important;
+            padding: 0 !important;
+            height: 20px !important;
+        }
+    </style>
+</head>
+@*@using (Html.BeginForm("Index", "Usuario", FormMethod.Post, new { id = "myForm" }))
+    {*@
+@*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+@*@Html.AntiForgeryToken()*@
+<body>
+    <input hidden id="divPeriodo" name="divPeriodo" value="@ViewBag.DivPeriodo" />
+    <input hidden id="mes" name="mes" value="@Session["mes"]" />
+    <input hidden id="mesAtual" name="mesAtual" value="@Session["mesAtual"]" />
+    <input hidden id="ano" name="ano" value="@Session["ano"]" />
+
+    <br />
+    <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:16px;z-index:100;">
+        <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:14px;position:relative;">
+            <fieldset>
+                <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Usuários</legend>
+            </fieldset>
+        </div>
+    </main>
+
+    <div class="page-wrapper chiller-theme">
+        <main class="page-content">
+            <div class="container-fluid" style="padding-top:30px;padding-left:30px">
+                <div class="panel with-nav-tabs panel-default" style="margin:0">
+                    <div class="panel-heading" style="padding:0">
+                        <table width="100%" id="tblPainel" style="margin-bottom:0 !important">
+                            <tr>
+                                @*<td>Usuários</td>*@
+                                <td style="text-align:right">
+                                    <a class="btn btn-success btn-sm" style="padding: 2px 6px;" title="Download Excel" onclick="location.href='@Url.Action("DownloadExcel", "Usuario")'">Exportar</a>
+                                    <button id="novoUsuario" onclick="AlterarUsuario('C')" class="btn btn-success btn-sm" style="padding: 2px 6px;">Novo Usuário</button>
+                                 </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body" style="padding:0;">
+                        <div class="tableFixHead" style="overflow:auto;height:79vh;">
+                            <table class="table table-hover table-striped table-responsive" style="white-space: nowrap;margin-bottom:0" id="tblPrincipal">
+                                <thead>
+                                    <tr>
+                                        @*<th>ID_PESSOA</th>*@
+                                        <th>NOME COMPLETO</th>
+                                        <th>LOGIN</th>
+                                        <th>ADMINISTRADOR</th>
+                                        <th>SITUAÇÃO</th>
+                                        <th>DEPARTAMENTO</th>
+                                        <th>PERFIL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        if (Model.lstUsuario != null)
+                                        {
+                                            foreach (var item in Model.lstUsuario)
+                                            {
+                                                <tr>
+                                                    <td hidden>@item.Id_Perfil</td>
+                                                    <td>@item.Nome</td>
+                                                    <td><a role="button" onclick="AlterarUsuario('E', @item.Id_Pessoa, @item.Id_Perfil, '@item.Login', '@item.Nome', '@item.Email', '@item.Perfil', '@item.Departamento','@item.Situacao', '@item.Administrador', @item.Id_Departamento)">@item.Login</a></td>
+                                                    <td>@item.Administrador</td>
+                                                    <td>@item.Situacao</td>
+                                                    <td>@item.Departamento</td>
+                                                    <td>@item.Perfil</td>
+                                                    @*<td style="text-align:center"><a onclick="AlterarUsuario(@item.Id_Pessoa, @item.Id_Perfil, '@item.Login', '@item.Nome', '@item.Administrador', '@item.Situacao')"><i class="glyphicon glyphicon-pencil" style="font-size:14px" title="Update"></i></a></td>*@
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    @*<button class="btn btn-primary" id="btnVoltar" type="button">Voltar</button>*@
+                    <br />
+                </div>
+                @*}*@
+
+            </div>
+    </main>
+    </div>
+
+    <div class="modal fade" id="modalAlterarUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center" style="padding:5px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    @*<h4 style="text-align:left">Alterar Perfil: <span id="titulo"></span></h4>*@
+                    <h4 style="text-align:left">Usuário</h4>
+                </div>
+                <div class="modal-body" style="padding-top:0">
+                    <br />
+                    <form id="formAlterarPerfil">
+                        <input type="hidden" id="id_pessoa" />
+                        <input type="hidden" id="id_departamento_h" />
+                        <input type="hidden" id="id_perfil_h" />
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="id_perfil">IDENTIFICAÇÃO</label>
+                                @*@Html.DropDownListFor(x => x.Id_Perfil, ViewBag.Perfil as SelectList, null, new { @class = "form-control", @id = "nome_perfil" })*@
+                                <input type="text" class="form-control" id="login">
+                                <div hidden id="erroLoginUpdate">Preencha este campo</div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="n_nome">NOME</label>
+                            <input type="text" class="form-control" id="nome">
+                            <div hidden id="erroNomeUpdate">Preencha este campo</div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="n_login">E-MAIL</label>
+                            <input type="text" class="form-control" id="email">
+                            <div hidden id="erroEmailUpdate">Preencha este campo</div>
+                        </div>
+
+                        @*<div class="form-group col-md-6">
+                            <label for="administrador">ADMINISTRADOR</label>
+                            <select id="administrador" class="form-control">
+                                <option value="S">Sim</option>
+                                <option value="N">Não </option>
+                            </select>
+                        </div>*@
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="situacao">PERFIL</label>
+                                @Html.DropDownListFor(x => x.Id_Perfil, ViewBag.Perfil as SelectList, " -- Selecione -- ", new { @class = "form-control", @id = "id_perfil" })                       
+                                <div hidden id="erroPerfilUpdate">Preencha este campo</div>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="situacao">DEPARTAMENTO</label>
+                                @Html.DropDownListFor(x => x.Id_Departamento, ViewBag.Departamento as SelectList, " -- Selecione -- ", new { @class = "form-control", @id = "id_departamento" })                            
+                                <div hidden id="erroDepartamentoUpdate">Preencha este campo</div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="situacao">SITUAÇÃO</label>
+                                <select id="situacao" class="form-control">
+                                    <option value="A">Ativo</option>
+                                    <option value="I">Inativo </option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="main">
+                        <div class="right" style="width:50%;float:right;text-align:right;padding-right: 15px;">
+                            <div class="btn-toolbar">
+                                <button type="button" class="btn btn-primary btn-sm pull-right" style="margin-bottom: 10px;" data-dismiss="modal">Fechar</button>
+                                <button class="btn btn-sm btn-primary pull-right" id="salvarUsuario" onclick="salvarUsuario()">Salvar</button>
+                            </div>
+                        </div>
+                        <div class="" style="width:50%;float:left;padding-left: 15px;">
+                            <input type="checkbox" id="ckAdmn"/> <label>Admnistrador</label>
+                        </div>
+                    </div>
+                    @*<div style="text-align:right">
+                        <button class="btn btn-sm btn-primary" id="salvarUsuario" onclick="salvarUsuario()">Salvar</button>
+                    </div>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNovoUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center" style="padding:5px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 style="text-align:left">Usuário</h4>
+                </div>
+                <div class="modal-body" style="padding-top:0">
+                    <br />
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="n_id_perfil">PERFIL</label>
+                                @*@Html.DropDownListFor(x => x.Id_Perfil, ViewBag.Perfil as SelectList, " -- Selecione -- ", new { @class = "form-control", @id = "n_id_perfil" })*@
+                                <div hidden id="erroIDPerfilNovo">Preencha este campo</div>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="n_login">LOGIN</label>
+                            <input type="text" class="form-control" id="n_login">
+                            <div hidden id="erroLoginNovo">Preencha este campo</div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="n_nome">NOME</label>
+                            <input type="text" class="form-control" id="n_nome">
+                            <div hidden id="erroNomeNovo">Preencha este campo</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="n_administrador">ADMINISTRADOR</label>
+                            <select id="administrador" class="form-control">
+                                <option selected>-- Selecione --</option>
+                                <option value="S">Sim</option>
+                                <option value="N">Não </option>
+                            </select>
+                            <div hidden id="erroAdministradorNovo">Selecione uma opção</div>
+                            @*<input type="email" class="form-control" id="n_administrador">*@
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="n_situacao">SITUAÇÃO</label>
+                            <select id="n_situacao" class="form-control">
+                                <option selected>-- Selecione --</option>
+                                <option value="A">Ativo</option>
+                                <option value="I">Inativo </option>
+                            </select>
+                            <div hidden id="erroSituacaoNovo">Selecione uma opção</div>
+                        </div>
+
+                    </form>
+                    <div style="text-align:right">
+                        <button class="btn btn-sm btn-primary" id="salvarUsuario" onclick="salvarNovoUsuario()">Salvar</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+    <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            let mesCorrente = $('#mes').val();
+            let anoCorrente = $('#ano').val();
+
+            //$('#divHide').val('#graficos');
+            $('#datepickerTEXT').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                onClose: function (dateText, inst) {
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    $('#datepickerTEXT').datepicker('setDate', new Date(year, month, 1));
+                    $('#mes').val(parseInt(month) + 1);
+                    $('#ano').val(parseInt(year));
+                    $('#myForm').append($(ano));
+
+                    //$.ajax({
+                    //    //url: '/TAMTBIP/Home/GraficoGerencial',
+                    //    url: '/HomeTeste/Index',
+                    //    data: { mes: parseInt(month) + 1 },
+                    //    //cache: false,
+                    //    //type: 'POST',
+                    //    success: function (response) {
+                    //        $('#myForm').submit();
+
+                    //    },
+
+                    //    error: function (xhr, status, error) {
+                    //    alert(error)
+                    //    }
+                    //});
+
+
+
+                },
+                beforeShow: function (input, inst) {
+                    var tmp = $('#datepickerTEXT').val().split('/');
+                    $('#datepickerTEXT').datepicker('option', 'defaultDate', new Date(tmp[1], tmp[0] - 1, 1));
+                    $('#datepickerTEXT').datepicker('setDate', new Date(tmp[1], tmp[0] - 1, 1));
+                },
+                onSelect: function (dateText, inst) {
+                    return $(this).trigger('change');
+                }
+
+            });
+
+            if ($('#datepickerTEXT').val() == '') {
+                var d = new Date();
+                var n = d.getMonth() + 1;
+                if (n <= 9) {
+                    n = '0' + n;
+                }
+                var y = d.getFullYear();
+
+                if (mesCorrente == 0) {
+                    $('#datepickerTEXT').val(n + '/' + y);
+                }
+                else {
+                    if (mesCorrente <= 9) {
+                        mesCorrente = '0' + mesCorrente.replace(0, '');
+                    }
+
+                    $('#datepickerTEXT').val(mesCorrente + '/' + anoCorrente);
+                }
+
+            }
+
+
+            var periodo = $('#divPeriodo').val();
+
+            //$("#" + periodo).prop("checked", true);
+
+        });
+
+        //google.charts.load("current", { packages: ['corechart'] });
+        //google.load("visualization", "1", { packages: ["corechart"] });
+        $('#show-sidebar').click(function () {
+            $('#menuIcone').val('click');
+        })
+        $('#close-sidebar').click(function () {
+            $('#menuIcone').val('unclick');
+        })
+
+
+        //$('#modalAlterarUsuario').on('shown.bs.modal', function () {
+        //    $(this).find('.modal-dialog').css({
+        //        width: '100%',
+        //        height: 'auto',
+        //        'max-height': '100%',
+        //        'padding-right': 0
+        //    });
+
+        //    $(this).css({
+        //        'padding-right': 0
+        //    });
+
+        //});
+
+
+        function AlterarUsuario(origem, id_pessoa, id_perfil, login, nome, email, perfil, departamento, situacao, adm, id_departamento) {
+            $('#id_pessoa').val('');
+            $('#id_perfil_h').val('');
+            $('#id_departamento_h').val('');
+            $('#login').val('');
+            $('#nome').val('');
+            $('#email').val('');
+            let val = situacao;
+            $('#situacao option:contains(' + '-- Selecione --' + ')').prop({ selected: true });
+            $('#id_departamento option:contains(' + '-- Selecione --' + ')').prop({ selected: true });
+            $('#id_perfil option:contains(' + '-- Selecione --' + ')').prop({ selected: true });
+            $('#ckAdmn').prop("checked", false);
+
+            if (origem == "E") {
+                $('#id_pessoa').val(id_pessoa);
+                $('#id_perfil_h').val(id_perfil);
+                $('#id_departamento_h').val(id_departamento);
+                $('#login').val(login);
+                $('#nome').val(nome);
+                $('#email').val(email);
+                let val = situacao;
+                $('#situacao option:contains(' + val + ')').prop({ selected: true });
+                $('#id_departamento option:contains(' + departamento + ')').prop({ selected: true });
+                $('#id_perfil option:contains(' + perfil + ')').prop({ selected: true });
+
+                if (adm == "Sim") {
+                    $('#ckAdmn').prop("checked", true);
+                }
+                else {
+                    $('#ckAdmn').prop("checked", false);
+                }
+            }
+            $('#modalAlterarUsuario').modal({
+                show: true,
+                closeOnEscape: true,
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+
+        function salvarUsuario() {
+            let id_pessoa = $('#id_pessoa').val();
+            let id_perfil = $('#id_perfil_h').val();
+            let perfil = $('#id_perfil').val();
+            let departamento = $('#id_departamento').val();
+            let id_departamento = $('#id_departamento_h').val();
+            let login = $('#login').val();
+            let nome = $('#nome').val();
+            let email = $('#email').val();
+            let administrador = $('#administrador').val();
+            let situacao = $('#situacao').val();
+            let adm = $('#ckAdmn:checkbox:checked').length;
+            if (adm > 0) {
+                adm = "S";
+            }
+            else {
+                adm = "N";
+            }
+            if (nome != "" & login != "" & email != "" & (perfil != "-- Selecione --" & perfil != ""    ) & (departamento != "-- Selecione --" & departamento != "") & situacao != "-- Selecione --")
+            {
+                $.ajax({
+                    url: '@Url.Action("salvarUsuario", "Usuario")',
+                    traditional: true,
+                    data: {
+                        id_pessoa: id_pessoa, id_perfil: perfil, id_departamento: departamento, login: login, nome: nome, administrador: adm,
+                        email : email, situacao: situacao
+                    },
+                    contentType: 'json',
+
+                    success: function (response) {
+                        if(response != null & response != ""){
+                            let mensagem = response[0].Mensagem;
+                            if (mensagem != "") {
+                                alert(mensagem);
+                            }
+                    }
+                        else {
+                            location.reload();
+                        }
+
+                    }
+                });
+            }
+            else {
+                if (login == "") {
+                    $('#login').addClass("erroInput");
+                    $('#erroLoginUpdate').addClass("erroDiv");
+                    $('#erroLoginUpdate').show();
+                }
+                if (email == "") {
+                    $('#email').addClass("erroInput");
+                    $('#erroEmailUpdate').addClass("erroDiv");
+                    $('#erroEmailUpdate').show();
+                }
+                if (nome == "") {
+                    $('#nome').addClass("erroInput");
+                    $('#erroNomeUpdate').addClass("erroDiv");
+                    $('#erroNomeUpdate').show();
+                }
+                if (perfil == "") {
+                    $('#id_perfil').addClass("erroInput");
+                    $('#erroPerfilUpdate').addClass("erroDiv");
+                    $('#erroPerfilUpdate').show();
+                }
+                if (departamento == "") {
+                    $('#id_departamento').addClass("erroInput");
+                    $('#erroDepartamentoUpdate').addClass("erroDiv");
+                    $('#erroDepartamentoUpdate').show();
+                }
+
+            }
+        }
+
+
+        function novoUsuario() {
+            $('#n_login').removeClass("erroInput");
+            $('#erroLoginNovo').removeClass("erroDiv");
+            $('#erroLoginNovo').hide();
+            $('#n_nome').removeClass("erroInput");
+            $('#erroNomeNovo').removeClass("erroDiv");
+            $('#erroNomeNovo').hide();
+            $('#n_id_perfil').removeClass("erroInput");
+            $('#erroIDPerfilNovo').removeClass("erroDiv");
+            document.getElementById("erroIDPerfilNovo").style.display = "none";
+            $('#n_administrador').removeClass("erroInput");
+            $('#erroAdministradorNovo').removeClass("erroDiv");
+            document.getElementById("erroAdministradorNovo").style.display = "none";
+            $('#n_situacao').removeClass("erroInput");
+            $('#erroSituacaoNovo').removeClass("erroDiv");
+            $('#erroSituacaoNovo').hide();
+
+            $('#modalNovoUsuario').modal({
+                show: true,
+                closeOnEscape: true,
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+
+
+        function salvarNovoUsuario() {
+            let id_pessoa = $('#n_id_pessoa').val();
+            let id_perfil = $('#n_id_perfil').val();
+            let login = $('#n_login').val();
+            let nome = $('#n_nome').val();
+            let administrador = $('#n_administrador').val();
+            let situacao = $('#n_situacao').val();
+            var loginInvalido = "";
+            if (nome != "" & id_perfil != "" & administrador != "-- Selecione --" & situacao != "-- Selecione --") {
+                $.ajax({
+                    url: '@Url.Action("salvarNovoUsuario", "Usuario")',
+                    traditional: true,
+                    data: { id_pessoa: id_pessoa, id_perfil: id_perfil, login: login, nome: nome, administrador: administrador, situacao: situacao },
+                    contentType: 'json',
+
+                    success: function (response) {
+                        //console.log(response)
+                        //alert(response[0]["Nome"]);
+                        //location.reload();
+                        //$('#modalNovoUsuario').modal('hide');
+
+                        //$('#modalNovoUsuario').modal('hide');
+                        //location.reload();
+                        if (response[0] != null) {
+                            if (response[0]["Nome"]) {
+                                alert(response[0]["Nome"]);
+                            }
+                            else if (response[0]["Mensagem"]) {
+                                loginInvalido = response[0]["Mensagem"];
+                                alert(response[0]["Mensagem"]);
+                            }
+                        }
+                    },
+                    complete: function (data) {
+                        if (loginInvalido == "") {
+                            location.reload();
+                        }
+                        //$('#modalNovoUsuario').modal('hide');
+
+                    },
+                });
+
+            }
+            else {
+                if (nome == "") {
+                    $('#n_nome').addClass("erroInput");
+                    $('#erroNomeNovo').addClass("erroDiv");
+                    $('#erroNomeNovo').show();
+                }
+                if (login == "") {
+                    $('#n_login').addClass("erroInput");
+                    $('#erroLoginNovo').addClass("erroDiv");
+                    $('#erroLoginNovo').show();
+                }
+                if (situacao == "-- Selecione --") {
+                    $('#n_situacao').addClass("erroInput");
+                    $('#erroSituacaoNovo').addClass("erroDiv");
+                    $('#erroSituacaoNovo').show();
+                }
+                if (id_perfil == "") {
+                    $('#n_id_perfil').addClass("erroInput");
+                    $('#erroIDPerfilNovo').addClass("erroDiv");
+                    document.getElementById("erroIDPerfilNovo").style.display = "block";
+                }
+                if (id_perfil == "") {
+                    $('#n_id_perfil').addClass("erroInput");
+                    $('#erroIDPerfilNovo').addClass("erroDiv");
+                    document.getElementById("erroIDPerfilNovo").style.display = "block";
+                }
+
+                if (administrador == "-- Selecione --") {
+                    $('#n_administrador').addClass("erroInput");
+                    $('#erroAdministradorNovo').addClass("erroDiv");
+                    document.getElementById("erroAdministradorNovo").style.display = "block";
+                }
+            }
+        }
+        $('#login').keyup(function () {
+            $('#login').removeClass("erroInput");
+            $('#erroLoginUpdate').removeClass("erroDiv");
+            $('#erroLoginUpdate').hide();
+        })
+        $('#nome').keyup(function () {
+            $('#nome').removeClass("erroInput");
+            $('#erroNomeUpdate').removeClass("erroDiv");
+            $('#erroNomeUpdate').hide();
+        })
+        $('#email').keyup(function () {
+            $('#email').removeClass("erroInput");
+            $('#erroEmailUpdate').removeClass("erroDiv");
+            $('#erroEmailUpdate').hide();
+        })
+        $('#id_perfil').change(function () {
+            $('#id_perfil').removeClass("erroInput");
+            $('#erroPerfilUpdate').removeClass("erroDiv");
+            document.getElementById("erroPerfilUpdate").style.display = "none";
+        })
+        $('#id_departamento').change(function () {
+            $('#id_departamento').removeClass("erroInput");
+            $('#erroDepartamentoUpdate').removeClass("erroDiv");
+            $('#erroDepartamentoUpdate').hide();
+        })
+        $('#modalAlterarUsuario').on('shown.bs.modal', function () {
+            $(this).find('.modal-dialog').css({
+                width: '80%',
+                height: 'auto',
+                'max-height': '100%',
+                'padding-right': 0
+            });
+
+            $(this).css({
+                'padding-right': 0
+            });
+
+        });
+        $('.menuSeguranca .sidebar-submenu').addClass("active");
+        $('.menuSeguranca .sidebar-submenu').toggle();
+
+    </script>
+
+</body>
+
+@*}*@
+</html>

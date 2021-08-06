@@ -1,0 +1,227 @@
+﻿@model Entities.Comprador
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    @if (Model != null)
+    {
+        if (Model.ListaComprador != null)
+        {
+            foreach (Entities.Comprador item in Model.ListaComprador)
+            {
+            <div class="modal fade" id="my-modal" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-header">Parametrizar pedidos de compra</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading">
+                                Pedidos selecionados
+                            </div>
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Selecionar Pedido</th>
+                                                    <th>Número</th>
+                                                    <th>Situação</th>
+                                                    <th>Aprovação</th>
+                                                    <th>Data</th>
+                                                    <th>Valor</th>
+                                                    <th>Fornecedor</th>
+                                                    <th>Comprador</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="field-label col-xs-3 active"><input type="checkbox" /></td>
+                                                    <td><a class="btn modalBTN" href="#">@item.NUMEROMOV</a></td>
+                                                    <td>@item.Situacao</td>
+                                                    <td>@item.Aprovacao</td>
+                                                    <td>@item.dataEmissao</td>
+                                                    <td>@item.ValorLiquido</td>
+                                                    <td>@item.Fornecedor</td>
+                                                    <td>@item.Comprador2</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <input id="depositoEspecialInput" class="form-check-input" type="radio" name="inlineRadioOptions" value="option2">
+                        <label id="depositoEspecial" class="form-check-label" for="depositoEspecialInput">Depósito especial</label>
+
+                        <input id="importacaoRegularInput" class="form-check-input" type="radio" name="inlineRadioOptions" value="option2">
+                        <label id="importacaoRegular" class="form-check-label" for="importacaoRegularInput">Importação regular</label>
+
+                        <div id="opcoesImportacaoRegular">
+                            @*teste*@
+                            <div class="panel with-nav-tabs panel-default">
+                                <div class="panel-heading">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#tab1default" data-toggle="tab">Shipping adress</a></li>
+                                        <li><a href="#tab2default" data-toggle="tab">Payment method</a></li>
+                                        <li><a href="#tab3default" data-toggle="tab">Shiping preferences</a></li>
+                                        <li><a href="#tab4default" data-toggle="tab">Contact information</a></li>
+                                        <li><a href="#tab5default" data-toggle="tab">Geral</a></li>
+                                        @*<li class="dropdown">
+                                                <a href="#" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="#tab4default" data-toggle="tab">Default 4</a></li>
+                                                    <li><a href="#tab5default" data-toggle="tab">Default 5</a></li>
+                                                </ul>
+                                            </li>*@
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade in active" id="tab1default">
+                                            <h4> Step 1 - Chosse a shipping adress</h4>
+                                            <br>
+                                            <div class="form-group">
+                                                <div class="col-md-6 sm-6">
+                                                    <label for="fornecedor">Freight forwarder</label>
+                                                    <select class="form-control" id="tpMovimento" required></select>
+                                                </div>
+                                                <div class="col-md-6 sm-6">
+                                                    <label for="fornecedor">Final destination</label>
+                                                    <select class="form-control" id="tpMovimento" required></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="tab2default">
+                                            <h4> Step 2 - Choose a payment method</h4>
+                                            <br>
+                                            <div class="col-md-12 sm-12">
+                                                <label for="fornecedor">Payment method</label>
+                                                <select class="form-control" id="tpMovimento" required>
+                                                    <option>-- Selecione --</option>
+                                                    <option>On Account</option>
+                                                    <option>Credit Card</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="tab3default">
+                                            <h4> Step 3 - Select a shipping preference</h4>
+                                            <br>
+                                            <div class="col-md-12 sm-12">
+                                                <label for="fornecedor">Carrier</label>
+                                                <select class="form-control" id="tpMovimento" required>
+                                                    <option>-- Selecione --</option>
+                                                    <option>Fed Ex</option>
+                                                    <option>UPS</option>
+                                                    <option>Fed Ex Ground Freight-Oversize</option>
+                                                </select>
+                                                <br />
+                                                <label class="radio-inline">
+                                                    <input id="dayHT1" type="radio" />
+                                                    1 Day - HT
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input id="dayHT2" type="radio" />
+                                                    2 Day - HT
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input id="dayHT3" type="radio" />
+                                                    3 Day - CS
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input id="dayHT4" type="radio" />
+                                                    FREE 4 Day - CS
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input id="dayHT5" type="radio" />
+                                                    FREE Stock - ST
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="tab4default">
+                                            <h4> Step 4 - Edit contact information</h4>
+                                            <br>
+                                            <div class="col-md-4 sm-4">
+                                                <label for="fornecedor">Contact name</label>
+                                                <input id="nomeContato" name="nomeContato" class="form-control" />
+                                            </div>
+                                            <div class="col-md-4 sm-4">
+                                                <label for="fornecedor">Contact e-mail</label>
+                                                <input id="emailContato" name="emailContato" class="form-control" />
+                                            </div>
+                                            <div class="col-md-4 sm-4">
+                                                <label for="fornecedor">Contact phone</label>
+                                                <input id="foneContato" name="foneContato" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="tab5default">
+                                            <h4> Export information</h4>
+                                            <br>
+                                            <div class="form-group">
+                                                <div class="col-md-6 sm-6">
+                                                    <label>Do you intend to export or re-expport any portion of this order? </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="optradio">Yes
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="optradio">No
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-6 sm-6">
+                                                    <label for="destCountry">Destination country</label>
+                                                    <select class="form-control" id="destCountry" required>
+                                                        <option>-- Selecione --</option>
+                                                        <option>Brazil</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-6 sm-6">
+                                                    <label for="destCountry">Order notes</label>
+                                                    <textarea class="form-control" rows="4" id="comment"></textarea>
+                                                </div>
+                                                <div class="col-md-6 sm-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" disabled>
+                                                        <label class="form-check-label" for="disabledFieldsetCheck">
+                                                            If you would...
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="btn-toolbar">
+                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-primary pull-right">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+               </div><!-- /.modal-content -->
+              </div>
+            }
+        }
+    }
+</body>
+</html>

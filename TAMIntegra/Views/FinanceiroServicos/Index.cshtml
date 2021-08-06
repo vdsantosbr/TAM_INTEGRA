@@ -1,0 +1,1479 @@
+﻿@model Entities.FinanceiroServicos
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pedidoModal = (IEnumerable<Entities.Compra>)ViewData["pedidoModal"];
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        .modal-dialog {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.modal-content {
+  height: auto;
+  min-height: 100%;
+  border-radius: 0;
+}
+        /*#my-modal{
+         width: 1500px;
+         height:1150px;
+          margin: auto;
+          padding-top: 17%;
+         vertical-align: middle;
+        }*/
+        /*.modal-body{
+            overflow-y: auto;
+        }*/
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            /*max-height: calc(110vh - 210px);*/
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            border-width: 5px;
+            border-color: #3A2303;
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        @@media (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: 130px 130px 70px 150px 150px 80px 200px auto;
+               padding-bottom: 5px;
+            }
+
+            .grid-item {
+                padding: 10px;
+                padding-right: 20px
+                text-align: left;
+                flex: 1;
+                  
+            }
+
+             .grid-item2 {
+                padding: 10px;
+                text-align: left;
+                flex: 2;
+                  
+            }
+
+            .grid-item {
+                padding-bottom: 0PX;
+            }
+
+            
+          
+        
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+
+        }
+
+
+/* Os itens não se expandem para ocupar o container. */
+.grow0 {
+	flex-grow: 0;
+}
+
+/* Os itens se expandem igualmente para ocupar o container. Utilizando apenas o flex-grow, o crescimento é distribuído igualmente antes e depois do conteúdo de cada elemento. (pois por padrão o flex-basis é auto) */
+.grow1 {
+	flex-grow: 1;
+}
+
+/* Os itens se expandem duas vezes mais que aqueles com flex-grow: 1; */
+.grow2 {
+	flex-grow: 2;
+}
+
+.item {
+	margin: 5px;
+	text-align: center;
+	font-size: 1.5em;
+}
+
+/* Flex Container */
+.container {
+	margin: 0 auto;
+	display: flex;
+	border: 1px solid #ccc;
+}
+/* Flex Item */
+
+
+h1 {
+	text-align: center;
+	margin: 20px 0 0 0;
+	font-size: 1.25em;
+	font-weight: normal;
+}
+
+
+body {
+overflow: hidden;
+}
+    </style>
+
+</head>
+@using (Html.BeginForm("Index", "FinanceiroServicos", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+    <body>
+      
+        <input hidden id="modal" />
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:15px;position:relative">
+                    <div class="stepwizard" style="padding-top:8px">
+                        <fieldset style="background: white;z-index: 999;position: sticky;top: 0;">
+                            <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Financeiro - Faturas de Serviço para CambioSys</legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </main>
+
+            <main class="page-content" style="height: 100vh;">
+                <br />
+                @*<main class="page-content">*@
+                <div class="container-fluid" style="padding-top:25px;padding-left: 21px;">
+
+                    <div class="row setup-content">
+                        <div class="col-xs-12" style="padding-left: 0;">
+                            <div class="col-md-12">
+                                <div class="form-horizontal">
+                                    <form role="form">
+
+                                        <fieldset>
+
+                                            @*<legend>Integração com fornecedor</legend>*@
+
+                                            <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ style="position:absolute;top:10px;width:97%">
+
+                                                <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;">
+                                                    <div class="panel-heading">
+                                                        Títulos do RM Fluxus
+                                                    </div>
+                                                    <div class="panel-body" style="padding-bottom:0;">
+
+                                                        @*<div class="grid-container">
+                                                    <div class="grid-item">
+                                                        <label class="form-negrito">Emissão (início)</label>
+                                                        @Html.Editor("strDataInicio", new { htmlAttributes = new { @style = "width:90px", @class = "datepickerInput", id = "strDataInicio", @onchange = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })
+                                                        <div style="color: red" id="dtIniciDivErro">
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid-item">
+                                                        @Html.Label("Emissão (fim)", new { @class = "form-negrito" })
+                                                        @Html.Editor("strDataFim", new { htmlAttributes = new { @style = "width:90px", @class = "datepickerInput", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                        <div style="color: red" id="dtFimDivErro">
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid-item2">
+                                                        @Html.Label("Código de Movimento", new { @class = "form-negrito" })
+                                                        @Html.DropDownList("faturamento", (SelectList)ViewBag.TipoFaturamento, "-- Selecione -- ", new { @style = "width:130px", @class = "chosen-select" })
+                                                        <div style="color: red" id="fatDivErro">
+                                                        </div>
+                                                    </div>
+                                                    <div class="grid-item">
+                                                        @Html.Label("Nº movimento", new { @class = "form-negrito" })
+                                                        @Html.Editor("numeroMov", new { htmlAttributes = new { @style = "width:90px", @class = "", @maxlengh = 35, @autocomplete = "off" } })
+                                                    </div>
+
+
+                                                        <div class="grid-item">
+                                                            @Html.Label("Invoice ", new { @class = "form-negrito" })
+                                                            @Html.Editor("invoice", new { htmlAttributes = new { @style = "width:90px", @class = "", @maxlengh = 35, @autocomplete = "off" } })
+                                                        </div>
+                                                    <div class="grid-item">
+                                                        @Html.Label("Documento", new { @class = "form-negrito" })
+                                                        @Html.Editor("documento", "-- Selecione -- ", new { @style = "width:90px", @class = "chosen-select" })
+                                                    </div>
+                                                    <div class="grid-item pull-right" style="text-align:right">
+                                                        <button class="btn btn-primary btn-md" id="btnFiltrar" name="exibir" value="exibir" type="submit">Exibir</button>
+                                                    </div>
+
+
+                                                </div>*@
+
+                                                        <div style="display:flex;justify-content:space-between;padding-bottom:10px;padding-left:10px; padding-right:10px">
+                                                            <div>
+                                                                <div style="float:left">
+                                                                    <label class="form-negrito">Recebimento (início)</label><br />
+                                                                    @Html.Editor("strDataInicio", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "datepickerInput form-control", id = "strDataInicio", @onchange = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })
+                                                                    <div style="color: red" id="dtIniciDivErro">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                @Html.Label("Recebimento (fim)", new { @class = "form-negrito" })<br />
+                                                                @Html.Editor("strDataFim", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "datepickerInput form-control", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                                <div style="color: red" id="dtFimDivErro">
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                @Html.Label("Situação da Integração", new { @class = "form-negrito" })
+                                                                @Html.DropDownList("situacao", (SelectList)ViewBag.Situacao, "-- Selecione -- ", new { @style = "width:70px", @class = "chosen-select" })
+
+                                                            </div>
+                                                            <div>
+                                                                @Html.Label("Movimento", new { @class = "form-negrito" })
+                                                                @Html.DropDownList("faturamento", (SelectList)ViewBag.TipoFaturamento, "-- Selecione -- ", new { @style = "width:130px", @class = "chosen-select" })
+                                                                <div style="color: red" id="fatDivErro">
+                                                                </div>
+                                                            </div>
+
+                                                            <div>
+                                                                @Html.Label("Nº movimento", new { @class = "form-negrito" })<br />
+                                                                @*@Html.Editor("numeroMov", new { htmlAttributes = new { @style = "width:90px", @class = "", @maxlengh = 35, @autocomplete = "off" } })*@
+                                                                <input id="numeroMov" size="10" style="height:26px" class="form-control" maxlength="35" />
+                                                            </div>
+                                                            <div>
+                                                                @Html.Label("Invoice ", new { @class = "form-negrito" })<br />
+                                                                @Html.Editor("invoice", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control", @maxlengh = 35, @autocomplete = "off" } })
+                                                            </div>
+
+                                                            <div>
+                                                                @Html.Label("Documento", new { @class = "form-negrito" })<br />
+                                                                <input id="documento" size="10" style="height:26px" class="form-control" maxlength="35" />
+                                                                @*@Html.Editor("documento", "-- Selecione -- ", new { @style = "width:40px", @class = "chosen-select" })*@
+                                                            </div>
+
+                                                            <div style="padding-top:20px">
+                                                                <button style="height:27px" class="btn btn-primary btn-sm" id="btnFiltrar" name="exibir" value="exibir" type="submit">Exibir</button>
+                                                                @if (ViewBag.PermitirExportar == "S" || ViewBag.PermitirExportar == "SIM")
+                                                                {
+                                                                    if (ViewBag.ExportaExcel == true)
+                                                                    {
+                                                                        <a style="height:27px" class="btn btn-success btn-sm" title="Download Excel" onclick="location.href='@Url.Action("DownloadExcel", "FinanceiroServicos", new { })'">Exportar</a>
+                                                                    }
+                                                                }
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Filtrar</button>*@
+
+                                                    </div>
+
+                                                </div>
+                                                @*<legend>Selecionar pedidos de compra</legend>*@
+                                                <br />
+                                                <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:20px">
+                                                    <div class="panel-heading">
+                                                        <table width="100%">
+                                                            <tr>
+                                                                <td style="text-align:left"> Integração(s)</td>
+                                                                <td style="text-align:right"><span id="valorTotal"></span></td>
+                                                            </tr>
+                                                        </table>
+
+                                                    </div>
+                                                    <div class="panel-body" style="padding-bottom: 0;margin-bottom:10px">
+                                                        <div class="table-responsive">
+
+                                                            <table id="tblDados" class="table table-hover table-striped table-responsive">
+                                                                <thead>
+                                                                    <tr>
+                                                                        @*<th style="text-align:center">ID LAN</th>*@
+                                                                        <th style="text-align:left;width: 120px;">
+                                                                            <div class="btn-toolbar" style="margin-left:0">
+                                                                                @*@if (ViewBag.Id_integracao > 0)
+                                                                        {
+                                                                            <input type="checkbox" id="ckRegistros" />
+                                                                        }*@
+
+                                                                                Documento
+                                                                            </div>
+                                                                        </th>
+                                                                        <th hidden style="text-align:left">Filial</th>
+                                                                        <th style="text-align:left;width: 150px;">Situação da Integração</th>
+                                                                        <th style="text-align:center">Invoice</th>
+                                                                        <th style="text-align:center">Rec Fiscal</th>
+                                                                        <th hidden style="text-align:center">Título</th>
+                                                                        <th hidden style="text-align:center">Emissao</th>
+                                                                        <th style="text-align:center">Vencimento</th>
+                                                                        <th style="text-align:left">Fornecedor</th>
+                                                                        <th style="text-align:center">Moeda</th>
+                                                                        <th style="text-align:center">Valor</th>
+                                                                        <th style="text-align:left">Centro de Custo</th>
+                                                                        <th style="text-align:center">Opções</th>
+                                                                    </tr>
+                                                                </thead>
+
+
+
+                                                                <tbody>
+                                                                    @if (Model != null)
+                                                                    {
+                                                                        if (Model.lstItens != null)
+                                                                        {
+                                                                            foreach (Entities.FinanceiroServicos item in Model.lstItens)
+                                                                            {
+
+                                                                                <tr>
+                                                                                    @*@if (@item.Id_Integracao == 0)
+                                                                            {
+                                                                                <td id="documento" style="text-align:left"><input type="checkbox" id="idMovArr" name="idMovArr" class="chkclass" value="@item.IDMOV,@item.IDLAN" /> @item.Documento</td>
+                                                                            }
+                                                                            else
+                                                                            {*@
+                                                                                    <td id="documento" style="text-align:left">@item.Documento</td>
+                                                                                    @*}*@
+                                                                                    @if (item.Id_Integracao > 0)
+                                                                                    {
+                                                                                        if (ViewBag.Id_Integracao_Agendamento != null)
+                                                                                        {
+                                                                                            <td id="situacao" style="text-align:left; font-weight:bold">@item.Situacao - @item.Id_Integracao</td>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <td id="situacao" style="text-align:left;">@item.Situacao - @item.Id_Integracao</td>
+                                                                                        }
+
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td id="situacao" style="text-align:left">@item.Situacao</td>
+                                                                                    }
+                                                                                    <td id="nome_fantasia" hidden style="text-align:center">@item.NOMEFANTASIA</td>
+                                                                                    <td id="invoice" style="text-align:center">@item.INVOICE</td>
+                                                                                    <td id="" style="text-align:center">@item.DATAEMISSAO.ToString("dd/MM/yyyy")</td>
+                                                                                    <td id="titulo" hidden style="text-align:center">@item.TITULO</td>
+                                                                                    <td id="data_emissao" hidden style="text-align:center">@item.DATAEMISSAO.ToString("dd/MM/yyyy")</td>
+                                                                                    <td id="data_venc" style="text-align:center">@item.DATAVENCIMENTO.ToString("dd/MM/yyyy")</td>
+                                                                                    <td id="fornecedor" style="text-align:left">@item.FORNECEDOR</td>
+                                                                                    <td id="moeda" style="text-align:center" class="moedaClass">@item.MOEDA</td>
+                                                                                    <td id="valor_original" style="text-align:center">@string.Format("{0:#,##0.00#}", item.VALORORIGINAL)</td>
+                                                                                    <td id="cCusto" style="text-align:left">@item.CCUSTO</td>
+                                                                                    <td id="idMov" class="idMov" hidden style="text-align:center">@item.IDMOV</td>
+                                                                                    <td id="idLan" class="idLan" hidden style="text-align:center">@item.IDLAN</td>
+                                                                                    <td id="observacao" class="idLan" hidden style="text-align:center">@item.OBSERVACAO</td>
+                                                                                    <td hidden class="wagein">@item.VALORORIGINAL</td>
+
+
+                                                                                    <td style="vertical-align:top;text-align:center">
+                                                                                        <a class="btn" style="padding:0px" title="Informativo"><span class="fa fa-info-circle" style="font-size:17px;" value="@item.Id_Integracao" onclick="Informativo(@item.Id_Integracao, @item.IDMOV)"></span></a>
+
+                                                                                        @*@if (@item.Id_Integracao > 0)
+                                                                                {
+                                                                                    <a class="btn" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Este procedimento gera uma nova integração para a fatura @item.Id_Integracao. Deseja continuar?'))  Reprocessar(@item.Id_Integracao, @item.IDMOV, @item.IDLAN)"></span></a>
+                                                                                    <a class="btn" title="Excluir" style="padding:0"><span class="fa fa-trash" style="font-size:16px;" onclick="if(confirm('Este procedimento exclui a fatura @item.Id_Integracao. Deseja continuar?'))  Excluir(@item.Id_Integracao,@item.IDMOV, @item.IDLAN)"></span></a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span class="" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;color:silver"></span></span>
+                                                                                    <a class="" title="Excluir" style="padding:0"><span class="fa fa-trash" style="font-size:16px;color:silver"></span></a>
+                                                                                }*@
+                                                                                    </td>
+                                                                                    @*}
+                                                                            else
+                                                                            {
+                                                                             <td style="vertical-align:top;text-align:center">
+                                                                                 <a class="btn modalExcel" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;"></span></a>
+                                                                             </td>
+                                                                            }*@
+
+
+                                                                                </tr>
+
+
+
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    @*<td><a class="modalBTN" style="padding:0;font-size:12px;text-decoration:none;color:black;font-size:14px;pointer-events:none">@item.NUMEROMOV</a></td>*@
+                                                                    @*<tr>
+                                                                <td class="moeda">E</td>
+                                                                <td class="wagein">10</td>
+                                                            </tr>*@
+
+                                                                </tbody>
+                                                            </table>
+
+                                                            @*@if (Model != null)
+                                                    {
+                                                        if (Model.lstItens == null)
+                                                        {
+
+                                                        }
+                                                        else
+                                                        {
+                                                            if (ViewBag.Id_Integracao == 0)
+                                                            {
+                                                                <button class="btn btn-primary btn-md pull-right" id="btnAgendar" type="button" name="btnAgendar" style="display:none" onclick="salvarPedidoCompra()">Agendar</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button class="btn btn-primary btn-md pull-right" id="btnAgendar" type="button" name="btnAgendar" enabled="enabled" onclick="salvarPedidoCompra()">Agendar</button>
+                                                            }
+                                                        }
+                                                    }*@
+
+
+
+
+                                                        </div>
+                                                        @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Continuar</button>*@
+                                                    </div>
+                                                </div>
+                                                @*teste*@
+
+
+
+
+                                            </div>
+
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.modal-dialog -->
+                            </div>
+                        </div>
+                    </div><!-- /.modal -->
+                </div>
+            </main>
+        </div>
+        <!-- Modal -->
+        @*@if (Model != null)
+            {
+                if (Model.lstInforme != null)
+                {*@
+
+        <div class="modal fade" id="modalInformativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document" style="width:100vh">
+                <div class="modal-content modal-lg" style="width:100%">
+                    <div class="modal-header" style="padding: 10px 5px 5px 10px;background-color:lightgray;font-weight:bold;font-weight:bold">
+                        <h5 style="padding-top:0" class="modal-title" id="exampleModalLabel"><span id="fornecedor_Modal"></span>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </h5>
+                        
+                    </div>
+                    <div class="modal-body" style="padding-bottom:0;padding-top:5px">
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:10px">
+                            <div class="panel-heading">
+                                RMFuxus
+                            </div>
+                            @*<table class="table table-hover  table-bordered">
+                                <tr>
+                                    <td>Documento: <span id="documento_Modal"> </span></td>
+                                    <td>Filial: <span id="filial_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Invoice: <span id="invoice_Modal"> </span></td>
+                                    <td>Título: <span id="titulo_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Emissão: <span id="emissao_Modal"> </span></td>
+                                    <td>Vencimento: <span id="vencimento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Valor: <span id="valor_Modal"> </span> - (<span id="moeda_Modal"> </span>)</td>
+                                    <td>Situação: <span id="situacao_Modal"> </span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Centro de Custo: <span id="cc_Modal"> </span></td>
+                                    <td>Ordem Serviço: <span id="os_Modal"> </span></td>
+                                </tr>
+                            </table>*@
+
+   
+                                <div style="display:flex;justify-content:space-between;padding-bottom:10px;flex-wrap:wrap;padding-top:10px">
+                                    <div style="float:left;padding-left: 10px">
+                                        <label class="form-negrito">Documento</label><br />
+                                        <input id="documento_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Filial</label><br />
+                                        <input id="filial_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Invoice</label><br />
+                                        <input id="invoice_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Título</label><br />
+                                        <input id="titulo_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Recebimento</label><br />
+                                        <input id="emissao_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Vencimento</label><br />
+                                        <input id="vencimento_Modal" disabled style="background-color:white;width: 70px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Moeda</label><br />
+                                        <input id="moeda_Modal" disabled style="background-color:white;width: 50px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Valor</label><br />
+                                        <input id="valor_Modal" disabled style="background-color:white;width: 80px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Situação</label><br />
+                                        <input id="situacao_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Centro de Custo</label><br />
+                                        <input id="cc_Modal" disabled style="background-color:white;width: 200px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left;padding-right: 10px">
+                                        <label class="form-negrito">Ordem Serviço</label><br />
+                                        <input id="os_Modal" disabled style="background-color:white;width: 70px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left;padding-right: 10px">
+                                        <label class="form-negrito">Histórico</label><br />
+                                        <input id="historico_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                </div>
+                                @*<div style="display:flex;justify-content:space-between;padding-bottom:10px">
+                                    <div style="float:left;padding-left: 10px">
+                                        <label class="form-negrito">Vencimento</label><br />
+                                        <input id="vencimento_Modal" disabled style="background-color:white;width: 70px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Moeda</label><br />
+                                        <input id="moeda_Modal" disabled style="background-color:white;width: 80px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Valor</label><br />
+                                        <input id="valor_Modal" disabled style="background-color:white;width: 80px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Situação</label><br />
+                                        <input id="situacao_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left">
+                                        <label class="form-negrito">Centro de Custo</label><br />
+                                        <input id="cc_Modal" disabled style="background-color:white;width: 180px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                                    <div style="float:left;padding-right: 10px">
+                                        <label class="form-negrito">Ordem Serviço</label><br />
+                                        <input id="os_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                    </div>
+                            </div>*@
+                            </div>
+
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:10px">
+                            <div class="panel-heading">
+                                Integração CâmbioSys
+                            </div>
+                            <div style="display:flex;justify-content:space-between;padding-bottom:10px;padding-top:10px;flex-wrap:wrap">
+                                <div style="float:left;padding-left: 10px">
+                                    <label class="form-negrito">ID Lançamento</label><br />
+                                    <input id="idlancamento_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                <div style="float:left">
+                                    <label class="form-negrito">Dt Emissão Doc</label><br />
+                                    <input id="dtemissaodoc_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                <div style="float:left">
+                                    <label class="form-negrito">Dt Transação</label><br />
+                                    <input id="dttransacao_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                <div style="float:left;padding-right: 10px">
+                                    <label class="form-negrito">Dt Contábil</label><br />
+                                    <input id="dtcontabil_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                @*<div style="float:left;padding-left: 10px">
+                                    <label class="form-negrito">Moeda</label><br />
+                                    <input id="moeda2_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>*@
+                                <div style="float:left">
+                                    <label class="form-negrito">Valor ME RM</label><br />
+                                    <input id="valormerm_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                <div style="float:left">
+                                    <label class="form-negrito">Valor MN RM</label><br />
+                                    <input id="valormnrm_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                <div style="float:left">
+                                    <label class="form-negrito">Taxa Conversão</label><br />
+                                    <input id="taxaconversao_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                <div style="float:left;padding-right: 10px">
+                                    <label class="form-negrito">Texto Complementar</label><br />
+                                    <input id="textocomplementar_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:10px;padding-top:10px">
+                            <div class="panel-heading">
+                                Fechamento de  Câmbio
+                            </div>
+                            <div style="display:flex;justify-content:space-between;padding-bottom:10px;flex-wrap:wrap">
+                                <div style="float:left;padding-left: 10px">
+                                    <label class="form-negrito">ID Lançamento</label><br />
+                                    <input id="idlancamento_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                <div style="float:left">
+                                    <label class="form-negrito">Dt Emissão Doc</label><br />
+                                    <input id="dtemissaodoc_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                <div style="float:left">
+                                    <label class="form-negrito">Dt Transação</label><br />
+                                    <input id="dttransacao_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                                <div style="float:left;padding-right: 10px">
+                                    <label class="form-negrito">Dt Contábil</label><br />
+                                    <input id="dtcontabil_Modal" disabled style="background-color:white;width: 100px;border: 1px solid #e4dfdf;padding:4px" />
+                                </div>
+                            </div>
+                        </div>
+                                <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:10px;padding-top:10px">
+                                    <div class="panel-heading">
+                                        Observação
+                                    </div>
+                                    <table class="table table-hover  table-bordered">
+                                        <tr width="100%" style="height:50px">
+                                            <td colspan="2"><div class="pre-scrollable" id="consideracoes_Modal" style="max-height:70px"></div></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                        <button type="button" class="btn btn-primary btn-sm pull-right" style="margin-bottom: 10px;" data-dismiss="modal">Fechar</button>
+                            </div>
+                       
+                </div>
+            </div>
+        </div>
+   
+
+        <div class="modal fade" id="modalReprocessarItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel">Reprocessamento para fatura  <span id="id_fatura"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span id="comentario_Modal"></span>
+
+                    </div>
+                    @*<div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalReprocessarItens" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel">Reprocessamento para fatura  <span id="id_fatura_rep"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="tblReprocessar">
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                    @*<div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="row setup-content divParametrosPedido" id="Security-Setup-step">
+            <div class="col-xs-12">
+                <div class="col-md-12">
+                    teste
+
+                    <div class="form-row">
+                        <div class="col-sm-12 text-right">
+                            <button id="btnSearch" class="btn btn-primary nextBtn btn-md center-block consultaPedido" Style="width: 100px;display:inline-block">Voltar</button>
+                            <button id="btnClear" class="btn btn-primary nextBtn btn-md center-block" Style="width: 100px;display:inline-block">Continuar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        @*<script>
+                $(document).ready(function () {
+
+                    var navListItems = $('div.setup-panel div a'),
+                            allWells = $('.setup-content'),
+                            allNextBtn = $('.nextBtn');
+
+                    allWells.hide();
+
+                    navListItems.click(function (e) {
+                        e.preventDefault();
+                        var $target = $($(this).attr('href')),
+                            $item = $(this);
+                        if (!$item.hasClass('disabled')) {
+                            //navListItems.removeClass('btn-primary').addClass('btn-default');
+                            if ($item.attr('id') != $(navListItems[1]).attr('id')) {
+                                $(navListItems[1]).removeClass('btn-primary').addClass('btn-success');
+                            }
+                            //$('#item3').addClass('btn-success');
+                            $item.addClass('btn-primary');
+                            allWells.hide();
+                            $target.show();
+                            $target.find('input:eq(0)').focus();
+                        }
+                    });
+
+                    allNextBtn.click(function () {
+                        var curStep = $(this).closest(".setup-content"),
+                            curStepBtn = curStep.attr("id"),
+                            nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                            curInputs = curStep.find("input[type='text'],input[type='url'], input[type='password'], input[type='email']"),
+                            isValid = true;
+
+                        $(".form-group").removeClass("has-error");
+                        for (var i = 0; i < curInputs.length; i++) {
+                            if (!curInputs[i].validity.valid) {
+                                isValid = false;
+                                $(curInputs[i]).closest(".form-group").addClass("has-error");
+                            }
+                        }
+
+                        if (isValid)
+                            nextStepWizard.removeAttr('disabled').trigger('click');
+                    });
+
+                    $('div.setup-panel div a.btn-primary').trigger('click');
+                });
+            </script>*@
+
+        <script>
+            $(document).ready(function () {
+
+
+                allWells = $('#Security-Setup-step'),
+                allWells2 = $('#VerifyEmail-step')
+                //,allNextBtn = $('.nextBtn');
+
+                allWells.hide();
+                allWells2.hide();
+
+                var menuAtivo = $('#menuAtivo').val();
+                $('.menuFinanceiro .sidebar-submenu').toggle();
+            });
+
+
+            $('.consultaPedido').click(function () {
+                $(".divConsultaPedido").toggle();
+                $(".divParametrosPedido").toggle();
+            });
+
+            $('a.modalBTN').click(function () {
+                $('#my-modal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+            $('#modalInformativo').css({
+                'padding-right': 0,
+                'right': '20px'
+            });
+
+
+            $('#opcoesImportacaoRegular *').attr("disabled", true);
+
+            $('#importacaoRegularInput').click(function () {
+                //$('#opcoesImportacaoRegular').show();
+                $('#opcoesImportacaoRegular *').attr("disabled", false);
+            });
+            $('#depositoEspecialInput').click(function () {
+                //$('#opcoesImportacaoRegular').hide();
+                $('#opcoesImportacaoRegular *').attr("disabled", true);
+            });
+        </script>
+
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        <link href="~/content/indexcompras.css" rel="stylesheet" />
+        <script>
+            $(window).load(function () {
+                $(".chosen-select").chosen()
+            });
+        </script>
+
+        <script>
+            function populaModal(idIntegracao, numeroMov, situacao, aprovacao, status, data, valor, fornecedor, idMov, comprador) {
+                $('#idIntegracao').html(idIntegracao);
+                $('#numeroMovModal').html(numeroMov);
+                $('#situacaoModal').html(situacao);
+                $('#aprovacao').html(aprovacao);
+                $('#status').html(status);
+                $('#data').html(data);
+                $('#valor').html(valor);
+                $('#fornecedor').html(fornecedor);
+                $('#comprador').text(comprador);
+                $('#idMov').text(idMov);
+                $('.fornecedor').html(fornecedor);
+            }
+
+            function salvarPedidoCompra() {
+
+                var table = $('#tblDados tr td :checkbox:checked');
+             
+                var data2 = [];
+
+                //table.find('tr').each(function (i, el) {
+                //    // no thead
+                //    if (i != 0) {
+                //        var $tds = $(this).find('td');
+                //        var row = [];
+                //        $tds.each(function (i, el) {
+                //            if (this.className == "idLan" || this.className == "idMov") {
+                               
+                //                    row.push($(this).text());
+                                
+                //            }
+                //        });
+                //        data2.push(row);
+                     
+                //    }
+                //});
+                
+                var values = new Array();
+                $.each($("input[name='idMovArr']:checked"), function () {
+                    values.push($(this).val());
+                });
+              
+                if (values.length > 0)
+                {
+                    $.ajax({
+                        url: '@Url.Action("AgendarIntegracao", "FinanceiroServicos")',
+                        contentType: 'json',
+                        traditional: true,
+                        //data: { nroPedidoModal: numeroPedido, strDataInicio: dataInicio, strDataFim: dataFim, idMov: idMov, statusModal: status, situacaoModal: situacao}
+                        data: { dados: values },
+                        success: function (data) {
+                            //$("#myForm").submit();
+                            //if (data[0] == "Erro") {
+                            //    alert(data[1]);
+                            //    $("#myForm").submit();
+                            //}
+                            //else {
+                            //    alert("Integração " + data + "\nAgendamento realizado com sucesso.");
+                            //    $("#myForm").submit();
+
+
+                            //}
+
+
+                            var input = $("<input>")
+                            .attr("type", "hidden")
+                            .attr("name", "id_integracao").val(data);
+                            $('#myForm').append($(input));
+
+                            $("#myForm").submit();
+
+
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //$('#btnagendar').attr("disabled", true);
+                            alert(exceptionThrown);
+                        },
+                    });
+                }
+                else
+                {
+                    alert('Selecione ao menos um documento.');
+                }
+               
+                         
+            }
+
+            function Atualiza() {
+                $('#myForm').submit();
+            }
+        </script>
+
+        <script>
+            $(function () {
+                //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' }).val();
+                //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' });
+                $(".datepickerInput").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+                $('#importacaoRegularInput').attr("disabled", true);
+            });
+
+            function isValidDate(date, campo) {
+                var temp = date.split('/');
+                var d = new Date(temp[1] + '/' + temp[0] + '/' + temp[2]);
+                var result = (d && (d.getMonth() + 1) == temp[1] && d.getDate() == Number(temp[0]) && d.getFullYear() == Number(temp[2]));
+                if (result == false) {
+                    $(campo).text("Data inválida.");
+                    $("#btnFiltrar").attr("disabled", true)
+                }
+                else {
+                    $("#btnFiltrar").attr("disabled", false)
+                    $(campo).text('');
+                }
+            }
+
+            function desbloquearPedido(idIntegracao, idMov) {
+                $.ajax({
+                    url: '@Url.Action("DesbloquearPedido", "Compra")',
+                    type: 'get',
+                    data: { idIntegracao: idIntegracao, idMov: idMov },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+            }
+
+            @*$("a.modalInformativo").click(function(evt){
+
+                $.ajax({
+                    url: '@Url.Action("Index", "Cavok")',
+                    type: 'get',
+                    data: {},
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "modalInformativo").val("#modalInformativo")
+                        .attr("id", "modalInformativo").val("#modalInformativo");
+                        $('#myForm').append($(input));
+
+                        $("#myForm").submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+
+
+            });*@
+
+            //$(document).ready(function () {
+            //    $('#modalInformativo').modal('show');
+            //});
+
+            @*function informativo(id_integracao)
+            {
+                $.ajax({
+                    url: '@Url.Action("Informativo", "Cavok")',
+                    type: 'get',
+                    data: { id_integracao: id_integracao },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "modalInformativo").val("#modalInformativo")
+                        .attr("id", "modalInformativo").val("#modalInformativo");
+                        $('#myForm').append($(input));
+                        $('#modal').val("#modalInformativo");
+                        $("#myForm").submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+            }*@
+
+            function Informativo(id_integracao, idMov)
+            {
+                $.ajax({
+                    url: '@Url.Action("Informativo", "FinanceiroServicos")',
+                    //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                    //dataType: "json",
+                    traditional: true,
+                    //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                    data: { id_integracao : id_integracao, idMov: idMov},
+                    contentType: 'json',
+
+                    success: function (response) {
+                        var documento = response[0].Documento;
+                        var filial = response[0].Filial;
+                        var invoice = response[0].Invoice;
+                        var titulo = response[0].Titulo;
+                        var emissao = response[0].Emissao;
+                        var vencimento = response[0].Vencimento;
+                        var valor = response[0].Valor;
+                        valor = valor != 0 ? parseFloat(valor).toLocaleString() : '';
+                        var valorme = "";
+                        if (response[0].Valor_me != "")
+                        {
+                            valorme = valorme != 0 ? parseFloat(valorme).toLocaleString() : '';
+                        }
+                       
+                        var valormn = "";
+                        if (response[0].Valor_me != "")
+                        {
+                            valormn = valormn != 0 ? parseFloat(valormn).toLocaleString() : '';
+                        }
+                       
+                        let situacao = response[0].Situacao;
+                        var cc = response[0].CC;
+                        var os = response[0].OS;
+                        var moeda = response[0].Moeda;
+                        var fornecedor = response[0].Fornecedor;
+                        var cor = response[0].Cor;
+                        var consideracoes = response[0].Observacao;
+                        var cor = response[0].Cor;
+                        var historico = response[0].Historico;
+                   ;
+                        if (cor == 'B') {
+                            $("#corConsideracoes").css("background-color", "white");
+                        }
+                        else if (cor == 'A') {
+                            $("#corConsideracoes").css("background-color", "lightgoldenrodyellow");
+                        }
+                        else {
+                            $("#corConsideracoes").css("background-color", "orangered");
+                        }
+                        
+
+                
+
+                        $('#documento_Modal').val(documento);
+                        $('#filial_Modal').val(filial);
+                        $('#titulo_Modal').val(titulo);
+                        $('#emissao_Modal').val(emissao);
+                        $('#invoice_Modal').val(invoice);
+                        $('#vencimento_Modal').val(vencimento);
+                        $('#fornecedor_Modal').html(fornecedor);
+                        $('#moeda_Modal').val(moeda);
+                        $('#valor_Modal').val(valor);
+                        $('#situacao_Modal').val(situacao);
+                        $('#cc_Modal').val(cc);
+                        $('#os_Modal').val(response[0].OS);
+                        $('#historico_Modal').val(response[0].Historico);
+                        $('#observacao_Modal').html(response[0].Observacao);
+                        $('#idlancamento_Modal').val(response[0].Id_lancamento);
+                        $('#dtemissaodoc_Modal').val(response[0].Dt_emissao_doc);
+                        $('#dttransacao_Modal').val(response[0].Dt_transacao);
+                        $('#dtcontabil_Modal').val(response[0].dt_contabil);
+                        $('#taxaconversao_Modal').val(response[0].Taxa);
+                        $('#valormerm_Modal').val(valorme);
+                        $('#valormnrm_Modal').val(valormn);
+                        $('#textocomplementar_Modal').val(response[0].Texto);
+
+                        $('#modalInformativo').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+
+
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //alert(exceptionThrown);
+                    },
+                });
+            }
+
+            function Reprocessar(id_integracao, idMov, idLan)
+            {
+                $.ajax({
+                    url: '@Url.Action("Reprocessar", "FinanceiroServicos")',
+                    //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                    //dataType: "json",
+                    traditional: true,
+                    //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                    data: { id_integracao: id_integracao, idMov: idMov, idLan: idLan },
+                    contentType: 'json',
+
+                    success: function (response) {
+                        if (response[0].Erro != "Erro")
+                        {
+                            var comentario = response[0].Comentario;
+                            var item = response[0].Id_integracao;
+
+                            var event_data = '';
+                            var dataArray = response;
+
+                            if (dataArray.length == 1) {
+                                for (var i = 0; i < dataArray.length; i++) {
+                                    if (dataArray[i].Comentario != null)
+                                    {
+                                        var item = dataArray[i].Id_integracao;
+                                        var arrivalTime = dataArray[i].Comentario;
+
+                                        event_data += '<tr>';
+                                        event_data += '<td>' + dataArray[i].Comentario + '</td>';
+                                        event_data += '</tr>';
+                                    }
+                                   
+                                }
+                            }
+                            else {
+                                for (var i = 0; i < dataArray.length; i++) {
+                                    if (dataArray[i].Comentario != null) {
+                                        var item = dataArray[i].Id_integracao;
+                                        var arrivalTime = dataArray[i].Comentario;
+
+                                        event_data += '<tr>';
+                                        //event_data += '<td>' + dataArray[i].Id_integracao + '. ' + '</td>';
+                                        event_data += '<td>' + dataArray[i].Comentario + '</td>';
+                                        event_data += '</tr>';
+                                    }
+                                };
+                            }
+
+                            $('#id_fatura_rep').html(id_fatura);
+                            //$("#tblReprocessar").append(event_data);
+
+                            $("#tblReprocessar tr>td").remove();
+                            $('#tblReprocessar').find('tbody').append(event_data);
+
+
+                            $('#modalReprocessarItens').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                        }
+                        else
+                        {
+                            alert(response[0].Comentario);
+                        }
+                        
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        alert(exceptionThrown);
+                    },
+                });
+            }
+
+            function Excluir(id_integracao, idMov, idLan) {
+                $.ajax({
+                    url: '@Url.Action("Excluir", "FinanceiroServicos")',
+                    //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                    //dataType: "json",
+                    traditional: true,
+                    //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                    data: { id_integracao: id_integracao, idMov: idMov, idLan: idLan },
+                    contentType: 'json',
+
+                    success: function (response) {
+                        if (response[0].Erro != "Erro") {
+                            var comentario = response[0].Comentario;
+                            var item = response[0].Id_integracao;
+
+                            var event_data = '';
+                            var dataArray = response;
+
+                            if (dataArray.length == 1) {
+                                for (var i = 0; i < dataArray.length; i++) {
+                                    if (dataArray[i].Comentario != null) {
+                                        var item = dataArray[i].Id_integracao;
+                                        var arrivalTime = dataArray[i].Comentario;
+
+                                        event_data += '<tr>';
+                                        event_data += '<td>' + dataArray[i].Comentario + '</td>';
+                                        event_data += '</tr>';
+                                    }
+
+                                }
+                            }
+                            else {
+                                for (var i = 0; i < dataArray.length; i++) {
+                                    if (dataArray[i].Comentario != null) {
+                                        var item = dataArray[i].Id_integracao;
+                                        var arrivalTime = dataArray[i].Comentario;
+
+                                        event_data += '<tr>';
+                                        //event_data += '<td>' + dataArray[i].Id_integracao + '. ' + '</td>';
+                                        event_data += '<td>' + dataArray[i].Comentario + '</td>';
+                                        event_data += '</tr>';
+                                    }
+                                };
+                            }
+
+                            $('#id_fatura_rep').html(id_fatura);
+                            //$("#tblReprocessar").append(event_data);
+
+                            $("#tblReprocessar tr>td").remove();
+                            $('#tblReprocessar').find('tbody').append(event_data);
+
+
+                            $('#modalReprocessarItens').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                        }
+                        else {
+                            alert(response[0].Comentario);
+                        }
+
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        alert(exceptionThrown);
+                    },
+                });
+            }
+
+            //$('#btnFiltrar').click(function () {
+            //    var dtInicio = $('#strDataInicio').val();
+            //    var dtFim = $('#strDataFim').val();
+            //    var faturamento = $('#faturamento').val();
+
+            //    if (dtInicio != '' & dtFim)
+            //    {
+            //        var input = $("<input>")
+            //        .attr("name", "exibir").val("exibir");
+
+            //        $('#myForm').append(input);
+            //        $('#myForm').submit();
+            //    }
+            //    else
+            //    {
+            //        $('#fatDivErro').html('Selecione Faturamento');
+            //        $("#btnFiltrar").attr("disabled", true)
+            //    }
+            //})
+
+            //$('#faturamento').change(function () {
+            //    $('#fatDivErro').html('');
+            //    $("#btnFiltrar").attr("disabled", false)
+            //})
+
+            //$('#strDataInicio').change(function () {
+            //    var dtInicio = $('#strDataInicio').val();
+
+            //    if (dtInicio != '')
+            //    {
+            //        $('#dtIniciDivErro').html('');
+            //    }
+            //})
+
+            //$('#strDataFim').change(function () {
+            //    var dtFim = $('#strDataFim').val();
+
+            //    if (dtFim = '')
+            //    {
+            //        $('#dtFimDivErro').html('');
+            //    }
+            //})
+
+            $('#ckRegistros').click(function () {
+                $('input:checkbox').not(this).prop('checked', this.checked);
+            })
+
+            $('.chkclass').click(function () {
+                var sum = 0;
+                var moeda = '';
+                var valor = 0;
+                var arr = [];
+                var total = 0;
+                var res = '';
+                $('.chkclass:checked').each(function () {
+                   
+                    moeda = $(this).closest('tr').find('.moedaClass').html();
+                    valor = $(this).closest('tr').find('.wagein').text().replace('.', '').replace(',', '.');
+                    arr.push({ Id: moeda, qty: valor });
+
+                    sum += parseFloat($(this).closest('tr').find('.wagein').text().replace('.', '').replace(',', '.'));
+                });
+                //arr.push({ Id: "E", qty: 100 });
+                //arr.push({ Id: "E", qty: 200 });
+                var unique = arr.filter(onlyUnique);
+
+
+                var result = [];
+                unique.reduce(function (res, value) {
+                    if (!res[value.Id]) {
+                        res[value.Id] = { Id: value.Id, qty: 0 };
+                        result.push(res[value.Id])
+                    }
+                    res[value.Id].qty += parseFloat(value.qty);
+                    return res;
+                }, {});
+
+                //console.log(result)
+              
+                if (sum > 0)
+                {
+                    result.forEach(item => res += item.Id + ": " + item.qty.toLocaleString('pt-br', {minimumFractionDigits: 2}) + " ");
+                    $('#valorTotal').html(res);
+                }
+                else
+                {
+                    $('#valorTotal').html('');
+                }
+               
+               // alert(sum);
+            });
+
+            function onlyUnique(value, index, self) {
+                return self.indexOf(value) === index;
+            }
+
+            function groupBy(arr, groupByKeyFn) {
+                return arr.reduce((acc, c) => {
+                    var key = groupByKeyFn(c);
+                    acc[key] = acc[key] || [];
+                    acc[key].push(c)
+                    return acc;
+                }, {})
+            }
+
+            $('#ckRegistros').click(function () {
+                var sum = 0;
+                var moeda = '';
+                var valor = 0;
+                var arr = [];
+                $('.chkclass:checked').each(function () {
+                    moeda = $(this).closest('tr').find('.moedaClass').html();
+                    valor = $(this).closest('tr').find('.wagein').text().replace('.', '').replace(',', '.');
+                    arr.push(moeda + valor);
+               
+                    sum += parseFloat($(this).closest('tr').find('.wagein').text().replace('.', '').replace(',', '.'));
+                });
+                if (sum > 0) {
+                    $('#valorTotal').html(moeda + ": " + sum.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+                }
+                else {
+                    $('#valorTotal').html('');
+                }
+            });
+
+            $('#modalInformativo').on('shown.bs.modal', function () {
+                $(this).find('.modal-dialog').css({
+                    width: '100%',
+                    height: 'auto',
+                    'max-height': '100%',
+                    'padding-right': 0
+                });
+
+                $(this).css({
+                    'padding-right': 0
+                });
+
+            });
+
+            $('.sidebar-dropdown .menuFinanceiro').addClass("active");
+            $('.sidebar-dropdown .menuFinanceiro').toggle();
+            $("#myDiv").show();
+        </script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </body>
+}
+</html>

@@ -1,0 +1,2253 @@
+﻿@model Entities.FinanceiroProcesso
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pedidoModal = (IEnumerable<Entities.Compra>)ViewData["pedidoModal"];
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+
+
+        body {
+  padding-right: 0px !important
+}
+
+
+
+/*.modal-open {
+  overflow-y: auto;
+}
+
+        .modalDialog {
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }*/
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            border-width: 5px;
+            border-color: #3A2303;
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        /*.modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }*/
+
+        @@media (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: 120px 120px 290px 120px 150px auto;
+                grid-gap: 35px;
+                padding: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .grid-item {
+                padding-bottom: 0PX;
+            }
+        }
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+        .page-content {
+            height: 100vh;
+        }
+
+        textarea {
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+            width: 100%;
+        }
+
+.with-nav-tabs.panel-primary .nav-tabs > li > a,
+.with-nav-tabs.panel-primary .nav-tabs > li > a:hover,
+.with-nav-tabs.panel-primary .nav-tabs > li > a:focus {
+    color: #fff;
+}
+.with-nav-tabs.panel-primary .nav-tabs > .open > a,
+.with-nav-tabs.panel-primary .nav-tabs > .open > a:hover,
+.with-nav-tabs.panel-primary .nav-tabs > .open > a:focus,
+.with-nav-tabs.panel-primary .nav-tabs > li > a:hover,
+.with-nav-tabs.panel-primary .nav-tabs > li > a:focus {
+	color: #fff;
+	background-color: #3071a9;
+	border-color: transparent;
+}
+.with-nav-tabs.panel-primary .nav-tabs > li.active > a,
+.with-nav-tabs.panel-primary .nav-tabs > li.active > a:hover,
+.with-nav-tabs.panel-primary .nav-tabs > li.active > a:focus {
+	color: #428bca;
+	background-color: #fff;
+	border-color: #428bca;
+	border-bottom-color: transparent;
+}
+.with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu {
+    background-color: #428bca;
+    border-color: #3071a9;
+}
+.with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > li > a {
+    color: #fff;   
+}
+.with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > li > a:hover,
+.with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > li > a:focus {
+    background-color: #3071a9;
+}
+.with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a,
+.with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a:hover,
+.with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a:focus {
+    background-color: #4a9fe9;
+}
+
+.view {
+    width: 1800px;
+}
+
+.wrapper {
+	position: relative;
+	overflow: auto;
+  	white-space: nowrap;
+}
+
+.sticky-col {
+    position: sticky;
+    position: -webkit-sticky;    
+    background-color: white;
+}
+  
+.first-col {
+	width: 120px;
+    min-width: 100px;
+    max-width: 340px;
+	left: 0px;  
+}
+
+.second-col {
+	width: 150px;
+    min-width: 110px;
+    max-width: 340px;
+	left: 100px;    
+}
+.third-col {
+	width: 100px;
+    min-width: 100px;
+    max-width: 340px;
+	left: 206px;    
+}
+.quarta-col {
+	width: 100px;
+    min-width: 100px;
+    max-width: 340px;
+	left: 300px;    
+}
+td, th {
+    padding: 15px;
+}
+
+
+.outer {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.middle {
+  display: flex;
+  flex: 1;
+}
+
+.inner {
+  flex: 0 0 100%;
+  height: 1em;
+}
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  height: 80px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+        .page-wrapper .page-content {
+    overflow-x: initial;
+}
+    </style>
+
+</head>
+@using (Html.BeginForm("Index", "FinanceiroProcesso", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+    <body style="overflow-x:hidden">
+        <input hidden id="modal" />
+        <input hidden id="codProcessoModal"/>
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                    <fieldset>
+                        <legend>Processo de Importação</legend>
+                    </fieldset>
+                </div>
+            </main>
+            <main class="page-content" style="margin-bottom:10px;">
+                <br />
+                @*<main class="page-content">*@
+                <div class="container-fluid" style="padding-top:25px;padding-left: 21px;">
+                    
+                        <div class="col-xs-12" style="padding-left:0">
+                            <div class="col-md-12">
+                                <div class="form-horizontal">
+                                    <form role="form">
+
+                                        <fieldset>
+
+                                            @*<legend>Integração com fornecedor</legend>*@
+
+                                            <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ stle="position:absolute;top:70px;width:97%">
+
+                                                <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;">
+                                                    <div class="panel-heading" style="background-color:lightgray">
+                                                        Filtros
+                                                    </div>
+                                                    <div class="panel-body" style="padding-bottom:0;">
+                                                        <div style="display:flex;justify-content:space-between;padding-bottom:10px;padding-left:10px;padding-right:10px">
+                                                            <div>
+                                                                <label class="form-negrito">Início Integração</label>
+                                                                @Html.Editor("strDataInicio", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", @onchange = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })
+                                                                <div style="color: red" id="dtIniciDivErro">
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                @Html.Label("Fim Integração", new { @class = "form-negrito" })
+                                                                @Html.Editor("strDataFim", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                                <div style="color: red" id="dtFimDivErro">
+                                                                </div>
+                                                            </div>
+                                                            @*<div style="width:350px">
+                                                                @Html.Label("Declaração", new { @class = "form-negrito" })
+                                                                @Html.DropDownList("declaracao", (SelectList)ViewBag.Credor, "-- Selecione -- ", new { @style = "width:110px;height:26px", @class = "chosen-select" })
+                                                                <div style="color: red" id="fatDivErro">
+                                                                </div>
+                                                            </div>*@
+                                                            @*<div>
+                                                                @Html.Label("Credor", new { @class = "form-negrito" })
+                                                                @Html.DropDownList("faturamento", (SelectList)ViewBag.Credor, "-- Selecione -- ", new { @style = "width:110px;height:26px", @class = "chosen-select" })
+                                                            </div>*@
+                                                            <div>
+                                                                <label>Num. Processo</label>
+                                                                @Html.Editor("numProcesso", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control", @maxlengh = "25",  @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                                <div style="color: red" id="dtFimDivErro">
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <label>Num. D.I.</label>
+                                                                @Html.Editor("numDI", new { htmlAttributes = new { @style = "width:110px;height:26px", @maxlengh = "25", @class = "form-control", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                                <div style="color: red" id="dtFimDivErro">
+                                                                </div>
+                                                            </div>
+                                                            @*<div>
+                                                                @Html.Label("Situação", new { @class = "form-negrito" })
+                                                                @Html.DropDownList("situacao", (SelectList)ViewBag.Situacao, "-- Selecione -- ", new { @class = "chosen-select" })
+                                                            </div>*@
+
+                                                            <div style="padding-top:16px">
+                                                                <button class="btn btn-primary btn-sm" id="btnFiltrar"  type="button">Exibir</button>
+
+                                                                @*@if (ViewBag.ExportaExcel == true)
+                                                                {
+                                                                    if (Model != null)
+                                                                    {
+                                                                        if (Model.lstItens != null)
+                                                                        {
+                                                                            if (Model.lstItens.Count > 0)
+                                                                            {
+                                                                                <a class="btn btn-success btn-sm" title="Download Excel" onclick="location.href='@Url.Action("DownloadExcel", "FinanceiroProcesso")'">Exportar</a>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="btn btn-success btn-sm" title="Download Excel" onclick="alert('Não há dados a serem exportados.')">Exportar</a>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="btn btn-success btn-sm" title="Download Excel" onclick="alert('Não há dados a serem exportados.')">Exportar</a>
+                                                                    }
+                                                                }*@
+                                                                @if (ViewBag.PermitirExportar == "S" || ViewBag.PermitirExportar == "SIM")
+                                                                {
+                                                                    <a class="btn btn-success btn-sm" title="Download Excel" onclick="downloadExcel()">Exportar</a>
+                                                                }
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                @*<legend>Selecionar pedidos de compra</legend>*@
+                                                <br />
+                                                <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                                                    <div class="panel-heading" style="background-color:lightgray">
+                                                        <table width="100%">
+                                                            <tr>
+                                                                <td style="text-align:left">Processo(s)</td>
+                                                                @*<td style="text-align:right">
+                                                                    @if (Model != null)
+                                                                    {
+                                                                        if (Model.lstMoedas != null)
+                                                                        {
+                                                                            foreach (string item in Model.lstMoedas)
+                                                                            {
+                                                                                <span id="valorMoeda">@item</span>;
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                </td>*@
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div class="panel-body" style="padding-bottom: 0;margin-bottom:0;font-size:11px">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-striped" id="tblProcesso">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="text-align:center">Processo</th>
+                                                                        <th style="text-align:center">Núm. D.I.</th>
+                                                                        <th style="text-align:center">Data D.I.</th>
+                                                                        <th style="text-align:left">Tipo da Declaração</th>
+                                                                        <th style="text-align:center">Data Integracão</th>
+                                                                        @*<th style="text-align:center">Opções</th>*@
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @if (Model != null)
+                                                                    {
+                                                                        if (Model.lstItens != null)
+                                                                        {
+                                                                            foreach (Entities.FinanceiroProcesso item in Model.lstItens)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td  id="processoLink" style="text-align:center"><a href="#" onclick="abrirProcesso('@item.COD_PROCESSO')">@item.COD_PROCESSO</a></td>
+                                                                                    <td style="text-align:center">@item.NUMERO_DI</td>
+                                                                                    <td style="text-align:center">@item.DATA_REGISTRO_DI.AsDateTime().ToString("dd/MM/yyyy").Replace("01/01/0001", "")</td>
+                                                                                    <td style="text-align:left">@item.TIPO_DECLARACAO</td>
+                                                                                    <td style="text-align:center">@item.DATA_INTEGRACAO.ToString("dd/MM/yyyy").Replace("01/01/0001", "")</td>
+                                                                                </tr>
+
+
+                                                                                @*<td><a class="modalBTN" style="padding:0;font-size:12px;text-decoration:none;color:black;font-size:14px;pointer-events:none">@item.NUMEROMOV</a></td>*@
+
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Continuar</button>*@
+                                                    </div>
+                                                </div>
+                                                @*teste*@
+
+
+
+
+                                            </div>
+
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.modal-dialog -->
+                            </div>
+                        </div>
+                 
+                </div>
+            </main>
+        </div>
+
+        <!-- Modal -->
+        @*@if (Model != null)
+            {
+                if (Model.lstInforme != null)
+                {*@
+        <div class="modal fade" id="modalInformativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel"><span id="credor_Modal"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Documento: <span id="documento_Modal"></span>
+                            </div>
+                            <table class="table table-hover  table-bordered">
+                                <tr>
+                                    <td>Processo: <span id="processo_Modal"> </span></td>
+                                    <td>Cadastro: <span id="cadastro_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Liberação: <span id="liberação_Modal"> </span></td>
+                                    <td>Vencimento: <span id="vencimento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Despesa: <span id="despesa_Modal"> </span></td>
+                                    <td>Documento: <span id="documento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Série: <span id="serie_Modal"> </span></td>
+                                    <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Código Credor Despesa: <span id="cod_Credor_Modal"> </span></td>
+                                    <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Valor Previsto Despesa: <span id="vr_previsto_despesa_Modal"> </span></td>
+                                    <td>Valor Adiantado Despesa: <span id="vr_adiantado_despesa_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Valor Real Despesa: <span id="valor_real_Modal"> </span></td>
+                                    <td>Valor a Pagar Despesa: <span id="valor_pagar_despesa_Modal"> </span></td>
+                                </tr>
+                            </table>
+
+                        </div>
+                        <br />
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Processo: <span id="processo_integracao_Modal"></span>
+                            </div>
+                            <table class="table table-hover  table-bordered" width="100%">
+                                <tr>
+                                    <td colspan="3">Integração: <span id="integracao_Modal"> </span></td>
+                                    <td colspan="3">ID: <span id="id_Modal"> </span></td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Data: <span id="data_Modal"> </span></td>
+                                    <td colspan="3"> Situação: <span id="situacao_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Tipo: <span id="tipo_Modal"> </span></td>
+                                    <td colspan="3">Complemento: <span id="complemento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" width="33%">ID INT: <span id="idint_Modal"> </span></td>
+                                    <td colspan="2" width="33%">COD TMV INT: <span id="codtmvint_Modal"> </span></td>
+                                    <td colspan="2" width="33%">Chave Origem Int: <span id="chave_origem_int_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" width="33%">Identificador: <span id="identificador_Modal"> </span></td>
+                                    <td colspan="2" width="33%">Movimento: <span id="movimento_Modal"> </span></td>
+                                    <td colspan="2" width="33%">Núm. Movimento: <span id="numMovimento_Modal"> </span></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <br />
+
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Considerações
+                            </div>
+                            <table class="table table-hover  table-bordered" width="100%">
+                                <tr id="corConsideracoes" width="100%">
+                                    <td colspan="6"><div class="pre-scrollable" id="consideracoes"></div></td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                        @*<div class="modal-footer" style="padding:5px;">*@
+                            @*<button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>*@
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
+        <div class="modal fade" id="modalProcesso2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="middle" style="width:1250px;height:100%">
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalProcesso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center" style="padding:5px">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4>Processo <span id="modal_processo"></span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel with-nav-tabs panel-primary" >
+                            <div class="panel-heading" style="background-color: #337ab7 !important">
+                                <ul class="nav nav-tabs">
+                                    <li id="liDeclaracao" class="active"><a href="#tabDeclaracao" data-toggle="tab">Declaração de Importação</a></li>
+                                    <li id="liFaturas"><a href="#tabFaturas" data-toggle="tab">Faturas</a></li>
+                                    <li id="liImpostos"><a href="#tabImpostos" data-toggle="tab">Impostos</a></li>
+                                    <li id="liDespesas"><a href="#tabDespesas" data-toggle="tab">Despesas</a></li>
+                                    <li id="liEstoque"><a href="#tabEstoque" data-toggle="tab">Notas (estoque)</a></li>
+                                    <li id="liFinanceiro"><a href="#tabFinanceiro" data-toggle="tab">Financeiro</a></li>
+                                    <li id="liHistorico"><a href="#tabHistorico" data-toggle="tab">Histórico</a></li>
+                                </ul>
+                            </div>
+                            <div class="panel-body" style="padding-bottom:0">
+                                <div class="tab-content">
+                                    @*<div class="tab-pane fade in active" id="tabDeclaracao">Primary 1</div>*@
+                                    @*Guia Fatura*@
+                                    <div class="tab-pane fade" id="tabFaturas">
+                                        <div class="panel with-nav-tabs panel-primary" style="height:100%;margin-bottom:0">
+                                            <div class="panel-heading" style="padding-bottom:2px;padding-top:2px;background-color:#337ab7 !important">
+                                                Faturas
+                                            </div>
+
+                                            <div class="outer" style="height:100%">
+                                                <div class="middle" style="height:100%">
+                                                    <div class="inner" style="height:100%">
+                                                        <table id="tblFatura" class="table table-striped table-responsive" cellspacing="20" style="white-space: nowrap;font-size:11px;margin-bottom:0">
+                                                            <thead>
+                                                                <tr align="left" style="background-color:lightgray;">
+                                                                    <td class="sticky-col first-col" style="text-align:left;background-color:lightgray;padding-top:2px;padding-bottom:2px;padding-left:15px !important">ImportSys</td>
+                                                                    <td class="sticky-col second-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Movimento</td>
+                                                                    <td class="sticky-col third-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Documento</td>
+                                                                    <td class="" style="padding-left:0;padding-top:2px;padding-bottom:2px">Exportador</td>
+                                                                    <td style="padding-left:0;padding-top:2px;padding-bottom:2px">Fatura</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;text-align:center">Tipo Fatura</td>
+                                                                    <td style="padding-left:0;padding-top:2px;padding-bottom:2px">Moeda</td>
+                                                                    <td style="padding-left:0;text-align:left;padding-top:2px;padding-bottom:2px">Cond. Pgto</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;text-align:center">Dt. Fatura</td>
+                                                                    <td style="text-align:center;padding-top:2px;padding-bottom:2px">Vencimento</td>
+                                                                    <td style="padding-right:20px;padding-top:2px;padding-bottom:2px;width:50px;text-align:center">Taxa DI</td>
+                                                                    <td style="padding-left:0;width:80px;text-align:center;padding-top:2px;padding-bottom:2px">Valor</td>
+                                                                    <td style="width:100px;padding-top:2px;padding-bottom:2px;padding-left: 10px !important;">Conhecimento</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Incoterm</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbodyFatura"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="panel with-nav-tabs panel-primary" style="">
+                                            <div class="panel-heading" style="padding-bottom:2px;padding-top:2px;background-color: #337ab7 !important">
+                                                Pedido de Compra
+                                            </div>
+
+                                            <div class="outer" style="height:100%">
+                                                <div class="middle" style="height:100%">
+                                                    <div class="inner" style="width:2500px;height:100%">
+
+                                                        <table id="tblFaturaPDC" class="table table-striped" cellspacing="20" style="white-space: nowrap;font-size:10px;">
+                                                            <thead>
+                                                                <tr style="background-color:lightgray;">
+                                                                    <td style="padding-top:2px;padding-bottom:2px;padding-left:15px !important;width:60px">ImportSys</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:60px">Filial</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:60px">Mov. Pedido</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:60px">Tipo de Importação</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:60px">Condição Pgto</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:60px">Fatura</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:60px">Mov. Recebimento</td>
+                                                                    @*<td style="padding-top:2px;padding-bottom:2px">Movimento</td>*@
+                                                                    @*
+                                                                    <td style="padding-top:2px;padding-bottom:2px">IDENTIFICADOR PDC</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">IDENTIFICADOR REC</td>*@
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbodyFaturaPDC"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*Fim Guia Fatura*@
+                                    @*Guia Impostos*@
+                                    <div class="tab-pane fade" id="tabImpostos">
+                                           <div class="panel with-nav-tabs panel-primary" style="height:100%;margin-bottom:0">
+                                            <div class="panel-heading" style="padding-bottom:2px;padding-top:2px;background-color: #337ab7 !important">
+                                                Impostos
+                                            </div>
+                                            <div class="outer" style="height:100%">
+                                                <div class="middle" style="height:100%">
+                                                    <div class="inner" style="width:2500px;height:100%">
+                                                        <table id="tblImpostos" class="table table-striped table-responsive" cellspacing="20" style="white-space: nowrap;font-size:10px">
+                                                            <thead>
+                                                                <tr style="background-color:lightgray;">
+                                                                    <td class="sticky-col first-col" style="text-align:left;padding-left:6px;background-color:lightgray;padding-top:2px;padding-bottom:2px">ImportSys</td>
+                                                                    <td class="sticky-col second-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Mov. Recebimento</td>
+                                                                    <td class="sticky-col third-col" style="padding-left:10px;background-color:lightgray;padding-top:2px;padding-bottom:2px">Documento</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Exportador</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Referência</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Descrição</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px"> Dt.Vencimento</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Moeda</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Vl. Previsto</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Vl. Adiantado</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Vl. Real</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Vl. Pagar</td>
+                                                                    <td style="text-align:center;padding-top:2px;padding-bottom:2px">Dt. Cadastro</td>
+                                                                    <td style="text-align:center;padding-top:2px;padding-bottom:2px">Dt. Liberação</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbodyImpostos"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    @*Fim Guia Impostos*@
+                                    @*@Guia Despesas*@
+                                    <div class="tab-pane fade" id="tabDespesas">
+                                        <div class="panel with-nav-tabs panel-primary" style="height:100%;margin-bottom:0">
+                                            <div class="panel-heading" style="padding-bottom:2px;padding-top:2px;background-color: #337ab7 !important">
+                                                Despesas
+                                            </div>
+                                           <div class="outer" style="height:100%">
+                                                <div class="middle" style="height:100%">
+                                                    <div class="inner" style="width:2500px;height:100%">
+                                                        <table id="tblDespesas" class="table table-striped table-responsive" cellspacing="20" style="white-space: nowrap;font-size:10px">
+                                                            <thead>
+                                                                <tr style="background-color:lightgray;">
+                                                                    <td class="sticky-col first-col" style="background-color:lightgray;padding-top:2px;padding-bottom:2px;padding-left:15px">ImportSys</td>
+                                                                    <td class="sticky-col second-col" style="background-color:lightgray;padding-top:2px;padding-bottom:2px">Mov. Emissão</td>
+                                                                    <td class="sticky-col third-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Mov. Recebimento</td>
+                                                                    <td class="sticky-col quarta-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Documento</td>
+                                                                    <td class="" style="padding-left:5px;padding-top:2px;padding-bottom:2px">Exportador</td>
+                                                                    <td style="padding-left:0px;padding-top:2px;padding-bottom:2px">Referência</td>
+                                                                    <td style="padding-left:0;padding-top:2px;padding-bottom:2px">Descrição</td>
+                                                                    <td style="padding-left:0;padding-top:2px;padding-bottom:2px">Dt. Vencimento</td>
+                                                                    <td style="padding-left:0;text-align:center;padding-top:2px;padding-bottom:2px">Moeda</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Vl. Previsto</td>
+                                                                    <td style="padding-right:15px;padding-top:2px;padding-bottom:2px">Vl. Adiantado</td>
+                                                                    <td style="padding-left:30px;padding-top:2px;padding-bottom:2px">Vl. Real</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Vl. Pagar</td>
+                                                                    <td style="padding-left:19px;padding-top:2px;padding-bottom:2px">Dt. Cadastro</td>
+                                                                    <td style="padding-left:0;padding-top:2px;padding-bottom:2px">Dt. Liberação</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbodyDespesa"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    @*@Fim Guia Despesas*@
+                                    @*@Guia Estoque*@
+                                    <div class="tab-pane fade" id="tabEstoque">
+                                        @*<div class="panel with-nav-tabs panel-primary" style="">
+                                            <div class="panel-heading" style="padding-bottom:2px;padding-top:2px">
+                                                Notas
+                                            </div>
+                                            <div class="outer" style="height:100%">
+                                                <div class="middle" style="height:100%">
+                                                    <div class="inner" style="width:2500px;height:100%">
+                                                        <table id="tblEstoque"  class="table table-striped" cellspacing="20" style="white-space: nowrap;font-size:10px;">
+                                                            <thead>
+                                                                <tr style="background-color:lightgray;">
+                                                                    <td class="sticky-col first-col" style="background-color:lightgray;padding-top:2px;padding-bottom:2px">BrokerSys</td>
+                                                                    <td class="sticky-col second-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Mov. Emissão</td>
+                                                                    <td class="sticky-col third-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Rec. Físico</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Fatura</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;padding-right:25px">Taxa DI</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;text-align:right">II</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;padding-right:25px">COFINS</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">IPI</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">PIS</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Frete</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Seguro</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Vl. Produto</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">ICMS</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Vl. Nota</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Despesa Complementar</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Vl. Estoque</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbodyEstoque"></tbody>
+                                                        </table>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+
+                                        <div class="panel with-nav-tabs panel-primary" style="margin-bottom:0">
+                                            <div class="panel-heading" style="padding-bottom:2px;padding-top:2px;background-color: #337ab7 !important">
+                                                Notas
+                                            </div>
+
+                                            <div class="outer" style="height:100%">
+                                                <div class="middle" style="height:100%">
+                                                    <div class="inner" style="width:2500px;height:100%">
+
+                                                        <table id="tblEstoque" class="table table-striped" cellspacing="20" style="white-space: nowrap;font-size:11px;margin-bottom:0">
+                                                            <thead>
+                                                                <tr style="background-color:lightgray;width:1%">
+                                                                    <td class="sticky-col first-col" style="background-color:lightgray;padding-top:2px;padding-bottom:2px;padding-left:15px">BrokerSys</td>
+                                                                    <td class="sticky-col second-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Mov. Emissão</td>
+                                                                    <td class="sticky-col third-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Rec. Físico</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">Fatura</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;">Taxa DI</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;text-align:center">II</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">COFINS</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">IPI</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">PIS</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">Frete</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">Seguro</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">Vl. Produto</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">ICMS</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">Vl. Nota</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:center;">Despesa Complementar</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;">Vl. Estoque</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbodyEstoque"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <br />
+                                       
+                                            @*<div class="panel with-nav-tabs panel-primary" style="height:100%;margin-bottom:0">
+                                                <div class="panel-heading" style="padding-bottom:2px;padding-top:2px">
+                                                    Histórico
+                                                </div>
+                                                <div class="outer" style="height:100%">
+                                                    <div class="middle" style="height:100%">
+                                                        <div class="inner" style="width:2500px;height:100%">
+                                                            <table id="tblNotaDespesas" class="table table-striped" cellspacing="20" style="white-space: nowrap;font-size:10px">
+                                                                <thead>
+                                                                    <tr style="background-color:lightgray;">
+                                                                        
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tbodyNotaDespesas"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+
+                                        <div class="panel with-nav-tabs panel-primary" style="">
+                                            <div class="panel-heading" style="padding-bottom:2px;padding-top:2px;background-color: #337ab7 !important">
+                                                Despesas Complementares
+                                            </div>
+                                            <div class="outer" style="height:100%">
+                                                <div class="middle" style="height:100%">
+                                                    <div class="inner" style="width:2500px;height:100%">
+
+                                                        <table id="tblNotaDespesas" class="table table-striped" cellspacing="20" style="white-space: nowrap;font-size:10px;margin-bottom:0">
+                                                            <thead>
+                                                                <tr style="background-color:lightgray;width:1%">
+                                                                    <td class="sticky-col first-col" style="background-color:lightgray;padding-top:2px;padding-bottom:2px">BrokerSys</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">Fatura</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">DI</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">II</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">COFINS</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">IPI</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">PIS</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">Frete</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">Seguro</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">Vl. Produto</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">ICMS</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">Vl. Nota</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:10px;text-align:right;min-width:50px">Vl. Estoque</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbodyNotaDespesas"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="panel with-nav-tabs panel-primary" style="">
+                <div class="panel-heading" style="padding-bottom:2px;padding-top:2px">
+                    Contabilizações (ImportSys)
+                </div>
+
+                <div class="outer" style="height:100%">
+                    <div class="middle" style="width:1250px;height:100%">
+                        <div class="inner" style="width:2500px;height:100%">
+
+                            <table id="tblEstoqueLACCTB" class="table table-striped" cellspacing="20" style="white-space: nowrap;font-size:10px">
+                                <thead>
+                                    <tr style="background-color:lightgray;">
+                                        <td style="padding-top:2px;padding-bottom:2px">DESPESA</td>
+                                        <td style="padding-top:2px;padding-bottom:2px">DÉBITO</td>
+                                        <td style="padding-top:2px;padding-bottom:2px">CRÉDITO</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyEstoqueLACCTB"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+                                    </div>
+                                            @*@Fim Guia Estoque*@
+                                            <div class="tab-pane fade" id="tabHistorico">
+                                                <div class="panel with-nav-tabs panel-primary" style="height:100%;margin-bottom:0">
+                                                    <div class="panel-heading" style="padding-bottom:2px;padding-top:2px;background-color: #337ab7 !important">
+                                                        Histórico
+                                                    </div>
+                                                    <div class="outer" style="height:100%">
+                                                        <div class="middle" style="height:100%">
+                                                            <div class="inner" style="width:2500px;height:100%">
+                                                                <table id="tblHistorico" class="table table-striped" cellspacing="20" style="white-space: nowrap;font-size:10px">
+                                                                    <thead>
+                                                                        <tr style="background-color:lightgray;">
+                                                                            <td class="sticky-col first-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">ImportSys</td>
+                                                                            <td class="sticky-col second-col" style="background-color:lightgray;padding-top:2px;padding-bottom:2px">Registro</td>
+                                                                            <td class="sticky-col third-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Mov. Emissão</td>
+                                                                            <td class="sticky-col third-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Mov. Recebimento</td>
+                                                                            <td class="sticky-col third-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Documento</td>
+                                                                            <td class="" style="padding-left: 35px;padding-top:2px;padding-bottom:2px;text-align:center">Valor</td>
+                                                                            <td style="padding-left:0;padding-top:2px;padding-bottom:2px">Dt. Integração</td>
+                                                                            <td style="padding-left:0;padding-top:2px;padding-bottom:2px">ID Integração</td>
+                                                                            <td style="padding-left:0;padding-top:2px;padding-bottom:2px">Chave Integração</td>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tbodyHistorico"></tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            @*@Fim Guia Estoque*@
+                                    @*@Inicio Guia Financeiro*@
+                                    <div class="tab-pane fade" id="tabFinanceiro">
+                                        <div class="panel with-nav-tabs panel-primary" style="">
+                                            <div class="panel-heading" style="padding-bottom:2px;padding-top:2px;background-color: #337ab7 !important">
+                                                Financeiro
+                                            </div>
+                                            <div class="outer" style="height:100%">
+                                                <div class="middle" style="height:100%">
+                                                    <div class="inner" style="width:2500px;height:100%">
+                                                        <table id="tblFinanceiro" class="table table-striped" cellspacing="20" style="white-space: nowrap;font-size:10px;margin-bottom:0">
+                                                            <thead>
+                                                                <tr style="background-color:lightgray;">
+                                                                    <td class="sticky-col first-col" style="background-color:lightgray;padding-top:2px;padding-bottom:2px">Operação</td>
+                                                                    <td class="sticky-col second-col" style="padding-left:0;background-color:lightgray;padding-top:2px;padding-bottom:2px">Mov. Recebimento</td>
+                                                                    <td class="" style="padding-top:2px;padding-bottom:2px">Dt. Emissão</td>
+                                                                    <td class="" style="padding-top:2px;padding-bottom:2px">Dt. Documento</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Fatura</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Documento</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Tipo</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:80px">Valor (ME)</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px;width:80px">Valor (MN)</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Situação</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Dt. Vencimento</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Ctt. Câmbio</td>
+                                                                    <td style="padding-top:2px;padding-bottom:2px">Dt. Baixa</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbodyFinanceiro"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @*@Fim Guia Financeiro*@
+                                            @*Guia Declaração*@
+                                            <div class="tab-pane fade in active" id="tabDeclaracao">
+                                                <div class="panel with-nav-tabs panel-primary" style="height:100%;margin-bottom:0">
+                                                    <div class="panel-heading" style="padding-bottom:2px;padding-top:2px;background-color: #337ab7 !important">
+                                                        Tipo de Declaração: <span id="declaracao_modal"></span>
+                                                    </div>
+                                                    <div class="outer" style="height:100%">
+                                                        <div class="middle" style="width:1250px;height:100%">
+                                                            <div class="inner" style="width:2500px;height:100%">
+                                                                <table id="tblDeclaracao" class="table table-striped table-responsive table-bordered" cellspacing="20" style="white-space: nowrap;width:98%;font-size:10px">
+                                                                    <tbody id="tbodyDeclaracao"></tbody>
+                                                                </table>
+
+                                                                <div class="row">
+                                                                    <div class="column" style="padding-left: 20px;border-right: 2px solid lightgray;">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <span style="font-weight:bold">DI: </span>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span id="di_modal"></span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <span style="font-weight:bold">DATA DI: </span>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span id="data_di_modal"></span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <span style="font-weight:bold">CONHECIMENTO: </span>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span id="conhecimento_modal"></span>
+
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <span style="font-weight:bold">DATA CONHECIMENTO: </span>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span id="dt_conhecimento_modal"></span>
+                                                                                </td>
+                                                                            </tr>
+
+
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="column" style="padding-left: 3px;">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <span style="font-weight:bold">TAXA DI:</span>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span id="taxa_di_modal"></span>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*Fim Guia Declaraçao*@
+                                        </div>
+                        </div>
+                    </div>
+                        <div class="modal-footer" style="padding:0;border-top:none !important">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                        </div>
+
+                </div>
+            </div>
+           </div>
+         </div>
+  
+
+
+
+
+            <script>
+                $(document).ready(function () {
+                    $('#modalProcesso').css({
+                        'padding-right': 0
+                    });
+
+                allWells = $('#Security-Setup-step'),
+                allWells2 = $('#VerifyEmail-step')
+                //,allNextBtn = $('.nextBtn');
+
+                allWells.hide();
+                allWells2.hide();
+
+                var menuAtivo = $('#menuAtivo').val();
+                //$('.menuFinanceiro .sidebar-submenu').toggle();
+            });
+
+
+            $('.consultaPedido').click(function () {
+                $(".divConsultaPedido").toggle();
+                $(".divParametrosPedido").toggle();
+            });
+
+            $('a.modalBTN').click(function () {
+                $('#my-modal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+
+
+
+            $('#opcoesImportacaoRegular *').attr("disabled", true);
+
+            $('#importacaoRegularInput').click(function () {
+                //$('#opcoesImportacaoRegular').show();
+                $('#opcoesImportacaoRegular *').attr("disabled", false);
+            });
+            $('#depositoEspecialInput').click(function () {
+                //$('#opcoesImportacaoRegular').hide();
+                $('#opcoesImportacaoRegular *').attr("disabled", true);
+            });
+            </script>
+
+
+     
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+      
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+            <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+            <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+            <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+ 
+            <script>
+            $(window).load(function () {
+                $(".chosen-select").chosen()
+            });
+            </script>
+
+            <script>
+            function populaModal(idIntegracao, numeroMov, situacao, aprovacao, status, data, valor, fornecedor, idMov, comprador) {
+                $('#idIntegracao').html(idIntegracao);
+                $('#numeroMovModal').html(numeroMov);
+                $('#situacaoModal').html(situacao);
+                $('#aprovacao').html(aprovacao);
+                $('#status').html(status);
+                $('#data').html(data);
+                $('#valor').html(valor);
+                $('#fornecedor').html(fornecedor);
+                $('#comprador').text(comprador);
+                $('#idMov').text(idMov);
+                $('.fornecedor').html(fornecedor);
+            }
+
+            function salvarPedidoCompra() {
+
+                var numeroPedido = $('#numeroMovModal').html();
+                var dataInicio = $('#strDataInicio').val();
+                var dataFim = $('#strDataFim').val();
+                var idMov = $('#idMov').html();
+                var status = $('#status').html();
+                var situacao = $('#situacaoModal').html();
+                var id_integracao = $('#idIntegracao').html();
+                var origem = '';
+
+                var de = document.getElementById('depositoEspecialInput');
+                if (de.checked) {
+                    origem = 'DE';
+                }
+
+                var ir = document.getElementById('importacaoRegularInput');
+                if (ir.checked) {
+                    origem = 'IR';
+                }
+
+                $.ajax({
+                    url: '@Url.Action("AgendarIntegracao", "Compra")',
+                    type: 'get',
+                    //data: { nroPedidoModal: numeroPedido, strDataInicio: dataInicio, strDataFim: dataFim, idMov: idMov, statusModal: status, situacaoModal: situacao}
+                    data: { idMov: idMov, id_integracao: id_integracao, origem: origem },
+                    success: function (data) {
+                        $("#myForm").submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    },
+                });
+            }
+
+            function Atualiza() {
+                $('#myForm').submit();
+            }
+            </script>
+
+            <script>
+            $(function () {
+                //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' }).val();
+                //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' });
+                $(".datepickerInput").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+                $('#importacaoRegularInput').attr("disabled", true);
+            });
+
+            function isValidDate(date, campo) {
+
+                var regEx = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+            
+                if (regEx.test(date) == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            function desbloquearPedido(idIntegracao, idMov) {
+                $.ajax({
+                    url: '@Url.Action("DesbloquearPedido", "Compra")',
+                    type: 'get',
+                    data: { idIntegracao: idIntegracao, idMov: idMov },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+            }
+
+            @*$("a.modalInformativo").click(function(evt){
+
+                $.ajax({
+                    url: '@Url.Action("Index", "Cavok")',
+                    type: 'get',
+                    data: {},
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "modalInformativo").val("#modalInformativo")
+                        .attr("id", "modalInformativo").val("#modalInformativo");
+                        $('#myForm').append($(input));
+
+                        $("#myForm").submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+
+
+            });*@
+
+            //$(document).ready(function () {
+            //    $('#modalInformativo').modal('show');
+            //});
+
+            @*function informativo(id_integracao)
+            {
+                $.ajax({
+                    url: '@Url.Action("Informativo", "Cavok")',
+                    type: 'get',
+                    data: { id_integracao: id_integracao },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "modalInformativo").val("#modalInformativo")
+                        .attr("id", "modalInformativo").val("#modalInformativo");
+                        $('#myForm').append($(input));
+                        $('#modal').val("#modalInformativo");
+                        $("#myForm").submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+            }*@
+
+            function Informativo(id_integracao, sp_id, sp_id_despesa_processo)
+            {
+                $.ajax({
+                    url: '@Url.Action("Informativo", "FinanceiroDespesas")',
+                    //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                    //dataType: "json",
+                    traditional: true,
+                    //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                    data: { id_integracao, sp_id, sp_id_despesa_processo},
+                    contentType: 'json',
+
+                    success: function (response) {
+                        var credor = response[0].Credor;
+                        var processo = response[0].Processo;
+                        var cadastro = response[0].Cadastro;
+                        var liberacao = response[0].Liberacao;
+                        var vencimento = response[0].Vencimento;
+                        var despesa = response[0].Despesa;
+                        var documento = response[0].Documento;
+                        var serie = response[0].Serie;
+                        var moeda = response[0].Moeda;
+                        var codDespesa = response[0].CodCredorDespesa;
+                        var vrDespesa = response[0].VrPrevistoDespesa;
+                        vrDespesa = vrDespesa != 0 ? parseFloat(vrDespesa).toLocaleString() : '';
+                        var vrAdiantado = response[0].VrAdiantadoDespesa;
+                        vrAdiantado = vrAdiantado != 0 ? parseFloat(vrAdiantado).toLocaleString() : '';
+                        var vrRealDespesa = response[0].VrRealDespesa;
+                        vrRealDespesa = vrRealDespesa != 0 ? parseFloat(vrRealDespesa).toLocaleString() : '';
+                        var vrPagarDespesa = response[0].VrPagarDespesa;
+                        vrPagarDespesa = vrPagarDespesa != 0 ? parseFloat(vrPagarDespesa).toLocaleString() : '';
+                        var processoIntegracao = response[0].ProcessoIntegracao;
+                        var id_int = response[0].Id_Integracao;
+                        var id = response[0].Id;
+                        var data = '';
+                        data = response[0].Data;
+                        var situacao = response[0].Situacao;
+                        var tipo = response[0].Tipo;
+                        var complemento = response[0].Complemento;
+                        var idIntegracao = response[0].Id_Integracao;
+                        var idInt = response[0].IdInt;
+                        var codTMVInt = response[0].CodTMVInt;
+                        var chaveOrigem = response[0].ChaveOrigem;
+                        var identificador = response[0].Identificador;
+                        var movimento = response[0].Movimento;
+                        var numMovimento = response[0].NumMovimento;
+                        var cor = response[0].Cor;
+                        var consideracoes = response[0].Consideracoes;
+                        var cor = response[0].Cor;
+                        if (cor == 'B') {
+                            $("#corConsideracoes").css("background-color", "white");
+                        }
+                        else if (cor == 'A') {
+                            $("#corConsideracoes").css("background-color", "lightgoldenrodyellow");
+                        }
+                        else {
+                            $("#corConsideracoes").css("background-color", "orangered");
+                        }
+
+                        $('#credor_Modal').html(credor);
+                        $('#processo_Modal').html(processo);
+                        $('#cadastro_Modal').html(cadastro);
+                        $('#liberacao_Modal').html(liberacao);
+                        $('#vencimento_Modal').html(vencimento);
+                        $('#despesa_Modal').html(despesa);
+                        $('#documento_Modal').html(documento);
+                        $('#serie_Modal').html(serie);
+                        $('#moeda_Modal').html(moeda);
+                        $('#cod_Credor_Modal').html(codDespesa);
+                        $('#vrDespesa_Modal').html(vrDespesa);
+                        $('#vr_adiantado_despesa_Modal').html(vrAdiantado);
+                        $('#valor_real_Modal').html(vrRealDespesa);
+                        $('#valor_pagar_despesa_Modal').html(vrPagarDespesa);
+                        $('#processo_integracao_Modal').html(processoIntegracao);
+                        $('#integracao_Modal').html(id_int);
+                        $('#id_Modal').html(id);
+                        $('#data_Modal').html(data);
+                        $('#situacao_Modal').html(situacao);
+                        $('#tipo_Modal').html(tipo);
+                        $('#complemento_Modal').html(complemento);
+                        $('#idint_Modal').html(idInt);
+                        $('#codtmvint_Modal').html(codTMVInt);
+                        $('#chave_origem_int_Modal').html(chaveOrigem);
+                        $('#identificador_Modal').html(identificador);
+                        $('#numMovimento_Modal').html(numMovimento);
+                        $('#movimento_Modal').html(movimento);
+                        $('#consideracoes').html(consideracoes);
+
+
+                        //$('#situacao_Modal').html(situacao);
+                        //$('#data_Modal').html(data);
+                        //$('#tipo_Modal').html(tipo);
+                        //$('#forma_pagamento_Modal').html(forma_pag);
+                        //$('#moeda_Modal').html(moeda);
+                        //$('#valor_Modal').html(valor);
+                        //$('#cotacao_Modal').html(cotacao);
+                        //$('#valor_total_Modal').html(valor_total);
+                        //$('#valor_total_reais_Modal').html(valor_total_reais);
+                        //$('#cliente_Modal').html(cliente);
+                        //$('#consideracoes_Modal').html(consideracoes);
+
+                        $('#modalInformativo').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+
+
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //alert(exceptionThrown);
+                    },
+                });
+            }
+
+            function Reprocessar(id_integracao, sp_id, sp_id_despesa_processo)
+            {
+                $.ajax({
+                    url: '@Url.Action("Reprocessar", "FinanceiroDespesas")',
+                    //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                    //dataType: "json",
+                    traditional: true,
+                    //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                    data: { id_integracao, sp_id: sp_id, sp_id_despesa_processo: sp_id_despesa_processo },
+                    contentType: 'json',
+
+                    success: function (response) {
+
+                        var comentario = response[0].Comentario;
+                        var item = response[0].Item;
+
+                        var event_data = '';
+                        var dataArray = response;
+
+                        if(dataArray.length == 1)
+                        {
+                            for (var i = 0; i < dataArray.length; i++){
+                                var item = dataArray[i].Item;
+                                var arrivalTime = dataArray[i].Comentario;
+
+                                event_data += '<tr>';
+                                event_data += '<td>'+dataArray[i].Comentario+'</td>';
+                                event_data += '</tr>';
+                            }
+                        }
+                        else
+                        {
+                            for (var i = 0; i < dataArray.length; i++){
+                                var item = dataArray[i].Item;
+                                var arrivalTime = dataArray[i].Comentario;
+
+                                event_data += '<tr>';
+                                event_data += '<td>'+dataArray[i].Item+'. '+'</td>';
+                                event_data += '<td>'+dataArray[i].Comentario+'</td>';
+                                event_data += '</tr>';
+                            };
+                        }
+
+
+
+                        $('#id_fatura_rep').html(id_fatura);
+                        //$("#tblReprocessar").append(event_data);
+
+                        $("#tblReprocessar tr>td").remove();
+                        $('#tblReprocessar').find('tbody').append(event_data);
+
+
+                        $('#modalReprocessarItens').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        alert(exceptionThrown);
+                    },
+                });
+            }
+
+                function abrirProcesso(codProcesso) {
+                   
+                    var codProcessoModal = $('#codProcessoModal').val();
+                  
+                    if (codProcessoModal != codProcesso)
+                    {
+                        $('#codProcessoModal').val(codProcesso);
+                        $('#modal_processo').html(codProcesso);
+                        //$("#tblFatura").find("tr:gt(0)").remove();
+                        $.ajax({
+                            url: '@Url.Action("abrirProcesso", "FinanceiroProcesso")',
+                            //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                            //dataType: "json",
+                            traditional: true,
+                            data: { codProcesso: codProcesso },
+                            contentType: 'json',
+
+                            success: function (response) {
+                                for (var x = 0; x < response.ListDeclaracao.length; x++) {
+
+                                    //$('#tblDeclaracao tbody').append('<tr></tr>');
+                                    //$('#tblDeclaracao tbody').append('<td style="padding-right: 40px;" class="sticky-col first-col">' + response.ListDeclaracao[x].NF_COD_PROCESSO + '</td>');
+                                    //$('#tblDeclaracao tbody').append('<td style="padding-right: 40px;" class="sticky-col second-col">' + response.ListDeclaracao[x].TIPO_DECLARACAO + '</td>');
+                                    //$('#tblDeclaracao tbody').append('<td style="padding-right: 50px;" class="sticky-col third-col">' + response.ListDeclaracao[x].NF_NUMERO_DI + '</td>');
+                                    //$('#tblDeclaracao tbody').append('<td style="padding-right: 40px;padding-left: 40px;width:100px">' + response.ListDeclaracao[x].NF_TAXA_DOLAR_REGISTRO_DI + '</td>');
+                                    //$('#tblDeclaracao tbody').append('<td hidden>' + response.ListDeclaracao[x].NF_DATA_REGISTRO_DI + '</td>');
+                                    //$('#tblDeclaracao tbody').append('<td hidden>' + response.ListDeclaracao[x].NF_NUM_CONHECIMENTO + '</td>');
+                                    //$('#tblDeclaracao tbody').append('<td hidden>' + response.ListDeclaracao[x].NF_DATA_CONHECIMENTO + '</td>');
+                                }
+                                if (response.ListDeclaracao.length > 0) {
+                                    let data_di_modal = new Date(parseInt(response.ListDeclaracao[0].NF_DATA_REGISTRO_DI.substr(6)));
+                                    dia = data_di_modal.getDate().toString(),
+                                     diaF = (dia.length == 1) ? '0' + dia : dia,
+                                     mes = (data_di_modal.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+                                     mesF = (mes.length == 1) ? '0' + mes : mes,
+                                     anoF = data_di_modal.getFullYear();
+                                    let ftmdata_di_modal = diaF + "/" + mesF + "/" + anoF;
+
+                                    let data_conhecimento_modal = new Date(parseInt(response.ListDeclaracao[0].NF_DATA_CONHECIMENTO.substr(6)));
+                                    let ftmdata_conhecimento_modal = ("0" + data_conhecimento_modal.getDate()).slice(-2) + '/' +
+                                         ("0" + (data_conhecimento_modal.getMonth() + 1)).slice(-2) + "/" +
+                                        data_conhecimento_modal.getFullYear();
+
+                                    let taxadi = response.ListDeclaracao[0].NF_TAXA_DOLAR_REGISTRO_DI;
+                                    taxadi = taxadi != 0 ? parseFloat(taxadi).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+
+                                    $('#di_modal').html(response.ListDeclaracao[0].NF_NUMERO_DI);
+                                    $('#data_di_modal').html(ftmdata_di_modal);
+                                    $('#declaracao_modal').html(response.ListDeclaracao[0].TIPO_DECLARACAO);
+                                    $('#dt_conhecimento_modal').html(ftmdata_conhecimento_modal);
+                                    $('#conhecimento_modal').html(response.ListDeclaracao[0].NF_NUM_CONHECIMENTO);
+                                    $('#taxa_di_modal').html(taxadi);
+                                }
+
+                                var totalValorFatura = 0
+                                for (var x = 0; x < response.ListFatura.length; x++) {
+                                    totalValorFatura += response.ListFatura[x].FAT_VMCV_TOTAL;
+                                    var vrPrevisto = response.ListFatura[x].FAT_TAXA_DI;
+                                    vrPrevisto = vrPrevisto != 0 ? parseFloat(vrPrevisto).toLocaleString() : '';
+                                    let date = new Date(parseInt(response.ListFatura[x].FAT_DATA_VENCIMENTO.substr(6)));
+                                    let ftmVencimento = ("0" + date.getDate()).slice(-2) + '/' +
+                                         ("0" + (date.getMonth() + 1)).slice(-2) + "/" +
+                                        date.getFullYear();
+
+                                    $('#tblFatura tbody').append('<tr style="padding-left:15px">');
+
+                                    if (x % 2 === 0) {
+
+                                        $('#tblFatura tbody').append('<td class="fat_importsys sticky-col first-col" style="background-color:#f2f2f2;padding-left:15px">' + response.ListFatura[x].ImportSys + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_recnucleus sticky-col second-col" style="background-color:#f2f2f2">' + response.ListFatura[x].REC_NUCLEUS + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_docfluxus sticky-col third-col" style="background-color:#f2f2f2">' + response.ListFatura[x].doc_fluxus + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_exportador" style="padding-right: 40px;background-color:#f2f2f2">' + response.ListFatura[x].EXPORTADOR + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_num_fatura" style="background-color:#f2f2f2">' + response.ListFatura[x].FAT_NUM_FATURA + '</td>');
+                                        $('#tblFatura tbody').append('<td class="" style="background-color:#f2f2f2;text-align:center">' + response.ListFatura[x].TIPO_FATURA + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_cod_moeda" style="text-align: center;background-color:#f2f2f2">' + response.ListFatura[x].FAT_COD_MOEDA + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_cond_pagto" style="text-align: left;padding-left:2px;background-color:#f2f2f2">' + response.ListFatura[x].FAT_COND_PAGTO + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_data_fatura" style="text-align: left;background-color:#f2f2f2;text-align:center">' + response.ListFatura[x].STR_DATA_FATURA + '</td> <br>');
+                                        $('#tblFatura tbody').append('<td class="fat_data_vencimento" style="background-color:#f2f2f2;text-align:center">' + ftmVencimento + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_taxa_di" style="text-align:right;background-color:#f2f2f2">' + response.ListFatura[x].FAT_TAXA_DI + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_vmcv_total" style="text-align:right;background-color:#f2f2f2">' + response.ListFatura[x].FAT_VMCV_TOTAL.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_conhecimento" style="text-align: left;background-color:#f2f2f2;padding-left: 10px !important">' + response.ListFatura[x].CONHECIMENTO + '</td> <br>');
+                                        //$('#tblFatura tbody').append('<td class="fat_tipo_conhecimento" style="text-align: left; padding-left:8px;background-color:#f2f2f2">' + response.ListFatura[x].TIPO_CONHECIMENTO + '</td> <br>');
+                                        $('#tblFatura tbody').append('<td class="fat_incoterm" style="text-align: left;padding-left:8px;background-color:#f2f2f2">' + response.ListFatura[x].FAT_INCOTERM + '</td> <br>');
+                                        $('#tblFatura tbody').append('<td hidden class="fat_id_integracao" style="background-color:#f2f2f2">' + response.ListFatura[x].ID_INTEGRACAO + '</td> <br>');
+                                        //$('#tblFatura tbody').append('<td class="fat_situacao" style="text-align: left;padding-left:8px;background-color:#f2f2f2">' + response.ListFatura[x].SITUACAO + '</td> <br>');
+                                        //$('#tblFatura tbody').append('<td class="fat_data" style="padding-left:8px;background-color:#f2f2f2">' + response.ListFatura[x].STR_DATA + '</td> <br>');
+                                    }
+                                    else {
+                                        $('#tblFatura tbody').append('<td class="fat_importsys sticky-col first-col" style="padding-left:15px">' + response.ListFatura[x].ImportSys + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_recnucleus sticky-col second-col">' + response.ListFatura[x].REC_NUCLEUS + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_docfluxus sticky-col third-col">' + response.ListFatura[x].doc_fluxus + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_exportador"  style="padding-right: 40px;">' + response.ListFatura[x].EXPORTADOR + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_num_fatura">' + response.ListFatura[x].FAT_NUM_FATURA + '</td>');
+                                        $('#tblFatura tbody').append('<td class="" style="text-align:center">' + response.ListFatura[x].TIPO_FATURA + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_cod_moeda" style="text-align: center">' + response.ListFatura[x].FAT_COD_MOEDA + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_cond_pagto" style="text-align: left;padding-left:2px">' + response.ListFatura[x].FAT_COND_PAGTO + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_data_fatura" style="text-align: center">' + response.ListFatura[x].STR_DATA_FATURA + '</td> <br>');
+                                        $('#tblFatura tbody').append('<td class="fat_data_vencimento" style="text-align: center">' + ftmVencimento + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_taxa_di" style="text-align:right">' + response.ListFatura[x].FAT_TAXA_DI + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_vmcv_total" style="text-align:right">' + response.ListFatura[x].FAT_VMCV_TOTAL.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblFatura tbody').append('<td class="fat_conhecimento" style="text-align: left;padding-left: 10px !important">' + response.ListFatura[x].CONHECIMENTO + '</td> <br>');
+                                        //$('#tblFatura tbody').append('<td class="fat_tipo_conhecimento" style="text-align: left; padding-left:8px">' + response.ListFatura[x].TIPO_CONHECIMENTO + '</td> <br>');
+                                        $('#tblFatura tbody').append('<td class="fat_incoterm" style="text-align: left;padding-left:8px">' + response.ListFatura[x].FAT_INCOTERM + '</td> <br>');
+                                        $('#tblFatura tbody').append('<td hidden class="fat_id_integracao">' + response.ListFatura[x].ID_INTEGRACAO + '</td> <br>');
+                                        //$('#tblFatura tbody').append('<td class="fat_situacao" style="text-align: left;padding-left:8px">' + response.ListFatura[x].SITUACAO + '</td> <br>');
+                                        //$('#tblFatura tbody').append('<td class="fat_data" style="padding-left:8px">' + response.ListFatura[x].STR_DATA + '</td> <br>');
+                                    }
+
+                                    $('#tblFatura tbody').append('</tr>');
+
+
+
+                                }
+
+                                $('#tblFatura tbody').append('<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td style="text-align:right;padding-right: 0px !important;">' + totalValorFatura.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td><td></td><td></td></tr>');
+
+                                var impVlPrevisto = 0;
+                                var impVlAdiantado = 0;
+                                var impVlReal = 0;
+                                var impVlPagar = 0;
+
+                                for (var x = 0; x < response.ListImpostos.length; x++) {
+
+
+                                    let date = new Date(parseInt(response.ListImpostos[x].VENCIMENTO.substr(6)));
+                                    let ftmVencimento = ("0" + date.getDate()).slice(-2) + '/' +
+                                         ("0" + (date.getMonth() + 1)).slice(-2) + "/" +
+                                        date.getFullYear();
+
+
+
+                                    let date2 = new Date(parseInt(response.ListImpostos[x].DATA_LIBERACAO.substr(6)));
+                                    let fmtDataLiberacao = ("0" + date.getDate()).slice(-2) + '/' +
+                                         ("0" + (date.getMonth() + 1)).slice(-2) + "/" +
+                                        date.getFullYear();
+
+                                    let date3 = new Date(parseInt(response.ListImpostos[x].DATA_CADASTRO.substr(6)));
+                                    let fmtDataCadastro = ("0" + date.getDate()).slice(-2) + '/' +
+                                         ("0" + (date.getMonth() + 1)).slice(-2) + "/" +
+                                        date.getFullYear();
+
+                                    let vrPrevisto = response.ListImpostos[x].VR_PREVISTO;
+                                    impVlPrevisto += vrPrevisto;
+                                    vrPrevisto = vrPrevisto != 0 ? parseFloat(vrPrevisto).toLocaleString() : '';
+
+                                    impVlAdiantado += response.ListImpostos[x].VR_ADIANTADO;
+                                    impVlReal += response.ListImpostos[x].VR_REAL;
+                                    impVlPagar += response.ListImpostos[x].VR_A_PAGAR;
+
+
+
+
+                                    $('#tblImpostos tbody').append('<tr></tr>');
+                                    if (x % 2 === 0) {
+
+
+
+                                        $('#tblImpostos tbody').append('<td class="imp_importsys sticky-col first-col" style="background-color:#f2f2f2;padding-left:6px">' + response.ListImpostos[x].ImportSys + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_recnucleus sticky-col second-col" style="background-color:#f2f2f2">' + response.ListImpostos[x].REC_NUCLEUS + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_docfluxus sticky-col third-col" style="background-color:#f2f2f2;">' + response.ListImpostos[x].doc_fluxus + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_exportador"  style="padding-right: 40px;padding-left:2px;background-color:#f2f2f2">' + response.ListImpostos[x].EXPORTADOR + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_credor"  style="padding-right: 40px;text-align:center;padding-left:2px;background-color:#f2f2f2">' + response.ListImpostos[x].SP_NUM_DOCUMENTO + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_descricao"  style="padding-right: 40px;text-align:left;padding-left:2px;background-color:#f2f2f2">' + response.ListImpostos[x].DESCRICAO + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vencimento"  style="padding-right: 40px;padding-left: 2px;background-color:#f2f2f2">' + ftmVencimento + '</td>');
+
+                                        $('#tblImpostos tbody').append('<td class="imp_moeda"  style="padding-right: 15px;padding-left:10px;background-color:#f2f2f2">' + response.ListImpostos[x].MOEDA + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vr_previsto"  style="text-align:right;background-color:#f2f2f2">' + response.ListImpostos[x].VR_PREVISTO.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vr_adiantado"  style="text-align:right;background-color:#f2f2f2">' + response.ListImpostos[x].VR_ADIANTADO.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vr_real"  style="text-align:right;background-color:#f2f2f2">' + response.ListImpostos[x].VR_REAL.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vr_a_pagar"  style="text-align:right;background-color:#f2f2f2">' + response.ListImpostos[x].VR_A_PAGAR.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_data_cadastro"  style="text-align:left;padding-left:8px;background-color:#f2f2f2">' + fmtDataCadastro + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_data_liberacao"  style="text-align:left;padding-left:8px;background-color:#f2f2f2">' + fmtDataLiberacao + '</td>');
+                                        //$('#tblImpostos tbody').append('<td class="imp_sp_num_documento"  style="text-align:left;padding-left:8px;background-color:#f2f2f2">' + response.ListImpostos[x].SP_NUM_DOCUMENTO + '</td>');
+
+
+                                        //$('#tblImpostos tbody').append('<td style="text-align:left;padding-left:8px;background-color:#f2f2f2">' + response.ListImpostos[x].SITUACAO + '</td>');
+                                        $('#tblImpostos tbody').append('<td hidden class="imp_sp_id_integracao"  style="text-align:center;background-color:#f2f2f2">' + response.ListImpostos[x].ID_INTEGRACAO + '</td>');
+                                        $('#tblImpostos tbody').append('<td hidden class="imp_nucleus_id"  style="text-align:center;background-color:#f2f2f2">' + response.ListImpostos[x].NUCLEUS_ID + '</td>');
+                                        $('#tblImpostos tbody').append('<td hidden class="imp_fluxus_id"  style="text-align:center;background-color:#f2f2f2">' + response.ListImpostos[x].FLUXUS_ID + '</td>');
+                                    }
+                                    else {
+                                        $('#tblImpostos tbody').append('<td class="imp_importsys sticky-col first-col" style="padding-left:6px">' + response.ListImpostos[x].ImportSys + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_recnucleus sticky-col second-col">' + response.ListImpostos[x].REC_NUCLEUS + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_docfluxus sticky-col third-col">' + response.ListImpostos[x].doc_fluxus + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_exportador"  style="padding-right: 40px;padding-left:2px">' + response.ListImpostos[x].EXPORTADOR + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_credor"  style="padding-right: 40px;text-align:center;padding-left:2px">' + response.ListImpostos[x].SP_NUM_DOCUMENTO + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_descricao"  style="padding-right: 40px;text-align:left;padding-left:2px">' + response.ListImpostos[x].DESCRICAO + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vencimento"  style="padding-right: 40px;padding-left: 2px;">' + ftmVencimento + '</td>');
+
+                                        $('#tblImpostos tbody').append('<td class="imp_moeda"  style="padding-right: 15px;padding-left:10px">' + response.ListImpostos[x].MOEDA + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vr_previsto"  style="text-align:right">' + response.ListImpostos[x].VR_PREVISTO.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vr_adiantado"  style="text-align:right">' + response.ListImpostos[x].VR_ADIANTADO.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vr_real"  style="text-align:right">' + response.ListImpostos[x].VR_REAL.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_vr_a_pagar"  style="text-align:right">' + response.ListImpostos[x].VR_A_PAGAR.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_data_cadastro"  style="text-align:left;padding-left:8px">' + fmtDataCadastro + '</td>');
+                                        $('#tblImpostos tbody').append('<td class="imp_data_liberacao"  style="text-align:left;padding-left:8px">' + fmtDataLiberacao + '</td>');
+                                        //$('#tblImpostos tbody').append('<td class="imp_sp_num_documento"  style="text-align:left;padding-left:8px">' + response.ListImpostos[x].SP_NUM_DOCUMENTO + '</td>');
+
+
+                                        //$('#tblImpostos tbody').append('<td style="text-align:left;padding-left:8px">' + response.ListImpostos[x].SITUACAO + '</td>');
+                                        $('#tblImpostos tbody').append('<td hidden class="imp_sp_id_integracao"  style="text-align:center;">' + response.ListImpostos[x].ID_INTEGRACAO + '</td>');
+                                        $('#tblImpostos tbody').append('<td hidden class="imp_nucleus_id"  style="text-align:center">' + response.ListImpostos[x].NUCLEUS_ID + '</td>');
+                                        //$('#tblImpostos tbody').append('<td hidden class="imp_fluxus_id"  style="text-align:center">' + response.ListImpostos[x].FLUXUS_ID + '</td>');
+                                    }
+
+
+                                }
+                                $('#tblImpostos tbody').append('<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td style="padding-right: 0px !important;text-align:right">'
+                                    + parseFloat(impVlPrevisto).toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td><td style="padding-right: 0px !important;;text-align:right">'
+                                    + impVlAdiantado.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                    + '</td><td style="padding-right: 0px !important;;text-align:right;">' + impVlReal.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                    + '</td><td style="padding-right: 0px !important;;text-align:right;">' + impVlPagar.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                    + '</td><td></td></tr>');
+
+
+                                var despVlPrevisto = 0;
+                                var despVlAdiantado = 0;
+                                var despVlReal = 0;
+                                var despVlPagar = 0;
+
+                                for (var x = 0; x < response.ListDespesas.length; x++) {
+
+
+                                    let date = new Date(parseInt(response.ListDespesas[x].VENCIMENTO.substr(6)));
+                                    let ftmVencimento = ("0" + date.getDate()).slice(-2) + '/' +
+                                         ("0" + (date.getMonth() + 1)).slice(-2) + "/" +
+                                        date.getFullYear()
+
+                                    let date2 = new Date(parseInt(response.ListDespesas[x].DATA_LIBERACAO.substr(6)));
+                                    let fmtDataLiberacao = ("0" + date.getDate()).slice(-2) + '/' +
+                                         ("0" + (date.getMonth() + 1)).slice(-2) + "/" +
+                                        date.getFullYear()
+
+                                    let date3 = new Date(parseInt(response.ListDespesas[x].DATA_CADASTRO.substr(6)));
+                                    let fmtDataCadastro = ("0" + date.getDate()).slice(-2) + '/' +
+                                         ("0" + (date.getMonth() + 1)).slice(-2) + "/" +
+                                        date.getFullYear();
+
+                                    let vrPrevisto = response.ListDespesas[x].VR_PREVISTO;
+                                    despVlPrevisto += vrPrevisto;
+                                    vrPrevisto = vrPrevisto != 0 ? parseFloat(vrPrevisto).toLocaleString() : '';
+
+                                    let emissao = response.ListDespesas[x].EMISSAO.length > 0 ? response.ListDespesas[x].EMISSAO : '';
+
+                                    despVlAdiantado += response.ListDespesas[x].VR_ADIANTADO;
+                                    despVlReal += response.ListDespesas[x].VR_REAL;
+                                    despVlPagar += response.ListDespesas[x].VR_A_PAGAR;
+
+                                    $('#tblDespesas tbody').append('<tr></tr>');
+
+                                    if (x % 2 === 0) {
+                                        $('#tblDespesas tbody').append('<td class="imp_importsys sticky-col first-col" style="background-color:#f2f2f2;padding-left:15px">' + response.ListDespesas[x].ImportSys + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="sticky-col second-col" style="background-color:#f2f2f2;padding-left:6px">' + emissao + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_recnucleus sticky-col third-col" style="background-color:#f2f2f2">' + response.ListDespesas[x].REC_NUCLEUS + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_docfluxus sticky-col quarta-col" style="background-color:#f2f2f2">' + response.ListDespesas[x].doc_fluxus + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_exportador"  style="padding-right: 40px;padding-left:5px;background-color:#f2f2f2">' + response.ListDespesas[x].EXPORTADOR + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_sp_num_documento"  style="padding-right: 40px;background-color:#f2f2f2">' + response.ListDespesas[x].SP_NUM_DOCUMENTO + '</td>');
+
+                                        $('#tblDespesas tbody').append('<td class="imp_descricao"  style="padding-right: 40px;background-color:#f2f2f2">' + response.ListDespesas[x].DESCRICAO + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vencimento"  style="padding-right: 40px;background-color:#f2f2f2">' + ftmVencimento + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_moeda"  style="text-align:center;background-color:#f2f2f2">' + response.ListDespesas[x].MOEDA + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vr_previsto"  style="text-align:right;background-color:#f2f2f2">' + response.ListDespesas[x].VR_PREVISTO.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vr_adiantado"  style="text-align:right;background-color:#f2f2f2">' + response.ListDespesas[x].VR_ADIANTADO.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vr_real" style="text-align:right;background-color:#f2f2f2">' + response.ListDespesas[x].VR_REAL.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vr_a_pagar" style="text-align:right;background-color:#f2f2f2">' + response.ListDespesas[x].VR_A_PAGAR.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+
+                                        $('#tblDespesas tbody').append('<td class="imp_data_cadastro"  style="padding-right: 40px;background-color:#f2f2f2;padding-left:20px">' + fmtDataCadastro + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_data_liberacao"  style="padding-right: 40px;background-color:#f2f2f2">' + fmtDataLiberacao + '</td>');
+                                        //$('#tblDespesas tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2">' + response.ListDespesas[x].SITUACAO + '</td>');
+                                        $('#tblDespesas tbody').append('<td hidden class="imp_sp_id_integracao"  style="padding-right: 40px;background-color:#f2f2f2">' + response.ListDespesas[x].ID_INTEGRACAO + '</td>');
+                                        $('#tblDespesas tbody').append('<td hidden class="imp_nucleus_id"  style="padding-right: 40px;background-color:#f2f2f2">' + response.ListDespesas[x].NUCLEUS_ID + '</td>');
+                                        $('#tblDespesas tbody').append('<td hidden class="imp_fluxus_id"  style="padding-right: 40px;background-color:#f2f2f2">' + response.ListDespesas[x].FLUXUS_ID + '</td>');
+
+                                    }
+                                    else {
+                                        $('#tblDespesas tbody').append('<td class="imp_importsys sticky-col first-col" style="padding-left:15px">' + response.ListDespesas[x].ImportSys + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="sticky-col second-col" style="padding-left:6px">' + emissao + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_recnucleus sticky-col third-col">' + response.ListDespesas[x].REC_NUCLEUS + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_docfluxus sticky-col quarta-col">' + response.ListDespesas[x].doc_fluxus + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_exportador"  style="padding-right: 40px;padding-left:5px">' + response.ListDespesas[x].EXPORTADOR + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_sp_num_documento"  style="padding-right: 40px;">' + response.ListDespesas[x].SP_NUM_DOCUMENTO + '</td>');
+
+                                        $('#tblDespesas tbody').append('<td class="imp_descricao"  style="padding-right: 40px;">' + response.ListDespesas[x].DESCRICAO + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vencimento"  style="padding-right: 40px;">' + ftmVencimento + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_moeda"  style="text-align:center">' + response.ListDespesas[x].MOEDA + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vr_previsto"  style="text-align:right">' + response.ListDespesas[x].VR_PREVISTO.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vr_adiantado"  style="text-align:right">' + response.ListDespesas[x].VR_ADIANTADO.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vr_real" style="text-align:right">' + response.ListDespesas[x].VR_REAL.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_vr_a_pagar" style="text-align:right">' + response.ListDespesas[x].VR_A_PAGAR.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td>');
+
+                                        $('#tblDespesas tbody').append('<td class="imp_data_cadastro"  style="padding-right: 40px;padding-left:20px">' + fmtDataCadastro + '</td>');
+                                        $('#tblDespesas tbody').append('<td class="imp_data_liberacao"  style="padding-right: 40px;">' + fmtDataLiberacao + '</td>');
+                                        //$('#tblDespesas tbody').append('<td style="padding-right: 40px;">' + response.ListDespesas[x].SITUACAO + '</td>');
+                                        $('#tblDespesas tbody').append('<td hidden class="imp_sp_id_integracao"  style="padding-right: 40px;">' + response.ListDespesas[x].ID_INTEGRACAO + '</td>');
+                                        $('#tblDespesas tbody').append('<td hidden class="imp_nucleus_id"  style="padding-right: 40px;">' + response.ListDespesas[x].NUCLEUS_ID + '</td>');
+                                        $('#tblDespesas tbody').append('<td hidden class="imp_fluxus_id"  style="padding-right: 40px;">' + response.ListDespesas[x].FLUXUS_ID + '</td>');
+
+                                    }
+
+                                }
+
+                                $('#tblDespesas tbody').append('<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td style="padding-right: 0px !important;text-align:right">'
+                                   + parseFloat(despVlPrevisto).toLocaleString('pt-br', { minimumFractionDigits: 2 }) + '</td><td style="padding-right: 0px !important;text-align:right">'
+                                   + despVlAdiantado.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                   + '</td><td style="padding-right: 0px !important;text-align:right">' + despVlReal.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                   + '</td><td style="padding-right: 0px !important;text-align:right">' + despVlPagar.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                   + '</td><td></td></tr>');
+
+
+                                var estFatura = 0;
+                                var estII = 0;
+                                var estCofins = 0;
+                                var estIPI = 0;
+                                var estPIS = 0;
+                                var estFrete = 0;
+                                var estSeguro = 0;
+                                var estVlProduto = 0;
+                                var estICMS = 0;
+                                var estVlNota = 0;
+                                var estDespCompl = 0;
+                                var estVlEstoque = 0;
+
+                                for (var x = 0; x < response.ListEstoque.length; x++) {
+
+                                    estFatura += response.ListEstoque[x].VR_FATURA;
+                                    estII += response.ListEstoque[x].II;
+                                    estCofins += response.ListEstoque[x].COFINS;
+                                    estIPI += response.ListEstoque[x].IPI;
+                                    estPIS += response.ListEstoque[x].PIS;
+                                    estFrete += response.ListEstoque[x].FRETEINTER;
+                                    estSeguro += response.ListEstoque[x].SEGURO;
+                                    estVlProduto += response.ListEstoque[x].VR_PRODUTO;
+                                    estICMS += response.ListEstoque[x].ICMS;
+                                    estVlNota += response.ListEstoque[x].VR_NOTA;
+                                    estDespCompl += response.ListEstoque[x].DESPESA_COMPL;
+                                    estVlEstoque += response.ListEstoque[x].VR_REC_FISICO;
+
+                                    $('#tblEstoque tbody').append('<tr></tr>');
+                                    if (x % 2 === 0) {
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2;padding-left:15px" class="">' + response.ListEstoque[x].BROKERSYS + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2" class="">' + response.ListEstoque[x].EMISSAO + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2" class="">' + response.ListEstoque[x].RECFISICO + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 20px;text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].VR_FATURA.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 20px;text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].TAXA_DI+ '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].II.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].COFINS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].IPI.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].PIS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].FRETEINTER.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].SEGURO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].VR_PRODUTO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].ICMS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].VR_NOTA.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;background-color:#f2f2f2">' + response.ListEstoque[x].DESPESA_COMPL.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align:right;background-color:#f2f2f2">' + response.ListEstoque[x].VR_REC_FISICO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2" hidden>' + response.ListEstoque[x].ID_INTEGRACAO + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2" hidden>' + response.ListEstoque[x].NF_ID + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2" hidden>' + response.ListEstoque[x].IDMOV_EMISSAONF + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2" hidden>' + response.ListEstoque[x].IDMOV_RECFISICO + '</td>');
+                                    }
+                                    else {
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;padding-left:15px" class="">' + response.ListEstoque[x].BROKERSYS + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;" class="">' + response.ListEstoque[x].EMISSAO + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;" class="">' + response.ListEstoque[x].RECFISICO + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 20px;text-align: right;">' + response.ListEstoque[x].VR_FATURA.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 20px;text-align: right;">' + response.ListEstoque[x].TAXA_DI + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].II.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].COFINS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].IPI.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].PIS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].FRETEINTER.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].SEGURO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].VR_PRODUTO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].ICMS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].VR_NOTA.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align: right;">' + response.ListEstoque[x].DESPESA_COMPL.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="text-align:right">' + response.ListEstoque[x].VR_REC_FISICO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;" hidden>' + response.ListEstoque[x].ID_INTEGRACAO + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;" hidden>' + response.ListEstoque[x].NF_ID + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;" hidden>' + response.ListEstoque[x].IDMOV_EMISSAONF + '</td>');
+                                        $('#tblEstoque tbody').append('<td style="padding-right: 40px;" hidden>' + response.ListEstoque[x].IDMOV_RECFISICO + '</td>');
+                                    }
+
+                                }
+
+                                //$('#tblEstoque tbody').append('<tr><td></td><td></td><td>'
+                                //  + '</td><td style="padding-right:20px;text-align:right;font-weight:bold">' + estFatura.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td></td>'
+                                //  + '</td><td style="padding-right:0px;text-align:right;font-weight:bold">' + estII.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td style="padding-right:20px;text-align:right;font-weight:bold">' + estCofins.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td style="padding-right:20px;text-align:right;font-weight:bold">' + estIPI.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td style="padding-right:20px;text-align:right;font-weight:bold">' + estPIS.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td style="padding-right:20px;text-align:right;font-weight:bold">' + estFrete.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td style="padding-right:20px;text-align:right;font-weight:bold">' + estSeguro.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td style="padding-right:20px;text-align:right;font-weight:bold">' + estVlProduto.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td style="padding-right:20px;text-align:right;font-weight:bold">' + estICMS.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td style="text-align:right;font-weight:bold">' + estVlNota.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //   + '</td><td style="text-align:right;font-weight:bold">' + estDespCompl.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //    + '</td><td style="text-align:right;font-weight:bold">' + estVlEstoque.toLocaleString('pt-br', { minimumFractionDigits: 2 })
+                                //  + '</td><td></td></tr>');
+
+                                $('#tblEstoque tbody').append('<tr><td></td><td></td><td>'
+                                  + '</td><td style="padding-right:20px !important;text-align:right">' + estFatura.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                   + '</td><td></td>'
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + estII.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="text-align:right;padding-right: 0px !important">' + estCofins.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + estIPI.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + estPIS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + estFrete.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + estSeguro.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + estVlProduto.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + estICMS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="text-align:right;padding-right: 0px !important;">' + estVlNota.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="text-align:right;padding-right: 0px !important;">' + estDespCompl.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="text-align:right;padding-right: 0px !important;">' + estVlEstoque.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td></tr>');
+
+
+                                for (var x = 0; x < response.ListInformeLACCTB.length; x++) {
+
+                                    $('#tblEstoqueLACCTB tbody').append('<tr></tr>');
+                                    if (x % 2 === 0) {
+                                        $('#tblEstoqueLACCTB tbody ').append('<td style="text-align: left;padding-left:6px;background-color:#f2f2f2">' + response.ListInformeLACCTB[x].DESPESA + '</td>');
+                                        $('#tblEstoqueLACCTB tbody').append('<td style="text-align: left;padding-left:6px;background-color:#f2f2f2">' + response.ListInformeLACCTB[x].DEBITO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) + '</td>');
+                                        $('#tblEstoqueLACCTB tbody').append('<td style="text-align: left;padding-left:6px;background-color:#f2f2f2">' + response.ListInformeLACCTB[x].CREDITO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                    }
+                                    else {
+                                        $('#tblEstoqueLACCTB tbody ').append('<td style="text-align: left;padding-left:6px">' + response.ListInformeLACCTB[x].DESPESA + '</td>');
+                                        $('#tblEstoqueLACCTB tbody').append('<td style="text-align: left;padding-left:6px">' + response.ListInformeLACCTB[x].DEBITO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) + '</td>');
+                                        $('#tblEstoqueLACCTB tbody').append('<td style="text-align: left;padding-left:6px">' + response.ListInformeLACCTB[x].CREDITO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                    }
+                                }
+
+                                var histValor = 0;
+
+                                for (var x = 0; x < response.ListHistorico.length; x++) {
+                                    histValor += response.ListHistorico[x].VALOR;
+
+                                    let date = new Date(parseInt(response.ListHistorico[x].DATA.substr(6)));
+                                    let ftmData = ("0" + date.getDate()).slice(-2) + '/' +
+                                         ("0" + (date.getMonth() + 1)).slice(-2) + "/" +
+                                        date.getFullYear()
+                                    $('#tblHistorico tbody').append('<tr></tr>');
+                                    if (x % 2 === 0) {
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2;padding-left:6px" class="">' + response.ListHistorico[x].IMPORTSYS + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2" class="">' + response.ListHistorico[x].REGISTRO + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2" class="">' + response.ListHistorico[x].EMISSAO + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;background-color:#f2f2f2" class="">' + response.ListHistorico[x].RECEBIMENTO + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 0px;background-color:#f2f2f2" class="">' + response.ListHistorico[x].DOCUMENTO + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;padding-left: 40px;width:80px;text-align:right;background-color:#f2f2f2">' + response.ListHistorico[x].VALOR.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 0px;background-color:#f2f2f2">' + ftmData + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="background-color:#f2f2f2">' + response.ListHistorico[x].ID_INTEGRACAO + '</td>');
+                                        $('#tblHistorico tbody').append('<td hidden>' + response.ListHistorico[x].ID_INT + '</td>');
+                                        $('#tblHistorico tbody').append('<td hidden>' + response.ListHistorico[x].CODTMV + '</td>');
+                                        $('#tblHistorico tbody').append('<td  style="background-color:#f2f2f2">' + response.ListHistorico[x].CHAVEORIGEM_INT + '</td>');
+                                    }
+                                    else {
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;padding-left:6px" class="">' + response.ListHistorico[x].IMPORTSYS + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;" class="">' + response.ListHistorico[x].REGISTRO + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;" class="">' + response.ListHistorico[x].EMISSAO + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;" class="">' + response.ListHistorico[x].RECEBIMENTO + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 0px;" class="">' + response.ListHistorico[x].DOCUMENTO + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 40px;padding-left: 40px;width:80px;text-align:right">' + response.ListHistorico[x].VALOR.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblHistorico tbody').append('<td style="padding-right: 0px;">' + ftmData + '</td>');
+                                        $('#tblHistorico tbody').append('<td>' + response.ListHistorico[x].ID_INTEGRACAO + '</td>');
+                                        $('#tblHistorico tbody').append('<td hidden>' + response.ListHistorico[x].ID_INT + '</td>');
+                                        $('#tblHistorico tbody').append('<td hidden>' + response.ListHistorico[x].CODTMV + '</td>');
+                                        $('#tblHistorico tbody').append('<td>' + response.ListHistorico[x].CHAVEORIGEM_INT + '</td>');
+                                    }
+
+                                }
+
+                                $('#tblHistorico tbody').append('<tr><td></td><td></td><td></td><td></td><td>'
+                                 + '</td><td style="padding-right:40px !important;text-align:right">' + estFatura.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                 + '</td><td></td></tr>');
+
+                                var finVlME = 0;
+                                var finVLMN = 0;
+
+                                for (var x = 0; x < response.ListInformeFinanceiro.length; x++) {
+                                    finVlME += response.ListInformeFinanceiro[x].VALOR_ME;
+                                    finVLMN += response.ListInformeFinanceiro[x].VALOR_MN;
+                                    let ftmDataEmissao = '';
+                                    if (response.ListInformeFinanceiro[x].DATAEMISSAO != null) {
+                                        let dtemissao = new Date(parseInt(response.ListInformeFinanceiro[x].DATAEMISSAO.substr(6)));
+                                        ftmDataEmissao = ("0" + dtemissao.getDate()).slice(-2) + '/' +
+                                             ("0" + (dtemissao.getMonth() + 1)).slice(-2) + "/" +
+                                            dtemissao.getFullYear();
+                                    }
+
+                                    let ftmDataDocumento = '';
+                                    if (response.ListInformeFinanceiro[x].DATA_DOCUMENTO != null) {
+                                        let dtdocumento = new Date(parseInt(response.ListInformeFinanceiro[x].DATA_DOCUMENTO.substr(6)));
+                                        ftmDataDocumento = ("0" + dtdocumento.getDate()).slice(-2) + '/' +
+                                             ("0" + (dtdocumento.getMonth() + 1)).slice(-2) + "/" +
+                                            dtdocumento.getFullYear();
+
+                                    }
+
+                                    let ftmDataVencimento = '';
+                                    if (response.ListInformeFinanceiro[x].DATAVENCIMENTO != null) {
+                                        let dtvencimento = new Date(parseInt(response.ListInformeFinanceiro[x].DATAVENCIMENTO.substr(6)));
+                                        ftmDataVencimento = ("0" + dtvencimento.getDate()).slice(-2) + '/' +
+                                             ("0" + (dtvencimento.getMonth() + 1)).slice(-2) + "/" +
+                                            dtvencimento.getFullYear();
+                                    }
+
+
+                                    let ftmDataBaixa = '';
+                                    if (response.ListInformeFinanceiro[x].DATABAIXA != null) {
+                                        let dtbaixa = new Date(parseInt(response.ListInformeFinanceiro[x].DATABAIXA.substr(6)));
+                                        ftmDataBaixa = ("0" + dtbaixa.getDate()).slice(-2) + '/' +
+                                             ("0" + (dtbaixa.getMonth() + 1)).slice(-2) + "/" +
+                                            dtbaixa.getFullYear();
+                                    }
+
+
+
+                                    $('#tblFinanceiro tbody').append('<tr></tr>');
+                                    if (x % 2 === 0) {
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2" class="sticky-col first-col">' + response.ListInformeFinanceiro[x].OPERACAO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2" class="sticky-col second-col">' + response.ListInformeFinanceiro[x].MOVIMENTO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2">' + ftmDataEmissao + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2">' + ftmDataDocumento + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2">' + response.ListInformeFinanceiro[x].INVOICE + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2">' + response.ListInformeFinanceiro[x].NUMERODOCUMENTO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2">' + response.ListInformeFinanceiro[x].TIPO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="text-align:right;background-color:#f2f2f2">' + response.ListInformeFinanceiro[x].VALOR_ME.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="text-align:right;background-color:#f2f2f2;padding-right: 15px !important;">' + response.ListInformeFinanceiro[x].VALOR_MN.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2">' + response.ListInformeFinanceiro[x].SITUACAO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2">' + ftmDataVencimento + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2">' + response.ListInformeFinanceiro[x].CTT_CAMBIO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="background-color:#f2f2f2">' + ftmDataBaixa + '</td>');
+
+                                    }
+                                    else {
+                                        $('#tblFinanceiro tbody').append('<td style="" class="sticky-col first-col">' + response.ListInformeFinanceiro[x].OPERACAO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="" class="sticky-col second-col">' + response.ListInformeFinanceiro[x].MOVIMENTO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="">' + ftmDataEmissao + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="">' + ftmDataDocumento + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="">' + response.ListInformeFinanceiro[x].INVOICE + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="">' + response.ListInformeFinanceiro[x].NUMERODOCUMENTO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="">' + response.ListInformeFinanceiro[x].TIPO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="text-align:right">' + response.ListInformeFinanceiro[x].VALOR_ME.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="text-align:right;padding-right: 15px !important;">' + response.ListInformeFinanceiro[x].VALOR_MN.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="">' + response.ListInformeFinanceiro[x].SITUACAO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="">' + ftmDataVencimento + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="">' + response.ListInformeFinanceiro[x].CTT_CAMBIO + '</td>');
+                                        $('#tblFinanceiro tbody').append('<td style="">' + ftmDataBaixa + '</td>');
+
+                                    }
+
+                                }
+
+                                $('#tblFinanceiro tbody').append('<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>'
+                                 + '</td><td style="padding-right: 0px !important;;text-align:right">' + finVlME.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                 + '</td><td style="padding-right: 13px !important;;text-align:right">' + finVLMN.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                 + '</td><td></td><td></td><td></td></tr>');
+
+                                var notaDespesasFatura = 0;
+                                var notaDespesasII = 0;
+                                var notaDespesasCofins = 0;
+                                var notaDespesasIPI = 0;
+                                var notaDespesasPIS = 0;
+                                var notaDespesasFrete = 0;
+                                var notaDespesasSeguro = 0;
+                                var notaDespesasVlProduto = 0;
+                                var notaDespesasICMS = 0;
+                                var notaDespesasVlNota = 0;
+                                var notaDespesasDespCompl = 0;
+                                var notaDespesasVlEstoque = 0;
+
+                                for (var x = 0; x < response.ListInformeNotaCompl.length; x++) {
+                                    notaDespesasFatura += response.ListInformeNotaCompl[x].VR_FATURA;
+                                    notaDespesasII += response.ListInformeNotaCompl[x].II;
+                                    notaDespesasCofins += response.ListInformeNotaCompl[x].COFINS;
+                                    notaDespesasIPI += response.ListInformeNotaCompl[x].IPI;
+                                    notaDespesasPIS += response.ListInformeNotaCompl[x].PIS;
+                                    notaDespesasFrete += response.ListInformeNotaCompl[x].FRETEINTER;
+                                    notaDespesasSeguro += response.ListInformeNotaCompl[x].SEGURO;
+                                    notaDespesasVlProduto += response.ListInformeNotaCompl[x].VR_PRODUTO;
+                                    notaDespesasICMS += response.ListInformeNotaCompl[x].ICMS;
+                                    notaDespesasVlNota += response.ListInformeNotaCompl[x].VR_NOTA;
+                                    notaDespesasDespCompl += response.ListInformeNotaCompl[x].DESPESA_COMPL;
+                                    notaDespesasVlEstoque += response.ListInformeNotaCompl[x].VR_REC_FISICO;
+
+                                    $('#tblNotaDespesas tbody').append('<tr></tr>');
+                                    if (x % 2 === 0) {
+                                        $('#tblNotaDespesas tbody').append('<td class="sticky-col first-col" style="width:1%;padding-right: 40px;background-color:#f2f2f2;padding-left:6px" class="">' + response.ListInformeNotaCompl[x].BROKERSYS + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="width:1%;background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].VR_FATURA.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].TAXA_DI.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].II.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].COFINS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].IPI.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].PIS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].FRETEINTER.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].SEGURO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].VR_PRODUTO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.ListInformeNotaCompl[x].ICMS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="padding-left: 50px;width:100px;text-align:right;background-color:#f2f2f2">' + response.ListInformeNotaCompl[x].VR_NOTA.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="padding-right: 2px;width:100px;text-align:right;background-color:#f2f2f2">' + response.ListInformeNotaCompl[x].VR_REC_FISICO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                    }
+                                    else {
+                                        $('#tblNotaDespesas tbody').append('<td class="sticky-col first-col" style="width:1%;padding-right: 40px;padding-left:6px" class="">' + response.ListInformeNotaCompl[x].BROKERSYS + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="width:1%;text-align:right">' + response.ListInformeNotaCompl[x].VR_FATURA.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="text-align:right" class="">' + response.ListInformeNotaCompl[x].TAXA_DI.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="text-align:right">' + response.ListInformeNotaCompl[x].II.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="text-align:right">' + response.ListInformeNotaCompl[x].COFINS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="text-align:right">' + response.ListInformeNotaCompl[x].IPI.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="text-align:right">' + response.ListInformeNotaCompl[x].PIS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="text-align:right">' + response.ListInformeNotaCompl[x].FRETEINTER.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="text-align:right">' + response.ListInformeNotaCompl[x].SEGURO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="text-align:right">' + response.ListInformeNotaCompl[x].VR_PRODUTO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="text-align:right">' + response.ListInformeNotaCompl[x].ICMS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="width:100px;text-align:right;">' + response.ListInformeNotaCompl[x].VR_NOTA.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                        $('#tblNotaDespesas tbody').append('<td style="padding-right: 2px;width:100px;text-align:right;">' + response.ListInformeNotaCompl[x].VR_REC_FISICO.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>');
+                                    }
+                                }
+
+                                $('#tblNotaDespesas tbody').append('<tr><td></td>'
+                                  + '<td style="padding-right:0px;text-align:right">' + notaDespesasFatura.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '<td></td>'
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasII.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasCofins.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasIPI.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasPIS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasFrete.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasSeguro.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasVlProduto.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasICMS.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasVlNota.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  //+ '</td><td style="padding-right:0px;text-align:right;font-weight:bold">' + notaDespesasDespCompl.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td><td style="padding-right: 0px !important;text-align:right">' + notaDespesasVlEstoque.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                  + '</td></tr>');
+
+                                for (var x = 0; x < response.ListInformeFaturaPDC.length; x++) {
+                                    $('#tblFaturaPDC tbody').append('<tr></tr>');
+                                    if (x % 2 === 0) {
+                                        $('#tblFaturaPDC tbody').append('<td style="background-color:#f2f2f2;padding-left:15px">' + response.ListInformeFaturaPDC[x].IMPORTSYS + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="background-color:#f2f2f2" class="">' + response.ListInformeFaturaPDC[x].FILIAL + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="background-color:#f2f2f2">' + response.ListInformeFaturaPDC[x].PEDIDO_COMPRA + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="background-color:#f2f2f2">' + response.ListInformeFaturaPDC[x].TIPO_IMPORTACAO + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="padding-left: 8px;background-color:#f2f2f2">' + response.ListInformeFaturaPDC[x].COND_PGTO + '</td>');
+
+
+                                        $('#tblFaturaPDC tbody').append('<td style="background-color:#f2f2f2">' + response.ListInformeFaturaPDC[x].FAT_NUM_FATURA + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="background-color:#f2f2f2;padding-left:8px">' + response.ListInformeFaturaPDC[x].REC_NUCLEUS + '</td>');
+                                        //$('#tblFaturaPDC tbody').append('<td style="background-color:#f2f2f2;padding-left:8px">' + response.ListInformeFaturaPDC[x].IDENTIFICADOR_PDC + '</td>');
+                                        //$('#tblFaturaPDC tbody').append('<td style="background-color:#f2f2f2;padding-left:8px">' + response.ListInformeFaturaPDC[x].IDENTIFICADOR_REC + '</td>');
+                                    }
+                                    else {
+                                        $('#tblFaturaPDC tbody').append('<td style="padding-right: 40px;padding-left:15px" class="">' + response.ListInformeFaturaPDC[x].IMPORTSYS + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="">' + response.ListInformeFaturaPDC[x].FILIAL + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="" class="">' + response.ListInformeFaturaPDC[x].PEDIDO_COMPRA + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="">' + response.ListInformeFaturaPDC[x].TIPO_IMPORTACAO + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="padding-left: 8px">' + response.ListInformeFaturaPDC[x].COND_PGTO + '</td>');
+
+                                        $('#tblFaturaPDC tbody').append('<td style="">' + response.ListInformeFaturaPDC[x].FAT_NUM_FATURA + '</td>');
+                                        $('#tblFaturaPDC tbody').append('<td style="padding-left:8px">' + response.ListInformeFaturaPDC[x].REC_NUCLEUS + '</td>');
+                                        //$('#tblFaturaPDC tbody').append('<td style="padding-left:8px">' + response.ListInformeFaturaPDC[x].IDENTIFICADOR_PDC + '</td>');
+                                        //$('#tblFaturaPDC tbody').append('<td style="padding-left:8px">' + response.ListInformeFaturaPDC[x].IDENTIFICADOR_REC + '</td>');
+                                    }
+                                }
+
+
+                                $('#modalProcesso').modal({
+                                    show: true,
+                                    closeOnEscape: true,
+                                    backdrop: 'static',
+                                    keyboard: false
+                                })
+
+
+                            },
+                            error: function (xhr, textStatus, exceptionThrown) {
+                                //alert(exceptionThrown);
+                            },
+                        });
+                    }
+                    
+                }
+                $('#modalProcesso').on('hidden.bs.modal', function () {
+                    $('#tbodyFatura').empty();
+                    $('#tbodyImpostos').empty();
+                    $('#tbodyDespesa').empty();
+                    $('#tbodyEstoque').empty();
+                    $('#tbodyEstoqueLACCTB').empty();
+                    $('#tbodyHistorico').empty();
+                    $('#tbodyDeclaracao').empty();
+                    $('#tbodyFinanceiro').empty();
+                    $('#tbodyNotaDespesas').empty();
+                    $('#tbodyFaturaPDC').empty();
+                    $('#codProcessoModal').val('');
+                });
+
+                $('#tblProcesso').on('click', function () {
+                      $('#liDeclaracao').addClass('active');
+                      $('#tabDeclaracao').addClass('active in');
+
+                      $('#liDespesas').removeClass('active');
+                      $('#tabDespesas').removeClass('active in');
+
+                      $('#liFaturas').removeClass('active');
+                      $('#tabFaturas').removeClass('active in');
+
+                      $('#liImpostos').removeClass('active');
+                      $('#tabImpostos').removeClass('active in');
+
+                      $('#liFinanceiro').removeClass('active');
+                      $('#tabFinanceiro').removeClass('active in');
+
+                      $('#liEstoque').removeClass('active');
+                      $('#tabEstoque').removeClass('active in');
+
+                      $('#liHistorico').removeClass('active');
+                      $('#tabHistorico').removeClass('active in');
+                });
+
+                $('#modalProcesso').on('shown.bs.modal', function () {
+                    $(this).find('.modal-dialog').css({
+                        width: '100%',
+                        height: 'auto',
+                        'max-height': '100%',
+                        'padding-right': 0
+                    });
+
+                    $(this).css({
+                        'padding-right': 0
+                    });
+
+                });
+
+                $('#btnFiltrar').click(function ()
+                {
+                    var dtInicio = $('#strDataInicio').val();
+                    var dtFim = $('#strDataFim').val();
+                    var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "exibir").val("exibir");
+                     $('#myForm').append($(input));
+                 
+                   
+                    if ((dtInicio == "" || dtInicio == null) || (dtFim == "" || dtFim == null)) {
+                        if ((dtInicio == "" || dtInicio == null)) {
+                            $('#dtIniciDivErro').text('Selecione a data início.');
+                        }
+                        if ((dtFim == "" || dtFim == null)) {
+                            $('#dtFimDivErro').text('Selecione a data fim.');
+                        }
+                        $("#btnFiltrar").attr("disabled", true)
+                    }
+                    else {
+                 
+                        var validaDTInicio = isValidDate(dtInicio, 'strDataInicio');
+                      
+                        var validaDTFim = isValidDate(dtFim, 'strDataFim');
+                        
+                        if (validaDTInicio == true & validaDTFim == true) {
+                            $("#btnFiltrar").attr("disabled", false)
+                            document.getElementById("myForm").submit();
+                        }
+                        else {
+                            if (validaDTInicio == false) {
+                                $('#dtIniciDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                            if (validaDTFim === false) {
+                                $('#dtFimDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                        }
+
+                    }
+                })
+                $("#strDataInicio").change(function () {
+                    $('#dtIniciDivErro').text('');
+                    $("#btnFiltrar").attr("disabled", false)
+                });
+
+                $("#strDataFim").change(function () {
+                    $('#dtFimDivErro').text('');
+                    $("#btnFiltrar").attr("disabled", false);
+                });
+
+                function downloadExcel() {
+                    var tabela = $('#tblProcesso tbody tr').length;
+                    if (tabela > 0)
+                    {
+                        window.location.href = 'FinanceiroProcesso/DownloadExcel'
+                    }
+                    else
+                    {
+                        alert('Não há dados a serem exportados.')
+                    }
+                    
+                }
+
+            </script>
+
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            @*<link href="~/content/financeiroprocesso.css" rel="stylesheet" />*@
+
+    </body>
+}
+</html>

@@ -1,0 +1,1689 @@
+﻿@model Entities.StatementConciliacao
+
+@{
+        ViewBag.Title = "Painel de metas";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+        var lstAnaliseVar = (List<Entities.StatementConciliacao>)TempData["result"];
+    }
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    @*@if (lstAnaliseVar != null)
+    {
+        <script type="text/javascript" charset="utf-8">
+        $('#my-modal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false,
+                    width: 'auto',
+                    height: 'auto',
+                    'max-height': '100%'
+                })
+        </script>
+    }*@
+
+    <style>
+            #tableMenu {
+                table-layout: auto;
+                width: 100%;
+                border-collapse: collapse;
+                text-align: center;
+            }
+
+            .childA {
+                float: left;
+                width: 33.3%;
+                background-color: #f5f5f5;
+                height: 50px;
+            }
+
+            .childB {
+                float: left;
+                width: 33.3%;
+                background-color: gray;
+                height: 50px;
+            }
+
+            .childC {
+                float: left;
+                width: 33.3%;
+                background-color: gray;
+                height: 50px;
+            }
+
+            .fileUpload {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .fileUpload {
+                position: relative;
+                overflow: hidden;
+            }
+
+                .fileUpload input.upload {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    margin: 0;
+                    padding: 0;
+                    font-size: 20px;
+                    cursor: pointer;
+                    opacity: 0;
+                    filter: alpha(opacity=0);
+                }
+
+            .modal-dialog {
+                position: relative;
+                display: table; /* This is important */
+                /*overflow-y: auto;*/
+                /*overflow-x: auto;*/
+                /*width: auto;
+        min-width: 400px;*/
+            }
+  @@media screen and (min-width: 992px) {
+  .modal .modal-dialog   {
+    width: 1120px;
+  }
+  .espacamento{
+      padding-top:10px;
+  }
+  .panel-body{
+      padding-bottom:0;
+  }
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto;
+  padding: 5px;
+}
+.grid-item {
+  padding: 5px;
+  text-align: left;
+}
+}
+
+body {
+overflow-x: hidden;
+}
+#lstAnaliseItem th{
+    position: sticky;
+    background-color:white;
+    top:0;
+}
+    </style>
+</head>
+@using (Html.BeginForm("Index", "StatementConciliacao", FormMethod.Post, new { id = "myForm", enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+
+    <body>
+        <input hidden value="@ViewBag.FiltroAnalise" name="idLstConciliacao" id="idLstConciliacao"/>
+        <input hidden id="fornecedorSelected" name="fornecedorSelected" />
+        <input hidden id="documentoSelected" name="documentoSelected" />
+        <input hidden id="result" value="@TempData["result"]"/>
+        <input hidden id="divShow" value="@ViewBag.DivShow" />
+        <input hidden id="menuAtivo" value="@ViewBag.MenuAtivo" />
+      
+      
+      
+       
+            <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;z-index:100">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:30px;position:fixed;">
+                    <div class="stepwizard">
+                        <fieldset>
+                            <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white;padding-left:10px">Conciliação</legend>
+                        </fieldset>
+                    </div>
+                </div>
+
+            </main>
+        
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content">
+                <div class="container-fluid" style="padding-top:0">
+
+
+                    <div id="divFiltro" hidden @*style="margin-left:120px;"*@ style="position:absolute;top:60px;width:97%;padding-left:10px">
+                        <!--Conciliacao-->
+                        <div class="panel with-nav-tabs panel-default" style="margin-bottom:10px">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Filtros para conciliação
+                            </div>
+                            <div class="panel-body" style="padding-bottom:10px;">
+                                <div class="tab-content">
+                                    <div class="row">
+                                        <div class="col-md-2 col-mb-1 col-2">
+                                            @Html.Label("Ano", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.Editor("ano", new { htmlAttributes = new { @class = "form-control", @style = "width:80%" } })
+                                        </div>
+                                        <div class="col-md-1 col-mb-1 col-1">
+                                            @Html.Label("Mês", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.Editor("mes", new { htmlAttributes = new { @class = "form-control", @style = "width:100%" } })
+                                        </div>
+                                        <div class="col-md-2 mb-2 col-2">
+                                            @Html.Label("Conta", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.ListBox("contaFiltro", (SelectList)ViewBag.Contas, new { @class = "chosen-select" })
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            @Html.Label("Pedido compra", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.Editor("pedidoCompraFiltro", new { htmlAttributes = new { @class = "form-control", @maxlength = "25" } })
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            @Html.Label("Invoice", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.Editor("invoiceFiltro", new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            @Html.Label("Sales Order", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.Editor("salesOrderFiltro", new { htmlAttributes = new { @class = "form-control", @maxlength = "25" } })
+                                        </div>
+                                        <div class="btn-toolbar">
+                                            <button class="btn btn-primary" style="margin-bottom:15px;margin-top:20px;margin-left:10px" id="btnFiltro" name="btnFiltro" type="submit">Exibir</button>
+                                        </div>
+
+                                        @*<div class="col-md-1 mb-1 col-1" align="" style="vertical-align:middle">
+                                            <button class="btn btn-primary btn-md" id="btnFiltro" type="submit" name="Filtrar">Filtrar</button>
+                                        </div>
+                                        <button class="btn btn-primary btn-md" id="btnFiltro" type="submit" name="Filtrar">Filtrar</button>
+                                        </div>*@
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        @*<div class="btn-toolbar">
+                            <button class="btn btn-primary pull-right" style="margin-bottom:10px;margin-top:0px;" id="btnFiltro" name="btnFiltro" type="submit">Exibir</button>
+                        </div>*@
+                        <div class="panel with-nav-tabs panel-default" id="conciliacao">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Conciliações
+                            </div>
+                            <div class="panel-body">
+                                <div id="tblAnalise" class="table-responsive">
+                                    <table class="table table-hover table-striped" id="blAnalise" style="margin-bottom:0">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Tipo</th>
+                                                <th>Conta</th>
+                                                <th>Descrição</th>
+                                                <th>Data da Imagem RM</th>
+                                                <th>Data do Statement</th>
+                                                <th>Data da Conciliação</th>
+                                                <th>Qtd. Registros</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstAnalise != null)
+                                            {
+                                                foreach (Entities.StatementConciliacao wk in Model.lstAnalise)
+                                                {
+
+                                                    <tbody>
+                                                        <tr>
+                                                            <td hidden id="ModelLstAnalise" value="@Model.lstAnalise"></td>
+                                                            <td hidden id="idLstConciliacao" name="idLstConciliacao">@wk.Id_Conciliacao</td>
+                                                            <td><input type="checkbox" id="btnFiltroAnalise" name="btnFiltroAnalise" value="@wk.Id_Conciliacao,@wk.QTD_REGISTRO,@wk.Id_Conciliacao_Item, @wk.PO_Number, @wk.Invoice, @wk.SO_REF" /> <a style="padding-left:0px" class="btn modalBTN"></a></td>
+                                                            @*@if (ViewBag.RegistrosChecked != null)
+                                                            {
+                                                                foreach (var x in ViewBag.RegistrosChecked)
+                                                                {
+                                                                    if (wk.QTD_REGISTRO.ToString() == x)
+                                                                    {
+                                                                        <td><input type="checkbox" id="btnFiltroAnalise" name="btnFiltroAnalise" value="@wk.Id_Conciliacao,@wk.QTD_REGISTRO,@wk.Id_Conciliacao_Item" checked /> <a style="padding-left:0px" class="btn modalBTN"></a></td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td><input type="checkbox" id="btnFiltroAnalise" name="btnFiltroAnalise" value="@wk.Id_Conciliacao,@wk.QTD_REGISTRO,@wk.Id_Conciliacao_Item" /> <a style="padding-left:0px" class="btn modalBTN"></a></td>
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td><input type="checkbox" id="btnFiltroAnalise" name="btnFiltroAnalise" value="@wk.Id_Conciliacao,@wk.QTD_REGISTRO,@wk.Id_Conciliacao_Item" /> <a style="padding-left:0px" class="btn modalBTN"></a></td>
+                                                            }*@
+
+
+                                                            <td>@wk.Tipo</td>
+                                                            <td>@wk.Conta</td>
+                                                            <td>@wk.Descricao</td>
+                                                            <td>@wk.Imagem_RM.ToString("dd/MM/yyyy")</td>
+                                                            <td>@wk.Data_Base.ToString("dd/MM/yyyy")</td>
+                                                            <td>@wk.Data_Conciliacao.ToString("dd/MM/yyyy")</td>
+                                                            <td style="text-align: right">@string.Format("{0:#,##}", @wk.QTD_REGISTRO)</td>
+                                                            <td style="text-align: right">@string.Format("{0:#,##0.00#}", @wk.Amount)</td>
+                                                        </tr>
+                                                    </tbody>
+                                                }
+                                                @*<tr>
+                                                    @if (Model != null)
+                                                    {
+                                                        for (int i = 1; i <= Model.PageSize; i++)
+                                                        {
+                                                            <td>
+                                                                @if (i != Model.PageNumber)
+                                                                {
+                                                                    <a href="javascript:PagerClick(@i);">[@i]</a> <text>&nbsp;</text>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@i &nbsp;</span>
+                                                                }
+                                                            </td>
+                                                        }
+                                                    }
+                                                </tr>*@
+                                            }
+                                        }
+                                    </table>
+                                    <table cellpadding="0" cellspacing="0">
+                                        @*<tr>
+                                            @if (Model != null)
+                                            {
+                                                for (int i = 1; i <= Model.PageSize; i++)
+                                                {
+                                                    <td>
+                                                        @if (i != Model.PageNumber)
+                                                        {
+                                                            <a href="javascript:PagerClick(@i);">[@i]</a> <text>&nbsp;</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@i &nbsp;</span>
+                                                        }
+                                                    </td>
+                                                }
+                                            }
+                                        </tr>*@
+                                    </table>
+                                    @*<button class="btn btn-primary btn-md pull-right" style="margin-bottom:15px;margin-top:15px;" id="filtroAnalise" type="button">Filtrar</button>*@
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading">
+                                Totais
+                            </div>
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-2 col-2">
+                                            @Html.Label("Qtd. Registro(s)", new { @class = "form-negrito" })
+                                            @Html.Editor("qtde_registros", new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                        <div class="col-md-3 mb-2 col-2">
+                                            @Html.Label("amount", new { @class = "form-negrito" })
+                                            @Html.Editor("amount", new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                        <div class="col-md-3 mb-2 col-2">
+                                            @Html.Label("Vaor RM", new { @class = "form-negrito" })
+                                            @Html.Editor("valor_rm", new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            @Html.Label("Diferença", new { @class = "form-negrito" })
+                                            @Html.Editor("diferenca", new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>*@
+
+
+
+
+
+                        <div class="panel with-nav-tabs panel-default" style="margin-bottom:10px">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Filtros para análise
+                            </div>
+                            <div class="panel-body" style="padding-bottom:10px;">
+                                <div class="tab-content">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-2 col-3">
+                                            @Html.Label("Situação", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.ListBox("id_situacao_Filtro", (SelectList)ViewBag.Situacao, new { @class = "chosen-select", @onclick = "scrollDown()" })
+                                        </div>
+                                        <div class="col-md-3 mb-2 col-3">
+                                            @Html.Label("Classificação", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.ListBox("id_classificacao2", (SelectList)ViewBag.Classificacao, new { @class = "chosen-select" })
+                                        </div>
+                                        <div class="col-md-3 mb-2 col-3">
+                                            @Html.Label("Departamento", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.ListBox("id_departamento2", (SelectList)ViewBag.Departamentos, new { @class = "chosen-select" })
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            @Html.Label("Situação da análise", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.ListBox("id_situacao_analise2", (SelectList)ViewBag.SituacaoAnalise, new { @class = "chosen-select" })
+                                        </div>
+
+                                        @*<button class="btn btn-primary btn-md pull-right" style="margin-bottom:15px;margin-top:15px;" id="filtroAnalise" type="button">Filtrar</button>*@
+                                        @*<div class="col-md-1 mb-1 col-1" align="" style="vertical-align:middle">
+                                            <button class="btn btn-primary btn-md" id="btnFiltro" type="submit" name="Filtrar">Filtrar</button>
+                                        </div>
+                                        <button class="btn btn-primary btn-md" id="btnFiltro" type="submit" name="Filtrar">Filtrar</button>
+                                        </div>*@
+                                        <div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+
+                        </div>
+                        <div class="btn-toolbar">
+                            <button class="btn btn-primary btn-md pull-right" style="margin-bottom:10px;margin-top:0px;" id="btnExibir" type="button" name="lstAnaliseItemFiltro">Exibir Registros do Statement</button>
+                        </div>
+
+                    </div>
+
+                    <div id="divRegistros" hidden style="position:absolute;padding-top:50px;width:100%">
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                        <div class="panel with-nav-tabs panel-default" id="conciliacao" style="width:97%;padding-bottom:0px;margin-bottom:10px">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                <table style="width:100%" id="tblRegistrosInvoices">
+                                    <tr>
+                                        <td style="text-align:left">
+                                            Registros/Invoices
+                                        </td>
+                                        <td style="text-align:right">
+                                            <span style="font-weight:normal">Qtd. Registros:</span>@string.Format("{0:#,##}", @ViewBag.QtdRegistros); <span style="font-weight:normal">Amount:</span> @string.Format("{0:#,##0.00#}", @ViewBag.Amount); <span style="font-weight:normal">Valor RM:</span> @string.Format("{0:#,##0.00#}", @ViewBag.ValorRM); <span style="font-weight:normal">Diferença:</span>
+                                            @if (ViewBag.Diferenca != null)
+                                            {
+                                                if (ViewBag.Diferenca.ToString().Contains("-"))
+                                                {
+                                                    <span style="color:red">@string.Format("{0:#,##0.00#}", @ViewBag.Diferenca)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@string.Format("{0:#,##0.00#}", @ViewBag.Diferenca)</span>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel-body" style="margin-bottom:0" >
+                                <div class="table-responsive" style="overflow:auto;height:75vh">
+                                    <table class="table table-hover table-striped" id="lstAnaliseItem" style="margin-bottom:0">
+                                        <thead>
+                                            <tr>
+                                                <th>SO</th>
+                                                <th>Invoice</th>
+                                                <th>Situação da Análise</th>
+                                                <th>Situação da Invoice</th>
+                                                <th>Departamento</th>
+                                                <th>DocumentoNo</th>
+                                                <th>Doc Date</th>
+                                                <th>Net Due Date</th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstAnaliseItem != null)
+                                            {
+                                                foreach (Entities.StatementConciliacao wk in Model.lstAnaliseItem)
+                                                {
+
+                                                    <tbody>
+                                                        <tr>
+                                                            @*<td><a class="btn modalBTN" onclick="populaModal('@wk.PO_Number', '@wk.SO_REF', '@wk.Invoice','@wk.Conta','@wk.Data_Statement','@wk.Data_Imagem_RM','@wk.Situacao','@wk.SITUACAO_ANALISE', @wk.Documento_No, '@wk.Doc_Date', '@wk.Net_Due_Date', @wk.Amount, @wk.RMValor, '@wk.Diferenca')">@wk.SO_REF</a></td>*@
+                                                            <td><a class="btn modalBTN" onclick="conciliacaoItem2(@wk.Id_Conciliacao, '@wk.Id_Conciliacao_Item', '@wk.Invoice')">@wk.SO_REF</a></td>
+                                                            @*<td><a class="btn modalBTN">@wk.SO_REF</a></td>*@
+                                                            <td><a class="btn modalBTN" onclick="conciliacaoItem2(@wk.Id_Conciliacao, '@wk.Id_Conciliacao_Item', '@wk.Invoice')">@wk.Invoice</a></td>
+                                                            <td>@wk.Situacao_Analise</td>
+                                                            <td>@wk.Situacao</td>
+                                                            <td>@wk.Departamento</td>
+                                                            <td>@wk.Documento_No</td>
+                                                            <td id="docDate"><a class="btn modalBTN" onclick="conciliacaoItem2(@wk.Id_Conciliacao, '@wk.Id_Conciliacao_Item', '@wk.Invoice')">@wk.Doc_Date.ToString("dd/MM/yyyy")</a></td>
+                                                            @if (wk.Net_Due_Date.ToString() != "01/01/0001 00:00:00")
+                                                            {
+                                                                <td>@wk.Net_Due_Date.ToString("dd/MM/yyyy")</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td></td>
+                                                            }
+                                                        </tr>
+                                                    </tbody>
+                                                }
+                                            }
+                                        }
+                                    </table>
+
+                                    @if (Model != null)
+                                    {
+                                        for (int i = 1; i <= Model.PageSizeAnaliseItem; i++)
+                                        {
+
+                                            if (i != Model.PageNumberanaliseItem)
+                                            {
+                                                <a href="javascript:PagerClickAnaliseItem(@i);">[@i]</a> <text>&nbsp;</text>
+                                            }
+                                            else
+                                            {
+                                                <span>@i &nbsp;</span>
+                                            }
+
+                                        }
+                                    }
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-right:40px">
+                            <button class="btn btn-primary pull-right divRegistros" type="submit">Voltar</button>
+                        </div>
+                    </div>
+                    <div id="divModal" hidden>
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+                        @*<div class="modal fade" id="my-modal" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content" style="height:100%;width:100%">
+                                <div class="modal-header text-center" style="padding:5px">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                        <div class="panel with-nav-tabs panel-default" style="margin-bottom: 5px;">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                @if (Model != null)
+                                {
+                                    if (Model.lstConciliacaoItem != null)
+                                    {
+                                        foreach (Entities.StatementConciliacao wk in Model.lstConciliacaoItem)
+                                        {
+                                            <table style="width:100%;font-weight:normal">
+                                                <tr>
+                                                    <td style="text-align:left;font-weight:bold">
+                                                        CONTA: @wk.Conta
+                                                    </td>
+                                                    <td style="text-align:left;font-weight:bold">
+                                                        INVOICE: @wk.Invoice
+                                                    </td>
+                                                    <td style="text-align:center;font-weight:bold">
+                                                        STATEMENT: @wk.Doc_Date.ToString("dd/MM/yyyy")
+                                                    </td>
+                                                    <td style="text-align:right;font-weight:bold">
+                                                        PO: @wk.PO_Number
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        }
+                                    }
+                                }
+                            </div>
+
+
+                        </div>
+
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Statement/Conciliação
+                            </div>
+                            @if (Model != null)
+                            {
+                                if (Model.lstConciliacaoItem != null)
+                                {
+                                    foreach (Entities.StatementConciliacao wk in Model.lstConciliacaoItem)
+                                    {
+                                        <div class="panel-body">
+                                            @*<div class="row">
+                                                <div class="col-md-2 mb-2 col-2">
+                                                    @Html.Label("Sales Order", new { @class = "form-negrito" })
+                                                    <input class="form-control " id="modalSO" value="@wk.SO_REF" readonly />
+                                                </div>
+                                                <div class="col-md-2 mb-2 col-2">
+                                                    @Html.Label("DocumentoNo", new { @class = "form-negrito" })
+                                                    <input class="form-control " id="modalDocumentoNo" value="@wk.Documento_No" readonly />
+                                                </div>
+                                                <div class="col-md-2 mb-1 col-1">
+                                                    @Html.Label("Doc Date", new { @class = "form-negrito" })
+                                                    <input class="form-control" id="modalDocDate" value="@wk.Doc_Date.ToString("dd/MM/yyyy")" readonly />
+                                                </div>
+                                                <div class="col-md-2 mb-2 col-1">
+                                                    @Html.Label("Net Due Date", new { @class = "form-negrito" })
+                                                    @if (@wk.Net_Due_Date.ToString() != "01/01/0001 00:00:00")
+                                                    {
+                                                        <input class="form-control" id="modalNetDueDate" value="@wk.Net_Due_Date.ToString("dd/MM/yyyy")" readonly />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-control" readonly />
+                                                    }
+                                                </div>
+
+
+
+                                                <div class="col-md-2 mb-2">
+                                                    @Html.Label("Amount", new { @class = "form-negrito" })
+                                                    <input style="text-align: right" class="form-control" id="modalAmount" value="@string.Format("{0:#,##0.00#}", @wk.Amount)" readonly />
+
+                                                </div>
+                                                <div class="col-md-2 mb-2">
+                                                    @Html.Label("Valor RM", new { @class = "form-negrito" })
+                                                    <input style="text-align: right" class="form-control" id="modalValorRM" value="@string.Format("{0:#,##0.00#}", @wk.RMValor)" readonly />
+                                                </div>
+                                                <div class="col-md-2 mb-2">
+                                                    @Html.Label("Diferença", new { @class = "form-negrito" })
+                                                    <input style="text-align: right" class="form-control" id="modalDiferenca" value="@string.Format("{0:#,##0.00#}", @wk.Diferenca)" readonly />
+                                                </div>
+                                            </div>*@
+                                        </div>
+
+                                        <div class="grid-container">
+                                            <div class="grid-item">
+                                                @Html.Label("Sales Order", new { @class = "form-negrito" })
+                                                <input class="form-control " id="modalSO" value="@wk.SO_REF" readonly />
+                                            </div>
+                                            <div class="grid-item">
+                                                @Html.Label("DocumentoNo", new { @class = "form-negrito" })
+                                                <input class="form-control " id="modalDocumentoNo" value="@wk.Documento_No" readonly />
+                                            </div>
+                                            <div class="grid-item">
+                                                @Html.Label("Doc Date", new { @class = "form-negrito" })
+                                                <input class="form-control" id="modalDocDate" value="@wk.Doc_Date.ToString("dd/MM/yyyy")" readonly />
+                                            </div>
+                                            <div class="grid-item">
+                                                @Html.Label("Net Due Date", new { @class = "form-negrito" })
+                                                @if (@wk.Net_Due_Date.ToString() != "01/01/0001 00:00:00")
+                                                {
+                                                    <input class="form-control" id="modalNetDueDate" value="@wk.Net_Due_Date.ToString("dd/MM/yyyy")" readonly />
+                                                }
+                                                else
+                                                {
+                                                    <input class="form-control" readonly />
+                                                }
+                                            </div>
+                                            <div class="grid-item">
+                                                @Html.Label("Sales Order", new { @class = "form-negrito" })
+                                                <input class="form-control " id="modalSO" value="@wk.SO_REF" readonly />
+                                            </div>
+                                            <div class="grid-item">
+                                                @Html.Label("Valor RM", new { @class = "form-negrito" })
+                                                <input style="text-align: right" class="form-control" id="modalValorRM" value="@string.Format("{0:#,##0.00#}", @wk.RMValor)" readonly />
+                                            </div>
+                                            <div class="grid-item">
+                                                @Html.Label("Diferença", new { @class = "form-negrito" })
+                                                <input style="text-align: right" class="form-control" id="modalDiferenca" value="@string.Format("{0:#,##0.00#}", @wk.Diferenca)" readonly />
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+
+
+
+                        @*<div class="modal-body" style="padding:20px 15px 0 15px">*@
+
+                        <div class="panel-group">
+
+                            <div class="panel with-nav-tabs panel-default">
+                                <div class="panel-heading" style="background-color:lightgray">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#tab1default" data-toggle="tab"><span style="font-weight:bold">Análise</span></a></li>
+                                        <li><a href="#tab2default" data-toggle="tab">Info. Complementares</a></li>
+                                        <li><a href="#tab3default" data-toggle="tab">Histórico</a></li>
+                                        @*<li><a href="#tab3default" data-toggle="tab">Default 3</a></li>
+                                        <li class="dropdown">
+                                            <a href="#" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="#tab4default" data-toggle="tab">Default 4</a></li>
+                                                <li><a href="#tab5default" data-toggle="tab">Default 5</a></li>
+                                            </ul>
+                                        </li>*@
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade in active" id="tab1default">
+
+
+
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Situação da invoice
+                                                </div>
+                                                @if (Model != null)
+                                                {
+                                                    if (Model.lstConciliacaoItem != null)
+                                                    {
+                                                        foreach (Entities.StatementConciliacao wk in Model.lstConciliacaoItem)
+                                                        {
+                                                            <div class="panel-body" style="padding-bottom:0px;">
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-6 col-6">
+                                                                        @Html.Label("Conciliação anterior", new { @class = "form-negrito" })
+                                                                        <input class="form-control" id="modalSituacaoAnterior" value="@wk.SITUACAO_CONCILIACAO_ANTERIOR" readonly />
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-6 col-6">
+                                                                        @Html.Label("Conciliação atual", new { @class = "form-negrito" })
+                                                                        <input class="form-control" id="modalSituacaoAtual" value="@wk.SITUACAO_ATUAL" readonly />
+                                                                    </div>
+
+
+
+
+                                                                </div>
+                                                                <br />
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+
+
+                                            <div class="panel with-nav-tabs panel-default" style="background-color:lightgray">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Parecer da análise
+                                                </div>
+                                                <div class="panel-body" style="padding-bottom:0px;">
+                                                    @if (Model != null)
+                                                    {
+                                                        if (Model.lstConciliacaoItem != null)
+                                                        {
+                                                            foreach (Entities.StatementConciliacao wk in Model.lstConciliacaoItem)
+                                                            {
+                                                                <div class="row">
+
+                                                                    <div class="panel-body" style="padding-bottom:0px;">
+                                                                        <div class="row">
+                                                                            @if (wk.Tipo == "C")
+                                                                            {
+                                                                                <div class="col-md-4 mb-2 col-1">
+                                                                                    @Html.Label("'invoice", new { @class = "form-negrito" })
+                                                                                    <input class="form-control" value="@wk.Classificacao" readonly />
+
+                                                                                    <input hidden id="id_classificacaoVal" value="@wk.ID_CLASSIFICACAO" />
+                                                                                </div>
+
+                                                                                <div class="col-md-4 mb-2">
+                                                                                    @Html.Label("Departamento", new { @class = "form-negrito" })
+                                                                                    <input class="form-control" value="@wk.Departamento" readonly />
+
+                                                                                    <input hidden id="id_departamentoVal" value="@wk.Id_Departamento" />
+
+                                                                                </div>
+                                                                                                    <div class="col-md-4 mb-2">
+                                                                                                        @Html.Label("Situação da análise", new { @class = "form-negrito" })
+                                                                                                        <input class="form-control" value="@wk.Situacao_Analise" readonly />
+
+
+                                                                                                        <input hidden id="id_situacao_analiseVal" value="@wk.Situacao_Analise" />
+
+                                                                                                    </div>
+
+                                                                            }
+
+                                                                            else
+                                                                            {
+                                                                                <div class="col-md-4 mb-2 col-1">
+                                                                                    @Html.Label("Classificação da invoice", new { @class = "form-negrito" })
+                                                                                    @Html.DropDownList("id_classificacao", (SelectList)ViewBag.Classificacao, @wk.Classificacao, new { @class = "chosen-select" })
+
+                                                                                    <input hidden id="id_classificacaoVal" value="@wk.ID_CLASSIFICACAO" />
+                                                                                </div>
+
+                                                                                <div class="col-md-3 mb-2">
+                                                                                    @Html.Label("Departamento", new { @class = "form-negrito" })
+                                                                                    @Html.DropDownList("id_departamento", (SelectList)ViewBag.Departamentos, @wk.Departamento, new { @class = "chosen-select" })
+
+                                                                                    <input hidden id="id_departamentoVal" value="@wk.Id_Departamento" />
+
+                                                                                </div>
+                                                                                                        <div class="col-md-3 mb-2">
+                                                                                                            @Html.Label("Situação da análise", new { @class = "form-negrito" })
+
+                                                                                                            @if (wk.Situacao_Analise.Equals("A"))
+                                                                                                            {
+                                                                                                                @Html.DropDownList("id_situacao_analise", new List<SelectListItem>
+                                                                                                        {
+                                                                                                           new SelectListItem{Text="Analisado", Value="A", Selected = true},
+                                                                                                           new SelectListItem{Text="Pendente", Value="P"}}, new { @class = "chosen-select" })
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                @Html.DropDownList("id_situacao_analise", new List<SelectListItem>
+                                                                                                        {
+                                                                                                           new SelectListItem{Text="Analisado", Value="A"},
+                                                                                                           new SelectListItem{Text="Pendente", Value="P",  Selected = true}}, new { @class = "chosen-select" })
+                                                                                                            }
+
+
+
+                                                                                                            <input hidden id="id_situacao_analiseVal" value="@wk.Situacao_Analise" />
+
+                                                                                                        </div>
+                                                                                                        <div class="col-md-2 mb-2">
+
+                                                                                                            <button type="button" class="btn btn-primary pull-right" style="margin-top:12px;" onclick="salvarAnaliseConciliacao(@wk.Id_Conciliacao, '@wk.Id_Conciliacao_Item', '@wk.Invoice', '@wk.Situacao_Analise')">Salvar</button>
+
+                                                                                                        </div>
+
+                                                                            }
+                                                                        </div>
+                                                                        <br />
+                                                                    </div>
+
+                                                                </div>
+                                                                if (wk.Tipo != "C")
+                                                                {
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-12">
+                                                                            @Html.Label("Comentários", new { @class = "form-negrito" })
+                                                                            @Html.TextArea("comentarios", new { @class = "form-control" })
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                </div>
+
+                                            </div>
+
+
+
+                                            @*<button type="button" class="btn btn-primary pull-right" id="btnAgendarConciliacao">Salvar</button>*@
+
+
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-striped" id="lstAnaliseItem" style="margin-bottom:0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Data Statement</th>
+                                                                    <th>Data Obs</th>
+                                                                    <th>Tipo</th>
+                                                                    <th>Comentário</th>
+                                                                    <th>Responsável</th>
+                                                                </tr>
+                                                            </thead>
+                                                            @if (Model != null)
+                                                            {
+                                                                if (Model.lstObservacao != null)
+                                                                {
+                                                                    foreach (Entities.StatementConciliacao wk in Model.lstObservacao)
+                                                                    {
+
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>@wk.Data_Base</td>
+                                                                                <td>@wk.Data</td>
+                                                                                <td>@wk.Tipo</td>
+                                                                                <td>@wk.Descricao</td>
+                                                                                <td>@wk.Responsavel</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </table>
+
+                                                    </div>
+                                                    <br />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="tab2default">
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="text-align:left;background-color:lightgray">
+                                                    Pedido de compra
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-striped" id="lstAnaliseItem" style="margin-bottom:0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Filial</th>
+                                                                    <th>Emissão</th>
+                                                                    <th>Movimento</th>
+                                                                    <th>Série</th>
+                                                                    <th>PO</th>
+                                                                    <th>Valor</th>
+                                                                    <th>Situação Doc</th>
+                                                                    <th>Situação da aprovação</th>
+                                                                    <th>Razão social</th>
+                                                                    <th>Responsável</th>
+                                                                </tr>
+                                                            </thead>
+                                                            @if (Model != null)
+                                                            {
+                                                                if (Model.lstPedidoCompra != null)
+                                                                {
+                                                                    foreach (Entities.StatementConciliacao wk in Model.lstPedidoCompra)
+                                                                    {
+
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>@wk.Filial</td>
+                                                                                <td>@wk.Emissao.ToString("dd/MM/yyyy")</td>
+                                                                                <td>@wk.Movimento</td>
+                                                                                <td>@wk.Serie</td>
+                                                                                <td>@wk.PO_Number</td>
+                                                                                <td>@wk.VALORLIQUIDOORIG</td>
+                                                                                <td>@wk.Status</td>
+                                                                                <td>@wk.Status_Aprovacao</td>
+                                                                                <td>@wk.NomeFantasia</td>
+                                                                                <td>@wk.Responsavel</td>
+
+
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </table>
+
+                                                    </div>
+                                                    <br />
+                                                </div>
+                                            </div>
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="text-align:left;background-color:lightgray">
+                                                    Invoice
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-striped" id="lstAnaliseItem" style="margin-bottom:0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Filial</th>
+                                                                    <th>Emissão</th>
+                                                                    <th>Movimento</th>
+                                                                    <th>Série</th>
+                                                                    <th>Documento</th>
+                                                                    <th>Invoice</th>
+                                                                    <th>Valor</th>
+                                                                    <th>D.I.</th>
+                                                                    <th>Processo</th>
+                                                                    <th>House</th>
+                                                                    <th>Situação doc.</th>
+                                                                </tr>
+                                                            </thead>
+                                                            @if (Model != null)
+                                                            {
+                                                                if (Model.lstInvoice != null)
+                                                                {
+                                                                    foreach (Entities.StatementConciliacao wk in Model.lstInvoice)
+                                                                    {
+
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>@wk.Filial</td>
+                                                                                <td>@wk.Emissao.ToString("dd/MM/yyyy")</td>
+                                                                                <td>@wk.Movimento</td>
+                                                                                <td>@wk.Serie</td>
+                                                                                <td>@wk.Documento_No</td>
+                                                                                <td>@wk.Invoice</td>
+                                                                                <td>@wk.VALORLIQUIDOORIG.ToString("0.00")</td>
+                                                                                <td>@wk.DI</td>
+                                                                                <td>@wk.Processo</td>
+                                                                                <td>@wk.House</td>
+                                                                                <td>@wk.Status</td>
+
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </table>
+
+                                                    </div>
+                                                    <br />
+                                                </div>
+                                            </div>
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="text-align:left;background-color:lightgray">
+                                                    Financeiro (contas a pagar/receber)
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-striped" id="lstAnaliseItem" style="margin-bottom:0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Filial</th>
+                                                                    <th>Razão social</th>
+                                                                    <th>Tipo</th>
+                                                                    <th>Invoice</th>
+                                                                    <th>Ctt. Câmbio</th>
+                                                                    <th>Data baixa</th>
+                                                                    <th>Moeda</th>
+                                                                    <th>Valor</th>
+                                                                    <th>Valor baixado</th>
+                                                                    <th>Data emissão</th>
+                                                                    <th>Data vencimento</th>
+                                                                    <th>Caixa</th>
+                                                                    <th>Situação</th>
+                                                                </tr>
+                                                            </thead>
+                                                            @if (Model != null)
+                                                            {
+                                                                if (Model.lstFinanceiro != null)
+                                                                {
+                                                                    foreach (Entities.StatementConciliacao wk in Model.lstFinanceiro)
+                                                                    {
+
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>@wk.Filial</td>
+                                                                                <td>@wk.NomeFantasia</td>
+                                                                                <td>@wk.Tipo</td>
+                                                                                <td>@wk.Invoice</td>
+                                                                                <td>@wk.CTT_CAMBIO</td>
+                                                                                <td>@wk.DataBaixa.ToString("dd/MM/yyyy")</td>
+                                                                                <td>@wk.Moeda</td>
+                                                                                <td>@string.Format("{0:#,##0.00#}", @wk.ValorOriginal)</td>
+                                                                                <td>@string.Format("{0:#,##0.00#}", @wk.ValorBaixado)</td>
+                                                                                <td>@wk.DataEmissao.ToString("dd/MM/yyyy")</td>
+                                                                                <td>@wk.DataVencimento.ToString("dd/MM/yyyy")</td>
+                                                                                <td>@wk.CodCxa</td>
+                                                                                <td>@wk.Status</td>
+
+
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </table>
+
+                                                    </div>
+                                                    <br />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="tab3default">
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="text-align:left;background-color:lightgray">
+                                                    Histórico
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-striped" id="lstAnaliseItem" style="margin-bottom:0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Data base</th>
+                                                                    <th>Amount</th>
+                                                                    <th>Amount retrieved</th>
+                                                                    <th>Balance</th>
+                                                                    <th>Arrear</th>
+                                                                    <th>Paid date</th>
+                                                                    <th>Doc type</th>
+                                                                    <th>Currency</th>
+                                                                    <th>Aircraft</th>
+                                                                    <th>Suffix</th>
+                                                                    <th>Check</th>
+                                                                    <th>Status</th>
+                                                                    <th>Text</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            @if (Model != null)
+                                                            {
+                                                                if (Model.lstHistorico != null)
+                                                                {
+                                                                    foreach (Entities.StatementConciliacao wk in Model.lstHistorico)
+                                                                    {
+
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                @if (@wk.Data_Base.ToString() != "01/01/0001 00:00:00")
+                                                                                {
+                                                                                    <td style="text-align:center">@wk.Data_Base.ToString("dd/MM/yyyy")</td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td></td>
+                                                                                }
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.00#}", @wk.Amount)</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.00#}", @wk.Amount_retrieved)</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.00#}", @wk.Balance)</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.00#}", @wk.Arrear)</td>
+                                                                                @if (@wk.Paid_date.ToString() != "01/01/0001 00:00:00")
+                                                                                {
+                                                                                    <td>@wk.Paid_date</td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td></td>
+                                                                                }
+
+                                                                                <td style="text-align:center">@wk.Doc_type</td>
+                                                                                <td style="text-align:center">@wk.Currency</td>
+                                                                                <td style="text-align:center">@wk.Aircraft</td>
+                                                                                <td style="text-align:center">@wk.Suffix</td>
+                                                                                <td style="text-align:center">@wk.Check</td>
+                                                                                <td style="text-align:center">@wk.Status</td>
+                                                                                <td style="text-align:left">@wk.Text</td>
+
+
+
+
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </table>
+
+                                                    </div>
+                                                    <br />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        @*<div class="tab-pane fade" id="tab3default">Default 3</div>
+                                        <div class="tab-pane fade" id="tab4default">Default 4</div>
+                                        <div class="tab-pane fade" id="tab5default">Default 5</div>*@
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        @*</div>
+                                        <button type="button" class="btn btn-primary pull-right" style="margin-bottom:10px;margin-top:10px;" data-dismiss="modal" onclick="Atualizar()">Fechar</button>
+                                    </div>
+
+                                            </div>
+                                        </div> /.modal-content
+                        </div>*@
+                        @*<button class="btn btn-primary pull-right" id="btnVoltarDivModal">Voltar</button>*@
+                        <input class="btn btn-primary pull-right" id="btnVoltarDivModal" type="button" value="Voltar" onclick="voltarDiv()" />
+                    </div>
+
+
+
+                </div>
+
+
+            </main>
+        </div>
+
+        <input type="hidden" id="hfCurrentPageIndex" name="pageNumber" />
+        <input type="hidden" id="hfCurrentPageIndex2" name="pageNumberAnaliseItem" />
+        <!-- Latest compiled and minified CSS -->
+        @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">*@
+
+    
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        <link href="~/content/indexCompras.css" rel="stylesheet" />
+        <link href="~/content/indexImportacaoProduto.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+        <!-- bootstrap Validator JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('#id_departamento option[value="1"]').attr("selected", "selected");
+                $('#id_departamento option:selected').attr("selected", null);
+            });
+
+            $(function () {
+                $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+                var divShow = $('#divShow').val();
+                $(divShow).show();
+
+                var menuAtivo = $('#menuAtivo').val();
+
+                  $('.menuStatement .sidebar-submenu').toggle();
+
+                    $(".menuStatement").click(function () {
+                       
+
+                    });
+                    //if (divShow == '#divModal')
+                    //{
+                    //    $('.menuStatement .sidebar-submenu').toggle();
+                    //}
+
+                    Windows.scroll(0);
+
+            });
+
+            function PagerClick(index) {
+                document.getElementById("hfCurrentPageIndex").value = index;
+                document.forms[0].submit();
+            }
+
+            function PagerClickAnaliseItem(index) {
+                var btnFiltroAnalise = $('#btnFiltroAnalise').val();
+
+                document.getElementById("hfCurrentPageIndex2").value = index;
+                var input = $("<input>")
+                .attr("type", "hidden")
+                .attr("name", "divShow2").val("#divRegistros");
+
+                $('#myForm').append($(input));
+
+                var btnFiltroAnalise = $("<input>")
+               .attr("type", "hidden")
+               .attr("name", "btnFiltroAnalise").val(btnFiltroAnalise);
+
+                $('#myForm').append($(btnFiltroAnalise));
+
+                document.forms[0].submit();
+            }
+
+            $("#btnFiltro").click(function () {
+                $('#myForm').bootstrapValidator({
+                    message: 'No es valido',
+                    framework: 'bootstrap',
+                    feedbackIcons: {
+                        //valid: 'glyphicon glyphicon-ok',
+                        //invalid: 'glyphicon glyphicon-remove',
+                        //validating: 'glyphicon glyphicon-refresh'
+                    },
+                    submitButtons: 'button[name="Filtrar"]',
+                    fields: {
+                        mes: {
+                            validators: {
+                                notEmpt:{
+                                    message: "Digite o mês."
+                                },
+                                stringLength: {
+                                    max: 2,
+                                    message: 'Mês inválido.'
+                                },
+                                integer: {
+                                    message: 'Mês inválido.'
+                                },
+                                between:
+                                    {
+                                        min: 1,
+                                        max: 12,
+                                        message: 'Mês inválido'
+                                    }
+                            }
+                        },
+
+                        ano: {
+                            validators: {
+                                notEmpt:{
+                                    message: "Digite o ano."
+                                },
+                                stringLength: {
+                                    max: 4,
+                                    message: 'Ano inválido.'
+                                },
+                                greaterThan: {
+                                    message: 'Ano deve ser superior ou igual a 2010.',
+                                    min: 2010,
+                                },
+                                integer: {
+                                    message: 'Ano inválido.'
+                                }
+
+                            }
+
+                        }
+                    }
+                })
+
+            });
+
+
+            //$('a.modalBTN').click(function () {
+            //    $('#conciliacaoModal').modal({
+            //        show: true,
+            //        closeOnEscape: true,
+            //        backdrop: 'static',
+            //        keyboard: false
+            //    })
+            //});
+
+
+            function desbloquearPedido(idIntegracao, idMov) {
+                $.ajax({
+                    url: '@Url.Action("DesbloquearPedido", "ImportacaoProduto")',
+                    type: 'get',
+                    data: { idIntegracao: idIntegracao, idMov: idMov },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); }
+                });
+            }
+
+            @*function uploadExcel() {
+                //var arquivo = document.getElementById("uploadBtn").value;
+
+                $.ajax({
+                    url: '@Url.Action("Admin", "StatementImportacao")',
+                    type: 'get',
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); }
+                });*@
+            //}
+
+            $(function () {
+                document.getElementById("uploadBtn").onchange = function () {
+                    document.getElementById("uploadFile").value = this.value.substring(12);
+                    $('#uploadInput').val("statement");
+                };
+
+                document.getElementById("salvarExcel").onclick = function () {
+                    var formdata = new FormData($('#myForm').get(0));
+                    //formData.append('conta', '123');
+                    //formData.append('conta', '123');
+
+                    CallService(formdata);
+                };
+            });
+
+
+
+            function CallService(file) {
+                $.ajax({
+                    url: '@Url.Action("Admin", "StatementImportacao")',
+                    type: 'POST',
+                    data: file,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        alert('Arquivo importado com sucesso!');
+                        $('#myForm').submit();
+                    },
+                    error: function () {
+                        alert('Erro na importação.');
+                    }
+                });
+            }
+
+
+
+
+            function populaModal(po, so, invoice, conta, data_statement, data_Imagem, situacao, situacaoInvoice, documentoNo, docDate, netDueDate, amount, valorRM, diferenca) {
+                $('#modalDocumentoNo').val(documentoNo);
+                $('#modalDocDate').val(docDate);
+                $('#modalNetDueDate').val(netDueDate);
+                $('#modalAmount').val(amount);
+                $('#modalValorRM').val(valorRM);
+                $('#modalDiferenca').val(diferenca);
+                $('#modalSituacaoAnterior').val(situacao);
+                $('#modalSituacaoAtual').val(situacaoInvoice);
+                $('#modalConta').text(conta);
+                $('#modalDataStatement').text(data_statement);
+                $('#modalRMFluxus').text(data_Imagem);
+                $('#modalInvoice').text(invoice);
+                $('#modalPO').text(po);
+                $('#modalSO').text(so);
+            }
+
+            function initializeFileUploads() {
+                $('.file-upload').change(function () {
+                    var file = $(this).val();
+                    $(this).closest('.input-group').find('.file-upload-text').val(file);
+                });
+                $('.file-upload-btn').click(function () {
+                    $(this).find('.file-upload').trigger('click');
+                });
+                $('.file-upload').click(function (e) {
+                    e.stopPropagation();
+                });
+            }
+
+            function salvarNovoStatement(){
+                var conta = $('#contaFiltro').val();
+                var dataBase = $('#dataBaseFiltro').val();
+                $.ajax({
+                    url: '@Url.Action("SalvarStatement", "StatementImportacao")',
+                    data: {conta : conta, DataBase : dataBase},
+                    cache: false,
+                    contentType: false,
+                    success: function (data) {
+                        alert('Statement salvo com sucesso!');
+                        $('#myForm').submit();
+                    },
+                    error: function () {
+                        alert('Erro na importação.');
+                    }
+                });
+            }
+
+
+            function conciliacaoItem2(id_conciliacao, id_conciliacao_item, invoice)
+            {
+
+                var id_departamento = $('#id_departamento').val();
+                var id_situacao_Filtro = $('#id_situacao_Filtro').val();
+                var id_classificacao = $('#id_classificacao').val();
+                var id_situacao_analise = $('#id_situacao_analise').val();
+                var idLstConciliacao = $('#idLstConciliacao').val();
+                var btnFiltroAnalise = $('#btnFiltroAnalise').val();
+                var pedidoCompra = $('#pedidoCompraFiltro').val();
+                var ano = $('#ano').val();
+                var mes = $('#mes').val();
+                //var invoice = $('#invoiceFiltro').val();
+                var so_ref = $('#salesOrderFiltro').val();
+                var ano = $('#ano').val();
+                var mes = $('#mes').val();
+                var divShow = '#divModal';
+                $.ajax({
+                    url: '@Url.Action("ConciliacaoItem", "StatementConciliacao")',
+                    data: { ano:ano, mes:mes,pedidoCompraFiltro: pedidoCompra, divShow: divShow, invoice_analise: invoice, id_conciliacao_analise: id_conciliacao, id_conciliacao_item_analise: id_conciliacao_item, ano, ano, mes: mes, idLstConciliacao: idLstConciliacao, btnFiltroAnalise: btnFiltroAnalise, id_departamento: id_departamento, id_situacao_Filtro: id_situacao_Filtro, id_classificacao: id_classificacao, id_situacao_analise: id_situacao_analise, poAnalise: pedidoCompra, invoiceAnalise: invoice, so_refAnalise: so_ref },
+                    cache: true,
+                    contentType: false,
+                    traditional: true,
+                    success: function (data) {
+                        $('#divFiltro').hide();
+                        $('#divRegistros').hide();
+
+                        //$("#divModal").load(location.href + " #divModal>*", "");
+
+
+                        var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "divShow2").val("#divModal");
+
+
+                        //var id_conciliacao_item_analise2 = $("<input>")
+                        //.attr("type", "hidden")
+                        //.attr("name", "id_conciliacao_item_analise").val(id_conciliacao_item);
+                        $('#idLstConciliacao').val(id_conciliacao);
+                        $('#myForm').append($(input));
+                        //$('#myForm').append($(id_conciliacao_item_analise2));
+                        $("#myForm").submit();
+                        //$("#divModal").load(location.href + "body", { 'divShow': '#divModal' });
+                        $('#divModal').show();
+                    },
+                    error: function () {
+                        alert('Erro na busca.');
+                    }
+                });
+
+                ('#divShow').val('#divModal');
+                //$("#myForm").submit();
+                $('#divModal').show();
+            }
+
+            $('#btnExibir').click(function () {
+                var tblChecked;
+                var situacaoAnalise = $('#situacaoAnalise').text();
+                var docDate = $('#docDate').text();
+
+               
+                //$('table [type="checkbox"]').each(function (i, chk) {
+                //    if (chk.checked) {
+                //        tblChecked = "s";
+                //    }
+                //});
+                if ($("#myForm input:checkbox:checked").length > 0) {
+                    tblChecked = "s";
+                }
+                else {
+                    tblChecked = "";
+                }
+                
+                //if (tblChecked != "s" & (situacaoAnalise == "" || situacaoAnalise == null) & docDate == null)
+                if (tblChecked != "s")
+                {
+                    alert("Selecione ao menos uma conciliação.");
+                }
+                else {
+                    //var id_departamento = $('#id_departamento').find(":selected").text();
+                    var id_departamento = $('#id_departamento2').val();
+                    var id_situacao_Filtro = $('#id_situacao_Filtro').val();
+                    var id_classificacao = $('#id_classificacao2').val();
+                    var id_situacao_analise = $('#id_situacao_analise2').val();
+                    var idLstConciliacao = $('#idLstConciliacao').val();
+                    var btnFiltroAnalise = $('#btnFiltroAnalise').val();
+                    var ano = $('#ano').val();
+                    var mes = $('#mes').val();
+                    var divShow = '#divRegistros';
+
+                    $.ajax({
+                        url: '@Url.Action("Index", "StatementConciliacao")',
+                        data: { divShow: divShow,ano, ano, mes: mes, idLstConciliacao: idLstConciliacao, btnFiltroAnalise: btnFiltroAnalise, id_departamento2: id_departamento, id_situacao_Filtro: id_situacao_Filtro, id_classificacao2: id_classificacao, id_situacao_analise2: id_situacao_analise },
+                        cache: false,
+                        contentType: false,
+                        traditional: true,
+                        success: function (data) {
+                            $('#divFiltro').hide();
+                            $('#divModal').hide();
+
+                            //$("#divRegistros").load(location.href + " #divRegistros>*", "");
+                            //$('#divRegistros').show();
+                            var input = $("<input>")
+                            .attr("type", "hidden")
+                            .attr("name", "divShow2").val("#divRegistros");
+                            $('#myForm').append($(input));
+                            $("#myForm").submit();
+                        },
+                        error: function (xhr, textStatus, error) {
+                            alert(error);
+                        }
+                    });
+
+
+                    //$('#myForm').submit();
+                    //$("#divRegistros").load(location.href + " #divRegistros>*", "");
+                }
+
+                //var $chkbox = $('#btnFiltroAnalise');
+                //var status = $chkbox.prop('checked');
+                //alert(status);
+                //if (status == true) {
+                //    $('#myForm').submit();
+                //}
+                //else {
+                //    alert("Selecione ao menos uma conciliação.");
+                //}
+            });
+
+
+            //$('a.modalBTN').click(function () {
+            //    $('#my-modal').modal({
+            //        show: true,
+            //        closeOnEscape: true,
+            //        backdrop: 'static',
+            //        keyboard: false
+            //    })
+            //});
+
+            function populaHistorico(invoice) {
+
+                $.ajax({
+                    url: '@Url.Action("PopulaHistorico", "StatementConciliacao")',
+                    data: { invoice: invoice },
+                    dataType: 'json',
+
+                    success: function (data) {
+
+                        if (data.success) {
+
+                        } else {
+                            // DoSomethingElse()
+
+                        }
+
+                    },
+                    error: function () {
+                        $('#my-modal').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                    }
+                })
+
+            };
+
+
+            function voltarDiv() {
+
+                var btnFiltroAnalise = $('#btnFiltroAnalise').val();
+                var ano = $('#ano').val();
+                var mes = $('#mes').val();
+
+                var divShow = '#divRegistros';
+                $('#divShow').val('#divRegistros');
+                $.ajax({
+                    url: '@Url.Action("Index", "StatementConciliacao")',
+                    data: { divShow: divShow, voltarDiv: 1, btnFiltroAnalise: btnFiltroAnalise, ano: ano, mes: mes },
+                    cache: false,
+                    contentType: false,
+                    traditional: true,
+                    success: function (data) {
+
+                        $("#divModal").hide();
+                        $("#divModal").empty();
+                        $('#carregando').val('Aguarde, carregando...');
+                        $("#divRegistros").show();
+                        $('#carregando').val('');
+                    },
+                    error: function () {
+                        alert('Erro na busca.');
+                    }
+                });
+
+            };
+
+
+
+            function salvarAnaliseConciliacao(id_Conciliacao, id_Conciliacao_Item, invoice) {
+                var id_classificacao = $('#id_classificacao').find(":selected").text();
+                var id_departamento = $('#id_departamento').find(":selected").text();
+                var id_situacao_analise = $('#id_situacao_analise').find(":selected").val();
+                var comentarios = $('#comentarios').val();
+
+                $.ajax({
+                    cache: true,
+                    //contentType: false,
+                    //traditional: true,
+                    url: '@Url.Action("salvarAnaliseConcilicacao", "StatementConciliacao")',
+                    data: {
+                        classificacao: id_classificacao, departamento: id_departamento, situacao_analise: id_situacao_analise, id_Conciliacao: id_Conciliacao, id_Conciliacao_Item: id_Conciliacao_Item
+                        , invoice: invoice, comentarios: comentarios},
+                    //dataType: 'json',
+
+                    success: function (data) {
+                        var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "divShow2").val("#divModal");
+
+                        var id_conciliacao_item_analise = $("<input>")
+                               .attr("type", "hidden")
+                               .attr("name", "id_conciliacao_item_analise").val(id_Conciliacao_Item);
+
+                        $('#myForm').append($(input));
+                        $('#myForm').append($(id_conciliacao_item_analise));
+                        $('#comentarios').val('');
+                        $("#myForm").submit();
+
+
+                    },
+                    error: function () {
+
+                    }
+                })
+                //var input = $("<input>")
+                //        .attr("type", "hidden")
+                //        .attr("name", "divShow2").val("#divModal");
+
+                //var id_conciliacao_item_analise = $("<input>")
+                //       .attr("type", "hidden")
+                //       .attr("name", "id_conciliacao_item_analise").val(id_Conciliacao_Item);
+                
+                //$('#myForm').append($(input));
+                //$('#myForm').append($(id_conciliacao_item_analise));
+                //$("#myForm").submit();
+            };
+
+
+
+
+            @*$('#btnVoltarDivModal').click(function () {
+                    alert("aqui");
+                    var id_departamento = $('#id_departamento').val();
+                    var id_situacao_Filtro = $('#id_situacao_Filtro').val();
+                    var id_classificacao = $('#id_classificacao').val();
+                    var id_situacao_analise = $('#id_situacao_analise').val();
+                    var idLstConciliacao = $('#idLstConciliacao').val();
+                    var btnFiltroAnalise = $('#btnFiltroAnalise').val();
+                    var ano = $('#ano').val();
+                    var mes = $('#mes').val();
+                    var divShow = '#divModal';
+
+                    $.ajax({
+                        url: '@Url.Action("Index", "StatementConciliacao")',
+                        data: { divShow: divShow, id_conciliacao_item: id_conciliacao_item, ano, ano, mes: mes, idLstConciliacao: idLstConciliacao, btnFiltroAnalise: btnFiltroAnalise, id_departamento: id_departamento, id_situacao_Filtro: id_situacao_Filtro, id_classificacao: id_classificacao, id_situacao_analise: id_situacao_analise, },
+                        cache: false,
+                        contentType: false,
+                        traditional: true,
+                        success: function (data) {
+                            //$('#divFiltro').hide();
+                            //$('#divRegistros').hide();
+                            //$('#divModal').show();
+                            //$("#divModal").load(location.href + " #divModal>*", "");
+
+
+                        },
+                        error: function () {
+                            alert('Erro na busca.');
+                        }
+                    });
+            })*@
+
+
+           function teste(value)
+            {
+               alert(value);
+            }
+
+           //function scrollDown() {
+           //    alert("teste");
+           //}
+
+           $('#id_situacao_Filtro').click(function () {
+               alert("teste");
+           });
+
+             
+        </script>
+    </body>
+}
+</html>

@@ -1,0 +1,284 @@
+﻿body, html {
+	margin:0;
+	padding:0;
+    font-size: 12px;
+}
+
+
+/***** LAYOUT *****/
+
+#wrap {
+	width:100%;
+	margin:0 auto;
+}
+
+#header {
+    /*padding:5px 10px;*/
+	/*background:#803029;*/
+}
+
+
+.logo-cabecalho {
+    /*width:200px;*/
+}
+
+h1 {
+	margin:0;
+}
+
+#nav {
+	padding:5px 10px;
+	background:#c99;
+}
+
+#nav ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+#nav li {
+	display:inline;
+	margin:0;
+	padding:0;
+}
+
+#main {
+	float:left;
+	width:100%;
+	padding:10px;
+	/*background:white;*/
+}
+
+h2 {
+	margin:0 0 1em;
+}
+
+#footer {
+	clear:both;
+	padding:5px 10px;
+	background: rgb(127,49,41);
+    color:white;
+}
+
+#footer p {
+	margin:0;
+}
+
+* html #footer {
+	height:1px;
+}
+
+
+/***** /LAYOUT *****/
+
+.tabela-grid {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.tabela-grid td, .tabela-grid th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.tabela-grid tr:nth-child(even){
+    background-color: #efefef;
+}
+
+.tabela-grid tr:hover {
+    background-color: #ddd;
+}
+
+.tabela-grid th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #707070;
+    color: white;
+}
+
+
+.tabela-grid-SemBackground {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+.tabela-grid-SemBackground td, .tabela-grid-SemBackground th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.tabela-grid-SemBackground tr:nth-child(even){
+    /*background-color: #efefef;*/
+}
+
+.tabela-grid-SemBackground tr:hover {
+    background-color: #ddd;
+}
+
+.tabela-grid-SemBackground th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #707070;
+    color: white;
+}
+
+
+.img-delete {
+    background: url(../Images/Actions-edit-delete-icon.png) no-repeat;
+    display: block;
+    width: 16px;
+    height: 16px;
+    text-indent: -9999px;
+    text-decoration:none;
+}
+
+.texto-centro {
+    text-align:center;
+}
+
+.texto-direita {
+    text-align: right;
+}
+
+.texto-cabecalho {
+    /*text-align: right;*/
+    color: #FFFFFF;
+    /*vertical-align: top;*/
+    /*float:right;*/
+    /*margin-top: 10px;
+    margin-right: 10px;*/
+    font-weight: bold;
+}
+
+.form-padrao {
+    margin-top:20px;
+    margin-bottom:20px;
+    width: 100%;
+}
+
+.form-padrao tr td {
+    padding:10px;
+}
+
+.pop-up-admin {
+    margin:20px;
+}
+
+.linha-botoes-form {
+    height: 50px;
+}
+
+.form-negrito {
+    font-weight: bold;
+}
+
+
+.busca {
+  padding: 5px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+#ul-regioes, #ul-estados, #ul-cidades, #ul-motorizacoes {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tabela-filtro {
+    width: 100%;
+}
+
+.botao-filtro {
+    text-align: right;
+    vertical-align: bottom;
+}
+
+.linhaVermelha {
+    background-color:#FF7979;
+}
+
+.linhaAmarela {
+    background-color:#FFFF66;
+}
+
+
+.popup-atendimento {
+    display:none;
+    position: absolute;
+    background-color:#000000;
+    color:#FFFFFF;
+    padding: 10px;
+}
+
+.painel-table {
+    /*width: 500px;*/
+}
+
+.chart-box {
+    background-color: #efefef;
+}
+
+.chart-titulo {
+    background-color: #005277;
+    color: #FFFFFF;
+    padding: 5px;
+}
+
+.tabela-painel {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.tabela-painel-td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.tabela-painel-tr:nth-child(even){
+    background-color: #efefef;
+}
+
+.tabela-painel-tr:hover {
+    background-color: #ddd;
+}
+
+.tabela-painel-itens tr td {
+    padding-bottom: 10px;
+}
+
+.tabela-painel-itens-detalhe {
+    border: 1px solid #cccccc;
+}
+
+.tabela-painel-itens-detalhe tr td {
+    padding-bottom: 10px;
+}
+
+.linkOrdena {
+    color:white;
+}
+
+.linkOrdena:hover {
+    color:white;
+    text-decoration:underline;
+}
+
+.buscaPornome {
+    text-decoration:underline;
+}
+
+.texto-vermelho  {
+    color:red;
+    font-weight: bold;
+}
+
+.form-inline {
+    width:100%;
+    display:inline-block;
+}

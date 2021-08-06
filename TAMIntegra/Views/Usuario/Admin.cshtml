@@ -1,0 +1,122 @@
+﻿@model Entities.Usuario
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TAMAE - TBIP</title>
+    <script type="text/javascript" src="~/scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="~/scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/menu.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/geral.css" />
+
+    @if (TempData["Mensagem"] != null)
+    {
+        <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+        </script>
+    }
+
+    @if (TempData["FechaPopUp"] != null)
+    {
+        <script type="text/javascript">
+        window.opener.location.reload();
+        window.close();
+        </script>
+    }
+
+</head>
+<body>
+
+    <div class="pop-up-admin">
+
+        <h3>Configurações - Usuários</h3>
+
+        @using (Html.BeginForm("Admin", "Usuario", FormMethod.Post))
+        {
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+
+            <table class="form-padrao" border="0">
+                <tr>
+                    <td>
+                        <label class="form-negrito">Login *</label>
+                        @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control", autofocus = "autofocus" } })
+                    </td>
+                    <td>
+                        <label class="form-negrito">Nome *</label>
+                        @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td>
+                        <label class="form-negrito">Sobrenome *</label>
+                        @Html.EditorFor(model => model.Sobrenome, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        <label class="form-negrito">E-mail *</label>
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="form-negrito">Área *</label>
+                        @Html.DropDownListFor(x => x.IdArea, (SelectList)ViewBag.UsuarioArea, "-- Selecione --", new { @class = "form-control" })
+                    </td>
+                    <td>
+                        <label class="form-negrito">Perfil *</label>
+                        @Html.DropDownListFor(x => x.IdPerfil, (SelectList)ViewBag.UsuarioPerfil, "-- Selecione --", new { @class = "form-control" })
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td>
+                        <label class="form-negrito">Situação *</label>
+                        @Html.DropDownListFor(x => x.IdSituacao, (SelectList)ViewBag.UsuarioSituacao, "-- Selecione --", new { @class = "form-control" })
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    <label class="form-negrito">Vendedor</label><br />
+                                    @Html.CheckBoxFor(x => x.Vendedor)
+                                </td>
+                                <td>
+                                    <label class="form-negrito">Visualiza valores de venda</label><br />
+                                    @Html.CheckBoxFor(x => x.exibirValorVenda)
+                                </td>
+                                <td>
+                                    <label class="form-negrito">Visualiza cor verde (geral)</label><br />
+                                    @Html.CheckBoxFor(x => x.exibirCorVerde)
+                                </td>
+                                <td>
+                                    <label class="form-negrito">Autorizar exportar dados</label><br />
+                                    @Html.CheckBoxFor(x => x.autorizarExportacao)
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    
+                </tr>
+                <tr class="linha-botoes-form">
+                    <td colspan="2">
+                        <input type="submit" name="enviaForm" value="Validar" class="btn btn-success" />
+                        <input type="submit" name="enviaForm" value="Salvar" class="btn btn-secondary" />
+                        <input type="reset" value="Limpar" class="btn btn-secondary" />
+                        <input type="button" value="Fechar" class="btn btn-secondary" onclick="window.close();" />
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</body>
+</html>

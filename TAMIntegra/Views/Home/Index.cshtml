@@ -1,0 +1,488 @@
+﻿@model Entities.Home
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        
+.panel-heading {
+    background-color: #f2f2f2 !important;
+}
+ .modal-dialog {
+  display: flex;
+  align-items: center;
+}
+
+.modal-content {
+  /*margin: 0 auto;*/
+}
+.page-content {
+    padding-top: 0px;
+}
+h1 {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+}
+@@media screen and (min-width: 992px) {
+  .modal .modal-dialog   {
+    width: 1120px;
+  }
+  .espacamento{
+      padding-top:10px;
+  }
+  .panel-body{
+      padding-bottom:0;
+  }
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  padding: 5px;
+}
+.grid-item {
+  padding: 5px;
+  text-align: left;
+}
+}
+    </style>
+</head>
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+<body>
+    <div class="page-wrapper chiller-theme">
+        <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                <div class="stepwizard">
+                    <fieldset>
+                        <legend style="margin-bottom:0;top:0;font-size:18px;">Painel</legend>
+                    </fieldset>
+                    </div>
+                </div>
+        </main>
+
+        <main class="page-content" style="padding-top:50px">
+            <div class="container-fluid" style="padding-top:0">
+                <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@>
+
+                    <div class="panel with-nav-tabs panel-default" style="margin-bottom:0;">
+                        <div class="panel-heading" style="background-color:lightgray !important">
+                            Pedidos selecionados
+                        </div>
+                        <div class="panel-body" style="padding-bottom:15px">
+                            <div class="tab-content">
+
+                                @*<div class="row">
+                                    <div class="col-md-2 mb-2 col-lg-2" style="padding-right:0;padding-left:0">
+                                        <div class="col-md-11" style="padding-right:0;padding-left:5px">
+                                            <label class="form-negrito">Data início</label>
+                                            @Html.Editor("strDataInicio", new { htmlAttributes = new { @class = "form-control datepickerInput", @onchange= "isValidDate(this.value, '#dtIniciDivErro')" } })
+                                            <div style="color: red" id="dtIniciDivErro">
+
+                                            </div>   
+                                         </div>
+                                    </div>
+                                    <div class="col-md-2 mb-2 col-lg-2" style="padding-right:0;padding-left:0">
+                                        <div class="col-md-11" style="padding-right:0;padding-left:0">
+                                            @Html.Label("Data fim", new { @class = "form-negrito" })
+                                            @Html.Editor("strDataFim", new { htmlAttributes = new { @class = "form-control datepickerInput", @onchange = "isValidDate(this.value, '#dtFimDivErro')" } })
+                                            <div style="color: red" id="dtFimDivErro">
+
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-2 col-lg-2" style="padding-right:0;padding-left:0">
+                                        <div class="col-md-12">
+                                            @Html.Label("Pedido de Compra", new { @class = "form-negrito" })
+                                            @Html.Editor("numeroPO", new { htmlAttributes = new { @class = "form-control", maxlength = "35" } })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 mb-2 col-lg-2" style="padding-right:0;padding-left:0">
+                                        <div class="col-md-11">
+                                            <label class="form-negrito">Processo Importação</label>
+                                            @Html.Editor("numProcesso", new { htmlAttributes = new { @class = "form-control", @maxlength = "25" } })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2" style="top:20px;">
+                                                <div class="btn-toolbar">
+                                                    <button class="btn btn-primary nextBtn btn-md" type="submit" name="Exportar" style="width:75px;">Exportar</button>
+                                                    <button class="btn btn-primary nextBtn btn-md" type="submit" name="Filtrar" id="filtrar" style="width:60px;">Exibir</button>
+                                                </div>
+                                    </div>
+                                </div>*@
+
+                                <div class="grid-container">
+                                    <div class="grid-item">
+                                        <label class="form-negrito">Data início</label>
+                                        @Html.Editor("strDataInicio", new { htmlAttributes = new { @class = "form-control datepickerInput", @onchange = "isValidDate(this.value, '#dtIniciDivErro')" } })
+                                        <div style="color: red" id="dtIniciDivErro">
+                                        </div>
+                                    </div>
+                                        <div class="grid-item">
+                                            @Html.Label("Data fim", new { @class = "form-negrito" })
+                                            @Html.Editor("strDataFim", new { htmlAttributes = new { @class = "form-control datepickerInput", @onchange = "isValidDate(this.value, '#dtFimDivErro')" } })
+                                            <div style="color: red" id="dtFimDivErro">
+                                            </div>
+                                        </div>
+                                    <div class="grid-item">
+                                        @Html.Label("Pedido de Compra", new { @class = "form-negrito" })
+                                        @Html.Editor("numeroPO", new { htmlAttributes = new { @class = "form-control", maxlength = "35" } })
+                                    </div>
+                                    <div class="grid-item">
+                                        <label class="form-negrito">Processo Importação</label>
+                                        @Html.Editor("numProcesso", new { htmlAttributes = new { @class = "form-control", @maxlength = "25" } })
+                                    </div>
+                                    <div class="grid-item" style="margin-top:20px;">
+                                         <button class="btn btn-primary nextBtn btn-md" type="submit" name="Filtrar" id="filtrar" style="width:60px;">Exibir</button>
+                                        <button class="btn btn-success nextBtn btn-md" type="submit" name="Exportar" style="width:75px;">Exportar</button>
+                                    </div>
+                                    
+                           </div>    
+                        </div>
+                            </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="text-align:center;">
+                                    <div class="row">
+                                        
+                                        @if (Model != null)
+                                        {
+                                            
+                                            if (Model.POQtd > 0)
+                                                {
+                                                    <span style="font-size:30px">
+                                                        @Model.POQtd
+                                                    </span>
+                                            }
+                                            else
+                                            {
+                                                <span style="font-size:30px">0</span>
+                                            }
+                                        }                                    
+
+                                    </div>
+                                    <div class="row">
+                                        <span>PO</span>
+                                    </div>
+                                </div>
+                                @*<a class="btn modalpedidosEnviar" href="#" onclick="popup();return false;">
+                                    Detalhes
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a>*@
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="text-align:center;">
+                                    <div class="row">
+                                        @if (Model != null)
+                                        {
+
+                                            if (Model.EDIQtd > 0)
+                                            {
+                                                <span style="font-size:30px">
+                                                    @Model.EDIQtd
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span style="font-size:30px">0</span>
+                                            }
+                                         }
+                                    </div>
+                                    <div class="row">
+                                        <span>EDI</span>
+                                    </div>
+                                </div>
+                                @*<a class="btn modalpedidosEnviar" href="#" onclick="popup();return false;">
+                                    Detalhes
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a>*@
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="text-align:center;">
+                                    <div class="row">
+                                        @if (Model != null)
+                                        {
+
+                                            if (Model.InvoiceQtd > 0)
+                                            {
+                                                <span style="font-size:30px">
+                                                    @Model.InvoiceQtd
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span style="font-size:30px">0</span>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <span>Invoice</span>
+                                    </div>
+                                </div>
+                                @*<a class="btn modalpedidosEnviar" href="#" onclick="popup();return false;">
+                                    Detalhes
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a>*@
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="text-align:center;">
+                                    <div class="row">
+                                        @if (Model != null)
+                                        {
+
+                                            if (Model.ProcessoQtd > 0)
+                                            {
+                                                <span style="font-size:30px">
+                                                    @Model.ProcessoQtd
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span style="font-size:30px">0</span>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <span>Processo</span>
+                                    </div>
+                                </div>
+                                @*<a class="btn modalpedidosEnviar" href="#" onclick="popup();return false;">
+                                    Detalhes
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a>*@
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-2">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="text-align:center;">
+                                    <div class="row">
+                                        @if (Model != null)
+                                        {
+
+                                            if (Model.NFEstoqueQtd > 0)
+                                            {
+                                                <span style="font-size:30px">
+                                                    @Model.NFEstoqueQtd
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span style="font-size:30px">0</span>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <span>NF Estoque</span>
+                                    </div>
+                                </div>
+                                @*<a class="btn modalpedidosEnviar" href="#" onclick="popup();return false;">
+                                    Detalhes
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a>*@
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading" style="text-align:center;">
+                                    <div class="row">
+                                        @if (Model != null)
+                                        {
+
+                                            if (Model.InconsistenciaQtd > 0)
+                                            {
+                                                <span style="font-size:30px">
+                                                    @Model.InconsistenciaQtd
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span style="font-size:30px">0</span>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <span>Inconsistencia</span>
+                                    </div>
+                                </div>
+                                @*<a class="btn modalpedidosEnviar" href="#" onclick="popup();return false;">
+                                    Detalhes
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a>*@
+                            </div>
+                        </div>
+                    </div><!-- /.row -->
+                </div>
+
+                <div class="panel with-nav-tabs panel-default">
+                    @*<div class="panel-heading">
+                        Selecionar pedidos de compra
+                    </div>*@
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>PO</th>
+                                        <th>Invoice</th>
+                                        <th>Processo</th>
+                                        <th>NF</th>
+                                    </tr>
+                                </thead>
+                                @if(Model != null)
+                                {
+                                    if(Model.lstWorkflow != null)
+                                    {
+                                        foreach(Entities.Home wk in Model.lstWorkflow)
+                                        {
+                                        <tbody>
+                                            <tr>
+                                                <td style="width:20%">@wk.Data.ToString("dd/MM/yyyy")</td>
+                                                <td>@wk.PO</td>
+                                                <td>@wk.Invoice</td>
+                                                <td>@wk.Processo</td>
+                                                <td>@wk.NFEstoque</td>
+                                            </tr>
+                                        </tbody>
+                                        }
+                                    }
+                                }
+                            </table>
+                        </div>
+                    </div>
+               </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="poRmModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+</main>
+    </div>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+    <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+    <link href="~/content/indexCompras.css" rel="stylesheet" />
+   
+    <script>
+        $(function () {
+            $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+          
+        });
+
+
+            function isValidDate(date, campo) {
+                var temp = date.split('/');
+                var d = new Date(temp[1] + '/' + temp[0] + '/' + temp[2]);
+                var result = (d && (d.getMonth() + 1) == temp[1] && d.getDate() == Number(temp[0]) && d.getFullYear() == Number(temp[2]));
+                if (result == false) {
+                    $(campo).text("Data inválida.");
+                    $("#filtrar").attr("disabled", true)
+                }
+                else
+                {
+                    $("#filtrar").attr("disabled", false)
+                    $(campo).text('');
+                }
+            }
+
+            $(".datepickerInput").datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior'
+            });
+
+    </script>
+
+    <script>
+        $('a.modalpedidosEnviar').click(function () {
+            $('#poRmModal').modal({
+                show: true,
+                closeOnEscape: true,
+                backdrop: 'static',
+                keyboard: false
+            })
+        });
+
+     
+
+
+    </script>
+
+</body>
+}
+</html>

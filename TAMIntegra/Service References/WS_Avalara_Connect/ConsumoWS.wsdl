@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ConsumoWS" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IConsumoWS_ConectividadeWS_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConectividadeWS" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_ConectividadeWS_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConectividadeWSResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadNFe_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadNFe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadNFe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadNFeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_Login_InputMessage">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_Login_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFe_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaResumosNFes_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaResumosNFes" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaResumosNFes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaResumosNFesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaClassificacoesProdutos_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaClassificacoesProdutos" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaClassificacoesProdutos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaClassificacoesProdutosResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesCTePorTipo_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesCTePorTipo" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesCTePorTipo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesCTePorTipoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFes_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFes" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFesPelaEntradaPorTipo_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFesPelaEntradaPorTipo" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFesPelaEntradaPorTipo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFesPelaEntradaPorTipoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFePelaEmissao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFePelaEmissao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFePelaEmissao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFePelaEmissaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFesPelaEmissao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFesPelaEmissao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFesPelaEmissao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFesPelaEmissaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFesPelaEmissaoPorTipo_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFesPelaEmissaoPorTipo" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFesPelaEmissaoPorTipo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFesPelaEmissaoPorTipoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadCTe_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadCTe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadCTe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadCTeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLCTesPelaEmissao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLCTesPelaEmissao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLCTesPelaEmissao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLCTesPelaEmissaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLCTesPelaEntrada_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLCTesPelaEntrada" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLCTesPelaEntrada_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLCTesPelaEntradaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLCTesPelaEmissaoPorTipo_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLCTesPelaEmissaoPorTipo" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLCTesPelaEmissaoPorTipo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLCTesPelaEmissaoPorTipoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLCTesPelaEntradaPorTipo_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLCTesPelaEntradaPorTipo" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLCTesPelaEntradaPorTipo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLCTesPelaEntradaPorTipoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadNfse_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadNfse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadNfse_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadNfseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFSePelaEmissao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFSePelaEmissao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFSePelaEmissao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFSePelaEmissaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFSePelaEmissao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFSePelaEmissao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFSePelaEmissao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFSePelaEmissaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFSeAprovadasPelaEntrada_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFSeAprovadasPelaEntrada" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFSeAprovadasPelaEntrada_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFSeAprovadasPelaEntradaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFSeAprovadasPelaEmissao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFSeAprovadasPelaEmissao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFSeAprovadasPelaEmissao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFSeAprovadasPelaEmissaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFSePelaEntrada_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFSePelaEntrada" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaXMLNFSePelaEntrada_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaXMLNFSePelaEntradaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFSePelaEntrada_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFSePelaEntrada" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFSePelaEntrada_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFSePelaEntradaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RealizarManifestoNFe_InputMessage">
+    <wsdl:part name="parameters" element="tns:RealizarManifestoNFe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RealizarManifestoNFe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RealizarManifestoNFeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RealizarLoteManifestoNFe_InputMessage">
+    <wsdl:part name="parameters" element="tns:RealizarLoteManifestoNFe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RealizarLoteManifestoNFe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RealizarLoteManifestoNFeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornarChavesIntegracao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornarChavesIntegracao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornarChavesIntegracao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornarChavesIntegracaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornarChavesCTeIntegracao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornarChavesCTeIntegracao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornarChavesCTeIntegracao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornarChavesCTeIntegracaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_PesquisarStatusEventoNFe_InputMessage">
+    <wsdl:part name="parameters" element="tns:PesquisarStatusEventoNFe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_PesquisarStatusEventoNFe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PesquisarStatusEventoNFeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaNovaUrlSaS_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaNovaUrlSaS" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaNovaUrlSaS_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaNovaUrlSaSResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadPdfNfe_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadPdfNfe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadPdfNfe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadPdfNfeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaCapas_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaCapas" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaCapas_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaCapasResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFePelaDataEntradaXml_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFePelaDataEntradaXml" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesNFePelaDataEntradaXml_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesNFePelaDataEntradaXmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_IntegracaoFisicaFiscal_InputMessage">
+    <wsdl:part name="parameters" element="tns:IntegracaoFisicaFiscal" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_IntegracaoFisicaFiscal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IntegracaoFisicaFiscalResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_PesquisarStatusSefazNFe_InputMessage">
+    <wsdl:part name="parameters" element="tns:PesquisarStatusSefazNFe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_PesquisarStatusSefazNFe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PesquisarStatusSefazNFeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadPdfCTe_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadPdfCTe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadPdfCTe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadPdfCTeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaPdfCTesPelaEmissao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaPdfCTesPelaEmissao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaPdfCTesPelaEmissao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaPdfCTesPelaEmissaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaPdfCTesPelaEntrada_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaPdfCTesPelaEntrada" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaPdfCTesPelaEntrada_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaPdfCTesPelaEntradaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadPdfNfse_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadPdfNfse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_DownloadPdfNfse_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadPdfNfseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaPdfNFSePelaEmissao_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaPdfNFSePelaEmissao" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaPdfNFSePelaEmissao_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaPdfNFSePelaEmissaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaPdfNFSePelaEntrada_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaPdfNFSePelaEntrada" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaPdfNFSePelaEntrada_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaPdfNFSePelaEntradaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesCTePelaEntradaPorTipo_InputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesCTePelaEntradaPorTipo" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RetornaChavesCTePelaEntradaPorTipo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RetornaChavesCTePelaEntradaPorTipoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RealizarManifestoCTe_InputMessage">
+    <wsdl:part name="parameters" element="tns:RealizarManifestoCTe" />
+  </wsdl:message>
+  <wsdl:message name="IConsumoWS_RealizarManifestoCTe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RealizarManifestoCTeResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IConsumoWS">
+    <wsdl:operation name="ConectividadeWS">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/ConectividadeWS" message="tns:IConsumoWS_ConectividadeWS_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/ConectividadeWSResponse" message="tns:IConsumoWS_ConectividadeWS_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadNFe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/DownloadNFe" message="tns:IConsumoWS_DownloadNFe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/DownloadNFeResponse" message="tns:IConsumoWS_DownloadNFe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/Login" message="tns:IConsumoWS_Login_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/LoginResponse" message="tns:IConsumoWS_Login_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFe" message="tns:IConsumoWS_RetornaChavesNFe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFeResponse" message="tns:IConsumoWS_RetornaChavesNFe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaResumosNFes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaResumosNFes" message="tns:IConsumoWS_RetornaResumosNFes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaResumosNFesResponse" message="tns:IConsumoWS_RetornaResumosNFes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaClassificacoesProdutos">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaClassificacoesProdutos" message="tns:IConsumoWS_RetornaClassificacoesProdutos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaClassificacoesProdutosResponse" message="tns:IConsumoWS_RetornaClassificacoesProdutos_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesCTePorTipo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesCTePorTipo" message="tns:IConsumoWS_RetornaChavesCTePorTipo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesCTePorTipoResponse" message="tns:IConsumoWS_RetornaChavesCTePorTipo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFes" message="tns:IConsumoWS_RetornaXMLNFes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFesResponse" message="tns:IConsumoWS_RetornaXMLNFes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFesPelaEntradaPorTipo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFesPelaEntradaPorTipo" message="tns:IConsumoWS_RetornaXMLNFesPelaEntradaPorTipo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFesPelaEntradaPorTipoResponse" message="tns:IConsumoWS_RetornaXMLNFesPelaEntradaPorTipo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFePelaEmissao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFePelaEmissao" message="tns:IConsumoWS_RetornaChavesNFePelaEmissao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFePelaEmissaoResponse" message="tns:IConsumoWS_RetornaChavesNFePelaEmissao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFesPelaEmissao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFesPelaEmissao" message="tns:IConsumoWS_RetornaXMLNFesPelaEmissao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFesPelaEmissaoResponse" message="tns:IConsumoWS_RetornaXMLNFesPelaEmissao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFesPelaEmissaoPorTipo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFesPelaEmissaoPorTipo" message="tns:IConsumoWS_RetornaXMLNFesPelaEmissaoPorTipo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFesPelaEmissaoPorTipoResponse" message="tns:IConsumoWS_RetornaXMLNFesPelaEmissaoPorTipo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadCTe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/DownloadCTe" message="tns:IConsumoWS_DownloadCTe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/DownloadCTeResponse" message="tns:IConsumoWS_DownloadCTe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLCTesPelaEmissao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEmissao" message="tns:IConsumoWS_RetornaXMLCTesPelaEmissao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEmissaoResponse" message="tns:IConsumoWS_RetornaXMLCTesPelaEmissao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLCTesPelaEntrada">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEntrada" message="tns:IConsumoWS_RetornaXMLCTesPelaEntrada_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEntradaResponse" message="tns:IConsumoWS_RetornaXMLCTesPelaEntrada_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLCTesPelaEmissaoPorTipo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEmissaoPorTipo" message="tns:IConsumoWS_RetornaXMLCTesPelaEmissaoPorTipo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEmissaoPorTipoResponse" message="tns:IConsumoWS_RetornaXMLCTesPelaEmissaoPorTipo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLCTesPelaEntradaPorTipo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEntradaPorTipo" message="tns:IConsumoWS_RetornaXMLCTesPelaEntradaPorTipo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEntradaPorTipoResponse" message="tns:IConsumoWS_RetornaXMLCTesPelaEntradaPorTipo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadNfse">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/DownloadNfse" message="tns:IConsumoWS_DownloadNfse_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/DownloadNfseResponse" message="tns:IConsumoWS_DownloadNfse_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFSePelaEmissao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFSePelaEmissao" message="tns:IConsumoWS_RetornaXMLNFSePelaEmissao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFSePelaEmissaoResponse" message="tns:IConsumoWS_RetornaXMLNFSePelaEmissao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFSePelaEmissao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFSePelaEmissao" message="tns:IConsumoWS_RetornaChavesNFSePelaEmissao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFSePelaEmissaoResponse" message="tns:IConsumoWS_RetornaChavesNFSePelaEmissao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFSeAprovadasPelaEntrada">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFSeAprovadasPelaEntrada" message="tns:IConsumoWS_RetornaChavesNFSeAprovadasPelaEntrada_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFSeAprovadasPelaEntradaResponse" message="tns:IConsumoWS_RetornaChavesNFSeAprovadasPelaEntrada_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFSeAprovadasPelaEmissao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFSeAprovadasPelaEmissao" message="tns:IConsumoWS_RetornaChavesNFSeAprovadasPelaEmissao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFSeAprovadasPelaEmissaoResponse" message="tns:IConsumoWS_RetornaChavesNFSeAprovadasPelaEmissao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFSePelaEntrada">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFSePelaEntrada" message="tns:IConsumoWS_RetornaXMLNFSePelaEntrada_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaXMLNFSePelaEntradaResponse" message="tns:IConsumoWS_RetornaXMLNFSePelaEntrada_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFSePelaEntrada">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFSePelaEntrada" message="tns:IConsumoWS_RetornaChavesNFSePelaEntrada_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFSePelaEntradaResponse" message="tns:IConsumoWS_RetornaChavesNFSePelaEntrada_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RealizarManifestoNFe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RealizarManifestoNFe" message="tns:IConsumoWS_RealizarManifestoNFe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RealizarManifestoNFeResponse" message="tns:IConsumoWS_RealizarManifestoNFe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RealizarLoteManifestoNFe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RealizarLoteManifestoNFe" message="tns:IConsumoWS_RealizarLoteManifestoNFe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RealizarLoteManifestoNFeResponse" message="tns:IConsumoWS_RealizarLoteManifestoNFe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornarChavesIntegracao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornarChavesIntegracao" message="tns:IConsumoWS_RetornarChavesIntegracao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornarChavesIntegracaoResponse" message="tns:IConsumoWS_RetornarChavesIntegracao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornarChavesCTeIntegracao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornarChavesCTeIntegracao" message="tns:IConsumoWS_RetornarChavesCTeIntegracao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornarChavesCTeIntegracaoResponse" message="tns:IConsumoWS_RetornarChavesCTeIntegracao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PesquisarStatusEventoNFe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/PesquisarStatusEventoNFe" message="tns:IConsumoWS_PesquisarStatusEventoNFe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/PesquisarStatusEventoNFeResponse" message="tns:IConsumoWS_PesquisarStatusEventoNFe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaNovaUrlSaS">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaNovaUrlSaS" message="tns:IConsumoWS_RetornaNovaUrlSaS_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaNovaUrlSaSResponse" message="tns:IConsumoWS_RetornaNovaUrlSaS_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadPdfNfe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/DownloadPdfNfe" message="tns:IConsumoWS_DownloadPdfNfe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/DownloadPdfNfeResponse" message="tns:IConsumoWS_DownloadPdfNfe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaCapas">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaCapas" message="tns:IConsumoWS_RetornaCapas_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaCapasResponse" message="tns:IConsumoWS_RetornaCapas_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFePelaDataEntradaXml">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFePelaDataEntradaXml" message="tns:IConsumoWS_RetornaChavesNFePelaDataEntradaXml_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesNFePelaDataEntradaXmlResponse" message="tns:IConsumoWS_RetornaChavesNFePelaDataEntradaXml_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IntegracaoFisicaFiscal">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/IntegracaoFisicaFiscal" message="tns:IConsumoWS_IntegracaoFisicaFiscal_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/IntegracaoFisicaFiscalResponse" message="tns:IConsumoWS_IntegracaoFisicaFiscal_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PesquisarStatusSefazNFe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/PesquisarStatusSefazNFe" message="tns:IConsumoWS_PesquisarStatusSefazNFe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/PesquisarStatusSefazNFeResponse" message="tns:IConsumoWS_PesquisarStatusSefazNFe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadPdfCTe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/DownloadPdfCTe" message="tns:IConsumoWS_DownloadPdfCTe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/DownloadPdfCTeResponse" message="tns:IConsumoWS_DownloadPdfCTe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaPdfCTesPelaEmissao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaPdfCTesPelaEmissao" message="tns:IConsumoWS_RetornaPdfCTesPelaEmissao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaPdfCTesPelaEmissaoResponse" message="tns:IConsumoWS_RetornaPdfCTesPelaEmissao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaPdfCTesPelaEntrada">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaPdfCTesPelaEntrada" message="tns:IConsumoWS_RetornaPdfCTesPelaEntrada_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaPdfCTesPelaEntradaResponse" message="tns:IConsumoWS_RetornaPdfCTesPelaEntrada_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadPdfNfse">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/DownloadPdfNfse" message="tns:IConsumoWS_DownloadPdfNfse_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/DownloadPdfNfseResponse" message="tns:IConsumoWS_DownloadPdfNfse_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaPdfNFSePelaEmissao">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaPdfNFSePelaEmissao" message="tns:IConsumoWS_RetornaPdfNFSePelaEmissao_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaPdfNFSePelaEmissaoResponse" message="tns:IConsumoWS_RetornaPdfNFSePelaEmissao_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaPdfNFSePelaEntrada">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaPdfNFSePelaEntrada" message="tns:IConsumoWS_RetornaPdfNFSePelaEntrada_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaPdfNFSePelaEntradaResponse" message="tns:IConsumoWS_RetornaPdfNFSePelaEntrada_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesCTePelaEntradaPorTipo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesCTePelaEntradaPorTipo" message="tns:IConsumoWS_RetornaChavesCTePelaEntradaPorTipo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RetornaChavesCTePelaEntradaPorTipoResponse" message="tns:IConsumoWS_RetornaChavesCTePelaEntradaPorTipo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RealizarManifestoCTe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConsumoWS/RealizarManifestoCTe" message="tns:IConsumoWS_RealizarManifestoCTe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConsumoWS/RealizarManifestoCTeResponse" message="tns:IConsumoWS_RealizarManifestoCTe_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IConsumoWS" type="tns:IConsumoWS">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ConectividadeWS">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/ConectividadeWS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadNFe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/DownloadNFe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaChavesNFe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaResumosNFes">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaResumosNFes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaClassificacoesProdutos">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaClassificacoesProdutos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesCTePorTipo">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaChavesCTePorTipo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFes">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLNFes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFesPelaEntradaPorTipo">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLNFesPelaEntradaPorTipo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFePelaEmissao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaChavesNFePelaEmissao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFesPelaEmissao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLNFesPelaEmissao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFesPelaEmissaoPorTipo">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLNFesPelaEmissaoPorTipo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadCTe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/DownloadCTe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLCTesPelaEmissao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEmissao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLCTesPelaEntrada">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEntrada" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLCTesPelaEmissaoPorTipo">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEmissaoPorTipo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLCTesPelaEntradaPorTipo">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLCTesPelaEntradaPorTipo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadNfse">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/DownloadNfse" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFSePelaEmissao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLNFSePelaEmissao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFSePelaEmissao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaChavesNFSePelaEmissao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFSeAprovadasPelaEntrada">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaChavesNFSeAprovadasPelaEntrada" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFSeAprovadasPelaEmissao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaChavesNFSeAprovadasPelaEmissao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaXMLNFSePelaEntrada">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaXMLNFSePelaEntrada" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFSePelaEntrada">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaChavesNFSePelaEntrada" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RealizarManifestoNFe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RealizarManifestoNFe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RealizarLoteManifestoNFe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RealizarLoteManifestoNFe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornarChavesIntegracao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornarChavesIntegracao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornarChavesCTeIntegracao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornarChavesCTeIntegracao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PesquisarStatusEventoNFe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/PesquisarStatusEventoNFe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaNovaUrlSaS">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaNovaUrlSaS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadPdfNfe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/DownloadPdfNfe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaCapas">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaCapas" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesNFePelaDataEntradaXml">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaChavesNFePelaDataEntradaXml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IntegracaoFisicaFiscal">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/IntegracaoFisicaFiscal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PesquisarStatusSefazNFe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/PesquisarStatusSefazNFe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadPdfCTe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/DownloadPdfCTe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaPdfCTesPelaEmissao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaPdfCTesPelaEmissao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaPdfCTesPelaEntrada">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaPdfCTesPelaEntrada" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadPdfNfse">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/DownloadPdfNfse" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaPdfNFSePelaEmissao">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaPdfNFSePelaEmissao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaPdfNFSePelaEntrada">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaPdfNFSePelaEntrada" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetornaChavesCTePelaEntradaPorTipo">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RetornaChavesCTePelaEntradaPorTipo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RealizarManifestoCTe">
+      <soap:operation soapAction="http://tempuri.org/IConsumoWS/RealizarManifestoCTe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ConsumoWS">
+    <wsdl:port name="BasicHttpBinding_IConsumoWS" binding="tns:BasicHttpBinding_IConsumoWS">
+      <soap:address location="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

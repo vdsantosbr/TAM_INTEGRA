@@ -1,0 +1,66 @@
+﻿@model Entities.UsuarioPerfilSituacao
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TAMAE - TBIP</title>
+    <script type="text/javascript" src="~/scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="~/scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/menu.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/geral.css" />
+
+    @if (TempData["Mensagem"] != null)
+    {
+        <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+        </script>
+    }
+
+    @if (TempData["FechaPopUp"] != null)
+    {
+        <script type="text/javascript">
+        window.opener.location.reload();
+        window.close();
+        </script>
+    }
+
+</head>
+<body>
+
+    <div class="pop-up-admin">
+
+        <h3>Configurações - Usuários - Perfis - Situações</h3>
+
+        @using (Html.BeginForm("Admin", "UsuarioPerfilSituacao", FormMethod.Post))
+        {
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+
+            <table class="form-padrao">
+                <tr>
+                    <td>
+                        <label class="form-negrito">Nome *</label>
+                        @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", autofocus = "autofocus" } })
+                    </td>
+                </tr>
+                <tr class="linha-botoes-form">
+                    <td>
+                        <input type="submit" value="Salvar" class="btn btn-secondary" />
+                        <input type="reset" value="Limpar" class="btn btn-secondary" />
+                        <input type="button" value="Fechar" class="btn btn-secondary" onclick="window.close();" />
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</body>
+</html>

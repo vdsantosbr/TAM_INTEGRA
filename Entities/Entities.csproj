@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{998C2CA2-0FC0-46C4-8EAE-FC57AD526431}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Entities</RootNamespace>
+    <AssemblyName>Entities</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AvalaraInfoNotas.cs" />
+    <Compile Include="AvalaraTotalNotas.cs" />
+    <Compile Include="Ava_DownloadNFe.cs" />
+    <Compile Include="Avalara_RetornaChavesNFePelaDataEntrada.cs" />
+    <Compile Include="CasosExcecao.cs" />
+    <Compile Include="Cavok.cs" />
+    <Compile Include="ComposicaoVariacao.cs" />
+    <Compile Include="CompraAprovacao.cs" />
+    <Compile Include="CompraFollowUp.cs" />
+    <Compile Include="Compra.cs" />
+    <Compile Include="Configuracao.cs" />
+    <Compile Include="Conta.cs" />
+    <Compile Include="Contabilizacao.cs" />
+    <Compile Include="ContabilizacaoVariacaoCambial.cs" />
+    <Compile Include="ContaContabil.cs" />
+    <Compile Include="Credor.cs" />
+    <Compile Include="Departamento.cs" />
+    <Compile Include="DiaDaSemana.cs" />
+    <Compile Include="EnderecoCidade.cs" />
+    <Compile Include="EnderecoEstado.cs" />
+    <Compile Include="Entidade.cs" />
+    <Compile Include="EntidadeTipo.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="ErrorMsg.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorMsg.resx</DependentUpon>
+    </Compile>
+    <Compile Include="FechamentoContabil.cs" />
+    <Compile Include="FinanceiroEstoque.cs" />
+    <Compile Include="Importacao.cs" />
+    <Compile Include="FinanceiroProForma.cs" />
+    <Compile Include="ImportacaoFatura.cs" />
+    <Compile Include="ImportacaoReceipt.cs" />
+    <Compile Include="ImportacaoSolPgto.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="FilterOperators.cs" />
+    <Compile Include="FilterType.cs" />
+    <Compile Include="FinanceiroCambioSYS.cs" />
+    <Compile Include="FinanceiroDespesas.cs" />
+    <Compile Include="FinanceiroFaturas.cs" />
+    <Compile Include="FinanceiroGuiaDeclaracao.cs" />
+    <Compile Include="FinanceiroGuiaDespesas.cs" />
+    <Compile Include="FinanceiroGuiaEstoque.cs" />
+    <Compile Include="FinanceiroGuiaFatura.cs" />
+    <Compile Include="FinanceiroGuiaFaturaPDC.cs" />
+    <Compile Include="FinanceiroGuiaFinanceiro.cs" />
+    <Compile Include="FinanceiroGuiaHistorico.cs" />
+    <Compile Include="FinanceiroGuiaImpostos.cs" />
+    <Compile Include="FinanceiroGuiaNotaCompl.cs" />
+    <Compile Include="FinanceiroProcesso.cs" />
+    <Compile Include="FinanceiroServicos.cs" />
+    <Compile Include="Fornecedor.cs" />
+    <Compile Include="GraficoDetalhe.cs" />
+    <Compile Include="Home.cs" />
+    <Compile Include="ImportacaoDocumento.cs" />
+    <Compile Include="ImportacaoConciliacao.cs" />
+    <Compile Include="ImportacaoFornecedor.cs" />
+    <Compile Include="ImportacaoRMFluxus.cs" />
+    <Compile Include="ImportacaoSolPgtoDespesas.cs" />
+    <Compile Include="ImportReceiptInformativo.cs" />
+    <Compile Include="InputType.cs" />
+    <Compile Include="Integracao.cs" />
+    <Compile Include="IntegracaoCambioSys.cs" />
+    <Compile Include="Motivo.cs" />
+    <Compile Include="PedidoVenda.cs" />
+    <Compile Include="Perfil.cs" />
+    <Compile Include="PopulaHistorico.cs" />
+    <Compile Include="QueryBuilderSettings.cs" />
+    <Compile Include="RecebimentoAvalaraEnviaForm.cs" />
+    <Compile Include="RecebimentoAvalaraIntegraRM.cs" />
+    <Compile Include="RecebimentoAvalaraNfse.cs" />
+    <Compile Include="RecebimentoCombosViewModel.cs" />
+    <Compile Include="RecebimentoContadores.cs" />
+    <Compile Include="RecebimentoNota.cs" />
+    <Compile Include="RecebimentoViewModel.cs" />
+    <Compile Include="Recebimento_AvalaraDetalheNota.cs" />
+    <Compile Include="Recebimento_Compra_item_Avalara.cs" />
+    <Compile Include="Recebimento_Tipo_Movimento_Avalara.cs" />
+    <Compile Include="SalesOrderAging.cs" />
+    <Compile Include="SalesOrderComposicao.cs" />
+    <Compile Include="SalesOrderQualificacao.cs" />
+    <Compile Include="SalesOrderSaldo.cs" />
+    <Compile Include="SalesOrderSituacao.cs" />
+    <Compile Include="Situacao.cs" />
+    <Compile Include="StatementClassificacao.cs" />
+    <Compile Include="StatementConciliacao.cs" />
+    <Compile Include="StatementContas.cs" />
+    <Compile Include="StatementDepartamento.cs" />
+    <Compile Include="StatementGestaoCredito.cs" />
+    <Compile Include="StatementImportacao.cs" />
+    <Compile Include="StatementRelatorioComentarios.cs" />
+    <Compile Include="StatementRelatorioExportacaoDados.cs" />
+    <Compile Include="StatementRelatorioInfoComplementares.cs" />
+    <Compile Include="StatementRelatorioReceberPagar.cs" />
+    <Compile Include="StatementRelatorioResumoStatement.cs" />
+    <Compile Include="StatementRelatorios.cs" />
+    <Compile Include="TipoClasse.cs" />
+    <Compile Include="TipoFaturamento.cs" />
+    <Compile Include="TipoMovimento.cs" />
+    <Compile Include="Usuario.cs" />
+    <Compile Include="UsuarioArea.cs" />
+    <Compile Include="UsuarioModulo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsuarioModuloSituacao.cs" />
+    <Compile Include="UsuarioPerfil.cs" />
+    <Compile Include="-UsuarioPerfilModulo.cs" />
+    <Compile Include="UsuarioPerfilSituacao.cs" />
+    <Compile Include="UsuarioSituacao.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ErrorMsg.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMsg.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

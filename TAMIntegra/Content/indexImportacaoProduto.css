@@ -1,0 +1,27 @@
+﻿.modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            /*margin: 0 auto;*/
+        }
+
+        .page-content {
+            padding-top: 0px;
+        }
+
+        h1 {
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }

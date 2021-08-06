@@ -1,0 +1,1889 @@
+﻿@model Entities.ImportacaoDocumento
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teste = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="~/scripts/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+    
+    @if (TempData["Mensagem"] != null)
+    {
+        <script type="text/javascript" charset="utf-8">
+            alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+        </script>
+    }
+
+
+    <style>
+        .hidden { display: none; }
+        .page-wrapper {
+  height: 100vh;
+}
+
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            border-width: 5px;
+            border-color: #3A2303;
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 5px;
+}
+.grid-container2 {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  padding: 5px;
+}
+.grid-item {
+  padding: 5px;
+  text-align: left;
+}
+}
+        body {
+overflow: auto;
+}
+        .page-wrapper .page-content {
+    overflow-x: hidden;
+}
+    </style>
+
+</head>
+@using (Html.BeginForm("Index", "ImportacaoDocumento", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+    <body style="overflow:auto; margin-top:auto">
+        <input hidden id="divShow" value="@ViewBag.DivShow" />
+        <input hidden id="divHide" value="@ViewBag.DivHide" />
+        <input hidden id="fornecedorSelected" name="fornecedorSelected" />
+        <input hidden id="documentoSelected" name="documentoSelected" />
+        <input hidden id="movimentoSelected" name="documentoSelected" />
+        @*<input hidden value="@ViewBag.situacaoDoc" id="situacaoDoc" />*@
+        <input hidden id="situacaoVB" value="@ViewBag.Situacao"/>
+        <input hidden id="corLinhaDocErro" value="@Model.CorLinha"/>
+        @*<input hidden id="id_integracao" name="id_integracao" value=@Session["id_integracao"] />*@
+        <input hidden id="documentoNome" value="@Session["documento"]"/>
+            @*<main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:0;left:21px;">
+                    <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                        <div class="stepwizard">
+                            <fieldset>
+                                <legend style="margin-bottom:0;top:0;font-size:24px;">Integração de documento para Softway</legend>
+                            </fieldset>
+                        </div>
+                    </div>
+                </main>*@
+
+                <div class="page-wrapper chiller-theme">
+                    <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+                        <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                            <div class="stepwizard">
+                                <fieldset>
+                                    <legend style="margin-bottom:0;top:0;font-size:18px;">Importação - Integração de documento</legend>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </main>
+
+                    <main class="page-content">
+                        <div class="container-fluid" style="padding-top:50px">
+                            <div id="registros" class="hidden">
+                                <div id="divPedidosSelecionados" style="position:absolute;top:60px;width:97%;padding-left:15px">
+
+                                    <div class="panel with-nav-tabs panel-default" style="margin-bottom:0;">
+                                        <div class="panel-heading" style="background-color:lightgray">
+                                            Documento
+                                        </div>
+                                        <div class="panel-body" style="padding-bottom:15px;">
+                                            @*<div class="tab-content">*@
+
+                                            @*<div class="row" style="width:100%">
+                                        <div class="col-md-3" style="padding-left:2px;padding-right:2px;">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Fornecedor</label>
+                                                    @Html.DropDownList("fornecedorNome", (SelectList)ViewBag.Fornecedores, "-- Selecione --", new { @class = "chosen-select", @onchange = "GetFNomeFornecedor(this);BuscaChosen('fornecedorNome', 'documento', null, '/ImportacaoDocumento/BuscaProcessos/')", @required = "true", @name = "fornecedorNome" })
+                                                    <div id="divErroFornecedor" class="fontErro"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3" style="padding-left:2px;padding-right:2px;">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Processo/Documento</label>
+                                                    @Html.DropDownList("documento", (SelectList)ViewBag.Processos, "-- Selecione --", new { @class = "chosen-select", @onchange = "GetDocumento(this);" })
+                                                    <div id="divErroDocumento" class="fontErro"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3" style="padding-left:2px;padding-right:2px;">
+                                            <div class="form-group">
+                                                <div class="col-md-10">
+                                                    <label class="form-negrito">Situação</label>
+                                                    @Html.ListBox("situacao", (SelectList)ViewBag.Situacao, new { @class = "chosen-select", @required = "true", @id = "situacao" })
+                                                    <div class="help-block with-errors"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3" style="padding-left:2px;padding-right:2px;">
+                                            <div class="form-group">
+                                                <div class="col-md-8">
+                                                    <label class="form-negrito">Nº do movimento</label>
+                                                    @Html.Editor("numeroMovimento", new { htmlAttributes = new { @class = "form-control", @required = true } })
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>*@
+                                            <div class="grid-container">
+                                                @*<div class="grid-item">
+                                            <label class="form-negrito">Fornecedor</label>
+                                            @Html.DropDownList("fornecedorNome", (SelectList)ViewBag.Fornecedores, "-- Selecione --", new { @class = "chosen-select", @onchange = "BuscaChosen('fornecedorNome', 'documento', null, '/ImportacaoDocumento/BuscaProcessos/')", @required = "true", @name = "fornecedorNome" })
+                                            <div id="divErroFornecedor" class="fontErro"></div>
+                                        </div>*@
+                                                <div class="grid-item">
+                                                    <label class="form-negrito">Processo/Documento</label>
+                                                    @Html.DropDownList("documento", (SelectList)ViewBag.Processos, "-- Selecione --", new { @class = "chosen-select", @onchange = "GetDocumento(this);BuscaChosen('documento', 'movimento', null, '/ImportacaoDocumento/BuscaTipoMovimento/')" })
+                                                    @*@Html.DropDownList("documento", (SelectList)ViewBag.Processos, "-- Selecione --", new { @class = "chosen-select" })*@
+                                                    <div id="divErroDocumento" class="fontErro"></div>
+                                                </div>
+                                                <div class="grid-item">
+                                                    <label class="form-negrito">Tipo de movimento</label>
+                                                    @Html.DropDownList("movimento", (SelectList)ViewBag.Movimentos, "-- Selecione --", new { @class = "chosen-select" })
+                                                    <div id="divErroMovimento" class="fontErro"></div>
+                                                </div>
+                                            </div>
+
+                                            @*<div class="grid-container">
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Tipo de movimento</label>
+                                            @Html.DropDownList("movimento", (SelectList)ViewBag.Movimentos, "-- Selecione --", new { @class = "chosen-select" })
+                                        </div>
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Processo/Documento</label>
+                                            @Html.DropDownList("documento", (SelectList)ViewBag.Processos, "-- Selecione --", new { @class = "chosen-select", @onchange = "GetDocumento(this);" })
+                                            <div id="divErroDocumento" class="fontErro"></div>
+                                        </div>
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Situação</label>
+                                            @Html.ListBox("situacao", (SelectList)ViewBag.Situacao, new { @class = "chosen-select", @required = "true", @id = "situacao" })
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Nº do movimento</label>
+                                            @Html.Editor("numeroMovimento", new { htmlAttributes = new { @class = "form-control", @required = true } })
+                                        </div>
+                                    </div>*@
+
+                                            <div class="grid-container2">
+                                                <div class="grid-item">
+                                                    <label class="form-negrito">Situação na integração</label>
+                                                    @*@Html.ListBox("situacao", (SelectList)ViewBag.Situacao, new { @class = "chosen-select", @required = "true", @id = "situacao" })*@
+                                                    @*@Html.ListBoxFor(model => Model.Situacao, new SelectList(ViewBag.Situacao, "value", "text", "NI"), new { @class = "chosen-select", @required = "true", @id = "situacao" })*@
+                                                    <select class="chosen-select" id="situacao" name="situacaoDoc" multiple style="width:100px;height:26px">
+                                                        <option value="AG">Agendado</option>
+                                                        <option value="ET">Em trânsito</option>
+                                                        <option value="IN">Integrado</option>
+                                                        <option value="NI">Não Integrado</option>
+                                                    </select>
+
+
+                                                    <div id="divErroSituacao" class="fontErro"></div>
+                                                </div>
+                                                <div class="grid-item">
+                                                    <label class="form-negrito">Nº do movimento</label>
+                                                    @Html.Editor("numeroMovimento", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control", @required = true, @autocomplete = "off", @maxlengh = "35" } })
+                                                </div>
+                                                <div class="grid-item">
+                                                    <label class="form-negrito">Data início</label>
+                                                    @Html.Editor("strDataInicio", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", @onblur = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })
+                                                    <div style="color: red" id="dtIniciDivErro">
+                                                    </div>
+                                                </div>
+                                                <div class="grid-item">
+                                                    <label class="form-negrito">Data fim</label>
+                                                    @Html.Editor("strDataFim", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                    <div style="color: red" id="dtFimDivErro">
+                                                    </div>
+                                                </div>
+                                                <div class="grid-item">
+                                                    @*<div class="btn-toolbar">*@
+                                                    <button class="btn btn-primary btn-sm pull-right" style="margin-bottom:15px;margin-top:20px;margin-left:10px;margin-right:10px" type="button" id="btnFiltro" name="Filtrar" value="exibir">Exibir</button>
+                                                    @*</div>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                        @*<div id="registros">*@
+                                        <div id="">
+                                            <div class="panel with-nav-tabs panel-default" style="padding-bottom:5px">
+                                                @*<div class="panel-heading">
+                                            Selecionar pedidos de compra
+                                        </div>*@
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-striped" id="tblFornecedor">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="text-align:center">Documento</th>
+                                                                    <th style="text-align:center">Situação da Integração</th>
+                                                                    <th style="text-align:center">Data</th>
+                                                                    <th style="text-align:center">Valor</th>
+                                                                    <th style="text-align:center">Status RM</th>
+                                                                    <th style="text-align:center">Aprovação</th>
+                                                                    <th style="text-align:left;width:280px">Observação</th>
+                                                                    @*<th style="text-align:center">Integraçao</th>*@
+                                                                    <th style="text-align:center">Opções</th>
+                                                                </tr>
+                                                            </thead>
+                                                            @if (Model != null)
+                                                            {
+
+                                                                if (Model.lstDocumentos != null)
+                                                                {
+                                                                    foreach (Entities.ImportacaoDocumento wk in Model.lstDocumentos)
+                                                                    {
+
+                                                                        <tbody>
+                                                                            <tr id="corLinha">
+
+                                                                                @*@if (wk.Situacao.Equals("NãoIntegrado") & ((wk.Aprovacao.Equals("APROVADO")) || (wk.Aprovacao.Equals("NãoSeAplica"))))*@
+                                                                                @if (wk.Situacao.Equals("NãoIntegrado"))
+                                                                                {
+                                                                                    <td style="text-align:center;vertical-align:middle">
+
+                                                                                        @if ((wk.Aprovacao.Equals("NãoSeAplica")) || (wk.Aprovacao.Equals("APROVADO")))
+                                                                                        {
+                                                                                            if (ViewBag.PermiteEdicao.Equals("Não"))
+                                                                                            {
+                                                                                                <input type="checkbox" name="idsSelecionados" value="@wk.idMov+@wk.Id_Integracao" />
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <a class="btn inserirContaModal" onclick="abrirDocumento(@wk.idMov, @wk.Id_Integracao)" href="#">@wk.Documento</a>
+                                                                                            }
+                                                                                        }
+                                                                                    </td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td style="text-align:center">@wk.Documento</td>
+                                                                                }
+
+
+
+
+
+
+                                                                                @if (wk.Id_Integracao.Equals(0))
+                                                                                {
+                                                                                    <td style="text-align:center">@wk.Situacao</td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (ViewBag.Id_Integracao_Agendamento != null)
+                                                                                    {
+                                                                                        <td style="text-align:center;font-weight:bold">@wk.Situacao - @wk.Id_Integracao</td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td style="text-align:center;">@wk.Situacao - @wk.Id_Integracao</td>
+                                                                                    }
+                                                                                }
+                                                                                <td style="text-align:center">@wk.DataEmissao.ToString("dd/MM/yyyy")</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.00#}", @wk.ValorLiquido)</td>
+                                                                                <td style="text-align:center">@wk.Status_Pedido_RM</td>
+                                                                                <td style="text-align:center">@wk.Aprovacao</td>
+                                                                                <td style="text-align:left" class="observacaoErro">@wk.Observacao</td>
+                                                                                <td style="vertical-align:top;text-align:center">
+                                                                                    @if (wk.Situacao.Equals("Integrado"))
+                                                                                    {
+                                                                                        @*<a class="btn" style="padding:0" title="Desbloquear pedido" href="javascript:;"><i class="fa fa-unlock btn" aria-hidden="true" style="font-size:16px;padding:0" onclick="if(confirm('O desbloqueio do documento [@wk.Documento] que já está integradono ImportSys possibilita: Modificar o documento (ex: pedido de compra que já está integrado no ImportSys). Deseja continuar?')) desbloquearPedidos(@wk.Id_Integracao, @wk.idMov);"></i></a>*@
+                                                                                        <a class="btn" style="padding:0" title="Desbloquear" href="javascript:;"><i class="fa fa-unlock btn" aria-hidden="true" style="font-size:16px;padding:0" onclick="abrirModalDesbloquear(@wk.Id_Integracao, @wk.idMov, '@wk.Documento');"></i></a>
+                                                                                        <a class="" style="padding:0" title="Informativo"><span class="fa fa-info-circle" style="font-size:17px;color:silver;padding:0"></span></a>
+                                                                                    }
+                                                                                    else if (wk.Situacao.Equals("NãoSeAplica"))
+                                                                                    {
+                                                                                        <a class="" style="padding:0" title="Desbloquear" href="javascript:;"><i class="fa fa-unlock btn" aria-hidden="true" style="font-size:16px;color:silver;padding:0"></i></a>
+                                                                                        <a class="btn" style="padding:0" title="Informativo"><span class="fa fa-info-circle" style="font-size:17px;padding:0" value="@wk.Id_Integracao" onclick="Informativo(@wk.idMov, '@wk.Comentario')"></span></a>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+
+                                                                                    }
+
+
+                                                                                </td>
+                                                                                <td hidden>@wk.Id_Documento</td>
+                                                                                <td hidden>@wk.Id_Fornecedor</td>
+                                                                                <td hidden id="idMov">@wk.idMov</td>
+                                                                                <td hidden id="comentario">@wk.Comentario</td>
+                                                                                @*<td hidden>'id'+@wk.idMov,@wk.Id_Integracao</td>*@
+                                                                                <td hidden id="documento_pedido">@wk.Documento</td>
+                                                                                <td hidden>FimLinha</td>
+
+
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    }
+                                                                }
+                                                            }
+
+                                                        </table>
+                                                        @*@if (Model != null)
+                                                {
+                                                    if (Model.lstDocumentos != null)
+                                                    {
+                                                        if (ViewBag.PermiteEdicao.Equals("Não"))
+                                                        {
+                                                            <button  type="button" class="btn btn-primary pull-right" onclick="if(confirm('Este procedimento libera o pedido para o fornecedor. Deseja continuar?')) agendarIntegracaoLst();">Agendar integração</button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button disabled type="button" class="btn btn-primary pull-right" onclick="if(confirm('Este procedimento libera o pedido para o fornecedor. Deseja continuar?')) agendarIntegracaoLst();">Agendar integração</button>
+                                                        }
+                                                    }
+                                                }*@
+                                                        @if (Model != null)
+                                                        {
+                                                            if (Model.lstDocumentos != null)
+                                                            {
+                                                                if (ViewBag.PermiteEdicao.Equals("Não") & (ViewBag.Id_Integracao_Agendamento == null || ViewBag.Id_Integracao_Agendamento == 0))
+                                                                {
+                                                                    @*<button type="button" class="btn btn-primary pull-right" onclick="if(confirm('Este procedimento libera o pedido para o fornecedor. Deseja continuar?')) agendarIntegracaoLst();">Agendar integração</button>*@
+                                                                    <button type="button" class="btn btn-primary pull-right btnAgendar" onclick="agendarIntegracaoLst();">Agendar integração</button>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <button style="display:none" type="button" class="btn btn-primary pull-right btnAgendar" onclick="agendarIntegracaoLst();">Agendar integração</button>
+                                                                }
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                </div>
+                            </div>
+
+                            @*<div  class="panel with-nav-tabs panel-default">
+
+                    </div>*@
+
+
+                            <div id="itensDocumento" class="hidden" style="position:absolute;width:97%;padding-left: 20px;display:none">
+
+                                <div class="panel with-nav-tabs panel-default">
+                                    <div class="panel-heading" style="background-color:lightgray">
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstItensDocumento != null)
+                                            {
+                                                foreach (Entities.ImportacaoDocumento wk in Model.lstItensDocumento)
+                                                {
+                                                    <span>@Session["documento"] - </span><span id="docLstItens">@wk.Documento</span>
+
+                                                }
+                                            }
+                                        }
+
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="tab-content">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-striped" id="tabelaPedido">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Filial</th>
+                                                            <th>Data Emissão</th>
+                                                            <th>Status</th>
+                                                            <th>Moeda</th>
+                                                            <th>Valor</th>
+                                                            <th>Condição pagamento</th>
+                                                            <th>Fornecedor</th>
+                                                            <th>Responsável</th>
+                                                            <th>Processo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model != null)
+                                                        {
+                                                            if (Model.lstItensDocumento != null)
+                                                            {
+                                                                foreach (Entities.ImportacaoDocumento wk in Model.lstItensDocumento)
+                                                                {
+                                                                    <tr>
+                                                                        @*<td><a class="btn modalBTN" href="#">@item.NUMEROMOV</a></td>*@
+                                                                        <td><a class="btn modalBTN" href="#"></a></td>
+                                                                        @*<td><a class="btn modalBTN" href="#"></a></td>*@
+                                                                        <td><a class="btn modalBTN" href="#"></a></td>
+                                                                        @*<td><a href="#" data-toggle="modal" data-target="#my-modal">@ViewBag.NumeroMov</a></td>*@
+                                                                        <td><a href="#" data-toggle="modal" data-target="#my-modal"></a></td>
+                                                                        @*<td><a href="#" data-toggle="modal" data-target="#my-modal"></a></td>*@
+                                                                        <td><a href="#" data-toggle="modal" data-target="#my-modal"></a></td>
+                                                                        <td>@wk.Filial</td>
+                                                                        <td>@wk.DataEmissao.ToString("dd/MM/yyyy")</td>
+                                                                        <td>@wk.Status</td>
+                                                                        <td>@wk.Moeda</td>
+                                                                        <td style="text-align:right">@string.Format("{0:#,##0.00#}", @wk.Valor)</td>
+                                                                        <td>@wk.Condicao_Pagamento</td>
+                                                                        <td>@wk.Fornecedor</td>
+                                                                        <td>@wk.Comprador</td>
+                                                                        <td>@wk.Processo</td>
+                                                                        <td hidden id="idMovItem">@wk.idMov</td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel with-nav-tabs panel-default">
+                                    <div class="panel-heading" style="background-color:lightgray">
+                                        Itens
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="tab-content">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-striped" id="tabelaItens">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="text-align:center">Nº</th>
+                                                            <th style="text-align:center">PN</th>
+                                                            <th style="text-align:center">Quantidade</th>
+                                                            <th style="text-align:center">Serial</th>
+                                                            <th style="text-align:center">Chave</th>
+                                                            <th style="text-align:center">Adição</th>
+                                                            <th style="text-align:center">Item adição</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model != null)
+                                                        {
+                                                            if (Model.lstItens != null)
+                                                            {
+                                                                foreach (Entities.ImportacaoDocumento wk in Model.lstItens)
+                                                                {
+                                                                    //if (@wk.NSEQITMMOV <= 32)
+                                                                    //{
+
+
+                                                                    <tr>
+                                                                        @if (@wk.Idprd > 0)
+                                                                        {
+                                                                            <td style="text-align:center" hidden>@wk.Idprd</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td style="text-align:center" hidden></td>
+                                                                        }
+
+                                                                        @if (@wk.idcfo > 0)
+                                                                        {
+                                                                            <td style="text-align:center" hidden>@wk.idcfo</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td style="text-align:center" hidden></td>
+                                                                        }
+
+
+                                                                        @if (@wk.NSEQITMMOV > 0)
+                                                                        {
+                                                                            <td style="text-align:center" hidden>@wk.NSEQITMMOV</td>
+                                                                        }
+
+                                                                        else
+                                                                        {
+                                                                            <td style="text-align:center" hidden></td>
+                                                                        }
+
+                                                                        @if (@wk.NUMEROSEQUENCIAL > 0)
+                                                                        {
+                                                                            <td style="text-align:center">@wk.NUMEROSEQUENCIAL</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td style="text-align:center"></td>
+                                                                        }
+
+                                                                        @if (@wk.NUMNOFABRIC != " " & @wk.NUMNOFABRIC != null)
+                                                                        {
+                                                                            <td class="numFabric" style="text-align:center">@wk.NUMNOFABRIC</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td class="numFabric" style="text-align:center"></td>
+                                                                        }
+
+                                                                        @if (wk.Quantidade > 0)
+                                                                        {
+                                                                            <td style="text-align:center">@string.Format("{0:#,##}", @wk.Quantidade)</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td style="text-align:center"></td>
+                                                                        }
+
+
+
+                                                                        @if (@wk.SerialNumber != " " & @wk.SerialNumber != null)
+                                                                        {
+                                                                            if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                            {
+                                                                                <td style="text-align:center" contenteditable='true' id="serialNumberText">@wk.SerialNumber</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center"></td>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                            {
+                                                                                <td style="text-align:center" contenteditable='true'></td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center"></td>
+                                                                            }
+                                                                        }
+
+
+                                                                        @if (wk.Chave != " " & wk.Chave != null)
+                                                                        {
+                                                                            if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                            {
+                                                                                <td style="text-align:center" id="chave" contenteditable='true'>@wk.Chave</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center"></td>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                            {
+                                                                                <td style="text-align:center" id="chave" contenteditable='true'></td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center"></td>
+                                                                            }
+                                                                        }
+
+
+                                                                        @if (@wk.NF_NUMNF != " ")
+                                                                        {
+                                                                            <td hidden>@wk.NF_NUMNF</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td hidden></td>
+                                                                        }
+
+                                                                        @if (@wk.NF_ITE_NUMITE != " ")
+                                                                        {
+                                                                            <td hidden>@wk.NF_ITE_NUMITE</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td hidden></td>
+                                                                        }
+
+
+                                                                        @if (wk.NF_ITE_NM_ADICAO != " " & wk.NF_ITE_NM_ADICAO != null)
+                                                                        {
+                                                                            if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                            {
+                                                                                <td style="text-align:center" id="NF_ITE_NM_ADICAO" contenteditable='true'>@wk.NF_ITE_NM_ADICAO</td>
+                                                                            }
+
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center">@wk.NF_ITE_NM_ADICAO</td>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                            {
+                                                                                <td style="text-align:center" id="NF_ITE_NM_ADICAO" contenteditable='true'></td>
+                                                                            }
+
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center"></td>
+                                                                            }
+                                                                        }
+
+
+                                                                        @if (wk.NF_ITE_NM_ITEM_ADICAO != " ")
+                                                                        {
+                                                                            if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                            {
+                                                                                <td style="text-align:center" id="NF_ITE_NM_ITEM_ADICAO" contenteditable='true'>@wk.NF_ITE_NM_ITEM_ADICAO</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center">@wk.NF_ITE_NM_ITEM_ADICAO</td>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                            {
+                                                                                <td style="text-align:center" id="NF_ITE_NM_ITEM_ADICAO" contenteditable='true'></td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center"></td>
+                                                                            }
+                                                                        }
+                                                                    </tr>
+                                                                    //}
+                                                                }
+                                                            }
+                                                        }
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-toolbar">
+                                    <button type="button" class="btn btn-primary pull-right" data-dismiss="modal" onclick="Atualiza()">Voltar</button>
+                                    @if (Model != null)
+                                    {
+                                        if (Model.lstItens != null)
+                                        {
+                                            foreach (Entities.ImportacaoDocumento wk in Model.lstItens)
+                                            {
+                                                if (@wk.Id_Integracao != 0)
+                                                {
+                                                    @*<button type="button" class="btn btn-primary pull-right" onclick="if(confirm('Este procedimento libera o pedido @wk.Documento para o fornecedor. Deseja continuar?')) agendarIntegracao();">Agendar integração</button>*@<button type="button" class="btn btn-primary pull-right" onclick="if(confirm('Este procedimento libera o pedido @wk.Documento para o fornecedor. Deseja continuar?')) agendarIntegracao();"></button>
+                                                    <button disabled id="btnagendar" type="button" class="btn btn-primary pull-right btnAgendar">Agendar integração</button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="btnagendar" type="button" class="btn btn-primary pull-right btnAgendar" onclick="agendarIntegracao()">Agendar integração</button>
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="inserirConta" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                                <div class="modal-dialog modal-lg modal-dialog-centered" style="height:91%">
+                                    <div class="modal-content" style="height:100%">
+                                        <div class="modal-header text-center" style="padding:5px">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                                        </div>
+                                        <div class="modal-body" style="padding:0 15px 0 15px">
+
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Pedidos selecionados
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="tab-content">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-striped" id="tabelaPedido">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Filial</th>
+                                                                        <th>Data</th>
+                                                                        <th>Status</th>
+                                                                        <th>Valor</th>
+                                                                        <th>Fornecedor</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @if (Model != null)
+                                                                    {
+                                                                        if (Model.lstItensDocumento != null)
+                                                                        {
+                                                                            foreach (Entities.ImportacaoDocumento wk in Model.lstItensDocumento)
+                                                                            {
+                                                                                <tr>
+                                                                                    @*<td><a class="btn modalBTN" href="#">@item.NUMEROMOV</a></td>*@
+                                                                                    <td><a class="btn modalBTN" href="#"></a></td>
+                                                                                    @*<td><a href="#" data-toggle="modal" data-target="#my-modal">@ViewBag.NumeroMov</a></td>*@
+                                                                                    <td><a href="#" data-toggle="modal" data-target="#my-modal"></a></td>
+                                                                                    <td>@wk.Filial</td>
+                                                                                    <td id="dataModal"></td>
+                                                                                    <td id="statusModal"></td>
+                                                                                    <td id="valorModal"></td>
+                                                                                    <td id="fornecedorModal"></td>
+                                                                                </tr>
+                                                                            }
+                                                                            <tr><td hidden id="lstItensDocumento">@Model.lstItensDocumento</td></tr>                                                                 }
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Itens
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="tab-content">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Nº</th>
+                                                                        <th>Produto</th>
+                                                                        <th>Quantidade</th>
+                                                                        <th>Serial</th>
+                                                                        <th>Chave PO</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td id="numeroItem"></td>
+                                                                        <td id="produtoItem"></td>
+                                                                        <td id="quantidadeItem"></td>
+                                                                        <td id="serialItem"></td>
+                                                                        <td id="chavePOItem"></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="btn-toolbar">
+                                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualiza()">Fechar</button>
+                                            <button type="button" class="btn btn-primary pull-right" onclick="salvarPedidoCompra()">Agendar integração</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div>
+
+
+                        <div class="modal fade" id="inserirConta2" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content" style="height:100%">
+                                    @*<div class="modal-header text-center" style="padding:5px">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                            </div>*@<div class="modal-header text-center" style="padding:5px">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                        <h4><span class="descricaoTMVModal"></span></h4>
+                                    </div>
+                                    <div class="modal-body" style="padding:20px 15px 0 15px">
+
+                                        <div class="panel with-nav-tabs panel-default">
+                                            <div class="panel-heading" style="background-color:lightgray">
+                                                NOVA CONTA <span class="contaModalSpan"></span>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="tab-content">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-striped" id="tabelaPedido">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Conta</th>
+                                                                    <th>Descrição</th>
+                                                                    <th>Situação</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><input id="contaAdd" class="form-control" maxlength="25"></td>
+                                                                    <td><input id="descricaoAdd" class="form-control" maxlength="250" /></td>
+                                                                    <td>
+                                                                        <select id="situacaoAdd" class="form-control">
+                                                                            <option value="Ativo">Ativo</option>
+                                                                            <option value="Inativo">Inativo</option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td hidden id="id_Conta"></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="btn-toolbar">
+                                                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualizar()">Fechar</button>
+                                                            <button type="button" class="btn btn-primary pull-right" onclick="inserirConta()">Salvar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div><!-- /.modal-content -->
+
+                        <div class="modal fade" id="modalInformativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel"><span id="documentoModal"> - </span></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-hover  table-bordered">
+                                            <tr>
+                                                <td>Filial: <span id="filial_Modal"> </span></td>
+                                                @*<td id="id_integracao_Modal"></td>*@
+                                                <td id="id_integracao_Modal"></td>
+                                                <td>Data Emissão: <span id="dtEmissao_Modal"> </span></td>
+                                                @*<td id="situacao_Modal"></td>*@
+                                                <td id="situacao_Modal"></td>
+                                            </tr>
+                                            @*<tr>
+                                        <td>Situação</td>
+                                        <td id="situacao_Modal"></td>
+                                    </tr>*@
+                                            <tr>
+                                                <td></td>
+                                                <td id="situacao_Modal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Status: <span id="status_Modal"> </span></td>
+                                                @*<td id="data_Modal"></td>*@
+                                                <td id="data_Modal"></td>
+                                                <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                                @*<td id="tipo_Modal"></td>*@
+                                                <td id="tipo_Modal"></td>
+                                            </tr>
+                                            @*<tr>
+                                        <td>Tipo</td>
+                                        <td id="tipo_Modal"></td>
+                                    </tr>*@
+                                            <tr>
+                                                <td></td>
+                                                <td id="tipo_Modal"></td>
+                                            </tr>
+                                            @*<tr>
+                                        <td>Handling</td>
+                                        <td id="handling_Modal"></td>
+                                    </tr>*@
+                                            <tr>
+                                                <td></td>
+                                                <td id="handling_Modal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Valor: <span id="valor_Modal"> </span></td>
+                                                @*<td id="cliente_Modal"></td>*@
+                                                <td id="cliente_Modal"></td>
+                                                <td>Condição de Pagamento: <span id="condPagamento_Modal"> </span></td>
+                                                @*<td id="descricao_Modal"></td>*@
+                                                <td id="descricao_Modal"></td>
+                                            </tr>
+                                            @*<tr>
+                                        <td>Descrição</td>
+                                        <td id="descricao_Modal"></td>
+                                    </tr>*@
+                                            <tr>
+                                                <td></td>
+                                                <td id="descricao_Modal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Fornecedor: <span id="fornecedor_Modal"> </span></td>
+                                                @*<td id="forma_pagamento_Modal"></td>*@
+                                                <td id="forma_pagamento_Modal"></td>
+                                                <td>Comprador: <span id="comprador_Modal"> </span></td>
+                                                @*<td id="moeda_Modal"></td>*@
+                                                <td id="moeda_Modal"></td>
+                                            </tr>
+
+                                            <tr width="100%" style="background-color:lightgoldenrodyellow">
+                                                <td colspan="2"><div class="pre-scrollable" id="consideracoes_Modal"></div></td>
+                                                @*<td colspan="3" id="consideracoes_Modal"></td>*@
+                                                <td colspan="3" id="consideracoes_Modal"></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div style="padding-right:15px">
+                                        <button type="button" class="btn btn-primary btn-sm pull-right" style="margin-bottom: 10px;" data-dismiss="modal">Fechar</button>
+                                    </div>
+                                    @*<div class="modal-footer" style="padding:5px;">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                            </div>*@<div class="modal-footer" style="padding:5px;">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="modalDesbloquearPedido" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                            <div class="modal-dialog modal-lg modal-dialog-centered" style="">
+                                <div class="modal-content" style="">
+                                    <div class="" style="padding:5px">
+                                    </div>
+                                    <div class="modal-body" style="padding:0 15px 0 15px">
+
+                                        <div class="">
+                                            @*<div class="panel-heading" style="background-color:lightgray">
+                                    </div>*@
+                                            <div class="panel-body">
+                                                @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                <input hidden id="modal_id_int_desbloquear" />
+                                                <input hidden id="modal_id_mov_desbloquear" />
+                                                <div style="padding-bottom:5px"><span>O desbloqueio do documento [<span style="font-weight:bold" id="modal_doc_desbloquear"></span>] que já está integrado no ImportSys possibilita: </span><br /></div>
+                                                <span style="padding-left:20px">Modificar o documento (ex: pedido de compra que já está integrado no ImportSys);</span><br />
+                                                <span style="padding-left:20px">Gerar um novo documento (ex: pedido de compra) no RM;</span><br />
+                                                <div style="padding-bottom:5px"><span style="padding-left:20px">A reintegração do documento para o ImportSys;</span><br /></div>
+                                                <span>Deseja continuar?</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-toolbar" style="padding-bottom: 10px;padding-right:10px">
+                                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-primary pull-right" onclick="desbloquearPedido()">OK</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.modal-content -->
+
+
+                    </main>
+                </div>
+
+
+
+
+
+
+
+
+
+            <!-- jQuery library -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+            <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+            <!-- Latest compiled JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+            <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+            <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+            <link href="~/content/indexCompras.css" rel="stylesheet" />
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+            <link href="~/content/indeximportacaodocumento.css" rel="stylesheet" />
+
+
+            <link href="~/content/chosen.css" rel="s
+                  tylesheet" />
+            <script src="~/scripts/chosen.jquery.js"></script>
+
+
+            <script>
+                $(window).bind("load", function () {
+                    var divShow = $('#divShow').val();
+                    $(divShow).removeClass('hidden');
+
+                    //var divHide = $('#divHide').val();
+                    //$(divHide).hide();
+
+                });
+                $(function () {
+                    let corLinha = $('#corLinhaDocErro').val();
+                    let alterarCor = "";
+                    let linhas = "";
+                    if (corLinha == "V") {
+                            $('#tblFornecedor tr').each(function () {
+                                var $row = $(this).closest('tr');
+                                //used :not(:first-child) to skip first element (the checkbox td)
+                                $('td', $row).each(function (i) {
+                                    linhas = $(this).text().trim();
+                                    if ($(this).attr('class') == 'observacaoErro') {
+                                        if ($(this).text().trim() != "") {
+                                            alterarCor = "S";
+                                        }
+                                    }
+                                })
+                                if (alterarCor == "S") {
+                                    $(this).css({ 'background': 'orangered' });
+                                }
+                            });
+                    }
+                    
+                    $(".datepickerInput").datepicker({
+                        dateFormat: 'dd/mm/yy',
+                        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        monthNames: ['Janeiro', 'Fevereiro', 'Mar\ço', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        nextText: 'Próximo',
+                        prevText: 'Anterior'
+                    });
+                    $('.menuImportacao .sidebar-submenu').addClass("active");
+                    $('.menuImportacao .sidebar-submenu').toggle();
+                    var mov = $('#movimento').val();
+
+                    //var e = document.getElementById("fornecedorNome");
+                    // var value = e.options[e.selectedIndex].value;
+                    //var text = e.options[e.selectedIndex].text;
+
+                    //var e2 = document.getElementById("movimento");
+                    //var value2 = e2.options[e2.selectedIndex].value;
+                    //var text2 = e2options[e2.selectedIndex].text;
+                    //alert(text2);
+
+                    //if (value > 0 & mov == null)
+                    //{
+                    //  $('#fornecedorNome').val('-- Selecione --');
+                    //  $('#fornecedorNome').trigger('chosen:updated');
+                    //}
+
+                    //if ($('#fornecedorNome').val() == '')
+                    //{
+                    //    $('#fornecedorNome').chosen();
+                    //    $('#fornecedorNome').val('3');
+                    //    $('#fornecedorNome').trigger('chosen:updated');
+                    //    BuscaChosen('fornecedorNome', 'documento', null, '/ImportacaoDocumento/BuscaProcessos/')
+                    //}
+
+                    //var fornecedor = $('#fornecedorNome').val();
+
+                    //BuscaChosen(fornecedor, 'documento', null, '/ImportacaoDocumento/BuscaProcessos/')
+
+                    $('#movimentoNome').val(mov);
+
+                    $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+                    var divShow = $('#divShow').val();
+                    $(divShow).show();
+
+                    var divHide = $('#divHide').val();
+                    $(divHide).hide();
+
+                    var sit = $('#situacaoDoc').val().toString();
+
+                    if (sit == '' & ((fornecedor == "" || fornecedor == null))) {
+                        //$('#situacao').val('NI');
+                        //$('#situacao').trigger('chosen:updated');
+                    }
+                    else {
+                        $.each(sit.split(","), function (i, e) {
+                            $("#situacao option[value='" + e + "']").prop("selected", true);
+                        });
+                        $('#situacao').trigger('chosen:updated');
+                    }
+
+                });
+
+
+                // history.pushState(null, null, 'ImportacaoDocumento');
+                //window.addEventListener('popstate', function (event) {
+                //    var mov = $('#movimento').val();
+                //    var fornecedor = $('#fornecedorNome').val();
+                //    if (mov == '' || mov == null) {
+                //        $('#fornecedorSelected').val('');
+                //        $('#fornecedorNome').empty();
+                //        $("#fornecedorNome").trigger("chosen:updated");
+                //    }
+
+                //    history.pushState(null, null, 'ImportacaoDocumento');
+                //});
+
+                //history.pushState(null, null, 'ImportacaoDocumento');
+
+
+
+
+
+                function isValidDate(dateString, campo) {
+
+                    var regEx = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+                    if (regEx.test(dateString) == true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                    //if (regEx.test(dateString) == true) {
+                    //    $("#btnFiltro").attr("disabled", false)
+                    //    $(campo).text('');
+                    //}
+                    //else {
+
+                    //    if (dateString.trim().length > 0) {
+                    //        $(campo).text("Data inválida.");
+                    //        $("#btnFiltro").attr("disabled", false)
+                    //    }
+
+                    //    $("#btnFiltro").attr("disabled", true)
+
+
+                    //var temp = date.split('/');
+                    //var d = new Date(temp[1] + '/' + temp[0] + '/' + temp[2]);
+                    //alert(temp[2]);
+                    //var result = (d && (d.getMonth() + 1) == temp[1] && d.getDate() == Number(temp[0]) && d.getFullYear() == Number(temp[2]));
+                    //alert(d.getFullYear());
+                    //if (result == false) {
+                    //    $(campo).text("Data inválida.");
+                    //    $("#btnFiltro").attr("disabled", true)
+                    //}
+                    //else {
+                    //    $("#btnFiltro").attr("disabled", false)
+                    //    $(campo).text('');
+                    //}
+                }
+            </script>
+
+            <script type="text/javascript">
+                $('a.modalpedidosEnviar').click(function () {
+                    $('#poRmModal').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                });
+
+
+                function populaModal(documento, filial, data, status, valor, fornecedor, descricaoTMV, idMov) {
+                    $('#documentoModal').html(documento);
+                    $('#filialModal').html(filial);
+                    $('#dataModal').html(data);
+                    $('#statusModal').html(status);
+                    $('#valorModal').html(valor);
+                    $('#fornecedorModal').html(fornecedor);
+                    $('#descricaoTMVModal').html(descricaoTMV);
+
+                }
+
+                //function GetFNomeFornecedor(nome) {
+                //    $('#fornecedorSelected').val($("#fornecedorNome option:selected").text());
+                //}
+
+                function GetDocumento(nome) {
+                    $('#documentoSelected').val($("#documento option:selected").text());
+                }
+
+
+                function PreencherModal(documento, filial, data, status, valor, fornecedor, descricaoTMV, idMov, nomeTMV) {
+                    //$('a.modalBTN').click(function () {
+                    $('#tabelaItens tr td').remove();
+                    var chave;
+                    var produto = "";
+                    var numero;
+                    var quantidade;
+                    var serial = "";
+
+                    //$('#my-modal').modal({
+                    //    show: true,
+                    //    closeOnEscape: true,
+                    //    backdrop: 'static',
+                    //    keyboard: false
+                    //})
+
+
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "ImportacaoDocumento/ddlTransType_Change",
+                        data: { 'idMov': idMov },
+                        dataType: 'json',
+                        success: function (data) {
+                            //alert(JSON.stringify(data));
+                            $('#my-modal').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+
+
+                            $('#documentoModal').html(documento);
+                            $('#filialModal').html(filial);
+                            $('#dataModal').html(data);
+                            $('#statusModal').html(status);
+                            $('#valorModal').html(valor);
+                            $('#fornecedorModal').html(fornecedor);
+                            $('.descricaoTMVModal').html(nomeTMV);
+
+                            var tr;
+
+                            $.each(data, function (index, value) {
+                                chave = value.Chave;
+                                numero = value.Numero;
+                                quantidade = value.Quantidade;
+                                serial = value.Serial;
+                                produto = value.Produto;
+
+                                console.log(produto);
+                                tr =
+                                '<tr>' +
+                                '<td>' + numero + '</td>' +
+                                '<td>' + produto + '</td>' +
+                                '<td>' + quantidade + '</td>' +
+                                '<td>' + serial + '</td>' +
+                                '<td>' + chave + '</td>' +
+                                '</tr>';
+
+                                $(tr).appendTo('#tabelaItens');
+
+
+                            })
+
+
+
+
+                            //$('#grid').childs('tr').append(tr);
+                            //$('#gridEmail').append(tr);
+
+                        },
+                        error: function (e) {
+                            alert("Error:Unable to load data from server");
+                        }
+                    });
+
+
+                };
+
+
+
+            </script>
+            <script>
+                $("#btnFiltro").click(function () {
+
+                    var fornecedor = $('#fornecedorNome').val();
+                    var documento = $('#documento').val();
+                    var movimento = $('#movimento').val();
+                    var dtInicio = $('#strDataInicio').val();
+                    var dtFim = $('#strDataFim').val();
+                    var situacao = $('#situacao').val();
+
+
+                    //if ((fornecedor == "" || fornecedor == null) || (documento == "" || documento == null) || (movimento == "" || movimento == null) || (dtInicio == "" || dtInicio == null) || (dtFim == "" || dtFim == null)) {
+                    //if ((fornecedor == "" || fornecedor == null)) {
+                    //    $('#divErroFornecedor').text('Selecione o fornecedor.');
+                    //}
+                    if ((documento == "" || documento == null) || (movimento == "" || movimento == null) || (dtInicio == "" || dtInicio == null) || (dtFim == "" || dtFim == null)) {
+                        if ((documento == "" || documento == null)) {
+                            $('#divErroDocumento').text('Selecione o processo/documento.');
+                        }
+                        if ((movimento == "" || movimento == null)) {
+                            $('#divErroMovimento').text('Selecione o tipo do movimento.');
+                        }
+                        if ((dtInicio == "" || dtInicio == null)) {
+                            $('#dtIniciDivErro').text('Selecione a data início.');
+                        }
+                        if ((dtFim == "" || dtFim == null)) {
+                            $('#dtFimDivErro').text('Selecione a data fim.');
+                        }
+                        //if ((situacao == "" || situacao == null)) {
+                        //    $('#divErroSituacao').text('Selecione a situação.');
+                        //}
+                        $("#btnFiltro").attr("disabled", true)
+                    }
+                    else {
+
+                        var validaDTInicio = isValidDate(dtInicio, 'strDataInicio');
+                        var validaDTFim = isValidDate(dtFim, 'strDataFim');
+
+                        if (validaDTInicio == true & validaDTFim == true) {
+                            $("#btnFiltro").attr("disabled", false)
+                            $('#documentoSelected').val($("#documento option:selected").text());
+                            document.getElementById("myForm").submit();
+                        }
+                        else {
+                            if (validaDTInicio == false) {
+                                $('#dtIniciDivErro').text('Data inválida.');
+                                $("#btnFiltro").attr("disabled", true)
+                            }
+                            if (validaDTFim === false) {
+                                $('#dtFimDivErro').text('Data inválida.');
+                                $("#btnFiltro").attr("disabled", true)
+                            }
+                        }
+
+                    }
+                });
+
+                $("#fornecedorNome").change(function () {
+                    var fornecedor = $('#fornecedorNome').val();
+                    var documento = $('#documento').val();
+
+                    if ($('#fornecedorNome').val() != "" & $('#fornecedorNome').val() != null) {
+                        $('#divErroFornecedor').text('');
+                    }
+                    else {
+                        $('#documento').val('');
+                        $('#movimento').empty();
+                        $("#movimento").trigger("chosen:updated");
+
+
+                    }
+                });
+
+                $("#documento").change(function () {
+                    var documento = $('#documento').val();
+
+                    if ($('#documento').val() != "" & $('#documento').val() != null) {
+                        $('#divErroDocumento').text('');
+                    }
+                    else {
+                        $('#movimento').val('');
+                    }
+                });
+
+                $("#movimento").change(function () {
+                    var documento = $('#movimento').val();
+
+                    if ($('#movimento').val() != "") {
+                        $('#divErroMovimento').text('');
+                    }
+                    $("#btnFiltro").attr("disabled", false)
+                });
+
+                $("#strDataInicio").change(function () {
+                    $('#dtIniciDivErro').text('');
+                    $("#btnFiltro").attr("disabled", false)
+                });
+
+                $("#strDataFim").change(function () {
+                    $('#dtFimDivErro').text('');
+                    $("#btnFiltro").attr("disabled", false)
+                });
+
+
+                $('a.modalBTN').click(function () {
+                    $('#my-modal').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                });
+
+                function abrirDocumento(idMov, id_integracao) {
+                    var fornecedor = $("#fornecedorNome option:selected").val();
+                    var fornecedor2 = $("#fornecedorNome").val();
+                    var movimento = $("#documento option:selected").text();
+                    var movimentoVal = $("#documento option:selected").val();
+                    var dtInicio = $('#strDataInicio').val();
+                    var dtFim = $('#strDataFim').val();
+
+                    history.pushState(null, null, 'ImportacaoDocumento');
+
+                    $('#registros').hide();
+                    $.ajax({
+                        url: '@Url.Action("abrirDocumento", "ImportacaoDocumento")',
+
+                        data: { idMov: idMov, id_fornecedor: fornecedor, movimento: movimento, id_integracao: id_integracao, strDataInicio: dtInicio, strDataFim: dtFim },
+                        success: function (data) {
+                            $('#registros').hide();
+
+                            //$("#divRegistros").load(location.href + " #divRegistros>*", "");
+                            //$('#divRegistros').show();
+                            var input = $("<input>")
+                            .attr("type", "hidden")
+                            .attr("name", "divShow2").val("#itensDocumento");
+                            $('#myForm').append($(input));
+
+                            $('#documento').val(movimentoVal);
+                            $("#documento option:selected").val(movimentoVal);
+                            $('#documento').trigger('chosen:updated');
+
+                            $("#myForm").submit();
+                        }
+                    });
+                }
+
+
+                //$('a.inserirContaModal').click(function () {
+                //    $('#inserirConta').modal({
+                //        show: true,
+                //        closeOnEscape: true,
+                //        backdrop: 'static',
+                //        keyboard: false
+                //    })
+                //});
+                var id_integracao = $('#id_integracao').val().replace("/", "");
+                function agendarIntegracao() {
+                    let numeroMovStr = $('#docLstItens').html().substring(0,6);
+                    var idMov = $('#idMovItem').html();
+
+                    var fornecedor = $("#fornecedorNome option:selected").val();
+                    var movimento = $("#documento option:selected").val();
+
+
+                    var table = $('#tabelaItens');
+                    var data2 = [];
+
+                    table.find('tr').each(function (i, el) {
+                        // no thead
+                        if (i != 0) {
+                            var $tds = $(this).find('td');
+                            var row = [];
+                            $tds.each(function (i, el) {
+                                if (this.className != "numFabric") {
+                                    row.push($(this).text());
+                                }
+
+                            });
+                            //console.log(row);
+                            data2.push(row);
+
+                        }
+
+
+                    })
+
+
+
+                    jQuery.ajaxSettings.traditional = true;
+
+
+                    $.ajax({
+                        url: '@Url.Action("agendarIntegracao", "ImportacaoDocumento")',
+                        //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                        //dataType: "json",
+                        traditional: true,
+                        //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                        data: { campos: data2, idMov2: idMov, id_fornecedor: fornecedor, id_integracao_processo: movimento },
+                        contentType: 'json',
+
+                        success: function (data) {
+                            $('#itensDocumento').show();
+                            //$("#fornecedorNome option[selected]").removeAttr("selected");
+                            //$("#situacao option[selected]").removeAttr("selected");
+                            //$("#movimento option[selected]").removeAttr("selected");
+                            //$('#numeroMovimento').val('');
+
+                            var today2 = new Date();
+                            var days = 86400000; //number of milliseconds in a day
+                            fiveDaysAgo = new Date(today2 - (10 * days));
+                            var diaInicio = fiveDaysAgo.getDate();
+                            var mesInicio = fiveDaysAgo.getMonth() + 1;
+                            var anoInicio = fiveDaysAgo.getFullYear();
+                            if (diaInicio < 10) {
+                                diaInicio = '0' + diaInicio;
+                            }
+                            if (mesInicio < 10) {
+                                mesInicio = '0' + mesInicio;
+                            }
+                            var today = diaInicio + '/' + mesInicio + '/' + anoInicio;
+
+                            //$('#strDataInicio').val(today);
+
+                            var dataAtual = new Date();
+                            var diaFinal = dataAtual.getDate();
+                            var mesFinal = dataAtual.getMonth() + 1;
+                            var anoFinal = dataAtual.getFullYear();
+
+                            if (diaFinal < 10) {
+                                diaFinal = '0' + diaFinal;
+                            }
+
+                            if (mesFinal < 10) {
+                                mesFinal = '0' + mesFinal;
+                            }
+                            dataAtual = diaFinal + '/' + mesFinal + '/' + anoFinal;
+
+                            let dado = [];
+                            let dados = [];
+                            let novaLinha = "\r\n"
+                            let valor = "";
+                            for (index in data) {
+                                if (data[index].Observacao != null) {
+                                    //valor += data[index].Observacao;
+                                    //valor += "\n";
+                                    //dado =
+                                    //  {
+                                    //      Id_Integracao: data[index].Id_Integracao,
+                                    //      Observacao: data[index].Observacao
+                                    //  }
+                                    //dados.push(dado);
+                                    //}
+                                    var numeroMovArr1 = $("<input>")
+                                    .attr("type", "hidden")
+                                    .attr("name", "numeroMovArr").val(numeroMovStr);
+                                    $('#myForm').append($(numeroMovArr1));
+                                }
+                            }
+                            
+                            $('#id_integracao').remove();
+                            
+                            if (data != null) {
+                                //if (data[0].Id_Integracao != null) {
+                                var input = $("<input>")
+                                  .attr("type", "hidden")
+                                  .attr("name", "id_integracao").val(data[0].Id_Integracao);
+
+                                $('#myForm').append($(input));
+                                $("#myForm").submit();
+   
+                                }
+
+
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+
+                            $('#btnagendar').attr("disabled", true);
+
+                        },
+                    })
+                    //alert('2');
+                    //$("#myForm").submit();
+                    //alert("Integração" + id_integracao + ". Agendamento realizado com sucesso.");
+                    //alert("Integração agendada com sucesso.");
+                }
+                function Atualiza() {
+                    $('#registros').show();
+                    $('#registros').removeClass('hidden');
+                    $('#itensDocumento').hide();
+                }
+
+                function abrirModalDesbloquear(idIntegracao, idMov, documento) {
+                    $('#modal_id_int_desbloquear').val(idIntegracao);
+                    $('#modal_id_mov_desbloquear').val(idMov);
+                    $('#modal_doc_desbloquear').html(documento);
+                    $('#modalDesbloquearPedido').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                }
+
+                function desbloquearPedido() {
+                    let idIntegracao = $('#modal_id_int_desbloquear').val();
+                    let idMov = $('#modal_id_mov_desbloquear').val();
+                    $.ajax({
+                        url: '@Url.Action("DesbloquearPedido", "ImportacaoDocumento")',
+                        type: 'get',
+                        data: { idIntegracao: idIntegracao, idMov: idMov },
+                        success: function (data) { $('#myForm').submit(); },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //$('#btnagendar').attr("disabled", true);
+                            alert(exceptionThrown);
+                        },
+                    });
+                }
+
+                function Informativo(idMov, comentario) {
+                    $.ajax({
+                        url: '@Url.Action("Informativo", "ImportacaoDocumento")',
+                        traditional: true,
+                        data: { idMov, comentario},
+                        contentType: 'json',
+
+                        success: function (response) {
+                            var documento = response[0].Documento;
+                            $('#documentoModal').html($("#documento option:selected").text() + ' - ' + documento);
+
+                            var filial = response[0].Filial;
+                            $('#filial_Modal').html(filial);
+
+                            var dtEmissao = response[0].DataEmissao;
+                            $('#dtEmissao_Modal').html(dtEmissao);
+
+                            var status = response[0].Status;
+                            $('#status_Modal').html(status);
+
+                            var moeda = response[0].Moeda;
+                            $('#moeda_Modal').html(moeda);
+
+                            var valor = response[0].Valor;
+                            valor = valor != 0 ? parseFloat(valor).toLocaleString() : '';
+                            $('#valor_Modal').html(valor);
+
+                            var condicao_Pagamento = response[0].Condicao_Pagamento;
+                            $('#condPagamento_Modal').html(condicao_Pagamento);
+
+                            var fornecedor = response[0].Fornecedor;
+                            $('#fornecedor_Modal').html(fornecedor);
+
+                            var comprador = response[0].Comprador;
+                            $('#comprador_Modal').html(comprador);
+
+                            $('#consideracoes_Modal').html(comentario);
+
+
+
+                            $('#modalInformativo').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+
+
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //alert(exceptionThrown);
+                        },
+                    });
+                };
+
+
+                function agendarIntegracaoLst() {
+                    var linhas = "";
+                    var dado = '';
+                    var data2 = [];
+                    var numeroMovArr1 = [];
+                    let numeroMovStr = "";
+                    //let rows = $('#tblFornecedor tbody tr').length;
+
+                    //if(rows > 1){
+                    $('#tblFornecedor tr input[type="checkbox"]:checked').each(function () {
+                        var $row = $(this).closest('tr');
+                        //used :not(:first-child) to skip first element (the checkbox td)
+                        $('td', $row).each(function (i) {
+                            linhas = $(this).text().trim();
+                            if($(this).attr('id') == 'documento_pedido'){
+                                numeroMovArr1.push($(this).text().trim());
+
+                                numeroMovStr += $(this).text().trim() + ',';
+                            }
+
+                            if (linhas.indexOf('FimLinha') >= 0) {
+                                data2.push(dado);
+                                dado = '';
+
+                            }
+                            else {
+                                dado += linhas + ',';
+                            }
+
+                            //data2.push(linhas);
+                        })
+                    });
+                    // }
+                    //else {
+                    //    $('#tblFornecedor tr').each(function () {
+                    //        var $row = $(this).closest('tr');
+                    //        //used :not(:first-child) to skip first element (the checkbox td)
+                    //        $('td', $row).each(function (i) {
+                    //            linhas = $(this).text().trim();
+                    //            //alert(linhas.indexOf('id'));
+                    //            if (linhas.indexOf('FimLinha') >= 0) {
+                    //                data2.push(dado);
+                    //                dado = '';
+                    //            }
+                    //            else {
+                    //                dado += linhas + ',';
+                    //            }
+                    //            //data2.push(linhas);
+                    //        })
+                    //    });
+                    //}
+
+                    if (data2 != null & data2 != '') {
+
+                        var idMov = 0;
+                        var idCFO = "";
+                        var fornecedor = $("#fornecedorNome option:selected").val();
+                        var movimento = $("#documento").val();
+                        jQuery.ajaxSettings.traditional = true;
+
+                        $.ajax({
+                            url: '@Url.Action("agendarIntegracao", "ImportacaoDocumento")',
+                            //dataType: "json",
+                            content: "application/json",
+                            traditional: true,
+                            data: { dados: data2, id_fornecedor: fornecedor, id_integracao_processo: movimento },
+                            success: function (data) {
+                                let dado = [];
+                                let dados = [];
+                                let novaLinha = "\r\n"
+                                let valor = "";
+                                for (index in data) {
+                                    if (data[index].Observacao != null) {
+                                        //valor += data[index].Observacao;
+                                        //valor += "\n";
+                                        //dado =
+                                        //  {
+                                        //      Id_Integracao: data[index].Id_Integracao,
+                                        //      Observacao: data[index].Observacao
+                                        //  }
+                                        //dados.push(dado);
+                                        //}
+                                        var numeroMovArr1 = $("<input>")
+                                        .attr("type", "hidden")
+                                        .attr("name", "numeroMovArr").val(numeroMovStr);
+                                        $('#myForm').append($(numeroMovArr1));
+                                    }
+                                }
+                                //if (valor != "") {
+                                //    alert(valor);
+                                //}
+                                $('#id_integracao').remove();
+                                $('#fornecedorAgendamento').remove();
+                                $('#numeroMovArr').remove();
+
+                                if (data != null) {
+                                    //if (data[0].Id_Integracao != null) {
+                                        var input = $("<input>")
+                                          .attr("type", "hidden")
+                                          .attr("name", "id_integracao").val(data[0].Id_Integracao);
+
+
+                                    //    //if (data[1].Id_Fornecedor != null) {
+                                    //    //    var fornecedor = $("<input>")
+                                    //    //     .attr("type", "hidden")
+                                    //    //     .attr("name", "fornecedorAgendamento").val(data[1].Id_Fornecedor);
+                                    //    //    $('#myForm').append($(fornecedor));
+                                    //    //}
+
+                                    //    if (data[0].Id_Integracao > 0) {
+                                          $('#myForm').append($(input));
+                                          $("#myForm").submit();
+                                    //    }
+
+                                    //}
+
+                                    @*$.ajax({
+                                        url: '@Url.Action("Index", "ImportacaoDocumento")',
+                                        content: "application/json",
+                                        traditional: true,
+                                        traditional: true,
+                                        data: { dados: numeroMovArr, id_integracao: data[0].Id_Integracao },
+                                        success: function (data) {
+
+                                        }
+                                    })*@
+                                }
+                                //}
+                                //else {
+                                //    alert(data[0].Observacao);
+                                //}
+                            },
+                            erro: function (data) {
+                                //  alert('');
+                            },
+                        }).always(function (data) {
+                            $('.btnAgendar').prop('disabled', false); // re-enable the button once ajax is finished
+                        });
+
+                    }
+                    else {
+                        alert('Selecione o(s) documento(s) para agendamento.')
+                    }
+
+
+
+
+
+                    //
+                }
+
+                //$(".drop").on('click', function (eventData) {
+                //    alert('click')
+                //});
+
+
+
+            </script>
+
+
+
+</body>
+}
+</html>

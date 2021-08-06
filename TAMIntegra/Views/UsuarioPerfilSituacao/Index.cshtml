@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Entities.UsuarioPerfilSituacao>
+
+@{
+    ViewBag.Title = "Configurações - Usuários - Perfis - Situações";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Configurações - Usuários - Perfis - Situações</h3>
+
+<p class="texto-direita"><input type="button" value="Novo registro" class="btn btn-success" onclick="AbreAdmin('Admin', 'UsuarioPerfilSituacao', '', 500, 250)" /></p>
+
+<table class="tabela-grid">
+    <thead>
+        <tr>
+            <th width="90%">
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th colspan="2" class="texto-centro">Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                    <td class="texto-centro"><img src="~/Images/Actions-document-edit-icon.png" onclick="AbreAdmin('Admin', 'UsuarioPerfilSituacao', '@item.Id', 500, 200)"></td>
+                    <td class="texto-centro"><a href="@Url.Action("Delete", "UsuarioPerfilSituacao", new { id = item.Id })"><img src="~/Images/Actions-edit-delete-icon.png" onclick="return confirm('Tem certeza que deseja excluir?')"></a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

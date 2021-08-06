@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="aeronaveVazio" xml:space="preserve">
+    <value>Selecione a aeronave.</value>
+  </data>
+  <data name="anoInvalido" xml:space="preserve">
+    <value>Ano inválido (1900 a 2200).</value>
+  </data>
+  <data name="anoVazio" xml:space="preserve">
+    <value>Preencha o campo 'Ano'.</value>
+  </data>
+  <data name="areaVazio" xml:space="preserve">
+    <value>Selecione a área.</value>
+  </data>
+  <data name="atendimentoVazio" xml:space="preserve">
+    <value>Preencha o campo 'Atendimento'.</value>
+  </data>
+  <data name="canalVazio" xml:space="preserve">
+    <value>Selecione o canal.</value>
+  </data>
+  <data name="conversaoVazio" xml:space="preserve">
+    <value>Selecione a conversão.</value>
+  </data>
+  <data name="cepInvalido" xml:space="preserve">
+    <value>'Cep' inválido (00000000).</value>
+  </data>
+  <data name="cidadeVazio" xml:space="preserve">
+    <value>Selecione o estado/cidade.</value>
+  </data>
+  <data name="classificacaoVazio" xml:space="preserve">
+    <value>Selecione a classificação.</value>
+  </data>
+  <data name="cor6" xml:space="preserve">
+    <value>O campo 'Cor' deve conter 6 letras (A-F).</value>
+  </data>
+  <data name="cpfCnpjInvalido" xml:space="preserve">
+    <value>Tamanho do campo 'CPF/CNPJ' excedido (14).</value>
+  </data>
+  <data name="dataInicioVazio" xml:space="preserve">
+    <value>Preencha o campo 'Data início'.</value>
+  </data>
+  <data name="dataTerminoVazio" xml:space="preserve">
+    <value>Preencha o campo 'Data término'.</value>
+  </data>
+  <data name="dataVazio" xml:space="preserve">
+    <value>Preencha o campo 'Data'.</value>
+  </data>
+  <data name="dddInvalido" xml:space="preserve">
+    <value>Tamanho do campo 'DDD' excedido (2).</value>
+  </data>
+  <data name="dddVazio" xml:space="preserve">
+    <value>Preencha o campo 'DDD'.</value>
+  </data>
+  <data name="ddiInvalido" xml:space="preserve">
+    <value>Tamanho do campo 'DDI' excedido (2).</value>
+  </data>
+  <data name="descricaoVazio" xml:space="preserve">
+    <value>Preencha o campo 'Descrição'.</value>
+  </data>
+  <data name="diaInicioVazio" xml:space="preserve">
+    <value>Preencha o campo 'Dia início'.</value>
+  </data>
+  <data name="diaTerminoVazio" xml:space="preserve">
+    <value>Preencha o campo 'Dia término'.</value>
+  </data>
+  <data name="email100" xml:space="preserve">
+    <value>Tamanho do campo 'E-mail' excedido (100).</value>
+  </data>
+  <data name="emailVazio" xml:space="preserve">
+    <value>Preencha o campo 'E-mail'.</value>
+  </data>
+  <data name="entidadeVazio" xml:space="preserve">
+    <value>Selecione a empresa.</value>
+  </data>
+  <data name="fabricanteVazio" xml:space="preserve">
+    <value>Selecione o fabricante.</value>
+  </data>
+  <data name="login50" xml:space="preserve">
+    <value>Tamanho do campo 'Login' excedido (50).</value>
+  </data>
+  <data name="loginVazio" xml:space="preserve">
+    <value>Preencha o campo 'Login'.</value>
+  </data>
+  <data name="logradouroInvalido" xml:space="preserve">
+    <value>Tamanho do campo 'Logradouro' excedido (200).</value>
+  </data>
+  <data name="metaVazio" xml:space="preserve">
+    <value>Preencha o campo 'Meta'.</value>
+  </data>
+  <data name="modelo100" xml:space="preserve">
+    <value>Tamanho do campo 'Modelo' excedido (100).</value>
+  </data>
+  <data name="modeloVazio" xml:space="preserve">
+    <value>Preencha o campo 'Modelo'.</value>
+  </data>
+  <data name="motorizacaoVazio" xml:space="preserve">
+    <value>Selecione a motorização.</value>
+  </data>
+  <data name="nome100" xml:space="preserve">
+    <value>Tamanho do campo 'Nome' excedido (100).</value>
+  </data>
+  <data name="nome150" xml:space="preserve">
+    <value>Tamanho do campo 'Nome' excedido (150).</value>
+  </data>
+  <data name="nome50" xml:space="preserve">
+    <value>Tamanho do campo 'Nome' excedido (50).</value>
+  </data>
+  <data name="nomeVazio" xml:space="preserve">
+    <value>Preencha o campo 'Nome'.</value>
+  </data>
+  <data name="numeroInvalido" xml:space="preserve">
+    <value>Tamanho do campo 'Número' excedido (6).</value>
+  </data>
+  <data name="numeroVazio" xml:space="preserve">
+    <value>Preencha o campo 'Número'.</value>
+  </data>
+  <data name="ordemInvalida" xml:space="preserve">
+    <value>Número de ordem inválida (1 a 99).</value>
+  </data>
+  <data name="ordemVazia" xml:space="preserve">
+    <value>Preencha o campo 'Ordem'.</value>
+  </data>
+  <data name="perfilVazio" xml:space="preserve">
+    <value>Selecione o perfil.</value>
+  </data>
+  <data name="pessoaVazio" xml:space="preserve">
+    <value>Selecione a 'Pessoa'.</value>
+  </data>
+  <data name="porcentagemFinalVazio" xml:space="preserve">
+    <value>Preencha o campo 'Porcentagem final'.</value>
+  </data>
+  <data name="porcentagemInicialVazio" xml:space="preserve">
+    <value>Preencha o campo 'Porcentagem inicial'.</value>
+  </data>
+  <data name="porcentagemInvalida" xml:space="preserve">
+    <value>Porcentagem inválida.</value>
+  </data>
+  <data name="prefixoInvalido" xml:space="preserve">
+    <value>O campo 'Prefixo' deve ter 5 letras.</value>
+  </data>
+  <data name="prefixoVazio" xml:space="preserve">
+    <value>Preencha o campo 'Prefixo'.</value>
+  </data>
+  <data name="setorVazio" xml:space="preserve">
+    <value>Selecione o setor.</value>
+  </data>
+  <data name="situacaoVazio" xml:space="preserve">
+    <value>Selecione a situação.</value>
+  </data>
+  <data name="sobrenome50" xml:space="preserve">
+    <value>Tamanho do campo 'Sobrenome' excedido (50).</value>
+  </data>
+  <data name="sobrenomeVazio" xml:space="preserve">
+    <value>Preencha o campo 'Sobrenome'.</value>
+  </data>
+  <data name="statusVazio" xml:space="preserve">
+    <value>Selecione o 'Status'.</value>
+  </data>
+  <data name="tipoMetaVazio" xml:space="preserve">
+    <value>Selecione o tipo de meta.</value>
+  </data>
+  <data name="tipoVazio" xml:space="preserve">
+    <value>Selecione o tipo.</value>
+  </data>
+  <data name="usuarioVazio" xml:space="preserve">
+    <value>Selecione o usuário.</value>
+  </data>
+  <data name="websiteInvalido" xml:space="preserve">
+    <value>Tamanho do campo 'Website' excedido (100).</value>
+  </data>
+</root>

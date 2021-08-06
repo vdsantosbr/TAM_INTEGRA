@@ -1,0 +1,806 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" />
+  <xs:element name="ConectividadeWS">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConectividadeWSResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ConectividadeWSResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadNFe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="chaveNfe" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadNFeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DownloadNFeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Login">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoginResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LoginResult" nillable="true" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaChavesNFeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaResumosNFes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="pagina" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaResumosNFesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaResumosNFesResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaClassificacoesProdutos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="chaveeletronica" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaClassificacoesProdutosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaClassificacoesProdutosResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesCTePorTipo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesCTePorTipoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaChavesCTePorTipoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLNFesResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFesPelaEntradaPorTipo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFesPelaEntradaPorTipoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLNFesPelaEntradaPorTipoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFePelaEmissao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFePelaEmissaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaChavesNFePelaEmissaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFesPelaEmissao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFesPelaEmissaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLNFesPelaEmissaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFesPelaEmissaoPorTipo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFesPelaEmissaoPorTipoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLNFesPelaEmissaoPorTipoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadCTe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="chaveCTe" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadCTeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DownloadCTeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLCTesPelaEmissao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLCTesPelaEmissaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLCTesPelaEmissaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLCTesPelaEntrada">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLCTesPelaEntradaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLCTesPelaEntradaResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLCTesPelaEmissaoPorTipo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLCTesPelaEmissaoPorTipoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLCTesPelaEmissaoPorTipoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLCTesPelaEntradaPorTipo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLCTesPelaEntradaPorTipoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLCTesPelaEntradaPorTipoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadNfse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NumeroDocumento" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DataEmissaoDocumento" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CNPJEmissorDocumento" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadNfseResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DownloadNfseResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFSePelaEmissao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFSePelaEmissaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLNFSePelaEmissaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFSePelaEmissao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFSePelaEmissaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaChavesNFSePelaEmissaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFSeAprovadasPelaEntrada">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFSeAprovadasPelaEntradaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaChavesNFSeAprovadasPelaEntradaResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFSeAprovadasPelaEmissao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFSeAprovadasPelaEmissaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaChavesNFSeAprovadasPelaEmissaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFSePelaEntrada">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaXMLNFSePelaEntradaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaXMLNFSePelaEntradaResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFSePelaEntrada">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFSePelaEntradaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaChavesNFSePelaEntradaResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RealizarManifestoNFe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" minOccurs="0" name="evento" nillable="true" type="q1:EventoReqDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RealizarManifestoNFeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" minOccurs="0" name="RealizarManifestoNFeResult" nillable="true" type="q2:EventoRespDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RealizarLoteManifestoNFe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" minOccurs="0" name="eventos" nillable="true" type="q3:ArrayOfEventoReqDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RealizarLoteManifestoNFeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" minOccurs="0" name="RealizarLoteManifestoNFeResult" nillable="true" type="q4:ArrayOfEventoRespDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornarChavesIntegracao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="companhia" type="xs:int" />
+        <xs:element minOccurs="0" name="estabelecimento" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornarChavesIntegracaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornarChavesIntegracaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornarChavesCTeIntegracao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="companhia" type="xs:int" />
+        <xs:element minOccurs="0" name="estabelecimento" type="xs:int" />
+        <xs:element minOccurs="0" name="tipo" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornarChavesCTeIntegracaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornarChavesCTeIntegracaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PesquisarStatusEventoNFe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" minOccurs="0" name="evento" nillable="true" type="q5:EventoReqDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PesquisarStatusEventoNFeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" minOccurs="0" name="PesquisarStatusEventoNFeResult" nillable="true" type="q6:EventoRespDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaNovaUrlSaS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="oldUrl" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaNovaUrlSaSResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaNovaUrlSaSResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadPdfNfe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="chaveNfe" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadPdfNfeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DownloadPdfNfeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaCapas">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="capa" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaCapasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaCapasResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFePelaDataEntradaXml">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesNFePelaDataEntradaXmlResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaChavesNFePelaDataEntradaXmlResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IntegracaoFisicaFiscal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sFileName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fileContent" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IntegracaoFisicaFiscalResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IntegracaoFisicaFiscalResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PesquisarStatusSefazNFe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="chaveNFe" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PesquisarStatusSefazNFeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="PesquisarStatusSefazNFeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadPdfCTe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="chaveCTe" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadPdfCTeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DownloadPdfCTeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaPdfCTesPelaEmissao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaPdfCTesPelaEmissaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaPdfCTesPelaEmissaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaPdfCTesPelaEntrada">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaPdfCTesPelaEntradaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaPdfCTesPelaEntradaResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadPdfNfse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NumeroDocumento" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DataEmissaoDocumento" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CNPJEmissorDocumento" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadPdfNfseResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DownloadPdfNfseResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaPdfNFSePelaEmissao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaPdfNFSePelaEmissaoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaPdfNFSePelaEmissaoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaPdfNFSePelaEntrada">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaPdfNFSePelaEntradaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaPdfNFSePelaEntradaResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesCTePelaEntradaPorTipo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="cnpj" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaDe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="horaAte" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RetornaChavesCTePelaEntradaPorTipoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RetornaChavesCTePelaEntradaPorTipoResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RealizarManifestoCTe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="senha" nillable="true" type="xs:string" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" minOccurs="0" name="evento" nillable="true" type="q7:EventoCTeReqDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RealizarManifestoCTeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" minOccurs="0" name="RealizarManifestoCTeResult" nillable="true" type="q8:EventoCTeRespDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,973 @@
+﻿@model Entities.ImportacaoFornecedor
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teste = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script src="~/scripts/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+
+    @if (TempData["Mensagem"] != null)
+    {
+        <script type="text/javascript" charset="utf-8">
+            alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+        </script>
+    }
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+    <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+    @*<script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />*@
+
+    <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+    <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+    <link href="~/content/indexCompras.css" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+    <link href="~/content/indeximportacaodocumento.css" rel="stylesheet" />
+
+
+    <link href="~/content/chosen.css" rel="stylesheet" />
+    <script src="~/scripts/chosen.jquery.js"></script>
+
+    <style>
+    
+        .panel-body {
+         padding: 0;
+}
+        .page-wrapper {
+            height: 100vh;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            /*margin: 0 auto;*/
+        }
+
+        .page-content {
+            padding-top: 0px;
+        }
+
+        h1 {
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto;
+            padding: 5px 0 0px 5px;
+        }
+
+        .grid-item {
+            padding: 0 5px 0 5px;
+            text-align: left;
+        }
+
+        }
+    </style>
+
+</head>
+@using (Html.BeginForm("Index", "ImportacaoFornecedor", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+
+    <body>
+        <input hidden id="divShow" value="@ViewBag.DivShow" />
+        <input hidden id="divHide" value="@ViewBag.DivHide" />
+        <input hidden id="fornecedorSelected" name="fornecedorSelected" />
+        <input hidden id="documentoSelected" name="documentoSelected" />
+       
+            @*<main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:0;left:21px;">
+                    <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                        <div class="stepwizard">
+                            <fieldset>
+                                <legend style="margin-bottom:0;top:0;font-size:24px;">Integração de documento para Softway</legend>
+                            </fieldset>
+                        </div>
+                    </div>
+                </main>*@
+
+            <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;z-index:100">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:10px;left:20px;position:fixed;">
+                    <div class="stepwizard">
+                        <fieldset>
+                            <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Integração de documento</legend>
+                        </fieldset>
+                    </div>
+                </div>
+
+            </main>
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="padding-top:0;">
+                <div class="container-fluid" style="padding-top:0">
+                    <div id="registros">
+                        <div id="divPedidosSelecionados" style="height:100vh;position:absolute;top:60px;width:97%;padding-left:10px">
+
+                            <div class="panel with-nav-tabs panel-default" style="margin-bottom:0">
+                                <div class="panel-heading" style="background-color:lightgray">
+                                    Filtro - Fornecedor
+                                </div>
+                                <div class="panel-body" style="padding-bottom:0">
+                                    <div class="grid-container">                                 
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Código</label>
+                                            @Html.Editor("codigo", new { htmlAttributes = new { @style = "width:200px;height:26px", @class = "form-control", @maxlengh = "25" } })
+                                        </div>
+                                            <div class="grid-item">
+                                                <label class="form-negrito">Nome Fantasia</label>
+                                                @Html.Editor("nomeFantasia", new { htmlAttributes = new { @style = "width:200px;height:26px",  @class = "form-control", @maxlengh = "100" } })
+                                            </div>
+                                        <div class="grid-item">
+
+                                            <button class="btn btn-primary pull-right" style="margin-bottom:15px;margin-top:20px;margin-left:10px;margin-right:10px;height:27px" onclick="forn()" type="button" id="btnFiltro" name="Filtrar">Exibir</button>
+
+                                        </div>
+
+                                    <div class="grid-container">
+
+                                    </div>
+
+                                </div>
+                               </div>
+                                </div>
+                                <br />
+                                        <div class="panel with-nav-tabs panel-default">
+                                            <div class="panel-heading" style="background-color:lightgray">
+                                                Fornecedor
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped" id="tblFornecedor">
+                                                        <thead>
+                                                        <tr>
+                                                            <th style="width:100px">CODCFO</th>
+                                                            <th style="width:140px">País</th>
+                                                            <th style="width:390px;text-align:left">Nome Fantasia</th>
+                                                            <th>CGCCFO</th>
+                                                            <th>Insc. Estadual</th>
+                                                            <th>Insc. Municipal</th>
+                                                            <th>Criação</th>
+                                                            <th>Alteração</th>
+                                                        </tr>
+                                                            </thead>
+                                                        <tbody>
+
+                                                            @if (Model != null)
+                                                            {
+                                                                if (Model.lstDocumentos != null)
+                                                                {
+                                                                    foreach (Entities.ImportacaoFornecedor wk in Model.lstDocumentos)
+                                                                    {
+
+                                                                            <tr>
+                                                                                @*<td><input type="checkbox" class="idMovCFO" name="idMovArr" value="@wk.idcfo+@wk.idMov" />@wk.Documento</td>*@
+                                                                                <td hidden>@wk.Documento</td>
+                                                                                <td style="width:100px"><input type="checkbox" class="idMovCFO" name="idMovArr" value="@wk.codcfo.Trim()" /> @wk.codcfo.Trim()</td>
+                                                                                <td style="width:140px">@wk.Pais</td>
+                                                                                <td hidden>@wk.idcfo</td>
+                                                                                <td hidden>'idCFO'+@wk.idMov,@wk.idcfo</td>
+                                                                                <td style="text-align:left;width:390px">@wk.NomeFantasia</td>
+                                                                                <td>@wk.CGCCFO</td>
+                                                                                <td>@wk.INSCRESTADUAL</td>
+                                                                                <td>@wk.INSCRMUNICIPAL</td>
+                                                                                @if (@wk.DATACRIACAO != null)
+                                                                                {
+                                                                                    <td>@wk.DATACRIACAO.Value.ToString("dd/MM/yyyy")</td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td></td>
+                                                                                }
+                                                                                
+                                                                                @if (wk.DATAULTALTERACAO != null)
+                                                                                {
+                                                                                    <td>@wk.DATAULTALTERACAO.Value.ToString("dd/MM/yyyy")</td>
+                                                                                } 
+                                                                                <td hidden>@wk.idMov,@wk.idcfo</td>
+                                                                            </tr>
+
+                                                                            @*<button type="button" class="btn btn-primary pull-right" onclick="if(confirm('Este procedimento libera o pedido para o fornecedor. Deseja continuar?')) agendarIntegracao();">Agendar integração</button>*@
+ 
+                                                                    }
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                            </table>
+                                                            @if (Model != null)
+                                                            {
+                                                                if (Model.lstDocumentos != null)
+                                                                {
+                                                                    //foreach (Entities.ImportacaoFornecedor wk in Model.lstDocumentos)
+                                                                    //{
+                                                                    <button type="button" id="btnAgendar" class="btn btn-primary pull-right" style="margin-bottom: 10px" onclick="if(confirm('Este procedimento libera o pedido para o fornecedor. Deseja continuar?')) agendarIntegracao();">Agendar integração</button>
+                                                                    //}
+                                                                }
+                                                            }
+
+                                                </div>
+                                            </div>
+                                    </div>
+
+                        </div>
+                    </div>
+
+                    <div id="itensDocumento">
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                @if (Model != null)
+                                {
+                                    if (Model.lstItensDocumento != null)
+                                    {
+                                        foreach (Entities.ImportacaoFornecedor wk in Model.lstItensDocumento)
+                                        {
+                                            <span>Documento </span>@wk.Documento
+
+                                        }
+                                    }
+                                }
+
+                            </div>
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-striped" id="tabelaPedido">
+                                            <thead>
+                                                <tr>
+                                                    <th>Filial</th>
+                                                    <th>Data Emissão</th>
+                                                    <th>Status</th>
+                                                    <th>Moeda</th>
+                                                    <th>Valor</th>
+                                                    <th>Condição pagamento</th>
+                                                    <th>Fornecedor</th>
+                                                    <th>Responsável</th>
+                                                    <th>Processo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model != null)
+                                                {
+                                                    if (Model.lstItensDocumento != null)
+                                                    {
+                                                        foreach (Entities.ImportacaoFornecedor wk in Model.lstItensDocumento)
+                                                        {
+                                                            <tr>
+                                                                @*<td><a class="btn modalBTN" href="#">@item.NUMEROMOV</a></td>*@
+                                                                @*<td><a class="btn modalBTN" href="#"></a></td>*@
+                                                                @*<td><a href="#" data-toggle="modal" data-target="#my-modal">@ViewBag.NumeroMov</a></td>*@
+                                                                @*<td><a href="#" data-toggle="modal" data-target="#my-modal"></a></td>*@
+                                                                <td>@wk.Filial</td>
+                                                                @if (@wk.DataEmissao != null)
+                                                                {
+                                                                    <td>@wk.DataEmissao.Value.ToString("dd/MM/yyyy")</td>
+                                                                }
+                                                                <td>@wk.Status</td>
+                                                                <td>@wk.Moeda</td>
+                                                                <td style="text-align:right">@string.Format("{0:#,##0.00#}", @wk.Valor)</td>
+                                                                <td>@wk.Condicao_Pagamento</td>
+                                                                <td>@wk.Fornecedor</td>
+                                                                <td>@wk.Comprador</td>
+                                                                <td></td>
+                                                                <td hidden id="idMovItem">@wk.idMov</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Itens
+                            </div>
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-striped" id="tabelaItens">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nº</th>
+                                                    <th>PN</th>
+                                                    <th>Quantidade</th>
+                                                    <th>Serial</th>
+                                                    <th>Chave</th>
+                                                    <th>Adição</th>
+                                                    <th>Item adição</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model != null)
+                                                {
+                                                    if (Model.lstItens != null)
+                                                    {
+                                                        foreach (Entities.ImportacaoFornecedor wk in Model.lstItens)
+                                                        {
+                                                            <tr>
+                                                                <td style="text-align:center" hidden><input type="checkbox" id="idMov" name="idMovArr" value="@wk.idcfo" />@wk.Idprd</td>
+                                                                <td style="text-align:center" hidden>@wk.idcfo</td>
+                                                                <td style="text-align:center" hidden>@wk.NSEQITMMOV</td>
+                                                                <td style="text-align:center">@wk.NUMEROSEQUENCIAL</td>
+                                                                <td style="text-align:center">@wk.NUMNOFABRIC</td>
+                                                                <td style="text-align:center">@string.Format("{0:#,##}", @wk.Quantidade)</td>
+                                                                <td>@wk.SerialNumber</td>
+                                                                @if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                {
+                                                                    <td style="text-align:center" id="chave" contenteditable='true'>@wk.Chave</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td style="text-align:center">@wk.Chave</td>
+                                                                }
+
+                                                                <td hidden>@wk.NF_NUMNF</td>
+                                                                <td hidden>@wk.NF_ITE_NUMITE</td>
+                                                                @if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                {
+                                                                    <td style="text-align:center" id="NF_ITE_NM_ADICAO" contenteditable='true'>@wk.NF_ITE_NM_ADICAO</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td style="text-align:center">@wk.NF_ITE_NM_ADICAO</td>
+                                                                }
+                                                                @if (wk.PERMITE_EDICAO.Equals("Sim"))
+                                                                {
+                                                                    <td style="text-align:center" id="NF_ITE_NM_ITEM_ADICAO" contenteditable='true'>@wk.NF_ITE_NM_ITEM_ADICAO</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td style="text-align:center">@wk.NF_ITE_NM_ITEM_ADICAO</td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-toolbar">
+                            <button type="button" class="btn btn-primary pull-right" data-dismiss="modal" onclick="Atualiza()">Voltar</button>
+                            @if (Model != null)
+                            {
+                                if (Model.lstItensDocumento != null)
+                                {
+                                    foreach (Entities.ImportacaoFornecedor wk in Model.lstItensDocumento)
+                                    {
+                                        <button type="button" class="btn btn-primary pull-right btnAgendar" onclick="if(confirm('Este procedimento libera o pedido @wk.Documento para o fornecedor. Deseja continuar?')) agendarIntegracao();">Agendar integração</button>
+                                    }
+                                }
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="inserirConta" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered" style="height:91%">
+                            <div class="modal-content" style="height:100%">
+                                <div class="modal-header text-center" style="padding:5px">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                                </div>
+                                <div class="modal-body" style="padding:0 15px 0 15px">
+
+                                    <div class="panel with-nav-tabs panel-default">
+                                        <div class="panel-heading" style="background-color:lightgray">
+                                            Pedidos selecionados
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="tab-content">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped" id="tabelaPedido">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Filial</th>
+                                                                <th>Data</th>
+                                                                <th>Status</th>
+                                                                <th>Valor</th>
+                                                                <th>Fornecedor</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Model != null)
+                                                            {
+                                                                if (Model.lstItensDocumento != null)
+                                                                {
+                                                                    foreach (Entities.ImportacaoFornecedor wk in Model.lstItensDocumento)
+                                                                    {
+                                                                        <tr>
+                                                                            @*<td><a class="btn modalBTN" href="#">@item.NUMEROMOV</a></td>*@
+                                                                            @*<td><a href="#" data-toggle="modal" data-target="#my-modal">@ViewBag.NumeroMov</a></td>*@
+                                                                            <td>@wk.Filial</td>
+                                                                            <td id="dataModal"></td>
+                                                                            <td id="statusModal"></td>
+                                                                            <td id="valorModal"></td>
+                                                                            <td id="fornecedorModal"></td>
+                                                                        </tr>
+                                                                    }
+                                                                    <tr><td hidden id="lstItensDocumento">@Model.lstItensDocumento</td></tr>                                                                 }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel with-nav-tabs panel-default">
+                                        <div class="panel-heading" style="background-color:lightgray">
+                                            Itens
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="tab-content">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nº</th>
+                                                                <th>Produto</th>
+                                                                <th>Quantidade</th>
+                                                                <th>Serial</th>
+                                                                <th>Chave PO</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="numeroItem"></td>
+                                                                <td id="produtoItem"></td>
+                                                                <td id="quantidadeItem"></td>
+                                                                <td id="serialItem"></td>
+                                                                <td id="chavePOItem"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-toolbar">
+                                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualiza()">Fechar</button>
+                                    <button type="button" class="btn btn-primary pull-right" onclick="salvarPedidoCompra()">Agendar integração</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div>
+
+
+                <div class="modal fade" id="inserirConta2" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content" style="height:100%">
+                            @*<div class="modal-header text-center" style="padding:5px">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                            </div>*@
+                            <div class="modal-body" style="padding:20px 15px 0 15px">
+
+                                <div class="panel with-nav-tabs panel-default">
+                                    <div class="panel-heading" style="background-color:lightgray">
+                                        NOVA CONTA <span class="contaModalSpan"></span>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="tab-content">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-striped" id="tabelaPedido">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Conta</th>
+                                                            <th>Descrição</th>
+                                                            <th>Situação</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><input id="contaAdd" class="form-control" maxlength="25"></td>
+                                                            <td><input id="descricaoAdd" class="form-control" maxlength="250" /></td>
+                                                            <td>
+                                                                <select id="situacaoAdd" class="form-control">
+                                                                    <option value="Ativo">Ativo</option>
+                                                                    <option value="Inativo">Inativo</option>
+                                                                </select>
+                                                            </td>
+                                                            <td hidden id="id_Conta"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="btn-toolbar">
+                                                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualizar()">Fechar</button>
+                                                    <button type="button" class="btn btn-primary pull-right" onclick="inserirConta()">Salvar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </main>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        <script>
+        $(function () {
+            $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+            var divShow = $('#divShow').val();
+            $(divShow).show();
+
+            var divHide = $('#divHide').val();
+            $(divHide).hide();
+        });
+
+        function isValidDate(dateString, campo) {
+
+            var regEx = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+            if (regEx.test(dateString) == true)
+            {
+                $("#btnFiltro").attr("disabled", false)
+                $(campo).text('');
+            }
+            else
+            {
+
+                if (dateString.trim().length > 0)
+                {
+                    $(campo).text("Data inválida.");
+                    $("#btnFiltro").attr("disabled", false)
+                }
+
+              $("#btnFiltro").attr("disabled", true)
+            }
+
+            //var temp = date.split('/');
+            //var d = new Date(temp[1] + '/' + temp[0] + '/' + temp[2]);
+            //alert(temp[2]);
+            //var result = (d && (d.getMonth() + 1) == temp[1] && d.getDate() == Number(temp[0]) && d.getFullYear() == Number(temp[2]));
+            //alert(d.getFullYear());
+            //if (result == false) {
+            //    $(campo).text("Data inválida.");
+            //    $("#btnFiltro").attr("disabled", true)
+            //}
+            //else {
+            //    $("#btnFiltro").attr("disabled", false)
+            //    $(campo).text('');
+            //}
+        }
+        </script>
+
+        <script type="text/javascript">
+        $('a.modalpedidosEnviar').click(function () {
+            $('#poRmModal').modal({
+                show: true,
+                closeOnEscape: true,
+                backdrop: 'static',
+                keyboard: false
+            })
+        });
+
+        function teste(){
+            alert("teste");
+        }
+
+        function populaModal(documento, filial, data, status, valor, fornecedor, descricaoTMV, idMov) {
+                    alert(documento);
+                    $('#documentoModal').html(documento);
+                    $('#filialModal').html(filial);
+                    $('#dataModal').html(data);
+                    $('#statusModal').html(status);
+                    $('#valorModal').html(valor);
+                    $('#fornecedorModal').html(fornecedor);
+                    $('#descricaoTMVModal').html(descricaoTMV);
+
+         }
+
+        function GetFNomeFornecedor(nome)
+        {
+            $('#fornecedorSelected').val($("#fornecedorNome option:selected").text());
+        }
+
+        function GetDocumento(nome) {
+            $('#documentoSelected').val($("#documento option:selected").text());
+        }
+
+
+        function PreencherModal(documento, filial, data, status, valor, fornecedor, descricaoTMV, idMov, nomeTMV) {
+        //$('a.modalBTN').click(function () {
+            $('#tabelaItens tr td').remove();
+            var chave;
+            var produto = "";
+            var numero;
+            var quantidade;
+            var serial = "";
+
+                    //$('#my-modal').modal({
+                    //    show: true,
+                    //    closeOnEscape: true,
+                    //    backdrop: 'static',
+                    //    keyboard: false
+                    //})
+
+
+
+            $.ajax({
+                type: 'GET',
+                url: "ImportacaoFornecedor/ddlTransType_Change",
+                data: { 'idMov': idMov },
+                dataType: 'json',
+                success: function (data) {
+                    //alert(JSON.stringify(data));
+                    $('#my-modal').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+
+
+                    $('#documentoModal').html(documento);
+                    $('#filialModal').html(filial);
+                    $('#dataModal').html(data);
+                    $('#statusModal').html(status);
+                    $('#valorModal').html(valor);
+                    $('#fornecedorModal').html(fornecedor);
+                    $('.descricaoTMVModal').html(nomeTMV);
+
+                    var tr;
+
+                    $.each(data, function (index, value) {
+                        chave = value.Chave;
+                        numero = value.Numero;
+                        quantidade = value.Quantidade;
+                        serial = value.Serial;
+                        produto = value.Produto;
+
+                        console.log(produto);
+                      tr =
+                      '<tr>' +
+                      '<td>' + numero + '</td>' +
+                      '<td>' + produto + '</td>' +
+                      '<td>' + quantidade + '</td>' +
+                      '<td>' + serial + '</td>' +
+                      '<td>' + chave +'</td>' +
+                      '</tr>';
+
+                      $(tr).appendTo('#tabelaItens');
+
+
+                    })
+
+
+
+
+                    //$('#grid').childs('tr').append(tr);
+                    //$('#gridEmail').append(tr);
+
+                },
+                error: function (e) {
+                    alert("Error:Unable to load data from server");
+                }
+            });
+
+
+        };
+
+
+
+        </script>
+        <script>
+
+            function fornecedor(){
+                alert('');
+            }
+
+            $("#codigo").keyup(function () {          
+                var codigo = $('#codigo').val();
+                var nomeFantasia = $('#nomeFantasia').val();
+
+                if (codigo.length > 0 || nomeFantasia > 0) {
+                    $("#btnFiltro").attr("disabled", false)
+                }
+                else {
+                    //$("#btnFiltro").attr("disabled", true)
+                }
+            })
+
+            $("#nomeFantasia").keyup(function () {
+                var nomeFantasia = $('#nomeFantasia').val();
+                var codigo = $('#codigo').val();
+
+                if (nomeFantasia.length > 0 || codigo > 0) {
+                    $("#btnFiltro").attr("disabled", false)
+                }
+                else {
+                    //$("#btnFiltro").attr("disabled", true)
+                }
+            })
+
+       $("#btnFiltro").click(function () {
+
+           var codigo = $('#codigo').val();
+           var nomeFantasia = $('#nomeFantasia').val();
+           //var movimento = $('#movimento').val();
+           //var dtInicio = $('#strDataInicio').val();
+           //var dtFim = $('#strDataFim').val();
+           //var situacao = $('#situacao').val();
+
+           //if ((fornecedor == "" || fornecedor == null) || (documento == "" || documento == null))
+           //{
+               //if ((fornecedor == "" || fornecedor == null)) {
+               //    $('#divErroFornecedor').text('Selecione o fornecedor.');
+               //}
+
+               //if ((documento == "" || documento == null)) {
+               //    $('#divErroDocumento').text('Selecione o processo/documento.');
+               //}
+               //if ((movimento == "" || movimento == null)) {
+               //    $('#divErroMovimento').text('Selecione o tipo do movimento.');
+               //}
+               //if ((dtInicio == "" || dtInicio == null)) {
+               //    $('#dtIniciDivErro').text('Selecione a data início.');
+               //}
+               //if ((dtFim == "" || dtFim == null)) {
+               //    $('#dtFimDivErro').text('Selecione a data fim.');
+               //}
+               //if ((situacao == "" || situacao == null)) {
+               //    $('#divErroSituacao').text('Selecione a situação.');
+               //}
+           if ((codigo == "" || codigo == null) & (nomeFantasia == "" || nomeFantasia == null))
+           {
+                   alert("Digite o código do movimento e/ou nome fantasia");
+               //}
+
+               //if ((nomeFantasia == "" || nomeFantasia == null)) {
+               //    $('#divErroNomeFantasia').text('Selecione o processo/documento.');
+               //}
+
+               $("#btnFiltro").attr("disabled", true)
+           }
+           else
+           {
+               $("#btnFiltro").attr("disabled", false)
+               document.getElementById("myForm").submit();
+           }
+       });
+
+       $("#fornecedorNome").change(function () {
+           var fornecedor = $('#fornecedorNome').val();
+           var documento = $('#documento').val();
+
+           if ($('#fornecedorNome').val() != "" & $('#fornecedorNome').val() != null) {
+               $('#divErroFornecedor').text('');
+           }
+           else
+           {
+               $('#documento').val('');
+               $('#movimento').val('');
+
+           }
+       });
+
+       $("#documento").change(function () {
+           var documento = $('#documento').val();
+
+           if ($('#documento').val() != "" & $('#documento').val() != null) {
+               $('#divErroDocumento').text('');
+           }
+           else
+           {
+               $('#movimento').val('');
+           }
+       });
+
+       $("#movimento").change(function () {
+           var documento = $('#movimento').val();
+
+           if ($('#movimento').val() != "") {
+               $('#divErroMovimento').text('');
+           }
+           $("#btnFiltro").attr("disabled", false)
+       });
+
+
+       $('a.modalBTN').click(function () {
+           $('#my-modal').modal({
+               show: true,
+               closeOnEscape: true,
+               backdrop: 'static',
+               keyboard: false
+           })
+       });
+
+       function abrirDocumento(idMov) {
+           var fornecedor = $("#fornecedorNome option:selected").val();
+           var fornecedor2 = $("#fornecedorNome").val();
+           var movimento = $("#documento option:selected").text();
+
+           $('#registros').hide();
+           $.ajax({
+               url: '@Url.Action("abrirDocumento", "ImportacaoFornecedor")',
+
+               data: { idMov: idMov, id_fornecedor: fornecedor , movimento : movimento},
+               success: function (data) {
+                   $('#registros').hide();
+
+                   //$("#divRegistros").load(location.href + " #divRegistros>*", "");
+                   //$('#divRegistros').show();
+                   var input = $("<input>")
+                   .attr("type", "hidden")
+                   .attr("name", "divShow2").val("#itensDocumento");
+                   $('#myForm').append($(input));
+
+                   $("#myForm").submit();
+               }
+           });
+       }
+
+
+       //$('a.inserirContaModal').click(function () {
+       //    $('#inserirConta').modal({
+       //        show: true,
+       //        closeOnEscape: true,
+       //        backdrop: 'static',
+       //        keyboard: false
+       //    })
+       //});
+            function agendarIntegracao()
+            {
+                $('#btnAgendar').attr('disabled', true);
+                var linhas = "";
+                 var data2 = [];
+                $('#tblFornecedor tr input[type="checkbox"]:checked').each(function () {
+                var $row = $(this).closest('tr');
+                //used :not(:first-child) to skip first element (the checkbox td)
+                $('td', $row).each(function (i) {
+                    linhas = $(this).text();
+                    //alert(linhas.indexOf('id'));
+                    if (linhas.indexOf('idCFO') >= 0)
+                    {
+                        data2.push(linhas);
+                    }
+
+                    //data2.push(linhas);
+                })
+                 });
+
+                var idMov = 0;
+                var idCFO = "";
+                var fornecedor = $("#fornecedorNome option:selected").val();
+                var movimento = $("#documento").val();
+
+
+                //var table = $('#tblFornecedor');
+                //var data2 = [];
+
+                //table.find('tr input[type="checkbox"]:checked').each(function (i, el) {
+                //    // no thead
+                //    if( i != 0){
+                //        var $tds = $(this).find('td');
+                //        var row = [];
+                //        $tds.each(function (i, el){
+                //            row.push($(this).text());
+                //        });
+                //        data2.push(row);
+                //    }
+
+                //});
+                //alert(data2);
+                jQuery.ajaxSettings.traditional = true;
+
+                $.ajax({
+                    url: '@Url.Action("agendarIntegracao", "ImportacaoFornecedor")',
+                    //dataType: "json",
+                    contentType: 'json',
+                    data: { dados: data2, idCFO: idCFO, id_fornecedor: fornecedor, movimento: movimento },
+                    success: function (data) {
+                        $('#id_integracao').remove();
+                        var input = $("<input>")
+                          .attr("type", "hidden")
+                          .attr("name", "id_integracao").val(data);
+
+                        $('#myForm').append($(input));
+
+                        $("#myForm").submit();
+                    },
+                    erro: function (data) {
+                      //  alert('');
+                    },
+                });
+                //
+            }
+            function Atualiza()
+            {
+                $('#registros').show();
+                $('#itensDocumento').hide();
+            }
+
+
+            $('.menuImportacao .sidebar-submenu').addClass("active");
+            $('.menuImportacao .sidebar-submenu').toggle();
+        </script>
+
+
+
+    </body>
+}
+</html>

@@ -1,0 +1,449 @@
+﻿@model Entities.IntegracaoCambioSys
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var cont = 1;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+    <style>
+        .tableFixHead {
+            /*overflow: auto;*/
+            height: 100px;
+            width: 100%;
+        }
+
+            .tableFixHead table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            .tableFixHead th,
+            .tableFixHead td {
+                padding: 8px 16px;
+            }
+
+
+            /*td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            /*td:nth-child(2), th:nth-child(2) {
+            position: sticky;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            .tableFixHead th {
+                position: sticky;
+                top: 0;
+                background: #f9f9f9;
+                z-index: 2;
+            }
+
+        th:first-child, th:nth-child(2) {
+            z-index: 3;
+        }
+
+        .sticky-col {
+            position: sticky;
+            position: -webkit-sticky;
+            background-color: white;
+        }
+
+        .first-col {
+            width: 120px;
+            min-width: 100px;
+            max-width: 340px;
+            left: 0px;
+        }
+
+        .second-col {
+            width: 150px;
+            min-width: 20px;
+            max-width: 340px;
+            left: 100px;
+        }
+
+        .third-col {
+            width: 50px;
+            min-width: 110px;
+            max-width: 340px;
+            left: 190px;
+        }
+
+        .fourth-col {
+            width: 100px;
+            min-width: 80px;
+            max-width: 340px;
+            left: 280px;
+        }
+
+        input[type=checkbox], input[type=radio] {
+            /* margin: 4px 0 0; */
+            margin-top: 1px\9;
+            line-height: normal;
+        }
+
+        @@media screen and (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: 80px 60px 150px auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-container2 {
+                display: grid;
+                grid-template-columns: auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .page-wrapper {
+                height: 100vh;
+            }
+        }
+
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            /*border-width: 5px;
+            border-color: #3A2303 !important;*/
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+        /*.page-content {
+            height: 100vh;
+        }*/
+        body {
+            overflow: auto;
+        }
+
+        .fontErro {
+            color: red;
+        }
+    </style>
+</head>
+@using (Html.BeginForm("Index", "FechamentoContabil", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+    <body>
+        <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;width:97%;z-index:100;">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:14px;position:relative;">
+                <fieldset>
+                    <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Variação Cambial - Fechamento Contábil</legend>
+                </fieldset>
+            </div>
+        </main>
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content">
+                <div class="container-fluid" style="padding-top:50px;padding-left:30px">
+                    <div id="divPedidosSelecionados">
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                <div style="display:flex;justify-content:space-between">
+                                    <div style="vertical-align:middle;padding:5px 10px"><span>Fechamento Contábil</span></div>
+                                </div>
+
+                            </div>
+                            <div class="panel-body" style="padding: 5px !important;">
+                                <div style="display:flex;justify-content:space-between">
+                                    <div>
+                                        <table class="" id="tblItens" style="margin-bottom:0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="" style="text-align:left;min-width: 70px;padding-left: 20px !important;">ANO</th>
+                                                    <th class="" style="text-align:center;min-width: 110px">MÊS</th>
+                                                    <th class="" style="text-align:center;min-width:125px">FECHAMENTO</th>
+                                                    <th class="" style="text-align:center;min-width:70px">DT. CONTABILIZAÇÃO</th>
+                                                    <th style="text-align:center;min-width:120px">SITUAÇÃO</th>
+                                                    <th style="text-align:center;min-width:125px">RESPONSÁVEL</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model != null)
+                                                {
+                                                    if (Model.lstGrid != null)
+                                                    {
+                                                        foreach (Entities.IntegracaoCambioSys item in Model.lstGrid)
+                                                        {
+                                                            <tr>
+                                                                <td style="padding-left: 20px !important;">@item.Ano</td>
+                                                                <td style="text-align:center;">@item.Mes</td>
+                                                                <td style="text-align:center">@item.Fechamento</td>
+                                                                <td style="text-align:center">@item.Dt_contabilizacao.ToString("dd/MM/yyyy")</td>
+                                                                <td style="text-align:center">@item.Situacao</td>
+                                                                <td style="text-align:center">@item.Responsavel</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div style="padding-top: 5px;">
+                                        <button class="btn btn-sm btn-primary" style="padding:2px 5px">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br />
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                <div style="display:flex;justify-content:space-between">
+                                    <div style="vertical-align:middle;padding:5px 10px"><span>Registro de Integração de Variação Cambial do Cambio.Sys</span></div>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 0;margin-bottom:0">
+                                <table class="table table-striped" id="tblItens" style="margin-bottom:0">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th class="" style="text-align:center;min-width: 70px;;">ID INTEGRAÇÃO</th>
+                                            <th class="" style="text-align:center;min-width: 110px">DATA</th>
+                                            <th class="" style="text-align:left;min-width:100px;width: 270px;">NOME</th>
+                                            <th class="" style="text-align:center;min-width:70px">DT. TRANSAÇÃO</th>
+                                            <th style="text-align:center;min-width:120px">QTD. REGISTROS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstRegistroIntegracao != null)
+                                            {
+                                                foreach (Entities.IntegracaoCambioSys item in Model.lstRegistroIntegracao)
+                                                {
+                                                    <tr>
+                                                        <td><input type="radio" id="radio" name="radio"/></td>
+                                                        <td style="text-align:center">@item.Id_integracao</td>
+                                                        <td style="text-align:center;">@item.Data.ToString("dd/MM/yyyy")</td>
+                                                        <td style="text-align:left">@item.Nome</td>
+                                                        <td style="text-align:center">@item.Dt_transacao.ToString("dd/MM/yyyy")</td>
+                                                        <td style="text-align:center">@item.Qtd_registros</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center" style="padding:5px">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        @*<h4 style="text-align:left">Alterar Perfil: <span id="titulo"></span></h4>*@
+                        <h4 style="text-align:left">Registro de Fechamento Contábil</h4>
+                    </div>
+                    <div class="modal-body" style="padding-top:0">
+                        <form id="formAlterarPerfil">
+                            <div class="form-group col-md-4" style="padding-top: 10px;">
+                                <label for="m_fechamento">Fechamento</label>
+                                <input type="text" class="form-control" id="m_fechamento">
+                            </div>
+                            <div class="form-group col-md-4" style="padding-top: 10px;">
+                                <label for="n_nome">Dt. Contabilização</label>
+                                <input type="text" class="form-control datepickerInput" id="modal_dt_contabil">
+
+                                @*@Html.Editor("modal_dt_contabilizacao", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", @onblur = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })*@
+                                <div hidden id="erroNomeUpdate">Preencha este campo</div>
+                            </div>
+                            <div class="form-group col-md-4" style="padding-top: 10px;">
+                                <label for="m_situacao">Situação da Contabilização</label>
+                                <select id="m_situacao" class="form-control">
+                                    <option value="A">Aberto</option>
+                                    <option value="F">Fechado </option>
+                                </select>
+                                @*<input type="email" class="form-control" id="n_administrador">*@
+                            </div>
+                            <div class="form-group col-md-12" style="padding-top: 10px;">
+                                <label for="observacao">Observação</label><br />
+                                <textarea id="observacao" style="width:100%"></textarea>
+                            </div>
+                            <div class="form-group col-md-12" style="padding-top: 10px;">
+                                <div style="text-align:right">
+                                    <button class="btn btn-sm btn-primary" id="salvarUsuario" onclick="salvarUsuario()">Salvar</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+        <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+        <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+        <link href="~/content/indexCompras.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+        <link href="~/content/indeximportacaodocumento.css" rel="stylesheet" />
+
+
+        <link href="~/content/chosen.css" rel="stylesheet" />
+        <script src="~/scripts/chosen.jquery.js"></script>
+
+        <script>
+
+            $(function () {
+                $(".datepickerInput").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+                $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val(); $("#checkin").datepicker();
+                $("#modal_dt_contabil").datepicker({ dateFormat: 'dd/mm/yy' }).val(); $("#checkin").datepicker();
+            });
+
+            $("#btnExibir").click(function () {
+                let ano = $("ano").val();
+
+                if (ano != "" || ano != null) {
+                    var filtrar = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "exibir").val("filtrar");
+                    $('#myForm').append($(filtrar));
+                    document.getElementById("myForm").submit();
+                }
+                else {
+                    $("anoErroAno").val("Digite o ano.");
+                }
+
+            });
+            function updateModal(fechamento, dt_contabil, situacao) {
+                if (fechamento != "" & fechamento != 'undefined') {
+                    $("#m_situacao option[value='-- Selecione --']").remove();
+                    $('#modal_dt_contabil').val(dt_contabil);
+                    $('#m_fechamento').val(fechamento);
+                    $('#m_situacao option:contains(' + situacao + ')').prop({ selected: true });
+                }
+                else {
+                    $("#m_situacao option[value='-- Selecione --']").remove();
+                    $("#m_situacao").prepend("<option value='-- Selecione --' selected='selected'>-- Selecione --</option>");
+                }
+
+               $('#modalUpdate').modal({
+                   show: true,
+                   closeOnEscape: true,
+                   backdrop: 'static',
+                   keyboard: false
+               })
+            }
+            $('#modalUpdatel').on('hidden.bs.modal', function (e) {
+                $("#m_situacao option[value='-- Selecione --']").remove();
+            })
+        </script>
+    </body>
+}
+</html>

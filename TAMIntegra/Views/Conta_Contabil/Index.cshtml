@@ -1,0 +1,516 @@
+﻿@model Entities.ContaContabil
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var cont = 1;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+    <style>
+                .page-wrapper .page-content {
+    overflow: hidden;
+}
+        .tableFixHead {
+            /*overflow: auto;*/
+            height: 100px;
+            width: 100%;
+        }
+
+            .tableFixHead table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            .tableFixHead th,
+            .tableFixHead td {
+                padding: 8px 16px;
+            }
+
+
+            /*td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            /*td:nth-child(2), th:nth-child(2) {
+            position: sticky;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            .tableFixHead th {
+                position: sticky;
+                top: 0;
+                background: #f9f9f9;
+                z-index: 2;
+            }
+
+        th:first-child, th:nth-child(2) {
+            z-index: 3;
+        }
+
+        .sticky-col {
+            position: sticky;
+            position: -webkit-sticky;
+            background-color: white;
+        }
+
+        .first-col {
+            width: 120px;
+            min-width: 100px;
+            max-width: 340px;
+            left: 0px;
+        }
+
+        .second-col {
+            width: 150px;
+            min-width: 20px;
+            max-width: 340px;
+            left: 100px;
+        }
+
+        .third-col {
+            width: 50px;
+            min-width: 110px;
+            max-width: 340px;
+            left: 190px;
+        }
+
+        .fourth-col {
+            width: 100px;
+            min-width: 80px;
+            max-width: 340px;
+            left: 280px;
+        }
+
+        input[type=checkbox], input[type=radio] {
+            /* margin: 4px 0 0; */
+            margin-top: 1px\9;
+            line-height: normal;
+        }
+
+        @@media screen and (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: 80px 60px 150px auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-container2 {
+                display: grid;
+                grid-template-columns: auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .page-wrapper {
+                height: 100vh;
+            }
+        }
+
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            /*border-width: 5px;
+            border-color: #3A2303 !important;*/
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+        /*.page-content {
+            height: 100vh;
+        }*/
+        body {
+            overflow: auto;
+        }
+
+        .erroInput {
+            border: 1px solid orangered !important;
+        }
+
+        .erroDiv {
+            color: red !important;
+        }
+    </style>
+</head>
+@using (Html.BeginForm("Index", "Conta_Contabil", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+    <body>
+        <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;width:97%;z-index:100;">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:14px;position:relative;">
+                <fieldset>
+                    <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Variação Cambial - Conta Contábil</legend>
+                </fieldset>
+            </div>
+        </main>
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content">
+                <div class="container-fluid" style="padding-top:50px;padding-left:30px">
+                    <div id="divPedidosSelecionados">
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                <div style="display:flex;justify-content:space-between">
+                                    <div style="vertical-align:middle;padding:5px 10px"><span>Conta Contábil</span></div>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="padding: 5px !important">
+                                <div style="display:flex;justify-content:flex-start;column-gap:50px">
+                                    <div style="width:60%">
+                                        <table class="" id="tblItens" style="margin-bottom:0;white-space:nowrap" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="" style="text-align:center;width: 10px;">ID</th>
+                                                    <th class="" style="text-align:center;width: 50px">QUALIFICACAO</th>
+                                                    <th class="" style="text-align:center;width:70px">TIPO VARIAÇÃO</th>
+                                                    <th style="text-align:center;width:50px">TIPO CONTA CONTÁBIL</th>
+                                                    <th style="text-align:center;width:40px">CONTA CONTÁBIL</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                 <tr>
+                                                    <td style="text-align:center"><span id="id"></span></td>
+                                                    <td style="text-align:center"><span id="qualificacao"></span></td>
+                                                    <td style="text-align:center"><span id="tp_variacao"></span></td>
+                                                    <td style="text-align:center"><span id="tp_conta"></span></td>
+                                                    <td id="td_codconta" contenteditable="false"   style="text-align:center;border: 1px solid #ddd;height:20px"><span id="cod_conta"></span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div style="padding-top:10px">
+                                        <button id="btnSalvar" class="btn btn-sm btn-primary" style="padding: 2px 5px 2px 5px;" type="button" disabled onclick="salvar()">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                <div style="display:flex;justify-content:space-between">
+                                    <div style="vertical-align:middle;padding:5px 10px"><span>Parametrização de Contas para Contabilização</span></div>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 0;margin-bottom:0">
+                                <table class="table table-striped" id="tblItens" style="margin-bottom:0;">
+                                    <thead>
+                                        <tr>
+                                            <th class="" style="text-align:center;width: 10px;">ID</th>
+                                            <th class="" style="text-align:center;width: 50px">QUALIFICACAO</th>
+                                            <th class="" style="text-align:center;width:50px">TIPO VARIAÇÃO</th>
+                                            <th style="text-align:center;width:50px">TIPO CONTA CONTÁBIL</th>
+                                            <th style="text-align:center;width:50px">CONTA CONTÁBIL</th>
+                                            <th style="text-align:center;width:130px">DESCRIÇÃO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstContas != null)
+                                            {
+                                                foreach (Entities.Conta item in Model.lstContas)
+                                                {
+                                                    <tr>
+                                                        @if (@item.QUALIFICACAO == "REVERSAO" & @item.TIPO_VARIACAO == "GANHO")
+                                                        {
+                                                            <td style="text-align:center;background-color:#FFFFC6">@item.ID_CONTACONTABIL</td>
+                                                            <td style="text-align:center;background-color:#FFFFC6">@item.QUALIFICACAO</td>
+                                                            <td style="text-align:center;background-color:#FFFFC6">@item.TIPO_VARIACAO</td>
+                                                            <td style="text-align:center;background-color:#FFFFC6"><a href="#" style="cursor:pointer" onclick="alterarConta(@item.ID_CONTACONTABIL, '@item.QUALIFICACAO', '@item.TIPO_VARIACAO', '@item.TIPO_CONTA', '@item.CODCONTA')">@item.TIPO_CONTA</a></td>
+                                                            <td style="text-align:center;background-color:#FFFFC6">@item.CODCONTA</td>
+                                                            <td style="text-align:center;background-color:#FFFFC6">@item.DESCRICAO</td>
+                                                        }
+                                                        @if (@item.QUALIFICACAO == "REVERSAO" & @item.TIPO_VARIACAO == "PERDA")
+                                                        {
+                                                            <td style="text-align:center;background-color:#e1d5d5">@item.ID_CONTACONTABIL</td>
+                                                            <td style="text-align:center;background-color:#e1d5d5">@item.QUALIFICACAO</td>
+                                                            <td style="text-align:center;background-color:#e1d5d5">@item.TIPO_VARIACAO</td>
+                                                            <td style="text-align:center;background-color:#e1d5d5"><a href="#" style="cursor:pointer" onclick="alterarConta(@item.ID_CONTACONTABIL, '@item.QUALIFICACAO', '@item.TIPO_VARIACAO', '@item.TIPO_CONTA', '@item.CODCONTA')">@item.TIPO_CONTA</a></td>
+                                                            <td style="text-align:center;background-color:#e1d5d5">@item.CODCONTA</td>
+                                                            <td style="text-align:center;background-color:#e1d5d5">@item.DESCRICAO</td>
+                                                        }
+                                                        @if (@item.QUALIFICACAO == "VC_EFETIVA" & @item.TIPO_VARIACAO == "GANHO")
+                                                        {
+                                                            <td style="text-align:center;background-color:#dfc7df">@item.ID_CONTACONTABIL</td>
+                                                            <td style="text-align:center;background-color:#dfc7df">@item.QUALIFICACAO</td>
+                                                            <td style="text-align:center;background-color:#dfc7df">@item.TIPO_VARIACAO</td>
+                                                            <td style="text-align:center;background-color:#dfc7df"><a href="#" style="cursor:pointer" onclick="alterarConta(@item.ID_CONTACONTABIL, '@item.QUALIFICACAO', '@item.TIPO_VARIACAO', '@item.TIPO_CONTA', '@item.CODCONTA')">@item.TIPO_CONTA</a></td>
+                                                            <td style="text-align:center;background-color:#dfc7df">@item.CODCONTA</td>
+                                                            <td style="text-align:center;background-color:#dfc7df">@item.DESCRICAO</td>
+                                                        }
+                                                        @if (@item.QUALIFICACAO == "VC_EFETIVA" & @item.TIPO_VARIACAO == "PERDA")
+                                                        {
+                                                            <td style="text-align:center;background-color:#c7d3c6">@item.ID_CONTACONTABIL</td>
+                                                            <td style="text-align:center;background-color:#c7d3c6">@item.QUALIFICACAO</td>
+                                                            <td style="text-align:center;background-color:#c7d3c6">@item.TIPO_VARIACAO</td>
+                                                            <td style="text-align:center;background-color:#c7d3c6"><a href="#" style="cursor:pointer" onclick="alterarConta(@item.ID_CONTACONTABIL, '@item.QUALIFICACAO', '@item.TIPO_VARIACAO', '@item.TIPO_CONTA', '@item.CODCONTA')">@item.TIPO_CONTA</a></td>
+                                                            <td style="text-align:center;background-color:#c7d3c6">@item.CODCONTA</td>
+                                                            <td style="text-align:center;background-color:#c7d3c6">@item.DESCRICAO</td>
+                                                        }
+                                                        @if (@item.QUALIFICACAO == "VC_NAO_EFETIVA" & @item.TIPO_VARIACAO == "GANHO")
+                                                        {
+                                                            <td style="text-align:center;background-color:#ffe2e0">@item.ID_CONTACONTABIL</td>
+                                                            <td style="text-align:center;background-color:#ffe2e0">@item.QUALIFICACAO</td>
+                                                            <td style="text-align:center;background-color:#ffe2e0">@item.TIPO_VARIACAO</td>
+                                                            <td style="text-align:center;background-color:#ffe2e0"><a href="#" style="cursor:pointer" onclick="alterarConta(@item.ID_CONTACONTABIL, '@item.QUALIFICACAO', '@item.TIPO_VARIACAO', '@item.TIPO_CONTA', '@item.CODCONTA')">@item.TIPO_CONTA</a></td>
+                                                            <td style="text-align:center;background-color:#ffe2e0">@item.CODCONTA</td>
+                                                            <td style="text-align:center;background-color:#ffe2e0">@item.DESCRICAO</td>
+                                                        }
+                                                        @if (@item.QUALIFICACAO == "VC_NAO_EFETIVA" & @item.TIPO_VARIACAO == "PERDA")
+                                                        {
+                                                            <td style="text-align:center;background-color:#e0e5e5">@item.ID_CONTACONTABIL</td>
+                                                            <td style="text-align:center;background-color:#e0e5e5">@item.QUALIFICACAO</td>
+                                                            <td style="text-align:center;background-color:#e0e5e5">@item.TIPO_VARIACAO</td>
+                                                            <td style="text-align:center;background-color:#e0e5e5"><a href="#" style="cursor:pointer" onclick="alterarConta(@item.ID_CONTACONTABIL, '@item.QUALIFICACAO', '@item.TIPO_VARIACAO', '@item.TIPO_CONTA', '@item.CODCONTA')">@item.TIPO_CONTA</a></td>
+                                                            <td style="text-align:center;background-color:#e0e5e5">@item.CODCONTA</td>
+                                                            <td style="text-align:center;background-color:#e0e5e5">@item.DESCRICAO</td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div class="modal fade" id="modalNovoBloqueio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center" style="padding:5px">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 style="text-align:left">Registro de Caso de Exceção</h4>
+                    </div>
+                    <div class="modal-body" style="padding-top:0">
+                        <input type="hidden" class="form-control" id="m_id_excecao">
+
+                        <form id="formAlterarPerfil">
+                            <div class="form-group col-md-4" style="padding-top: 10px;margin-bottom:0">
+                                <label for="m_fechamento">Referência</label>
+                                <input type="text" class="form-control" id="m_referencia" autocomplete="off">
+                                <div hidden id="erroReferencia">Preencha este campo</div>
+                            </div>
+                            <div class="form-group col-md-4" style="margin-top: 2.8em;margin-bottom:0">
+                                <button class="btn btn-sm btn-primary" type="button" id="btnSalvarBloqueio" onclick="AddBloqueio()">Adicionar Bloqueio</button>
+                            </div>
+                            <div class="form-group col-md-12" style="padding-top: 10px;margin-bottom:0">
+                                <label for="observacao">Observação</label><br />
+                                <textarea id="m_observacao" style="width:100%" maxlength="1000"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+        <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+        <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+        <link href="~/content/indexCompras.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+        <link href="~/content/indeximportacaodocumento.css" rel="stylesheet" />
+
+
+        <link href="~/content/chosen.css" rel="stylesheet" />
+        <script src="~/scripts/chosen.jquery.js"></script>
+
+        <script>
+
+            $(function () {
+                $(".datepickerInput").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+                $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val(); $("#checkin").datepicker();
+                $("#modal_dt_contabil").datepicker({ dateFormat: 'dd/mm/yy' }).val(); $("#checkin").datepicker();
+            });
+
+            function alterarConta(id, qualificacao, tp_variacao, tp_conta_contabil, cod_conta){
+                $('#id').html(id);
+                $('#qualificacao').html(qualificacao);
+                $('#tp_variacao').html(tp_variacao);
+                $('#tp_conta').html(tp_conta_contabil);
+                $('#cod_conta').html(cod_conta);
+
+                $('#btnSalvar').prop("disabled", false);
+                $('#td_codconta').attr('contenteditable', 'true');
+            };
+
+            function salvar() {
+                let id_conta = $('#id').html();
+                let cod_conta = $('#cod_conta').html();
+
+                $.ajax({
+                    url: '@Url.Action("Salvar", "Conta_Contabil")',
+                    traditional: true,
+                    contentType: 'json',
+                    data: { id_conta: id_conta, cod_conta: cod_conta },
+                    success: function (response) {
+                        if(response.Resultado != null){
+                            if (response.Resultado[0].Mensagem != "" & response.Resultado[0].Mensagem != null) {
+                                alert(response.Resultado[0].Mensagem)
+                            }
+                        }
+                        else {
+                            $('#myForm').submit();
+                        }
+                    }
+                });
+            };
+
+
+
+            $("#btnExibir").click(function () {
+                let ano = $("ano").val();
+
+                if (ano != "" || ano != null) {
+                    var filtrar = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "exibir").val("filtrar");
+                    $('#myForm').append($(filtrar));
+                    document.getElementById("myForm").submit();
+                }
+                else {
+                    $("anoErroAno").val("Digite o ano.");
+                }
+
+            });
+            function updateModal(fechamento, dt_contabil, situacao) {
+                if (fechamento != "" & fechamento != 'undefined') {
+                    $("#m_situacao option[value='-- Selecione --']").remove();
+                    $('#modal_dt_contabil').val(dt_contabil);
+                    $('#m_fechamento').val(fechamento);
+                    $('#m_situacao option:contains(' + situacao + ')').prop({ selected: true });
+                }
+                else {
+                    $("#m_situacao option[value='-- Selecione --']").remove();
+                    $("#m_situacao").prepend("<option value='-- Selecione --' selected='selected'>-- Selecione --</option>");
+                }
+
+               $('#modalUpdate').modal({
+                   show: true,
+                   closeOnEscape: true,
+                   backdrop: 'static',
+                   keyboard: false
+               })
+            }
+
+            $('#modalUpdatel').on('hidden.bs.modal', function (e) {
+                $("#m_situacao option[value='-- Selecione --']").remove();
+            })
+            $('.menuContabilizacao .sidebar-submenu').addClass("active");
+            $('.menuContabilizacao .sidebar-submenu').toggle();
+
+        </script>
+    </body>
+}
+</html>

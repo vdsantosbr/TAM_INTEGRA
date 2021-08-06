@@ -1,0 +1,159 @@
+﻿
+@{
+    Layout = null;
+
+    var listaSemanas = (List<Entities.Semana>)ViewData["listaSemanas"];
+    var meta = (Entities.UsuarioMeta)ViewData["meta"];
+    var linha = 1;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TAMAE - TBIP</title>
+    
+    <script type="text/javascript" src="~/scripts/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+    <script type="text/javascript" src="~/scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="~/scripts/bootstrap.min.js"></script>    
+    <script type="text/javascript" src="~/scripts/simple-donut-jquery.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="~/Images/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/menu.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/geral.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/simple-donut.css" />
+
+    @if (TempData["Mensagem"] != null)
+    {
+        <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+        </script>
+    }
+
+    @if (TempData["FechaPopUp"] != null)
+    {
+        <script type="text/javascript">
+            window.opener.location.reload();
+            window.close();
+        </script>
+    }
+</head>
+<body>
+    <div class="pop-up-admin">
+
+        <h3>Detalhe da meta</h3>
+
+        <p class="texto-direita">
+            <input type="button" value="Fechar" class="btn btn-secondary" onclick="window.close();" />
+        </p>
+
+        @if (meta != null)
+        {
+            <table class="tabela-painel-itens-detalhe" border="0" width="100%">
+                <tr>
+                    <th>Período</th>
+                    <th>Dia de início e término</th>
+                    <th>Tipo</th>
+                    <th>Meta semanal</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>@meta.DataInicio.ToShortDateString() a @meta.DataTermino.ToShortDateString()</td>
+                    <td>@meta.DiaInicioDescricao / @meta.DiaTerminoDescricao</td>
+                    <td>@meta.Tipo</td>
+                    <td>@meta.Meta</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Fabricante</th>
+                    <th>Modelo</th>
+                    <th>Categoria</th>
+                    <th>Tipo</th>
+                    <th>Idade da aeronave</th>
+                </tr>
+                <tr>
+                    <td>
+                        @foreach (Entities.UsuarioMetaAeronaveFabricante umaf in meta.ListaUMAF)
+                        {
+                            @umaf.Fabricante @(umaf != meta.ListaUMAF.Last() ? ", " : "")
+                        }
+                    </td>
+                    <td>
+                        @foreach (Entities.UsuarioMetaAeronaveModelo umam in meta.ListaUMAM)
+                        {
+                            @umam.Modelo @(umam != meta.ListaUMAM.Last() ? ", " : "")
+                        }
+                    </td>
+                    <td>
+                        @foreach (Entities.UsuarioMetaAeronaveCategoria umac in meta.ListaUMAC)
+                        {
+                            @umac.Categoria @(umac != meta.ListaUMAC.Last() ? ", " : "")
+                        }
+                    </td>
+                    <td>
+                        @foreach (Entities.UsuarioMetaAeronaveTipo umat in meta.ListaUMAT)
+                        {
+                            @umat.Tipo @(umat != meta.ListaUMAT.Last() ? ", " : "")
+                        }
+                    </td>
+                    <td>
+                        @if (meta.IdadeAeronaveInicio > 0 && meta.IdadeAeronaveTermino > 0)
+                        {
+                            @(meta.IdadeAeronaveInicio + " a " + meta.IdadeAeronaveTermino)
+                        }
+                    </td>
+                </tr>
+            </table>
+        }
+
+        <hr />
+
+        @if (listaSemanas != null)
+        {
+            <table class="tabela-painel">
+                @foreach (Entities.Semana item in listaSemanas)
+                {
+                    <tr class="tabela-painel-tr">
+                        <td class="tabela-painel-td" width="50%">
+                            <strong>Semana @linha:</strong> @item.Inicio.ToShortDateString() a @item.Termino.ToShortDateString() <br />
+                            <strong>Registros: </strong> @item.ListaUMR.Count()
+                        </td>
+                        <td class="tabela-painel-td">
+                            <div id="chart-@linha" value="@(Math.Round(((decimal)item.ListaUMR.Count()/meta.Meta) * 100, 0))" class="donut-size-small">
+                                <div class="pie-wrapper">
+                                    <span class="label">
+                                        <span class="num">0</span><span class="smaller">%</span>
+                                    </span>
+                                    <div class="pie">
+                                        <div class="left-side half-circle-vermelho"></div>
+                                        <div class="right-side half-circle-vermelho"></div>
+                                    </div>
+                                    <div class="shadow"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    linha++;
+                }
+            </table>
+        }
+    </div>
+
+    <script>
+        var value;
+
+        $(document).ready(function () {
+            $('.tabela-painel-td div').each(function () {
+                if (this.id != "") {
+                    value = document.getElementById(this.id).getAttribute('value');
+                    updateDonutChart('#' + this.id, value, true);
+                }
+            })
+        });
+    </script>
+</body>
+</html>

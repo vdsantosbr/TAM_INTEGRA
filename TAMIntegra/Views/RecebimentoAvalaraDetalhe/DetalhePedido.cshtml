@@ -1,0 +1,316 @@
+﻿@model Entities.RecebimentoViewModel
+@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        $('.collapse').on('shown.bs.collapse', function(){
+        $(this).parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+        }).on('hidden.bs.collapse', function(){
+        $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        });
+    </script>
+</head>
+<body style="background-color:transparent">
+    <form>
+
+        @*@foreach (var itemm in Model)
+            {
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@itemm.NUMERONOTA.Replace(" ","").Trim()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            Nf : @itemm.NUMERONOTA
+                        </a>
+                    </h4>
+                </div>
+
+
+            }*@
+
+
+
+
+        <div class="container">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="@Model.DetalhePedidos.FirstOrDefault().NuMERO.Replace(" ","").Trim()" aria-expanded="false">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Nº do Pedido  : @Model.DetalhePedidos.FirstOrDefault().NuMERO
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="@Model.DetalhePedidos.FirstOrDefault().NuMERO.Replace(" ","").Trim()" class="panel-collapse collapse in " aria-expanded="false">
+                        <div class="panel-body">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="10" style="color:Highlight">
+                                            <h4> Dados do Pedido</h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>N do Pedido</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().NuMERO
+                                        </td>
+                                        <td>
+                                            <b>Data Emissão</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().EMISSAO
+                                        </td>
+                                        <td>
+                                            <b>Valor Nota</b><br />
+                                            @*@Model.DetalhePedidos.FirstOrDefault().VALOR*@
+                                           @Model.DetalhePedidos.FirstOrDefault().MOEDA @string.Format("{0:0,0.00}", Convert.ToDouble(Model.DetalhePedidos.FirstOrDefault().VALOR)) 
+                                        </td>
+
+                                    </tr>                                   
+                                    <tr>
+                                        <td colspan="10" style="color:Highlight">
+                                            <h4> Emitente</h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Inscrição Estadual</b><br />
+                                          @Model.DetalhePedidos.FirstOrDefault().IE
+                                        </td>
+                                        <td >
+                                            <b>IE do subst. Trib.</b><br />
+                                            -
+                                        </td>
+                                        <td  colspan="10" >
+                                            <b>Insc. Municipal</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().IM
+                                        </td>                                       
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>CNPJ</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().CNPJ
+                                        </td>
+                                        <td colspan="2">
+                                            <b>Razao Social</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().RAZAO
+                                        </td>                                        
+
+
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <b>Endereço</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().RUA
+                                        </td>
+                                        <td>
+                                            <b>Numero</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().NuMERO
+                                        </td>
+                                        <td>
+                                            <b>Bairro</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().N
+                                        </td>
+                                        <td>
+                                            <b>Complemento</b><br />
+                                            -
+                                        </td>
+                                        <td>
+                                            <b>Cep</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().CEP
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <b>País</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().PAIS
+                                        </td>
+                                        <td>
+                                            <b>Estado</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().ESTADO
+                                        </td>
+                                        <td>
+                                            <b>Município</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().MUNICIPIO
+                                        </td>
+                                        <td>
+                                            <b>Telefone</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().TELEFONE
+                                        </td>
+
+                                    </tr>
+
+                                    @*<tr>
+                                        <td colspan="10" style="color:Highlight">
+                                            <h4> Destinatário</h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Inscrição Estadual</b><br />
+                                            @Model.DetalhePedidos.FirstOrDefault().DEST
+                                        </td>
+                                        <td colspan="2">
+                                            <b>IE do subst. Trib.</b><br />
+                                            -
+                                        </td>
+                                        <td colspan="2">
+                                            <b>Insc. Municipal</b><br />
+                                            @Model.FirstOrDefault().DEST_INSC_MUNI
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>CNPJ</b><br />
+                                            @Model.FirstOrDefault().DEST_CNPJ
+                                        </td>
+                                        <td colspan="2">
+                                            <b>Razao Social</b><br />
+                                            @Model.FirstOrDefault().DEST_RAZAO
+                                        </td>
+                                        <td colspan="2">
+                                            <b>Nome Fantasia</b><br />
+                                            @Model.FirstOrDefault().DEST_RAZAO
+                                        </td>
+
+
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <b>Endereço</b><br />
+                                            @Model.FirstOrDefault().DEST_ENDERECO
+                                        </td>
+                                        <td>
+                                            <b>Numero</b><br />
+                                            @Model.FirstOrDefault().DEST_NUMERO
+                                        </td>
+                                        <td>
+                                            <b>Bairro</b><br />
+                                            @Model.FirstOrDefault().DEST_BAIRRO
+                                        </td>
+                                        <td>
+                                            <b>Complemento</b><br />
+                                            -
+                                        </td>
+                                        <td>
+                                            <b>Cep</b><br />
+                                            @Model.FirstOrDefault().DEST_CEP
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <b>País</b><br />
+                                            @Model.FirstOrDefault().DEST_PAIS
+                                        </td>
+                                        <td>
+                                            <b>Estado</b><br />
+                                            @Model.FirstOrDefault().DEST_UF
+                                        </td>
+                                        <td>
+                                            <b>Município</b><br />
+                                            @Model.FirstOrDefault().DEST_MUNICIPIO
+                                        </td>
+                                        <td>
+                                            <b>Telefone</b><br />
+                                            @Model.FirstOrDefault().DEST_TELEFONE
+                                        </td>
+
+                                    </tr>*@
+
+                                    <tr>
+                                        <td colspan="10" style="color:Highlight">
+                                            <h4> Produtos / Serviços</h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Código</b>
+                                        </td>
+                                        <td>
+                                            <b>Descrição</b>
+
+                                        </td>
+                                        <td>
+                                            <b>Qtde Com</b>
+                                        </td>
+
+                                        <td>
+                                            <b>Un Com</b>
+                                        </td>
+                                        <td>
+                                            <b>Valor</b><br />
+                                        </td>
+
+                                    </tr>
+                                    @foreach (var item in Model.DetalhePedidosItens)
+                                    {
+
+
+                                        <tr>
+                                            <td>
+                                               @item.CODIGO
+                                            </td>
+                                            <td>
+                                                @item.DESCRICAO
+
+                                            </td>
+                                            <td>
+                                                @item.QTDE
+                                            </td>
+                                            <td>
+                                                @item.UN
+                                            </td>
+                                            <td>
+                                                @item.PRECOUNITARIO
+                                            </td>
+
+
+                                        </tr>
+                                    }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

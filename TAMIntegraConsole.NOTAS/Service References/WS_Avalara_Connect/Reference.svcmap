@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="10907cc6-ac04-44c5-8118-7177e556bcf3" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ConsumoWS.wsdl" MetadataType="Wsdl" ID="d49d5391-2bc9-4cf5-a250-a69bff007b7f" SourceId="1" SourceUrl="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc?wsdl" />
+    <MetadataFile FileName="ConsumoWS.xsd" MetadataType="Schema" ID="d65e1ed7-5a5e-4b83-bd21-f1b3476e3e8d" SourceId="1" SourceUrl="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc?xsd=xsd0" />
+    <MetadataFile FileName="ConsumoWS.disco" MetadataType="Disco" ID="bc1bef05-0809-4172-be7d-a5a53b3e02a8" SourceId="1" SourceUrl="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc?disco" />
+    <MetadataFile FileName="ConsumoWS1.xsd" MetadataType="Schema" ID="8458da58-4005-482d-857a-f687b8cd5b88" SourceId="1" SourceUrl="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc?xsd=xsd1" />
+    <MetadataFile FileName="ConsumoWS2.xsd" MetadataType="Schema" ID="8d65acce-8d25-454c-9822-73f451285f1f" SourceId="1" SourceUrl="http://monitor.avalarabrasil.com.br/Efisc.MonitorNFe.ConsumoWS/ConsumoWS.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

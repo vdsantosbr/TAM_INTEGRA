@@ -1,0 +1,744 @@
+﻿@model Entities.ImportacaoProduto
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teste = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+    <style>
+                .page-wrapper .page-content {
+    overflow: hidden;
+}
+        input[type=checkbox], input[type=radio] {
+    /* margin: 4px 0 0; */
+    margin-top: 1px\9;
+    line-height: normal;
+}
+        @@media screen and (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-container2 {
+                display: grid;
+                grid-template-columns: auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .page-wrapper {
+                height: 100vh;
+            }
+        }
+         .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            border-width: 5px;
+            border-color: #3A2303;
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+        /*.page-content {
+            height: 100vh;
+        }*/
+                body {
+overflow: auto;
+}
+.fontErro{
+	color:red;
+}
+    </style>
+</head>
+@using (Html.BeginForm("Index", "ImportacaoProduto", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+
+    <body>
+        <input hidden id="fornecedorSelected" name="fornecedorSelected" />
+        <input hidden id="documentoSelected" name="documentoSelected" />
+
+        <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;width:97%;z-index:100;">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:14px;position:relative;">
+                    <fieldset>
+                        <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Integração para cadastro de produto</legend>
+                    </fieldset>
+                </div>
+        </main>
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content">
+                <div class="container-fluid" style="padding-top:50px;padding-left:30px">
+                    <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@>
+
+                        <div class="panel with-nav-tabs panel-default" style="margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Filtro - Produto
+                            </div>
+                            <div class="panel-body" style="padding-bottom:0;">
+                                <div class="tab-content">
+                                    <div class="grid-container" style="display:flex;justify-content:space-between">
+                                        @*<div class="grid-item">
+                                            <label class="form-negrito">Fornecedor</label>
+                                            @Html.DropDownList("fornecedorNome", (SelectList)ViewBag.Fornecedores, "-- Selecione --", new { @style = "width:100px;height:26px", @class = "chosen-select", @onchange = "BuscaChosen('fornecedorNome', 'documento', null, '/ImportacaoProduto/BuscaProcessos/')", @required = "true", @name = "fornecedorNome" })
+                                            <div id="divErroFornecedor" class="fontErro"></div>
+                                        </div>
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Processo/Documento</label>
+                                            @Html.DropDownList("documento", (SelectList)ViewBag.Processos, "-- Selecione --", new { @style = "width:100px;height:26px", @class = "chosen-select", @onchange = "BuscaChosen('documento', 'movimento', null, '/ImportacaoProduto/BuscaTipoMovimento/')" })
+                                            <div id="divErroDocumento" class="fontErro"></div>
+                                        </div>*@
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Tipo de movimento</label>
+                                               @*@Html.DropDownList("movimento", (SelectList)ViewBag.Movimentos, "-- Selecione --", new { @style = "width:150px;height:26px", @class = "chosen-select" })*@
+                                            @Html.Editor("movimento", new { htmlAttributes = new { @style = "width:200px;height:26px", @class = "form-control", @autocomplete = "off", maxlengh = "6" } })
+                                            @*<input type="text" maxlength="6" style = "width:200px;height:26px" autocomplete="off" class="form-control" id="movimento" name="movimento"/>*@
+                                            <div id="divErroMovimento" class="fontErro"></div>
+                                        </div>
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Nº do movimento</label>
+                                            @Html.Editor("numeroMovimentoFiltro", new { htmlAttributes = new { @style = "width:200px;height:26px", @class = "form-control", @autocomplete = "off", @maxlengh = 35 } })
+                                            @*<input type="text" maxlength="35" style="width:200px;height:26px" autocomplete="off" class="form-control" id="numeroMovimentoFiltro" name="numeroMovimentoFiltro"/>*@
+                                            <div id="divErroNumeroMovimento" class="fontErro"></div>
+                                        </div>
+                                        <div class="grid-item">
+                                            @Html.Label("Código", new { @class = "form-negrito" })
+                                            @Html.Editor("codigoFiltro", new { htmlAttributes = new { @style = "width: 200px;height:26px", @class = "form-control", @maxlength = "100", @autocomplete = "off" } })
+                                            @*<input type="text" maxlength="100" style="width:200px;height:26px" autocomplete="off" class="form-control" id="codigoFiltro" name="codigoFiltro" />*@
+                                            <div id="divErroCodigoFiltro" class="fontErro"></div>
+                                        </div>
+                                        <div class="grid-item pull-right" style="padding-top:20px;padding-right:5px">
+                                            <button class="btn btn-primary nextBtn btn-sm pull-right" style="height:27px" id="btnFiltro" type="button" name="Filtrar">Exibir</button>
+                                        </div>
+                                    </div>
+
+                                    @*<div class="grid-container2">      
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Nº do movimento</label>
+                                            @Html.Editor("numeroMovimentoFiltro", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control", @autocomplete = "off", @maxlengh = "35" } })
+                                            <div id="divErroNumeroMovimento" class="fontErro"></div>
+                                        </div>
+                                        <div class="grid-item">
+                                            @Html.Label("Código", new { @class = "form-negrito" })
+                                            @Html.Editor("codigoFiltro", new { htmlAttributes = new { @style = "width: 150px;height:26px", @class = "form-control", @maxlength = "100", @autocomplete = "off" } })
+                                            <div id="divErroCodigoFiltro" class="fontErro"></div>
+                                        </div>
+                                        <div class="grid-item pull-right"  style="padding-top:20px;padding-right:5px">
+                                            <button class="btn btn-primary nextBtn btn-sm pull-right" style="height:27px" id="btnFiltro" type="button" name="Filtrar">Exibir</button>
+                                        </div>
+                                    </div>*@
+                                </div>
+                            </div>
+
+                        </div>
+                        <br />
+
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                    Produto
+                                </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped" id="lstProdutos">
+                                        <thead>
+                                            <tr>
+                                                <th>Part Number</th>
+                                                <th>NCM</th>
+                                                <th>Descrição</th>
+                                                <th>Unidade</th>
+                                                @*<th>Integraçao</th>
+                                                <th>Opções</th>*@
+                                            </tr>
+                                        </thead>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstProdutos != null)
+                                            {
+                                                foreach (Entities.ImportacaoProduto wk in Model.lstProdutos)
+                                                {
+
+                                                    <tbody>
+                                                        <tr>
+                                                            @*<td><input type="checkbox" id="idMov" name="idMovArr" value="@wk.idMov"/> <a style="padding-left:0px" class="btn modalBTN">@wk.NumNoFabric</a></td>*@
+                                                            <td><input type="checkbox" id="idMov" name="idMovArr" value="@wk.IdPrd" /> @wk.NumNoFabric</td>
+                                                            <td>@wk.NumeroCCF</td>
+                                                            <td>@wk.NomeFantasia</td>
+                                                            <td>@wk.CodUndVenda</td>
+                                                            @*<td>@wk.Id_Integracao</td>
+                                                            <td><a title="Desbloquear pedido" href="javascript:;"><i class="fa fa-unlock btn" aria-hidden="true" style="font-size:16px" onclick="if(confirm('Este procedimento libera o pedido @wk.NumNoFabric para o fornecedor. Deseja continuar?')) desbloquearPedido(@wk.Id_Integracao, @wk.idMov);"></i></a></td>*@
+                                                            <td hidden id="idPrd" name="idPrd">@wk.IdPrd</td>
+                                                            @*<td hidden name="idMov">@wk.idMov</td>*@
+                                                        </tr>
+                                                    </tbody>
+                                                }
+                                            }
+                                        }
+                                    </table>
+                                    @*<button class="btn btn-primary btn-md pull-right" id="btnAgendar" type="submit" name="btnAgendar"  enabled="enabled">Agendar</button>*@
+                                </div>
+                            @if (Model != null)
+                            {
+                                if (Model.lstProdutos != null)
+                                {
+                                     <button class="btn btn-primary btn-md pull-right" id="btnAgendar" type="button" name="btnAgendar" enabled="enabled" onclick="agendarIntegracao()">Agendar</button>
+                                }
+                            }
+                              </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="my-modal" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered" style="height:91%">
+                            <div class="modal-content" style="height:100%">
+                                <div class="modal-header text-center" style="padding:5px">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                                </div>
+                                <div class="modal-body" style="padding:0 15px 0 15px">
+
+                                    <div class="panel with-nav-tabs panel-default">
+                                        <div class="panel-heading" style="background-color:lightgray">
+                                            Pedidos selecionados
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="tab-content">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped" id="tabelaPedido">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Documento</th>
+                                                                <th>Filial</th>
+                                                                <th>Data</th>
+                                                                <th>Status</th>
+                                                                <th>Valor</th>
+                                                                <th>Fornecedor</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                @*<td><a class="btn modalBTN" href="#">@item.NUMEROMOV</a></td>*@
+                                                                @*<td><a href="#" data-toggle="modal" data-target="#my-modal">@ViewBag.NumeroMov</a></td>*@
+                                                                <td id="documentoModal"></td>
+                                                                <td id="filialModal"></td>
+                                                                <td id="dataModal"></td>
+                                                                <td id="statusModal"></td>
+                                                                <td id="valorModal"></td>
+                                                                <td id="fornecedorModal"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel with-nav-tabs panel-default">
+                                        <div class="panel-heading" style="background-color:lightgray">
+                                            Itens
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="tab-content">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped" id="tabelaItens">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nº</th>
+                                                                <th>Produto</th>
+                                                                <th>Quantidade</th>
+                                                                <th>Serial</th>
+                                                                <th>Chave PO</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="numeroItem"></td>
+                                                                <td id="produtoItem"></td>
+                                                                <td id="quantidadeItem"></td>
+                                                                <td id="serialItem"></td>
+                                                                <td id="chavePOItem"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-toolbar">
+                                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualiza()">Fechar</button>
+                                    <button type="button" class="btn btn-primary pull-right" onclick="salvarPedidoCompra()">Agendar integração</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div>
+
+
+            </main>
+        </div>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        @*<script src="~/scripts/importacaoproduto2.js"></script>*@
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        <link href="~/content/indexCompras.css" rel="stylesheet" />
+        <link href="~/content/indexImportacaoProduto.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+        <!-- bootstrap Validator JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+
+        <script>
+            $("document").ready(function () {
+               
+            });
+        $(function () {
+            $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+         
+
+
+          
+        });
+
+
+
+        //$("#btnFiltro").click(function () {
+        //    $('#myForm').bootstrapValidator({
+        //        message: 'No es valido',
+        //        framework: 'bootstrap',
+        //        feedbackIcons: {
+        //            //valid: 'glyphicon glyphicon-ok',
+        //            //invalid: 'glyphicon glyphicon-remove',
+        //            //validating: 'glyphicon glyphicon-refresh'
+        //        },
+        //        submitButtons: 'button[name="Filtrar"]',
+        //        fields: {
+
+        //            numeroMovimentoFiltro: {
+        //                validators: {
+        //                    notEmpty: {
+        //                        message: 'Digite o número do movimento.'
+        //                    },
+        //                    stringLength: {
+        //                        max: 100,
+        //                        message: 'Digite até 100 caracteres.'
+        //                    }
+        //                }
+        //            },
+        //            codigoFiltro: {
+        //                validators: {
+        //                    stringLength: {
+        //                        max: 10,
+        //                        message: 'Digite até 10 caracteres.'
+        //                    }
+        //                }
+        //            },
+        //            nomeFantasiaFiltro: {
+        //                validators: {
+        //                    stringLength: {
+        //                        max: 10,
+        //                        message: 'Digite até 10 caracteres.'
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    })
+
+        //});
+
+
+        $("#btnFiltro").click(function () {
+          
+
+            var fornecedor = $('#fornecedorNome').val();
+            var documento = $('#documento').val();
+            var movimento = $('#movimento').val();
+            var nroMovimento = $('#numeroMovimentoFiltro').val();
+            var codigo = $('#codigoFiltro').val();
+            var tipoMovimento = $('#movimento').val();
+            //var nomeFantansia = $('#nomeFantasiaFiltro').val();
+
+
+            //if ((((fornecedor == "" || fornecedor == null) & (documento == "" || documento == null) & (nroMovimento == "" || nroMovimento == null) & (movimento == "" || movimento == null)) && (codigo.length > 0)) 
+            //    || (((fornecedor != "" & fornecedor != null) & (documento != "" & documento != null) & (nroMovimento != "" & nroMovimento != null) & (movimento != "" & movimento != null)) && (codigo.length == 0)))
+         //if(((fornecedor.length > 0 & documento.length > 0 & nroMovimento.length > 0 & movimento.length > 0) & (codigo.length > 0 || codigo.length == 0)) ||
+            //    ((fornecedor.length == 0 & documento.length == 0 & nroMovimento.length == 0 & movimento.length == 0) & codigo.length > 0))
+            //if(((nroMovimento == "" || nroMovimento == null) & (movimento == "" || movimento == null) & (codigo.length > 0)) || 
+            //    ((nroMovimento != "" & nroMovimento != null) & (movimento != "" & movimento != null)))
+            if (((movimento.length > 0 & nroMovimento.length > 0) & (codigo.length > 0)) ||
+                ((movimento.length > 0 & nroMovimento.length > 0) & (codigo.length == 0)) ||
+                ((movimento.length == 0 & nroMovimento.length == 0) & (codigo.length > 0)))
+            {
+                let regEx = /^\d{1,1}[.]{0,1}\d{1,1}[.]{0,1}\d{2,2}$/;
+                if (movimento.length > 0)
+                {
+                    if (regEx.test(movimento) == true) {
+                        $("#btnFiltro").attr("disabled", false)
+                        document.getElementById("myForm").submit();
+                    }
+                    else {
+
+                        $('#divErroMovimento').text('Digite o valor seguindo o padrão "0.0.00".');
+                    }
+                }
+                else
+                {
+                    document.getElementById("myForm").submit();
+                }
+               
+               
+
+               
+
+            }
+            else {
+
+             //if ((fornecedor == "" || fornecedor == null)) {
+             //    $('#divErroFornecedor').text('Selecione o fornecedor.');
+             //    if ((documento == "" || documento == null)) {
+             //        $('#divErroDocumento').text('Selecione o processo/documento.');
+             //    }
+             //    if ((movimento == "" || movimento == null)) {
+             //        $('#divErroMovimento').text('Selecione o tipo do movimento.');
+             //    }
+             //    if ((nroMovimento == "" || nroMovimento == null)) {
+             //        $('#divErroNumeroMovimento').text('Digite o número do movimento.');
+             //    }
+
+             //    if ((codigo == "" || codigo == null)) {
+             //        $('#divErroCodigoFiltro').text('Digite o código.');
+             //    }
+             //}
+             //else
+             //{
+             //    if ((documento == "" || documento == null)) {
+             //        $('#divErroDocumento').text('Selecione o processo/documento.');
+             //    }
+             //    if ((movimento == "" || movimento == null)) {
+             //        $('#divErroMovimento').text('Selecione o tipo do movimento.');
+             //    }
+             //    if ((nroMovimento == "" || nroMovimento == null)) {
+             //        $('#divErroNumeroMovimento').text('Digite o número do movimento.');
+             //    }
+             //}
+             if ((movimento == "" || movimento == null)) {
+                 $('#divErroMovimento').text('Digite o movimento.');
+             }
+             else
+             {
+                 if ((nroMovimento == "" || nroMovimento == null)) {
+                     $('#divErroNumeroMovimento').text('Digite o tipo do movimento.');
+                 }
+
+                 let regEx = /^\d{1,1}[.]{0,1}\d{1,1}[.]{0,1}\d{2,2}$/;
+                 if (regEx.test(movimento) == true) {
+                 }
+                 else {
+                     $('#divErroMovimento').text('Digite o valor seguindo o padrão "0.0.00".');
+                 }
+             }
+
+             if ((nroMovimento == "" || nroMovimento == null)) {
+                 $('#divErroNumeroMovimento').text('Digite o número do movimento.');                
+             }
+             else
+             {
+                 if ((movimento == "" || movimento == null)) {
+                     $('#divErroMovimento').text('Digite o tipo do movimento.');
+                 }
+             }
+
+             if ((movimento == "" || movimento == null) && (nroMovimento == "" || nroMovimento == null)) {
+                 if ((codigo == "" || codigo == null)) {
+                     $('#divErroCodigoFiltro').text('Digite o código.');
+                 }
+             }
+            
+
+            
+             
+
+             $("#btnFiltro").attr("disabled", true)
+               
+            }
+        });
+
+        $("#fornecedorNome").change(function () {
+            var fornecedor = $('#fornecedorNome').val();
+            var documento = $('#documento').val();
+
+            //if (fornecedor.length == 0) {
+            //    var newOption = "<option value='" + "1" + "'>Some Text</option>";
+            //    $("#movimento").append(newOption)
+            //}
+            //if(fornecedor.length == 0)
+            //{
+            //    $('#documento').val('');
+            //    $('#movimento').val('');
+            //}
+            $('#divErroFornecedor').text('');
+            $('#divErroNumeroMovimento').text('');
+            $('#divErroDocumento').text('');
+            $('#divErroMovimento').text('');
+            $('#divErroCodigoFiltro').text('');
+            $("#btnFiltro").attr("disabled", false)
+           if ($('#fornecedorNome').val() != "" & $('#fornecedorNome').val() != null) {
+               BuscaChosen('movimento', 'movimento', null, '/ImportacaoProduto/BuscaMovimento/')
+               
+            }
+            else {
+               $('#movimento').empty();
+               $("#movimento").trigger("chosen:updated");
+            }
+        });
+
+        //$("#documento").change(function () {
+        //    var documento = $('#documento').val();
+
+        //    if ($('#documento').val() != "" & $('#documento').val() != null) {
+        //        $('#divErroDocumento').text('');
+        //    }
+        //    else {
+        //        $('#movimento').val('');
+        //    }
+        //});
+
+        $("#movimento").keyup(function () {
+            var movimento = $('#movimento').val();
+
+            //if (movimento != "" & movimento != null) {
+                $('#divErroMovimento').text('');
+                $("#btnFiltro").attr("disabled", false)
+            //}
+        });
+       
+
+        $("#numeroMovimentoFiltro").keyup(function () {
+            var documento = $('#movimento').val();
+            var nroMovimento = $('#numeroMovimentoFiltro').val();
+
+            if (nroMovimento != "" & nroMovimento != null) {
+                $('#divErroNumeroMovimento').text('');
+                $("#btnFiltro").attr("disabled", false)
+            }
+        });
+
+        $("#documento").change(function () {
+            var documento = $('#documento').val();
+          
+            if ($('#documento').val() != "" & $('#documento').val() != null) {
+                $('#divErroDocumento').text('');
+            }
+        });
+
+        $("#codigoFiltro").keyup(function () {
+            var documento = $('#codigoFiltro').val();
+
+            if ($('#codigoFiltro').val() != "" & $('#codigoFiltro').val() != null) {
+                $('#divErroCodigoFiltro').text('');
+                $('#divErroFornecedor').text('');
+                $('#divErroNumeroMovimento').text('');
+                $('#divErroDocumento').text('');
+                $('#divErroMovimento').text('');
+                $("#btnFiltro").attr("disabled", false)
+
+            }
+        });
+
+            $('a.modalBTN').click(function () {
+                $('#my-modal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+            function desbloquearPedido(idIntegracao, idMov) {
+                $.ajax({
+                    url: '@Url.Action("DesbloquearPedido", "ImportacaoProduto")',
+                    type: 'get',
+                    data: { idIntegracao: idIntegracao, idMov: idMov },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); }
+                });
+            }
+
+        //$("#btnAgendar").click(function () {
+        //    $('#lstProdutos tr input[type="checkbox"]:checked').each(function () {
+        //        var $row = $(this).closest('tr');
+        //        //used :not(:first-child) to skip first element (the checkbox td)
+        //        $('td', $row).each(function (i) {
+        //            var linhas = $(this).text();
+        //            //alert(linhas);
+        //        })
+        //    });
+            //});
+
+            function agendarIntegracao()
+            {
+                $('#btnAgendar').attr('disabled', true);
+                movimento = $('#nroMovimento').val();
+                var id_fornecedor = $('#fornecedorNome').val();
+                var documento = $('#documento').val();
+                var idLstConciliacao = $('#lstProdutos input:checked').map(function () {
+                    if (this.value != "" & this.value != null) {
+                        return this.value;
+                    }
+                }).get().join(', ');
+                //alert(idLstConciliacao);
+
+                //var idMov = $('#idMovItem').html();
+
+                //var fornecedor = $("#fornecedorNome option:selected").val();
+                //var movimento = $("#documento option:selected").text();
+
+
+                //var table = $('#lstProdutos');
+                //var data2 = [];
+
+                //table.find('tr').each(function (i, el) {
+                //    // no thead
+                //    if (i != 0) {
+                //        var $tds = $(this).find('td');
+                //        var row = [];
+                //        $tds.each(function (i, el) {
+                //            row.push($(this).text());
+                //        });
+                //        data2.push(row);
+                //    }
+
+                //});
+                //alert(data2);
+                jQuery.ajaxSettings.traditional = true;
+
+                $.ajax({
+                    url: '@Url.Action("agendarIntegracao", "ImportacaoProduto")',
+                    //dataType: "json",
+                    contentType: 'json',
+                    data: { idPrd: idLstConciliacao, id_fornecedor: id_fornecedor, movimento: documento },
+                    success: function (response) {
+                  
+                        $('#id_integracao').remove();
+                        var input = $("<input>")
+                          .attr("type", "hidden")
+                          .attr("name", "id_integracao").val(response);
+
+                        $('#myForm').append($(input));
+
+                        $("#myForm").submit();
+                    },
+                    erro: function (data) {
+                          //alert('');
+                    },
+                });
+                //alert("Integração agendada com sucesso.");
+            };
+
+            $("#movimento").keyup(function (event) {
+                $(this).val($(this).val().replace(/[^0-9\.|\,]/g, '').replace(/^(\d{1})(\d{1})(\d{2})+$/, "$1.$2.$3"));
+            });
+
+
+            $('.menuImportacao .sidebar-submenu').addClass("active");
+            $('.menuImportacao .sidebar-submenu').toggle();
+        </script>
+
+
+    </body>
+}
+</html>

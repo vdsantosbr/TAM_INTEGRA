@@ -1,0 +1,480 @@
+﻿@model Entities.StatementRelatorios
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teste = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<style>
+.hide-calendar .ui-datepicker-calendar
+{
+	display:none!important;
+	visibility:hidden!important
+}
+.form-group{
+    margin-bottom:0;
+}
+ </style>
+</head>
+@using (Html.BeginForm("Index", "StatementRelatorios", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+
+
+    <body>
+        <input hidden id="Id_Conciliacao" name="Id_Conciliacao"/>
+        <input hidden id="radio" name="radio"/>
+        <input hidden id="fornecedorSelected" name="fornecedorSelected" />
+        <input hidden id="documentoSelected" name="documentoSelected" />
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;z-index:100">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:30px;position:fixed">
+                    <div class="stepwizard">
+                        <fieldset>
+                            <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Relatórios</legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </main>
+
+            <main class="page-content" style="padding-top:0">
+                <div class="container-fluid" style="padding-top:0">
+                    <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ style="position:absolute;top:60px;width:97%;padding-left:10px">
+
+                        <div class="panel with-nav-tabs panel-default" style="margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Filtro para conciliação
+                            </div>
+                            <div class="panel-body" style="padding-bottom:0">
+                                <div class="tab-content">
+
+                                    <div class="row">
+                                        <div class="col-md-2 col-lg-2 col-sm-6">
+                                            <div class="form-group" style="margin-bottom:10px">
+                                                <div class="col-md-9">
+                                                    @Html.Label("Ano", new { @class = "form-negrito" })
+                                                    @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("ano", new { htmlAttributes = new { @class = "form-control datepickerMes" } })
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-2 col-lg-2 col-sm-6">
+                                            <div class="form-group"  style="margin-bottom:10px">
+                                                <div class="col-md-8">
+                                                    @Html.Label("Mês", new { @class = "form-negrito" })
+                                                    @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("mes", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                        </div>
+
+
+                                        @*<div class="col-md-3 col-lg-3 col-sm-6">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label class="form-negrito">Conta</label>
+                                        @Html.ListBox("conta", (SelectList)ViewBag.Contas, new { @class = "chosen-select" })
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>*@
+
+
+                                        @*<div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="col-md-11">
+                                        @Html.Label("Situação", new { @class = "form-negrito" })
+                                        @Html.Editor("codigoFiltro", new { htmlAttributes = new { @class = "form-control", style = "width:60%" } })
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>*@
+
+
+
+
+                                        <div class="col-md-2 col-lg-1 col-sm-2 col-md-offset-4 pull-right">
+                                            <div class="form-group" style="margin-bottom:0">
+                                                <div class="col-md-12 col-sm-12">
+
+                                                    <div style="margin-top:15px">
+                                                        <button class="btn btn-primary btn-md pull-right" id="btnFiltro" type="submit" name="Filtrar">Exibir</button>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br />
+
+                        <div class="panel with-nav-tabs panel-default" id="conciliacao">
+                        <div class="panel-heading" style="background-color:lightgray">
+                            Conciliações
+                        </div>
+                        <div class="panel-body">
+                            <div id="tblAnalise" class="table-responsive">
+                                <table class="table table-hover table-striped" id="blAnalise" style="margin-bottom:0">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Tipo</th>
+                                            <th>Conta</th>
+                                            <th>Descrição</th>
+                                            <th>Data da Imagem RM</th>
+                                            <th>Data do Statement</th>
+                                            <th>Data da Conciliação</th>
+                                            <th>Qtd. Registros</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    @if (Model != null)
+                                    {
+                                        if (Model.lstAnalise != null)
+                                        {
+                                            foreach (Entities.StatementConciliacao wk in Model.lstAnalise)
+                                            {
+
+                                                <tbody>
+                                                    <tr>
+                                                        <td hidden id="ModelLstAnalise" value="@Model.lstAnalise"></td>
+                                                        <td hidden id="idLstConciliacao" name="idLstConciliacao">@wk.Id_Conciliacao</td>
+                                                        <td><input type="checkbox" id="btnFiltroAnalise" name="btnFiltroAnalise" value="@wk.Id_Conciliacao" /> <a style="padding-left:0px" class="btn modalBTN"></a></td>
+                                                        @*@if (ViewBag.RegistrosChecked != null)
+                                            {
+                                                foreach (var x in ViewBag.RegistrosChecked)
+                                                {
+                                                    if (wk.QTD_REGISTRO.ToString() == x)
+                                                    {
+                                                        <td><input type="checkbox" id="btnFiltroAnalise" name="btnFiltroAnalise" value="@wk.Id_Conciliacao,@wk.QTD_REGISTRO,@wk.Id_Conciliacao_Item" checked /> <a style="padding-left:0px" class="btn modalBTN"></a></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td><input type="checkbox" id="btnFiltroAnalise" name="btnFiltroAnalise" value="@wk.Id_Conciliacao,@wk.QTD_REGISTRO,@wk.Id_Conciliacao_Item" /> <a style="padding-left:0px" class="btn modalBTN"></a></td>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <td><input type="checkbox" id="btnFiltroAnalise" name="btnFiltroAnalise" value="@wk.Id_Conciliacao,@wk.QTD_REGISTRO,@wk.Id_Conciliacao_Item" /> <a style="padding-left:0px" class="btn modalBTN"></a></td>
+                                            }*@
+
+
+                                                        <td>@wk.Tipo</td>
+                                                        <td>@wk.Conta</td>
+                                                        <td>@wk.Descricao</td>
+                                                        <td>@wk.Imagem_RM.ToString("dd/MM/yyyy")</td>
+                                                        <td>@wk.Data_Base.ToString("dd/MM/yyyy")</td>
+                                                        <td>@wk.Data_Conciliacao.ToString("dd/MM/yyyy")</td>
+                                                        <td style="text-align: right">@string.Format("{0:#,##}", @wk.QTD_REGISTRO)</td>
+                                                        <td style="text-align: right">@string.Format("{0:#,##0.00#}", @wk.Amount)</td>
+                                                    </tr>
+                                                </tbody>
+                                            }
+                                            
+                                        }
+                                    }
+                                </table>
+                                <table cellpadding="0" cellspacing="0">
+                                    @*<tr>
+                            @if (Model != null)
+                            {
+                                for (int i = 1; i <= Model.PageSize; i++)
+                                {
+                                    <td>
+                                        @if (i != Model.PageNumber)
+                                        {
+                                            <a href="javascript:PagerClick(@i);">[@i]</a> <text>&nbsp;</text>
+                                        }
+                                        else
+                                        {
+                                            <span>@i &nbsp;</span>
+                                        }
+                                    </td>
+                                }
+                            }
+                        </tr>*@
+                                </table>
+                                @*<button class="btn btn-primary btn-md pull-right" style="margin-bottom:15px;margin-top:15px;" id="filtroAnalise" type="button">Filtrar</button>*@
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                    Opção de Relatório
+                             </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped" id="tblRadio" >
+                                        <tr>
+                                            <td>
+                                                <input type="radio" value="1" name="relatorio" class="relatorio"/> Exportação de dados (conciliação)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="radio" value="2" name="relatorio" class="relatorio"/> Exportação de dados (conciliação c/ informações complementares)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="radio" value="3" name="relatorio" class="relatorio"/> Exportação de dados (invoice a pagar/receber)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="radio" value="4" name="relatorio"/> Exportação de dados (conciliação com comentários)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="radio" value="5" name="relatorio"/> Exportação de dados (gestão de crédito)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="radio" value="6" name="relatorio"/> Detalhamento de lote para câmbio
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="radio" value="7" name="relatorio"/> Resumo do statement (conciliação x classificação)
+                                            </td>
+                                        </tr>
+                                    </table>
+                                   
+                                </div>
+                                <button class="btn btn-primary btn-md pull-right" id="btnExportarRelatorio" style="margin-bottom: 10px" type="button" name="btnExportarRelatorio" enabled="enabled">Exportar</button>
+                            </div>
+
+                        </div>
+                        @*<div class="btn-toolbar">
+                            <button class="btn btn-primary btn-md pull-right" id="btnExportarRelatorio" type="button" name="btnExportarRelatorio" enabled="enabled">Exportar</button>
+                        </div>*@
+                    </div>
+
+                    
+                </div>
+
+
+            </main>
+        </div>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        @*<script src="~/scripts/importacaoproduto2.js"></script>*@
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        <link href="~/content/indexCompras.css" rel="stylesheet" />
+        <link href="~/content/indexImportacaoProduto.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+        <!-- bootstrap Validator JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+
+        <script>
+        //$(function () {
+        //    $(".datepickerMes").datepicker({ dateFormat: 'yy', changeYear: true, changeMonth:false }).val();
+            //});
+       
+            //$('.relatorio').click(function(e){
+            //    if (e.target.checked) {
+            //        localStorage.checked = true;
+            //    } else {
+            //        localStorage.checked = false;
+            //    }
+            //})
+ 
+            //$( document ).ready(function() {
+  
+            //    document.querySelector('.relatorio').checked = localStorage.checked
+  
+            //});
+
+            $(function () {
+
+                var menuAtivo = $('#menuAtivo').val();
+
+                $('.menuStatement .sidebar-submenu').toggle();
+
+                $(".menuStatement").click(function () {
+
+
+                });
+
+
+                Windows.scroll(0);
+
+            });
+            $(function () {
+                $('.datepickerMes').datepicker({
+                    changeYear: true,
+                    showButtonPanel: true,
+                    dateFormat: 'yy',
+                    onClose: function (dateText, inst) {
+                        var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                        $(this).datepicker('setDate', new Date(year, 1));
+                    }
+                });
+                $(".datepickerMes").focus(function () {
+                    $(".ui-datepicker-month").hide();
+                });
+            });
+
+            $('a.modalBTN').click(function () {
+                $('#my-modal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+            $('a.inserirContaModal').click(function () {
+                $('#inserirConta').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+            function populaModal(idConta, conta, descricao, situacao) {
+                $('.contaModalInput').val(conta);
+                $('.contaModalSpan').html(conta);
+               $('#descricaoModal').val(descricao);
+               document.getElementById("situacaoModal").value = situacao;
+               $('#id_Conta_Modal').val(idConta);
+           }
+
+            function updateConta() {
+                var idConta = $('#id_Conta_Modal').val();
+                var conta = $('.contaModalInput').val();
+                var descricao = $('#descricaoModal').val();
+                var situacao = document.getElementById("situacaoModal").value
+
+                $.ajax({
+                    url: '@Url.Action("Atualizar", "StatementContas")',
+                    type: 'get',
+                    data: { idConta: idConta, conta: conta, descricao: descricao, situacao: situacao },
+                    success: function (data) { $('#my-modal').modal('toggle'); alert("Registro alterado com sucesso!"); $('#myForm').submit();}
+                });
+            }
+
+            function ExcluirConta() {
+                var idConta = $('#idConta').html();
+
+                $.ajax({
+                    url: '@Url.Action("Excluir", "StatementContas")',
+                    type: 'get',
+                    data: { idConta: idConta },
+                    success: function (data) { $('#my-modal').modal('toggle'); alert("Registro alterado com sucesso!"); $('#myForm').submit(); }
+                });
+            }
+
+            function exportarRelatorio() {
+             
+                $.ajax({
+                    url: '@Url.Action("Inserir", "StatementRelatorios")',
+                    type: 'get',
+                    data: {},
+                    success: function (data) { $('#inserirConta').modal('toggle'); alert("Registro inserido com sucesso!"); $('#myForm').submit(); }
+                });
+            }
+
+            function Atualizar() {
+                $('#myForm').submit();
+            }
+
+            $('#btnExportarRelatorio').click(function () {
+                //if ($("#myForm input:radio:checked").length > 0) {
+                //    tblChecked = "s";
+                //}
+                //else {
+                //    tblChecked = "";
+                //    alert("2");
+                //}
+
+                var idLstConciliacao = $('#blAnalise input:checked').map(function () {
+                    if (this.value != "" & this.value != null)
+                    {
+                        return this.value;
+                    }
+                }).get().join(', ');
+
+               var radioChecked = $('#tblRadio input:checked').map(function () {
+                   if (this.value != "" & this.value != null)
+                   {
+                       return this.value;
+                   }
+                }).get().join(', ');
+
+               $('#Id_Conciliacao').val(idLstConciliacao);
+               $('#radio').val(radioChecked);
+
+               if ($("#myForm input:checkbox:checked").length > 0) {
+                   if ($("#myForm input:radio:checked").length > 0) {
+                       $('#myForm').submit();
+                   }
+                   else {
+                       alert("Selecione um relatório.");
+                   }
+               }
+               else {
+                   alert("Selecione ao menos uma conciliação.");
+               }
+                @*$.ajax({
+                    url: '@Url.Action("gerarRelatorios", "StatementRelatorios")',
+                    data: { Id_Conciliacao: idLstConciliacao }
+                    //success: function (data) { $('#my-modal').modal('toggle'); alert("Registro alterado com sucesso!"); $('#myForm').submit(); }
+                });*@
+            })
+
+        </script>
+
+
+    </body>
+}
+</html>

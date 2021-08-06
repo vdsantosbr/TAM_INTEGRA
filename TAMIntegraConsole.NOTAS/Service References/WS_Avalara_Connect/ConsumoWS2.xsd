@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Efisc.MonitorNFe.ConsumoWS.Dto" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="EventoReqDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ChaveNFe" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Motivo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TipoEvento" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EventoReqDto" nillable="true" type="tns:EventoReqDto" />
+  <xs:complexType name="EventoRespDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ChaveNFe" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Evento" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Mensagem" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Sucesso" type="xs:int" />
+      <xs:element minOccurs="0" name="Usuario" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EventoRespDto" nillable="true" type="tns:EventoRespDto" />
+  <xs:complexType name="ArrayOfEventoReqDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="EventoReqDto" nillable="true" type="tns:EventoReqDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEventoReqDto" nillable="true" type="tns:ArrayOfEventoReqDto" />
+  <xs:complexType name="ArrayOfEventoRespDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="EventoRespDto" nillable="true" type="tns:EventoRespDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEventoRespDto" nillable="true" type="tns:ArrayOfEventoRespDto" />
+  <xs:complexType name="EventoCTeReqDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ChaveCTe" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Motivo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TipoEvento" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EventoCTeReqDto" nillable="true" type="tns:EventoCTeReqDto" />
+  <xs:complexType name="EventoCTeRespDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ChaveCTe" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Evento" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Mensagem" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Sucesso" type="xs:int" />
+      <xs:element minOccurs="0" name="Usuario" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EventoCTeRespDto" nillable="true" type="tns:EventoCTeRespDto" />
+</xs:schema>

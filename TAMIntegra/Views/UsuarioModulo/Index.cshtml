@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Entities.UsuarioModulo>
+
+@{
+    ViewBag.Title = "Configurações - Módulos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Configurações - Módulos</h3>
+
+<hr />
+
+@using (Html.BeginForm("Index", "UsuarioModulo", FormMethod.Post))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+    <table class="tabela-filtro" border="0">
+        <tr>
+            <td>
+                @Html.Label("Nome", new { @class = "form-negrito" })
+                @Html.Editor("nome", new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.Label("Situação", new { @class = "form-negrito" })
+                @Html.DropDownList("idSituacao", (SelectList)ViewBag.UsuarioModuloSituacao, "-- Selecione --", new { @class = "form-control" })
+            </td>
+            <td class="botao-filtro" width="1">
+                <input type="submit" name="enviaForm" value="Filtrar" class="btn btn-success" />
+            </td>
+        </tr>
+    </table>
+}
+
+<hr />
+
+<p class="texto-direita"><input type="button" value="Novo registro" class="btn btn-success" onclick="AbreAdmin('Admin', 'UsuarioModulo', '', 550, 420)" /></p>
+
+<table class="tabela-grid">
+    <thead>
+        <tr>
+            <th width="30%">
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th width="30%">
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th width="30%">
+                @Html.DisplayNameFor(model => model.Situacao)
+            </th>
+            <th colspan="2" class="texto-centro">Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Situacao)</td>
+                    <td class="texto-centro"><img src="~/Images/Actions-document-edit-icon.png" onclick="AbreAdmin('Admin', 'UsuarioModulo', '@item.Id', 550, 420)"></td>
+                    <td class="texto-centro"><a href="@Url.Action("Delete", "UsuarioModulo", new { id = item.Id })"><img src="~/Images/Actions-edit-delete-icon.png" onclick="return confirm('Tem certeza que deseja excluir?')"></a></td>
+                </tr>
+            }
+        }        
+    </tbody>
+</table>

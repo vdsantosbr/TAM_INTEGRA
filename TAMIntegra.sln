@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TAMIntegra", "TAMIntegra\TAMIntegra.csproj", "{D9BE4273-5DF7-4791-BC8D-8CEE263D76E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{5E6BC14E-F579-4734-8B46-5A2350EEE8FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{998C2CA2-0FC0-46C4-8EAE-FC57AD526431}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{28DFE738-F567-44E0-8932-59F4A069C90A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryBuilder", "QueryBuilder\QueryBuilder.csproj", "{598209E0-A6C8-4CBC-9697-FFC8E0C89EBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TAMIntegraConsole.NOTAS", "TAMIntegraConsole.NOTAS\TAMIntegraConsole.NOTAS.csproj", "{FD016E51-C290-4994-AF65-506362C983A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TAMIntegraAvalara.Console", "TAMIntegraAvalara.Console\TAMIntegraAvalara.Console.csproj", "{45BED2B0-D177-41D2-917E-961B4726B6B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9BE4273-5DF7-4791-BC8D-8CEE263D76E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9BE4273-5DF7-4791-BC8D-8CEE263D76E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9BE4273-5DF7-4791-BC8D-8CEE263D76E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9BE4273-5DF7-4791-BC8D-8CEE263D76E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E6BC14E-F579-4734-8B46-5A2350EEE8FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E6BC14E-F579-4734-8B46-5A2350EEE8FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E6BC14E-F579-4734-8B46-5A2350EEE8FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E6BC14E-F579-4734-8B46-5A2350EEE8FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{998C2CA2-0FC0-46C4-8EAE-FC57AD526431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{998C2CA2-0FC0-46C4-8EAE-FC57AD526431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{998C2CA2-0FC0-46C4-8EAE-FC57AD526431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{998C2CA2-0FC0-46C4-8EAE-FC57AD526431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28DFE738-F567-44E0-8932-59F4A069C90A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28DFE738-F567-44E0-8932-59F4A069C90A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28DFE738-F567-44E0-8932-59F4A069C90A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28DFE738-F567-44E0-8932-59F4A069C90A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{598209E0-A6C8-4CBC-9697-FFC8E0C89EBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{598209E0-A6C8-4CBC-9697-FFC8E0C89EBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{598209E0-A6C8-4CBC-9697-FFC8E0C89EBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{598209E0-A6C8-4CBC-9697-FFC8E0C89EBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD016E51-C290-4994-AF65-506362C983A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD016E51-C290-4994-AF65-506362C983A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD016E51-C290-4994-AF65-506362C983A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD016E51-C290-4994-AF65-506362C983A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45BED2B0-D177-41D2-917E-961B4726B6B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45BED2B0-D177-41D2-917E-961B4726B6B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45BED2B0-D177-41D2-917E-961B4726B6B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45BED2B0-D177-41D2-917E-961B4726B6B6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

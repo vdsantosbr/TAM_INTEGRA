@@ -1,0 +1,1557 @@
+﻿
+@model Entities.ImportacaoSolPgtoDespesas
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pedidoModal = (IEnumerable<Entities.Compra>)ViewData["pedidoModal"];
+    var cont = 1;
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        option:disabled {
+  color: red !important; 
+}
+        .form-horizontal .form-group {
+    margin-right: -15px;
+    margin-left: 0 !important;
+}
+        /*.input-group.input-group-unstyled input.form-control {
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+}
+.input-group-unstyled .input-group-addon {
+    border-radius: 4px;
+    border: 0px;
+    background-color: transparent;
+}*/
+                .icon-stack {
+                    position: relative;
+                }
+
+                .fa {
+                    position: relative;
+                }
+
+                .icon-stack .glyphicon {
+                    position: absolute;
+                }
+
+                .fa .glyphicon {
+                    position: absolute;
+                }
+
+
+                /*.table-fixed {
+          width: 100%;
+          table-layout: fixed;
+        }
+
+
+        .table-fixed thead {
+          position: sticky;
+          position: -webkit-sticky;
+          top:50px;
+          z-index: 100;
+          background-color: #f9f9f9;
+          color: black;
+        }
+
+        .table-fixed thead th {
+            position: sticky;
+            position: -webkit-sticky;
+            top: 50px;
+            z-index: 100;
+            background-color: #f9f9f9;
+            color: black;
+        }*/
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 5px;
+}
+body{
+    overflow-x:hidden;
+}
+#tblItens th{
+    background:white;
+    position:sticky;
+    top:0;
+    z-index:99;
+}
+    </style>
+</head>
+
+
+                                                @using (Html.BeginForm("Index", "ImportacaoSolPgtoDespesas", FormMethod.Post, new { id = "myForm" }))
+                                                {
+
+    <body>
+        <input hidden id="itens" value="@Model.lstItens" />
+        <input hidden id="modal" />
+        <input hidden id="dtInicioRep" />
+        <input hidden id="dtFimRep" />
+        <input hidden id="divExibir" value="@Model.DivExibir"/>
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                    <fieldset>
+                        <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Importação - Adiantamento e Pagamento de Despesas</legend>
+                    </fieldset>
+                </div>
+            </main>
+            <br />
+            @*<div class="page-wrapper chiller-theme">*@
+            <main class="page-content">
+                <div class="container-fluid" style="padding-top:25px;padding-left: 21px;">
+                    <div class="col-xs-12" style="padding-left:0">
+                        <div class="col-md-12">
+                            <div class="form-horizontal">
+
+                                    <fieldset>
+
+                                        @*<legend>Integração com fornecedor</legend>*@
+                                        <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ stle="position:absolute;top:70px;width:97%">
+                                            @if (Model.lstDespesas != null)
+                                            {
+                                                using (Html.BeginForm("Index", "ImportacaoSolPgtoDespesas", FormMethod.Post, new { id = "myForm" }))
+                                                {
+
+                                                <div id="divFiltros" hidden>
+                                                    <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;">
+                                                        <div class="panel-heading" style="background-color:lightgray;padding:0px;">
+                                                            <div style="display:flex;justify-content:space-between">
+                                                                <div style="padding: 4px 5px;">Filtro</div>
+                                                                <div>
+                                                                    <button type="button" class="btn btn-success btn-sm" id="btnNovaDespesaX" style="">
+                                                                        <span class="glyphicon glyphicon-plus"></span> Nova Despesa
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="panel-body" style="padding-bottom:0;">
+                                                            <div style="display:flex;justify-content:space-between;padding-bottom:10px">
+                                                                <div style="position:relative;z-index:99">
+                                                                    <label class="form-negrito">Data início</label>
+                                                                    @Html.Editor("strDataInicio", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", id = "strDataInicio", @onchange = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })
+                                                                    <div style="color: red" id="dtIniciDivErro">
+                                                                    </div>
+                                                                </div>
+                                                                <div style="position:relative;z-index:99">
+                                                                    @Html.Label("Data fim", new { @class = "form-negrito" })
+                                                                    @Html.Editor("strDataFim", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                                    <div style="color: red" id="dtFimDivErro"></div>
+                                                                </div>
+                                                                <div>
+                                                                    @Html.Label("Tipo de Documento", new { @class = "form-negrito" })
+                                                                    @Html.DropDownList("tpDocumento", (SelectList)ViewBag.TipoDocumento, "-- Selecione -- ", new { @class = "chosen-select", @id = "situacao" })
+                                                                </div>
+                                                                <div>
+                                                                    <label>Número Documento</label>
+                                                                    @Html.Editor("numDoc", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control", @autocomplete = "off" } })
+                                                                </div>
+                                                                <div>
+                                                                    <label>Processo</label>
+                                                                    @Html.Editor("processo", new { htmlAttributes = new { @style = "width:150px;height:26px", @class = "form-control", @autocomplete = "off" } })
+                                                                </div>
+                                                                <div>
+                                                                    <label>Invoice</label>
+                                                                    @Html.Editor("nota", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control", @autocomplete = "off" } })
+                                                                </div>
+                                                                <div>
+                                                                    @Html.Label("Situação", new { @class = "form-negrito" })
+                                                                    @Html.DropDownList("situacao", (SelectList)ViewBag.Situacao, "-- Selecione -- ", new { @class = "chosen-select", @id = "situacao" })
+                                                                </div>
+
+                                                                <div style="padding-top:16px">
+                                                                    <button class="btn btn-primary btn-sm" id="btnFiltrar" name="exibir" type="button">Exibir</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    @*<legend>Selecionar pedidos de compra</legend>*@
+                                                    <br />
+
+                                                    <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;min-height:20px;max-height:68vh;overflow:auto">
+                                                        <div class="panel-heading" style="background-color:lightgray;padding:5px">
+                                                            Despesas
+                                                        </div>
+                                                        <div class="panel-body" style="padding-bottom: 0;margin-bottom:0">
+                                                            @if (Model != null)
+                                                            {
+
+                                                                <div class="" id="th" style="">
+                                                                    <table class="table table-striped table-fixed" id="tblItens">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th style="text-align:center">Id_SPDesp</th>
+                                                                                <th style="text-align:center">Sp_ID</th>
+                                                                                <th style="text-align:center">Origem</th>
+                                                                                <th style="text-align:center">Tipo Documento</th>
+                                                                                <th style="text-align:center">Dt. Emissão</th>
+                                                                                <th style="text-align:center">Fornecedor</th>
+                                                                                <th style="text-align:center">Vencimento</th>
+                                                                                <th style="text-align:center">Núm. Doc</th>
+                                                                                <th style="text-align:center">Processo</th>
+                                                                                <th style="text-align:center">Fatura</th>
+                                                                                <th style="text-align:center">Ref. Emissão</th>
+                                                                                <th style="text-align:center">Situação</th>
+                                                                                <th style="text-align:center">Opções</th>
+                                                                            </tr>
+                                                                        </thead>
+
+                                                                        <tbody>
+
+                                                                            @if (Model.lstItens != null)
+                                                                            {
+                                                                                foreach (Entities.ImportacaoSolPgtoDespesas item in Model.lstItens)
+                                                                                {
+
+                                                                                    <tr>
+                                                                                        <td style="text-align:center">@item.Id_SPDesp</td>
+                                                                                        <td style="text-align:center">@item.Sp_ID</td>
+                                                                                        <td style="text-align:center">@item.Origem</td>
+                                                                                        <td style="text-align:center">@item.Tipo_Documento</td>
+                                                                                        <td style="text-align:center">@item.Data_Emissao.Value.ToString("dd/MM/yyyy")</td>
+                                                                                        @if (item.Id_SPDesp > 0)
+                                                                                        {
+                                                                                            <td style="text-align:center"><a style="cursor:pointer" onclick="Edicao(@item.Id_SPDesp, 0, 0, 0)">@item.Sp_Codigo_Credor_Despesa</a></td>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <td style="text-align:center"><a style="cursor:pointer" onclick="Edicao(@item.Id_SPDesp, @item.Id_Integracao, @item.Sp_ID, '@item.Spd_Id_Despesa_Processo')">@item.Sp_Codigo_Credor_Despesa</a></td>
+                                                                                        }
+                                                                                        <td style="text-align:center">@item.Data_Vencimento.Value.ToString("dd/MM/yyyy")</td>
+                                                                                        <td style="text-align:center">@item.Sp_Num_Documento</td>
+                                                                                        <td style="text-align:center">@item.Sp_Cod_Processo</td>
+                                                                                        <td style="text-align:center">@item.Fat_Num_Fatura</td>
+                                                                                        <td style="text-align:center">@item.Ref_Emissao</td>
+                                                                                        <td style="text-align:center">@item.Situacao</td>
+                                                                                        @if (item.Id_SPDesp > 0)
+                                                                                        {
+                                                                                            <td style="vertical-align:top;text-align:center">
+                                                                                                <a id="iconeEditar" class="" style="padding:0"><span class="fas fa-edit" style="font-size:12px;padding:0" onclick="Edicao(@item.Id_SPDesp, 0, 0, 0)"></span></a>
+                                                                                                <a id="iconeExcluir" class="" style="padding:0"><span class="fa fa-trash" style="font-size:14px;padding:0"></span></a>
+                                                                                            </td>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <td style="text-align:center"></td>
+                                                                                        }
+
+                                                                                    </tr>
+
+                                                                                }
+                                                                            }
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            }
+                                                            @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Continuar</button>*@
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    @*<div class="pull-right btn-toolbar" style="padding-top:16px">
+                                                            <button class="btn btn-primary btn-sm" id="btnAdiantamento" name="exibir" type="button">Adiantamento</button>
+                                                            <button class="btn btn-primary btn-sm" id="btnDespNaoPrevista" name="exibir" type="button">Despesa não Prevista</button>
+                                                        </div>*@
+                                                </div>
+                                                    }
+                                                }
+                                            @if (Model.Div == "S")
+                                            {
+                                                    <div id="divDesp">
+                                                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 10px;margin-bottom:0;">
+                                                            <div class="panel-heading" style="background-color:lightgray">
+                                                                <div style="display:flex;justify-content:space-between">
+                                                                    <div>Formulário de Despesa</div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="panel-body" style="padding-bottom:0;">
+                                                            @if (Model.Id_SPDesp == 0 & Model.Sp_ID  != "")
+                                                            {
+                                                                //using (Html.BeginForm("Index", "ImportacaoSolPgtoDespesas", FormMethod.Post, new { id = "myForm2" }))
+                                                                //{
+
+                                                                <div class="row" style="padding:10px 10px 0px 10px;">
+                                                                    <div style="float:left;width:70%">
+                                                                        <div style="display:flex;justify-content:space-between;column-gap:20px">
+                                                                            <input hidden name="id_integracao" value="@Model.Id_Integracao" />
+                                                                            <input hidden name="dtLiberacao" value="@Model.DtLiberacao" />
+                                                                            <input hidden name="strDataInicio" value="@Model.strDataInicio" />
+
+                                                                                <div>
+                                                                                    @Html.Label("Tipo de Documento", new { @class = "form-negrito" })
+                                                                                    <select class="chosen-select" disabled name="id_tp_documento_div">
+                                                                                        <option style="color:black !important" disabled value="2" selected>Ajuste de Despesa</option>
+                                                                                    </select>
+                                                                                    <input hidden name="id_tp_documento_div" value="2" />
+                                                                                </div>
+                                                                                <div style="">
+                                                                                    @Html.Label("Número Documento", new { @class = "form-negrito" })
+                                                                                    @Html.Editor("numDocDiv", new { htmlAttributes = new { @style = "height:26px", @class = "form-control", @disabled = "true" } })
+                                                                                    <input hidden name="numDocDiv" value="@Model.NumDocDiv" />
+                                                                                    <div hidden id="divErroNumDoc" style="color:red">Digite o Número do Documento.</div>
+                                                                                </div>
+                                                                                <div style="">
+                                                                                    @Html.Label("Processo", new { @class = "form-negrito" })
+                                                                                    @Html.Editor("processoDiv", new { htmlAttributes = new { @style = "height:26px", @class = "form-control", @disabled = "true" } })
+                                                                                    <input hidden name="processoDiv" value="@Model.ProcessoDiv"/>
+                                                                                    <div hidden id="divErroProcesso" style="color:red">Digite o Processo e/ou Invoice.</div>
+                                                                                </div>
+                                                                            
+                                                                            <div style="">
+                                                                                @Html.Label("Invoice", new { @class = "form-negrito" })
+                                                                                @Html.Editor("invoiceDiv", new { htmlAttributes = new { @style = "height:26px", @class = "form-control" } })
+                                                                               
+                                                                                <div hidden id="divErroInvoice" style="color:red">Digite o Processo e/ou Invoice.</div>
+                                                                            </div>
+                                                                            @if (Model.Id_SPDesp == 0 & Convert.ToInt16(Model.Sp_ID) > 0)
+                                                                            {
+                                                                                <div style="width:200px">
+                                                                                    @Html.Label("Filial", new { @class = "form-negrito" })
+                                                                                    <select class="chosen-select" disabled>
+                                                                                        <option style="color:black !important" disabled value="2" selected>Jundiaí</option>
+                                                                                    </select>
+                                                                                    <input hidden name="filialDiv" value="@Model.FilialDiv" />
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style="float:right;margin-top:20px">
+                                                                        <button class="btn btn-primary btn-sm" id="btSalvarFormulario1" name="salvar" type="submit" value="salvar">Salvar</button>
+                                                                        <button class="btn btn-primary btn-sm" id="" onclick="voltar()" type="button">Voltar</button>                                                                    
+    @*<input class="btn btn-default" value="submit files" type="submit" />*@
+                                                                    </div>
+                                                                </div>
+                                                                <br />
+                                                                <div style="display:flex;justify-content:space-between;padding:0px 10px 0px 10px;width:80%;column-gap:20px">
+                                                                    @if (Model.Id_SPDesp == 0 & Convert.ToInt16(Model.Sp_ID) > 0)
+                                                                    {
+                                                                        <div class="" style="width:500px">
+                                                                            <div class="form-group" style="margin:0 !important">
+                                                                                @*<label class="control-label" for="inputGroup">Fornecedor </label>*@
+                                                                                @Html.Label("Fornecedor", new { @class = "form-negrito" })
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" placeholder="BUSCA POR NOME, CNPJ OU CODCFO" id="fornecedor" style="height:26px" value="@Model.FornecedorDiv" readonly />
+                                                                                    <span class="input-group-addon" id="" style="padding: 3px 3px 0px 3px;">
+                                                                                        <i class="fa fa-search"></i>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <input hidden name="fornecedorDiv" value="@Model.FornecedorDiv" />
+                                                                            <div hidden id="divErroFornecedor" style="color:red">Preencha o Fornecedor.</div>
+                                                                        </div>
+                                                                    }
+                                                                    <div>
+                                                                        <label class="form-negrito">Dt. Emissão</label>
+                                                                        @Html.Editor("DtEmissaoDivFmt", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", @disabled = "true" } })
+                                                                        <input hidden name="dtEmissaoDiv" value="@Model.DtEmissaoDiv" />
+                                                                    </div>
+                                                                    <div style="width:250px">
+                                                                        @Html.Label("Moeda", new { @class = "form-negrito" })
+                                                                        @*@Html.DropDownList("moeda", (SelectList)ViewBag.Moeda, new { @class = "chosen-select" })*@
+                                                                        <select id="moedaDiv" name="moedaDiv" class="chosen-select">
+                                                                            @foreach (SelectListItem option in ViewBag.Moeda)
+                                                                            {
+                                                                                <option value="@option.Value" @(option.Value == "R$" ? "selected='selected'" : "")>@option.Text</option>
+
+                                                                            }
+                                                                        </select>
+                                                                        <div hidden id="divErroMoeda" style="color:red">Selecione a  Moeda.</div>
+                                                                    </div>
+                                                                    <div style="width: 120px">
+                                                                        @Html.Label("Valor", new { @class = "form-negrito" })
+                                                                        @Html.Editor("valorDiv", new { htmlAttributes = new { @style = "height:26px", @class = "form-control", @disabled = "true" } })
+                                                                    </div>
+                                                                    <div style="position:relative; z-index:999;">
+                                                                        @Html.Label("Dt. Vencimento", new { @class = "form-negrito" })
+                                                                        @*@Html.Editor("VencimentoDivFmt", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datefield" } })*@                                         
+                                                                        <input  name="VencimentoDiv" value="@Model.DtEmissaoDiv" style="width:100px;height:26px" class = "form-control datepickerInput"/>
+                                                                        <div hidden id="divErroVencimento" style="color:red">Selecione o vencimento.</div>
+                                                                    </div>
+                                                                    @*<div class="col-md-2">
+                                                                            @Html.Label("País", new { @class = "form-negrito" })
+                                                                            @Html.Editor("pais", new { htmlAttributes = new { @style = "height:26px", @class = "form-control", @disabled = "true" } })
+                                                                        </div>*@
+
+                                                                </div>
+                                                                <br />
+                                                                <div class="" style="padding:0px 10px 0px 10px;">
+                                                                    <div>
+                                                                        <label>Justificativa</label>
+                                                                        @Html.TextAreaFor(m => m.Justificativa, new
+                                                                   {
+                                                                       maxlength = 2000, // or other value
+                                                                       style = "width: 100%; height: 60px; max-height: 500px;",
+                                                                       id = "txtJustificativa"
+                                                                   })
+                                                                    </div>
+
+                                                                </div>
+                                                                //}
+                                                            }
+                                                            else
+                                                            {
+                                                                using (Html.BeginForm("Index", "ImportacaoSolPgtoDespesas", FormMethod.Post, new { id = "myForm2" }))
+                                                                {
+                                                                <div class="row" style="padding:10px 10px 0px 10px;">
+                                                                    <div style="float:left;width:70%">
+                                                                        <div style="display:flex;justify-content:space-between;column-gap:20px">
+                                                                            <div>
+                                                                                @Html.Label("Tipo de Documento", new { @class = "form-negrito" })
+                                                                                @Html.DropDownList("id_tp_documento_div", (SelectList)ViewBag.TipoDocumento, "-- Selecione -- ", new { @class = "chosen-select" })
+                                                                            </div>
+                                                                            <div style="">
+                                                                                @Html.Label("Número Documento", new { @class = "form-negrito" })
+                                                                                @Html.Editor("numDocDiv", new { htmlAttributes = new { @style = "height:26px", @class = "form-control" } })
+                                                                                <div hidden id="divErroNumDoc" style="color:red">Digite o Número do Documento.</div>
+                                                                            </div>
+                                                                            <div style="">
+                                                                                @Html.Label("Processo", new { @class = "form-negrito" })
+                                                                                @Html.Editor("processoDiv", new { htmlAttributes = new { @style = "height:26px", @class = "form-control" } })
+                                                                                <div hidden id="divErroProcesso" style="color:red">Digite o Processo e/ou Invoice.</div>
+                                                                            </div>                                                                            
+                                                                            <div style="">
+                                                                                @Html.Label("Invoice", new { @class = "form-negrito" })
+                                                                                @Html.Editor("invoiceDiv", new { htmlAttributes = new { @style = "height:26px", @class = "form-control" } })
+                                                                                <div hidden id="divErroInvoice" style="color:red">Digite o Processo e/ou Invoice.</div>
+                                                                            </div>     
+                                                                            <div style="width:200px">
+                                                                                @Html.Label("Filial", new { @class = "form-negrito" })
+                                                                                @*@Html.DropDownList("filialDiv", (SelectList)ViewBag.Filial, "-- Selecione -- ", new { @class = "chosen-select" })*@
+                                                                                <select id="filialDiv" name="filialDiv" class="chosen-select">
+                                                                                    @foreach (SelectListItem option in ViewBag.Filial)
+                                                                                    {
+                                                                                        <option value="@option.Value" @(option.Value == "2" ? "selected='selected'" : "")>@option.Text</option>
+                                                                                    }
+                                                                                  </select>
+                                                                                    <div hidden id="divErroFilial" style="color:red">Selecione a Filial.</div>
+</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style="float:right;margin-top:20px">
+                                                                        <button class="btn btn-primary btn-sm" id="btSalvarFormulario1" name="salvar" type="submit" value="salvar">Salvar</button>
+                                                                        @*<input class="btn btn-default" value="submit files" type="submit" />*@
+                                                                    </div>
+                                                                </div>
+                                                                <br />
+                                                                <div style="display:flex;justify-content:space-between;padding:0px 10px 0px 10px;width:80%;column-gap:20px">
+                                                                        <div class="" style="width:500px">
+                                                                            <div class="form-group" style="margin:0 !important">
+                                                                                @*<label class="control-label" for="inputGroup">Fornecedor </label>*@
+                                                                                @Html.Label("Fornecedor", new { @class = "form-negrito" })
+                                                                                <div class="input-group">
+                                                                                    @if (Model.FornecedorDiv != "")
+                                                                                    {
+                                                                                        <input type="text" class="form-control" placeholder="BUSCA POR NOME, CNPJ OU CODCFO" id="fornecedorDiv" name="fornecedorDiv" style="height:26px" value="@Model.FornecedorDiv" />
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <input type="text" class="form-control" placeholder="BUSCA POR NOME, CNPJ OU CODCFO" id="fornecedorDiv" name="fornecedorDiv" style="height:26px" />
+                                                                                    }
+                                                                                    <span class="input-group-addon" id="btnBuscaFornecedor" style="padding: 3px 3px 0px 3px;">
+                                                                                        <i class="fa fa-search"></i>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div hidden id="divErroFornecedor" style="color:red">Preencha o Fornecedor.</div>
+                                                                        </div>                                                                   
+                                                                    <div>
+                                                                        <label class="form-negrito">Dt. Emissão</label>
+                                                                        @Html.Editor("dtEmissaoDiv", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput" } })
+                                                                    </div>
+                                                                    <div style="width:250px">
+                                                                        @Html.Label("Moeda", new { @class = "form-negrito" })
+                                                                        @*@Html.DropDownList("moeda", (SelectList)ViewBag.Moeda, new { @class = "chosen-select" })*@
+                                                                        <select id="moedaDiv" name="moedaDiv" class="chosen-select">
+                                                                            @foreach (SelectListItem option in ViewBag.Moeda)
+                                                                            {
+                                                                                if (@Model.MoedaDiv != "R$")
+                                                                                {
+                                                                                    <option value="@option.Value" @(option.Value == Model.MoedaDiv ? "selected='selected'" : "")>@option.Text</option>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <option value="@option.Value" @(option.Value == "R$" ? "selected='selected'" : "")>@option.Text</option>
+                                                                                }
+                                                                            }
+                                                                        </select>
+                                                                        <div hidden id="divErroMoeda" style="color:red">Selecione a Moeda.</div>
+                                                                    </div>
+                                                                    <div style="width: 120px">
+                                                                        @Html.Label("Valor", new { @class = "form-negrito" })
+                                                                        @Html.Editor("valorDiv", new { htmlAttributes = new { @style = "height:26px", @class = "form-control", @disabled = "true" } })
+                                                                    </div>
+                                                                    <div style="position:relative; z-index:999;">
+                                                                        @Html.Label("Dt. Vencimento", new { @class = "form-negrito" })
+                                                                        @Html.Editor("vencimentoDiv", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput" } })
+                                                                        <div hidden id="divErroVencimento" style="color:red">Selecione o vencimento.</div>
+                                                                    </div>
+                                                                    @*<div class="col-md-2">
+                                                                            @Html.Label("País", new { @class = "form-negrito" })
+                                                                            @Html.Editor("pais", new { htmlAttributes = new { @style = "height:26px", @class = "form-control", @disabled = "true" } })
+                                                                        </div>*@
+
+                                                                </div>
+                                                                <br />
+                                                                <div class="" style="padding:0px 10px 0px 10px;">
+                                                                    <div>
+                                                                        <label>Justificativa</label>
+                                                                        @Html.TextAreaFor(m => m.Justificativa, new
+                                                                   {
+                                                                       maxlength = 2000, // or other value
+                                                                       style = "width: 100%; height: 60px; max-height: 500px;",
+                                                                       id = "txtJustificativa"
+                                                                   })
+                                                                    </div>
+
+                                                                </div>
+                                                                }
+                                                            }
+                                                            </div>
+
+                                                        </div>
+                                                        <br />
+                                                        <div hidden style="padding-bottom:10px" class="btn-toolbar">
+                                                            <button class="btn btn-success btn-sm" id="btnNovaDespesa" name="exibir" type="button">Novo Item</button>
+                                                            <button class="btn btn-primary btn-sm" id="btnLiberarPag" name="exibir" type="button">Liberar Pagamento</button>
+                                                        </div>
+
+
+                                                        @*<div style="padding-top:10px" class="btn-toolbar">
+                                                                <button class="btn btn-primary btn-sm pull-right" id="btnSalvarSolicitacao2" name="exibir" type="button">Salvar</button>
+                                                            </div>*@
+
+
+                                                        <div class="modal fade" id="modalBuscaFornecedor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+                                                            <div class="modal-dialog" role="document" style="width:100%">
+                                                                <div class="modal-content" style="width:100%">
+                                                                    <div class="modal-body" style="height:240px;padding:0;width: 100%;overflow:visible">
+
+                                                                        <div class="panel with-nav-tabs panel-default" style="border-bottom:hidden">
+                                                                            <div class="panel-heading" style="background-color:lightgray">
+                                                                                <h5 style="font-weight" class="modal-title" id="exampleModalLabel">
+                                                                                    Busca<span id="id_fatura_rep"></span>
+                                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </h5>
+
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <table id="tblBuscaFornecedor">
+                                                                                    <tbody></tbody>
+                                                                                </table>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="modal fade" id="modalBuscaFornecedor2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td>bBusca</td>
+                                                                                <td>
+                                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <table id="tblReprocessar">
+                                                                            <tbody></tbody>
+                                                                        </table>
+
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                                                                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="modal fade" id="modalItem" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                                                            <div class="modal-dialog modal-lg modal-dialog-centered" style="height:99%">
+                                                                <div class="modal-content" style="height:100%">
+                                                                    <div class="modal-header text-center" style="padding:5px;background-color:lightgray">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <span style="font-weight:bold">Item da Despesa</span>
+                                                                    </div>
+                                                                    <div class="modal-body" style="padding:0 15px 0 15px;height:100%;overflow-y:visible;max-height:100%">
+
+
+                                                                        @*<div class="panel with-nav-tabs panel-default" style="padding-bottom: 10px;margin-bottom:0;">
+                                                                            <div class="panel-body" style="padding-bottom:0;">*@
+                                                                        <div class="row">
+
+                                                                            <div class="col-md-6" style="position:relative;z-index:999">
+                                                                                @Html.Label("Item", new { @class = "form-negrito" })<br />
+                                                                                @Html.DropDownList("itemModal", (SelectList)ViewBag.DescItem, "-- Selecione -- ", new { @class = "chosen-select", @id = "itemModal" })
+                                                                                <div hidden id="divErroItemModal" style="color:red">Selecione o Item.</div>
+                                                                            </div>
+                                                                            <div class="col-md-6" style="position:relative;z-index:999">
+                                                                                @Html.Label("Centro de Custo", new { @class = "form-negrito" })<br />
+                                                                                @Html.DropDownList("filialModal", (SelectList)ViewBag.Filial, "-- Selecione -- ", new { @class = "chosen-select", @id = "filialModal" })
+                                                                                <div hidden id="divErroFilialModal" style="color:red">Selecione a Filial.</div>
+                                                                            </div>
+
+
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                @Html.Label("Descrição Complementar", new { @class = "form-negrito" })
+                                                                                @Html.Editor("descComplModal", new { htmlAttributes = new { @style = "height:26px", @class = "form-control" } })
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        <div class="row">
+                                                                            <div class="col-md-3">
+                                                                                @Html.Label("Data", new { @class = "form-negrito" })
+                                                                                @Html.Editor("dataModal", new { htmlAttributes = new { @style = "height:26px", @class = "form-control datepickerInput" } })
+                                                                                <div hidden id="divErroDataModal" style="color:red">Selecione a data.</div>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                @Html.Label("Qtd", new { @class = "form-negrito" })
+                                                                                @Html.Editor("qtdModal", new { htmlAttributes = new { @style = "height:26px", @class = "form-control", @type = "number" } })
+                                                                                <div hidden id="divErroQtdModal" style="color:red">Preencha a Quantidade.</div>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                @Html.Label("Valor Unitário", new { @class = "form-negrito" })
+                                                                                @Html.Editor("vlUnitarioModal", new { htmlAttributes = new { @style = "height:26px", @class = "form-control", @type = "number" } })
+                                                                                <div hidden id="divErroVlUnitarioModal" style="color:red">Preencha o valor.</div>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                @Html.Label("Valor Total", new { @class = "form-negrito" })
+                                                                                @Html.Editor("vlTotalModal", new { htmlAttributes = new { @style = "height:26px", @class = "form-control", @disabled = "true" } })
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                        @*<div class="row DescItem" id="divDescItem" hidden>
+
+                                                                                <table class="table table-striped table-fixed" id="tblAddRow">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Descrição do Item</th>
+                                                                                            <th>Descrição</th>
+                                                                                            <th>Centro de Custo</th>
+                                                                                            <th>Preço</th>
+                                                                                            <th>Qtd</th>
+                                                                                            <th>Valor</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <tr></tr>
+
+                                                                                    </tbody>
+                                                                                </table>
+
+                                                                            </div>*@
+
+                                                                        @*</div>
+
+                                                                            </div>*@
+                                                                        <div style="padding-top:10px" class="btn-toolbar">
+                                                                            <button class="btn btn-primary btn-sm pull-right" id="btnSalvarSolicitacao" name="exibir" type="button">Salvar Item</button>
+                                                                        </div>
+                                                                        <br />
+                                                                    </div>
+                                                                </div>
+                                                            </div><!-- /.modal-content -->
+                                                        </div>
+                                                    </div>
+
+                                                
+
+                                            }
+
+                                            @if (Model.DivDespesas == "S")
+                                            {
+                                                <div class="panel with-nav-tabs panel-default" style="padding-bottom: 10px;margin-bottom:0;">
+                                                    <div class="panel-heading" style="background-color:lightgray">
+                                                        Despesas
+                                                    </div>
+                                                    <div class="panel-body" style="padding-bottom:0;">
+                                                        <div class="row" id="divDescItem">
+                                                            <table class="table table-striped table-fixed" id="tblAddRow2">
+                                                                <thead>
+                                                                    <tr>
+                                                                        @*<th><input type="checkbox" id="checkedAll" /></th>*@
+                                                                        <th style="text-align:center">Descrição do Item</th>
+                                                                        <th style="text-align:center">Descrição</th>
+                                                                        <th style="text-align:center">Centro de Custo</th>
+                                                                        <th style="text-align:center">Preço</th>
+                                                                        <th style="text-align:center">Qtd</th>
+                                                                        <th style="text-align:center">Valor</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @*@if (Model != null)
+                                                                        {
+                                                                            if (Model.lstDespesas != null)
+                                                                            {
+                                                                                foreach (Entities.ImportacaoSolPgtoDespesas item in Model.lstDespesas)
+                                                                                {
+                                                                                 <tr>
+                                                                                     <td style="text-align:center">teste</td>
+                                                                                     <td style="text-align:center">@item.Desc</td>
+                                                                                     <td style="text-align:center">@item.Dt_Emissao.ToString("dd/MM/yyyy")</td>
+
+                                                                                     <td style="text-align:center">@item.Dt_Vencimento.ToString("dd/MM/yyyy")</td>
+                                                                                     <td style="text-align:center">@item.NumDocumento</td>
+                                                                                     <td style="text-align:center">@item.Processo</td>
+                                                                                     <td style="text-align:center">@item.Status</td>
+
+                                                                                 </tr>
+                                                                                }
+                                                                            }
+                                                                        }*@
+                                                                </tbody>
+                                                            </table>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            }
+                                        </div>
+
+                                    </fieldset>
+                            </div><!-- /.modal-dialog -->
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+
+
+
+
+
+            <script>
+
+                $(document).ready(function () {
+                    @*var height = screen.height;
+                    var lstItens = @Html.Raw(Json.Encode(Model.lstItens));
+                    if (lstItens.length > 0)
+                    {
+
+                        $('.inner').css('height', height/2 + 'px');
+                    }*@
+
+
+                    allWells = $('#Security-Setup-step'),
+                    allWells2 = $('#VerifyEmail-step')
+                    //,allNextBtn = $('.nextBtn');
+
+                    allWells.hide();
+                    allWells2.hide();
+
+                    var menuAtivo = $('#menuAtivo').val();
+                    $('.menuEstoque .sidebar-submenu').toggle();
+                });
+
+
+                $('.consultaPedido').click(function () {
+                    $(".divConsultaPedido").toggle();
+                    $(".divParametrosPedido").toggle();
+                });
+
+                $('a.modalBTN').click(function () {
+                    $('#my-modal').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                });
+
+
+            </script>
+
+
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+            <!-- jQuery library -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+            <!-- Latest compiled JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+            <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+            <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+            <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+            @*<link href="~/content/indexcompras.css" rel="stylesheet" />
+            <link href="~/content/Estoque.css" rel="stylesheet" />
+            <script type="text/javascript" src="~/scripts/Estoque.js"></script>*@
+            <script>
+                $(window).load(function () {
+                    $(".chosen-select").chosen()
+                });
+            </script>
+
+            <script>
+                $(function () {
+                    let divExibir = $('#divExibir').val();
+                    $(divExibir).show();
+                    //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' }).val();
+                    //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' });
+                    $(".datepickerInput").datepicker({
+                        dateFormat: 'dd/mm/yy',
+                        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        nextText: 'Próximo',
+                        prevText: 'Anterior'
+                    });
+
+                });
+                function isValidDate(date, campo) {
+
+                    var regEx = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+
+                    if (regEx.test(date) == true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+
+                $('#btnFiltrar').click(function () {
+                    var dtInicio = $('#strDataInicio').val();
+                    var dtFim = $('#strDataFim').val();
+                    var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "exibir").val("exibir");
+                    $('#myForm').append($(input));
+                    $('#divExibir').remove();
+                    var divExibir = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "divExibir").val("#divFiltros");
+                    $('#myForm').append($(divExibir));
+
+
+                    if ((dtInicio == "" || dtInicio == null) || (dtFim == "" || dtFim == null)) {
+                        if ((dtInicio == "" || dtInicio == null)) {
+                            $('#dtIniciDivErro').text('Selecione a data início.');
+                        }
+                        if ((dtFim == "" || dtFim == null)) {
+                            $('#dtFimDivErro').text('Selecione a data fim.');
+                        }
+                        $("#btnFiltrar").attr("disabled", true)
+                    }
+                    else {
+
+                        var validaDTInicio = isValidDate(dtInicio, 'strDataInicio');
+
+                        var validaDTFim = isValidDate(dtFim, 'strDataFim');
+
+                        if (validaDTInicio == true & validaDTFim == true) {
+                            $("#btnFiltrar").attr("disabled", false)
+                            document.getElementById("myForm").submit();
+                        }
+                        else {
+                            if (validaDTInicio == false) {
+                                $('#dtIniciDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                            if (validaDTFim === false) {
+                                $('#dtFimDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                        }
+
+                    }
+                })
+
+                $("#strDataInicio").keyup(function () {
+                    $('#dtIniciDivErro').text('');
+                    $("#btnFiltrar").attr("disabled", false)
+                });
+
+                $("#strDataFim").keyup(function () {
+                    $('#dtFimDivErro').text('');
+                    $("#btnFiltrar").attr("disabled", false);
+                });
+
+
+                function Informativo(id_integracao, sp_id, sp_id_despesa_processo) {
+                    $.ajax({
+                        url: '@Url.Action("Informativo", "FinanceiroDespesas")',
+                        //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                        //dataType: "json",
+                        traditional: true,
+                        //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                        data: { id_integracao, sp_id, sp_id_despesa_processo},
+                        contentType: 'json',
+
+                        success: function (response) {
+                            var credor = response[0].Credor;
+                            var processo = response[0].Processo;
+                            var cadastro = response[0].Cadastro;
+                            var liberacao = response[0].Liberacao;
+                            var vencimento = response[0].Vencimento;
+                            var despesa = response[0].Despesa;
+                            var documento = response[0].Documento;
+                            var serie = response[0].Serie;
+                            var moeda = response[0].Moeda;
+                            var codDespesa = response[0].CodCredorDespesa;
+                            var vrDespesa = response[0].VrPrevistoDespesa;
+                            vrDespesa = vrDespesa != 0 ? parseFloat(vrDespesa).toLocaleString() : '';
+                            var vrAdiantado = response[0].VrAdiantadoDespesa;
+                            vrAdiantado = vrAdiantado != 0 ? parseFloat(vrAdiantado).toLocaleString() : '';
+                            var vrRealDespesa = response[0].VrRealDespesa;
+                            vrRealDespesa = vrRealDespesa != 0 ? parseFloat(vrRealDespesa).toLocaleString() : '';
+                            var vrPagarDespesa = response[0].VrPagarDespesa;
+                            vrPagarDespesa = vrPagarDespesa != 0 ? parseFloat(vrPagarDespesa).toLocaleString() : '';
+                            var processoIntegracao = response[0].ProcessoIntegracao;
+                            var id_int = response[0].Id_Integracao;
+                            var id = response[0].Id;
+                            var data = '';
+                            data = response[0].Data;
+                            var situacao = response[0].Situacao;
+                            var tipo = response[0].Tipo;
+                            var complemento = response[0].Complemento;
+                            var idIntegracao = response[0].Id_Integracao;
+                            var idInt = response[0].IdInt;
+                            var codTMVInt = response[0].CodTMVInt;
+                            var chaveOrigem = response[0].ChaveOrigem;
+                            var identificador = response[0].Identificador;
+                            var movimento = response[0].Movimento;
+                            var numMovimento = response[0].NumMovimento;
+                            var cor = response[0].Cor;
+                            var consideracoes = response[0].Consideracoes;
+                            var cor = response[0].Cor;
+                            if (cor == 'B') {
+                                $("#corConsideracoes").css("background-color", "white");
+                            }
+                            else if (cor == 'A') {
+                                $("#corConsideracoes").css("background-color", "lightgoldenrodyellow");
+                            }
+                            else {
+                                $("#corConsideracoes").css("background-color", "orangered");
+                            }
+
+                            $('#credor_Modal').html(credor);
+                            $('#processo_Modal').html(processo);
+                            $('#cadastro_Modal').html(cadastro);
+                            $('#liberacao_Modal').html(liberacao);
+                            $('#vencimento_Modal').html(vencimento);
+                            $('#despesa_Modal').html(despesa);
+                            $('#documento_Modal').html(documento);
+                            $('#serie_Modal').html(serie);
+                            $('#moeda_Modal').html(moeda);
+                            $('#cod_Credor_Modal').html(codDespesa);
+                            $('#vrDespesa_Modal').html(vrDespesa);
+                            $('#vr_adiantado_despesa_Modal').html(vrAdiantado);
+                            $('#valor_real_Modal').html(vrRealDespesa);
+                            $('#valor_pagar_despesa_Modal').html(vrPagarDespesa);
+                            $('#processo_integracao_Modal').html(processoIntegracao);
+                            $('#integracao_Modal').html(id_int);
+                            $('#id_Modal').html(id);
+                            $('#data_Modal').html(data);
+                            $('#situacao_Modal').html(situacao);
+                            $('#tipo_Modal').html(tipo);
+                            $('#complemento_Modal').html(complemento);
+                            $('#idint_Modal').html(idInt);
+                            $('#codtmvint_Modal').html(codTMVInt);
+                            $('#chave_origem_int_Modal').html(chaveOrigem);
+                            $('#identificador_Modal').html(identificador);
+                            $('#numMovimento_Modal').html(numMovimento);
+                            $('#movimento_Modal').html(movimento);
+                            $('#consideracoes').html(consideracoes);
+
+
+                            //$('#situacao_Modal').html(situacao);
+                            //$('#data_Modal').html(data);
+                            //$('#tipo_Modal').html(tipo);
+                            //$('#forma_pagamento_Modal').html(forma_pag);
+                            //$('#moeda_Modal').html(moeda);
+                            //$('#valor_Modal').html(valor);
+                            //$('#cotacao_Modal').html(cotacao);
+                            //$('#valor_total_Modal').html(valor_total);
+                            //$('#valor_total_reais_Modal').html(valor_total_reais);
+                            //$('#cliente_Modal').html(cliente);
+                            //$('#consideracoes_Modal').html(consideracoes);
+
+                            $('#modalInformativo').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+
+
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //alert(exceptionThrown);
+                        },
+                    });
+                }
+
+                $('#btnNovaDespesa').click(function(){
+                    $('#modalItem').modal('hide');
+                    $('#itemModal').val('-- Selecione --');
+                    $('#itemModal').trigger("chosen:updated");
+                    $('#filialModal').val('-- Selecione --');
+                    $('#filialModal').trigger("chosen:updated");
+                    $('#descComplModal').val('');
+                    $('#dataModal').val('');
+                    $('#qtdModal').val('');
+                    $('#vlUnitarioModal').val('');
+                    $('#vlTotalModal').val('');
+
+                    $('#modalItem').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                })
+
+
+
+                $('.menuImportacao .sidebar-submenu').addClass("active");
+                $('.menuImportacao .sidebar-submenu').toggle();
+
+
+                var height = $('#th').height();
+                var resHeight = window.screen.height;
+                //if(height > 400)
+                //{
+                //    height = height * (22 / 100);
+                //    alert(height);
+                //    //height = height / 2;
+                //    $('#th').height(height +  'px');
+                //}
+                if(height > 300)
+                {
+                    if(resHeight > 700 & resHeight < 800)
+                    {
+                        $('#th').height('400px');
+                    }
+                    else if(resHeight > 1000 & resHeight < 1100)
+                    {
+                        $('#th').height('650px');
+                    }
+                }
+
+                $('#iconeEditar').click(function(){
+                    $('#divExibir').remove();
+                    var divExibir = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "divExibir").val("#divDesp");
+                    $('#myForm').append($(divExibir));
+                    document.getElementById("myForm").submit();
+                })
+
+                $('#btnNovaDespesaX').click(function(){
+                    $('#divExibir').remove();
+                    var divExibir = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "exibir").val("#divDesp");
+                    $('#myForm').append($(divExibir));
+                    document.getElementById("myForm").submit();
+                })
+
+                $('#btnBuscaFornecedor').click(function(){
+                    let valor = $('#fornecedorDiv').val();
+                    if(valor == "" || valor == null)
+                    {
+                        alert('Digite o nome, CNPJ ou CODCFO.')
+                    }
+                    else
+                    {
+                        $.ajax({
+                            url: '@Url.Action("BuscaFornecedor", "ImportacaoSolPgtoDespesas")',
+                            traditional: true,
+                            data: { valor : valor},
+                            contentType: 'json',
+
+                            success: function (response) {
+
+                                var event_data = '';
+                                var dataArray = response;
+
+                                if(dataArray.length == 1)
+                                {
+                                    for (var i = 0; i < dataArray.length; i++){
+                                        event_data += '<tr>';
+                                        event_data += '<td class="tdForn" ><a style="cursor:pointer">'+dataArray[i].Nome+'</a></td>';
+                                        event_data += '</tr>';
+                                    }
+                                }
+                                else
+                                {
+                                    for (var i = 0; i < dataArray.length; i++){
+                                        event_data += '<tr>';
+                                        event_data += '<td class="tdForn"><a style="cursor:pointer">'+dataArray[i].Nome+'</a></td>';
+                                        event_data += '</tr>';
+                                    };
+                                }
+
+                                ;
+
+                                $("#tblBuscaFornecedor tr>td").remove();
+                                $('#modalBuscaFornecedor').find('tbody').append(event_data);
+
+
+                                $('#modalBuscaFornecedor').modal({
+                                    show: true,
+                                    closeOnEscape: true,
+                                    backdrop: 'static',
+                                    keyboard: false
+                                })
+                            },
+                            error: function (xhr, textStatus, exceptionThrown) {
+
+                            },
+                        });
+                    }
+
+                })
+
+                $('#modalBuscaFornecedor').on('click', 'tr', function() {
+                    var values = $(this).find('td').map(function() {
+                        return $(this).text();
+                    });
+                    $('#fornecedorDiv').val(values[0]);
+                    $('#modalBuscaFornecedor').modal('hide');
+                });
+                $('#modalBuscaFornecedor').on('shown.bs.modal', function () {
+                    $(this).find('.modal-dialog').css({
+                        width: '100%',
+                        height: 'auto',
+                        'max-height': '100%',
+                        'padding-right': 0
+                    });
+
+                    $(this).css({
+                        'padding-right': 0
+                    });
+                });
+
+                // Add button Delete in row
+                //$('tbody tr')
+                //    .find('td')
+                //    //.append('<input type="button" value="Delete" class="del"/>')
+                //    .parent() //traversing to 'tr' Element
+                //    //.append('<td><a href="#" class="delrow">Delete Row</a></td>');
+                //  .append('<td><a href="#" class="delrow"><span class="" id="btnBuscaFornecedor"  style="padding: 3px 3px 0px 3px;border:0;color: #555;font-size: 12px;color:red"><i class="fas fa-minus-circle"></i></span></a></td>');
+
+
+
+                // Add row the table
+                $('#btnAddRow').on('click', function() {
+                    $("div.DescItem").css("display","block");
+
+
+                    let rowCount = document.getElementById('tblAddRow').rows.length - 1;
+                    var linha = 'myDropDownLisTId' + rowCount;
+                    var ccLinha = 'ccList' + rowCount;
+                    let descItemLinha = '.myDropDownLisTId' + (rowCount - 1);
+                    let descItem = '';
+                    let desc = '';
+                    let descLinha = '.ccList' + (rowCount - 1);
+                    let cc = '';
+                    let preco = '';
+                    let qtd = '';
+                    let valor = '';
+
+                    if(rowCount >= 2)
+                    {
+                        $(descItemLinha).find(":selected").each(function(){
+                            descItem =$(this).val();
+                        });
+
+                        $(descLinha).find(":selected").each(function(){
+                            cc =$(this).val();
+                        });
+
+                        desc = $('.desc' + (rowCount - 1)).val();
+                        preco = $('.preco' + (rowCount - 1)).val();
+                        qtd = $('.qtd' + (rowCount - 1)).val();
+                        valor = $('.valor' + (rowCount - 1)).val();
+
+                        $.ajax({
+                            url: '@Url.Action("SalvarSolicitacao", "ImportacaoSolPgtoDespesas")',
+                            traditional: true,
+                            contentType: 'json',
+                            data: { descItem : descItem, desc: desc, cc : cc, preco : preco, qtd : qtd, valor: valor},
+
+                            success: function (response) {
+
+                            },
+                            error: function (xhr, textStatus, exceptionThrown) {
+
+                            },
+                        });
+                    }
+
+
+
+                    $.ajax({
+                        url: '@Url.Action("DescricaoItem", "ImportacaoSolPgtoDespesas")',
+                        traditional: true,
+                        contentType: 'json',
+
+                        success: function (response) {
+
+                            var lastRow = '';
+                            if(lastRow == "" || lastRow == null)
+                            {
+                                $('#divDescItem').show();
+                                $('#tblAddRow tbody').append('<tr> <td><select class="chosen-select myDropDownLisTId myDropDownLisTId' + rowCount + '" style="height:26px" name="txtName[]"</select></td>' +
+                                    '<td><input class="form-control desc' + rowCount + '" style="height:26px" name="txtName[]"/></td>'+
+                                    '<td><select class="chosen-select ccList ccList' + rowCount + '" style="height:26px" name="txtName[]"</select></td>'+
+                                    '<td><input class="form-control preco' + rowCount + '" style="height:26px" name="txtName[]"/></td>'+
+                                    '<td><input class="form-control qtd' + rowCount + '" style="height:26px" name="txtName[]"/></td>'+
+                                    '<td><input class="form-control valor' + rowCount + '" style="height:26px" name="txtName[]"/></td>' +
+                                    '<td><a href="#" class="delrow"><span class="" id="btnBuscaFornecedor"  style="padding: 3px 3px 0px 3px;border:0;color: #555;font-size: 12px;color:red"><i class="fas fa-minus-circle"></i></span></a></td></tr>');
+
+                                $("." + linha).append($("<option     />").val(0).text('-- Selecione --'));
+                                $("." + ccLinha).append($("<option     />").val(0).text('-- Selecione --'));
+                                for (var i = 0; i < response.lstDescItem.length; i++){
+                                    $("." + linha).append($("<option     />").val(response.lstDescItem[i].DescItem).text(response.lstDescItem[i].DescItem));
+                                    $("." + ccLinha).append($("<option     />").val(response.lstCC[i].CC).text(response.lstCC[i].CC));
+                                }
+
+                            }
+                            else{
+                                lastRow = $('#tblAddRow tbody tr:last').html();
+                                $('#tblAddRow tbody').append('<tr>' + lastRow + '</tr>');
+                                $('#tblAddRow tbody tr:last input').val('');
+                            }
+
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+
+                        },
+                    });
+                });
+
+                $('#btnSalvarSolicitacao').click(function(){
+                    //var linhas = "";
+                    //var dados = [];
+                    //let rowCount = document.getElementById('tblAddRow').rows.length;
+
+                    //let descItemLinha = '.myDropDownLisTId' + (rowCount - 1);
+                    let descItem = '';
+                    let desc = '';
+                    //let descLinha = '.ccList' + (rowCount - 1);
+                    let cc = '';
+                    let preco = '';
+                    let qtd = '';
+                    let valor = '';
+                    let data = '';
+
+
+                    descItem = $('#itemModal').val();
+                    cc = $('#filialModal').val();
+                    desc = $('#descComplModal').val();
+                    preco = $('#vlUnitarioModal').val();
+                    qtd = $('#qtdModal').val();
+                    data = $('#dataModal').val();
+                    //$(descItemLinha).find(":selected").each(function(){
+                    //    descItem =$(this).val();
+                    //});
+
+                    //$(descLinha).find(":selected").each(function(){
+                    //    cc =$(this).val();
+                    //});
+
+                    //desc = $('.desc' + (rowCount - 1)).val();
+                    //preco = $('.preco' + (rowCount - 1)).val();
+                    //qtd = $('.qtd' + (rowCount - 1)).val();
+                    //valor = $('.valor' + (rowCount - 1)).val();
+
+                    if((descItem != '' & descItem != null) & (cc != '' & cc != null) & (preco != '' & preco != null) & (data != '' & data != null) & (qtd != '' & qtd != null))
+                    {
+                        $.ajax({
+                            url: '@Url.Action("SalvarSolicitacao", "ImportacaoSolPgtoDespesas")',
+                            traditional: true,
+                            contentType: 'json',
+                            data: { descItem : descItem, desc: desc, cc : cc, preco : preco, qtd : qtd, valor: valor, data : data},
+
+                            success: function (response) {
+                                $('#modalItem').modal('hide');
+                                $('#itemModal').val('-- Selecione --');
+                                $('#itemModal').trigger("chosen:updated");
+                                $('#filialModal').val('-- Selecione --');
+                                $('#filialModal').trigger("chosen:updated");
+                                $('#descComplModal').val('');
+                                $('#dataModal').val('');
+                                $('#qtdModal').val('');
+                                $('#vlUnitarioModal').val('');
+                                $('#vlTotalModal').val('');
+
+                                $('#tblAddRow2').find("tr:gt(0)").remove();
+
+                                for (var i =0; i <= response.length; i++)
+                                {
+                                    $('#tblAddRow2 tbody').append('<tr>'
+                                        + '<td style="text-align:center">' + response[i].DescItem + ' </td>'
+                                        + '<td style="text-align:center">' + response[i].Desc + ' </td>'
+                                        + '<td style="text-align:center">' + response[i].CC + ' </td>'
+                                        + '<td style="text-align:center">' + response[i].Preco + ' </td>'
+                                        + '<td style="text-align:center">' + response[i].Qtd + ' </td>'
+                                        + '<td style="text-align:center">' + response[i].Valor + ' </td>'
+                                        + '</tr>');
+                                }
+                            },
+                            error: function (xhr, textStatus, exceptionThrown) {
+
+                            },
+                        });
+                    }
+                    else{
+                        if(descItem == '' || descItem == null)
+                        {
+                            $('#divErroItemModal').show();
+                        }
+                        if(cc == '' || cc == null)
+                        {
+                            $('#divErroFilialModal').show();
+                        }
+                        if(preco == '' || preco == null)
+                        {
+                            $('#divErroVlUnitarioModal').show();
+                        }
+                        if(data == '' || data == null)
+                        {
+                            $('#divErroDataModal').show();
+                        }
+                        if(qtd == '' || qtd == null)
+                        {
+                            $('#divErroQtdModal').show();
+                        }
+                    }
+                });
+
+                // Delete row on click in the table
+                $('#tblAddRow').on('click', 'tr a', function(e) {
+                    var lenRow = $('#tblAddRow tbody tr').length;
+                    e.preventDefault();
+                    if (lenRow == 1 || lenRow <= 1) {
+                        alert("Can't remove all row!");
+                    } else {
+                        $(this).parents('tr').remove();
+                    }
+                });
+
+                $('#modalItem').on('shown.bs.modal', function () {
+                    $(this).find('.modal-dialog').css({
+                        width: '100%',
+                        height: 'auto',
+                        'max-height': '100%',
+                        'padding-right': 0
+                    });
+
+                    $(this).css({
+                        'padding-right': 0
+                    });
+
+                });
+
+                $('#vlUnitarioModal').on("keyup change click", function(){
+                    let qtd = $('#qtdModal').val();
+                    let vlUnitario = $('#vlUnitarioModal').val();
+
+                    if(qtd.length > 0 & vlUnitario.length > 0)
+                    {
+                        $('#vlTotalModal').val(qtd * vlUnitario);
+                        $('#valor').val(qtd * vlUnitario);
+                    }
+                    else
+                    {
+                        $('#vlTotalModal').val('');
+                        $('#valor').val('');
+                    }
+                });
+
+
+                $('#qtdModal').on("keyup change click", function(){
+                    let qtd = $('#qtdModal').val();
+                    let vlUnitario = $('#vlUnitarioModal').val();
+
+                    if(qtd.length > 0 & vlUnitario.length > 0)
+                    {
+                        $('#vlTotalModal').val(qtd * vlUnitario);
+                        $('#valor').val(qtd * vlUnitario);
+                    }
+                    else
+                    {
+                        $('#vlTotalModal').val('');
+                        $('#valor').val('');
+                    }
+                });
+
+                $('#btSalvarFormulario').click(function(){
+                    let filial = $('#filial').val();
+                    let processo = $('#processo').val();
+                    let invoice = $('#invoice').val();
+                    let numDoc = $('#numDoc').val();
+                    let moeda = $('#moeda').val();
+                    let vencimento = $('#vencimento').val();
+                    let fornecedor = $('#fornecedor').val();
+                    let rdDespesa = $('input[name=rdTpDespesa]:checked');
+
+                    if ($('input[name=rdTpDespesa]:checked') & filial != "" & (processo.length > 0 || invoice.length > 0) & numDoc.length > 0 & moeda.length > 0 & vencimento.length > 0 & fornecedor.length > 0
+                        & rdDespesa.length > 0) {
+                        $('#myForm').submit();
+                    }
+                    else
+                    {
+                        if(filial == ""){$('#divErroFilial').show();}
+                        if(processo == ""){$('#divErroProcesso').show();}
+                        if(invoice == ""){$('#divErroInvoice').show();}
+                        if(numDoc == ""){$('#divErroNumDoc').show();}
+                        if(moeda == ""){$('#divErroMoeda').show();}
+                        if(vencimento == ""){$('#divErroVencimento').show();}
+                        if(fornecedor == ""){$('#divErroFornecedor').show();}
+                        if(!$('input[name=rdTpDespesa]').is(":checked")){$('#divErroRdDespesa').show();}
+                    }
+                });
+
+                $('#filial').change(function(){
+                    $('#divErroFilial').hide();
+                });
+                $('#processo').keyup(function(){
+                    $('#divErroProcesso').hide();
+                });
+                $('#invoice').keyup(function(){
+                    $('#divErroInvoice').hide();
+                });
+                $('#numDoc').keyup(function(){
+                    $('#divErroNumDoc').hide();
+                });
+                $('#moeda').change(function(){
+                    $('#divErroMoeda').hide();
+                });
+                $('#vencimento').change(function(){
+                    $('#divErroVencimento').hide();
+                });
+                $('#fornecedor').keyup(function(){
+                    $('#divErroFornecedor').hide();
+                });
+                $('input[name=rdTpDespesa]').change(function(){
+                    $('#divErroRdDespesa').hide();
+                })
+                $('#itemModal').change(function(){
+                    $('#divErroItemModal').hide();
+                });
+                $('#filialModal').change(function(){
+                    $('#divErroFilialModal').hide();
+                });
+                $('#dataModal').change(function(){
+                    $('#divErroDataModal').hide();
+                });
+                $('#qtdModal').keyup(function(){
+                    $('#divErroQtdModal').hide();
+                });
+                $('#vlUnitarioModal').keyup(function(){
+                    $('#divErroVlUnitarioModal').hide();
+                });
+
+                function Edicao(ID_SPDESP, ID_INTEGRACAO, SP_ID, SPD_ID_DESPESA_PROCESSO){
+                        $.ajax({
+                            url: '@Url.Action("Edicao", "ImportacaoSolPgtoDespesas")',
+                            //dataType: "json",
+                            traditional: true,
+                            data: { id_spdesp: ID_SPDESP, id_integracao:ID_INTEGRACAO, sp_id:SP_ID, spd_id_despesa_processo:SPD_ID_DESPESA_PROCESSO},
+                            //contentType: 'json',
+                            success: function (response) {
+                                $('#exibir').remove();
+                                var divExibir = $("<input>")
+                                    .attr("type", "hidden")
+                                    .attr("name", "exibir").val("#divDesp");
+
+                                $('#id_spdesp').remove();
+                                var divIdSpDesp = $("<input>")
+                                    .attr("type", "hidden")
+                                    .attr("name", "id_spdesp").val(ID_SPDESP);
+
+                                $('#id_integracao').remove();
+                                var divIdIntegracao = $("<input>")
+                                    .attr("type", "hidden")
+                                    .attr("name", "id_integracao").val(ID_INTEGRACAO);
+
+                                $('#sp_id').remove();
+                                var divSpId = $("<input>")
+                                    .attr("type", "hidden")
+                                    .attr("name", "sp_id").val(SP_ID);
+
+                                $('#sp_id_despesa_processo').remove();
+                                var divIdDespesaProcesso = $("<input>")
+                                    .attr("type", "hidden")
+                                    .attr("name", "spd_id_despesa_processo").val(SPD_ID_DESPESA_PROCESSO);
+
+
+                               
+                                $('#myForm').append($(divIdSpDesp));
+                                $('#myForm').append($(divIdIntegracao));
+                                $('#myForm').append($(divSpId));
+                                $('#myForm').append($(divIdDespesaProcesso));
+                                $('#myForm').append($(divExibir));
+
+                                document.getElementById("myForm").submit();
+                            },
+                        });
+                }
+                function voltar() {
+                    document.getElementById("myForm").submit();
+                }
+            </script>
+
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</body>
+}
+</html>

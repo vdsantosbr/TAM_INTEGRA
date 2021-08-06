@@ -1,0 +1,1030 @@
+﻿@model Entities.ComposicaoVariacao
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var cont = 1;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+    <style>
+        .page-wrapper .page-content {
+    overflow: hidden;
+}
+        .modal-body {
+            max-height: 100% !important;
+            overflow-y: auto;
+        }
+        .tableFixHead {
+            /*overflow: auto;*/
+            height: 100px;
+            width: 100%;
+        }
+       .tableFixHead::-webkit-scrollbar {
+            width: 14px !important;
+            height: 12px;
+        }
+
+            .tableFixHead table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            .tableFixHead th,
+            .tableFixHead td {
+                padding: 8px 16px;
+            }
+              .tableFixHead {
+                    overflow-y: auto;
+                    height: 100px;
+                }
+
+                    .tableFixHead thead th {
+                        position: sticky;
+                        top: 0;
+                    }
+
+
+
+            /*td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            /*td:nth-child(2), th:nth-child(2) {
+            position: sticky;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            .tableFixHead th {
+                position: sticky;
+                top: 0;
+                background: #f9f9f9;
+                z-index: 2;
+            }
+
+        th:first-child, th:nth-child(2) {
+            z-index: 3;
+        }
+
+        .sticky-col {
+            position: sticky;
+            position: -webkit-sticky;
+            background-color: white;
+        }
+
+        .first-col {
+            width: 120px;
+            min-width: 100px;
+            max-width: 340px;
+            left: 0px;
+        }
+
+        .second-col {
+            width: 150px;
+            min-width: 20px;
+            max-width: 340px;
+            left: 100px;
+        }
+
+        .third-col {
+            width: 50px;
+            min-width: 110px;
+            max-width: 340px;
+            left: 190px;
+        }
+
+        .fourth-col {
+            width: 100px;
+            min-width: 80px;
+            max-width: 340px;
+            left: 280px;
+        }
+
+        input[type=checkbox], input[type=radio] {
+            /* margin: 4px 0 0; */
+            margin-top: 1px\9;
+            line-height: normal;
+        }
+
+        @@media screen and (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: 80px 60px 150px auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-container2 {
+                display: grid;
+                grid-template-columns: auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .page-wrapper {
+                height: 100vh;
+            }
+        }
+
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            /*border-width: 5px;
+            border-color: #3A2303 !important;*/
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+        /*.page-content {
+            height: 100vh;
+        }*/
+        body {
+            overflow: auto;
+        }
+
+        .fontErro {
+            color: red;
+        }
+        .historico{   
+        max-width: 250px !important;
+        overflow: auto !important;
+        text-overflow: clip !important;
+        white-space: nowrap !important;
+        }
+    </style>
+</head>
+@using (Html.BeginForm("Index", "ComposicaoVariacao", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+    <body>
+        <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;width:97%;z-index:100;">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:14px;position:relative;">
+                <fieldset>
+                    <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Variação Cambial - Composição da Variação</legend>
+                </fieldset>
+            </div>
+        </main>
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content">
+                <div class="container-fluid" style="padding-top:50px;padding-left:30px">
+                    <div id="divPedidosSelecionados">
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                <div style="display:flex;justify-content:space-between">
+                                    <div style="vertical-align:middle;padding:5px 10px"><span>Fechamento Contábil</span></div>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="padding: 5px !important;">
+                                <div style="display:flex;justify-content:space-between">
+                                    <div>
+                                        <table class="" id="tblItens" style="margin-bottom:0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="" style="text-align:left;min-width: 70px;padding-left: 20px !important;">ANO</th>
+                                                    <th class="" style="text-align:center;min-width: 110px">MÊS</th>
+                                                    <th class="" style="text-align:center;min-width:125px">FECHAMENTO</th>
+                                                    <th class="" style="text-align:center;min-width:70px">DT. CONTABILIZAÇÃO</th>
+                                                    <th style="text-align:center;min-width:120px">SITUAÇÃO</th>
+                                                    <th style="text-align:center;min-width:125px">RESPONSÁVEL</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model != null)
+                                                {
+                                                    if (Model.lstGrid != null)
+                                                    {
+                                                        foreach (Entities.ComposicaoVariacao item in Model.lstGrid)
+                                                        {
+                                                            <tr>
+                                                                <td hidden style="padding-left: 20px !important;">@item.Id_Integracao</td>
+                                                                <td style="padding-left: 20px !important;">@item.Ano</td>
+                                                                <td style="text-align:center;">@item.Mes</td>
+                                                                <td style="text-align:center">@item.Fechamento</td>
+                                                                <td style="text-align:center">@item.Data_contabilizacao.Value.ToString("dd/MM/yyyy")</td>
+                                                                <td style="text-align:center">@item.Situacao</td>
+                                                                <td style="text-align:center">@item.Responsavel</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br />
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-body" style="padding-bottom:0;">
+                                <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                    <div style="display:flex;justify-content:space-between">
+                                        <div style="vertical-align:middle;padding:5px 10px"><span>Variação Cambial</span></div>
+                                    </div>
+                                </div>
+                                <div class="tab-content" style="padding: 5px">
+                                    <div class="" style="display:flex;justify-content:space-between">
+                                        <div>
+                                            <label class="form-negrito">Situação na Composição</label>
+                                            <div style="width: 150px;">
+                                                @Html.DropDownList("situacao", (SelectList)ViewBag.Situacao, " -- Selecione -- ", new { @class = "chosen-select" })
+                                         </div>
+                                     </div>
+                                        <div>
+                                            <label class="form-negrito">Qualificação</label>
+                                            <div style="width: 250px;">
+                                                @Html.DropDownList("qualificacao", (SelectList)ViewBag.Qualificacao, " -- Selecione -- ", new { @class = "chosen-select" })
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="form-negrito">Tipo VC</label>
+                                            <div style="width: 180px;">
+                                                @Html.DropDownList("tipo_vc", (SelectList)ViewBag.Tipo_vc, " -- Selecione -- ", new { @class = "chosen-select" })
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="form-negrito">Tipo Fatura</label>
+                                            <div style="width: 180px;">
+                                                @Html.DropDownList("tipo_fatura", (SelectList)ViewBag.Tipo_fatura, " -- Selecione -- ", new { @class = "chosen-select" })
+                                            </div>
+                                        </div>
+                                        <div class="" style="padding: 2px 0px 2px 2px;">
+                                            <label class="form-negrito">Cód. Processo</label> <br />
+                                            @*<input autocomplete="off" class="form-control text-box single-line" id="cod_processo" maxlengh="35" name="cod_processo" style="width:120px;height:26px" type="text" value="">*@
+                                            @Html.Editor("cod_processo", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control" } })
+                                        </div>
+                                        <div class="" style="padding: 2px 10px 2px 2px;">
+                                            <label class="form-negrito">Referência</label> <br />
+                                            @Html.Editor("referencia", new { htmlAttributes = new { @style = "width:110px;height:26px", @class = "form-control" } })
+                                        </div>
+                                        <div class="">
+                                            <div class="btn-toolbar" style="padding-top: 20px;">
+                                                <button class="btn btn-sm btn-primary" style="padding: 2px 5px" id="btnExibir" type="button">Exibir</button>
+                                                <button class="btn btn-sm btn-success" style="padding: 2px 5px" type="button" onclick="location.href='@Url.Action("Exportar", "ComposicaoVariacao", new { })'">Exportar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="" style="display:flex;justify-content:flex-start;column-gap: 100px;padding-top: 8px;">
+                                        <div>
+                                            <label class="form-negrito">Conta débito</label>
+                                            <div style="width: 380px;">
+                                                @Html.DropDownList("conta_debito", (SelectList)ViewBag.Conta_debito, " -- Selecione -- ", new { @class = "chosen-select" })
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="form-negrito">Conta crédito</label>
+                                            <div style="width: 380px;">
+                                                @Html.DropDownList("conta_credito", (SelectList)ViewBag.Conta_credito, "-- Selecione -- ", new { @class = "chosen-select" })
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <div class="btn-toolbar" style="padding-top: 20px;">
+                                                <button class="btn btn-sm btn-primary" style="padding: 2px 5px">Exibir</button>
+                                                <button class="btn btn-sm btn-success" style="padding: 2px 5px">Exportar</button>
+                                            </div>
+                                        </div>
+                                    </div>*@
+
+                                    </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                        <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important;display:flex">
+                            <div style="width:33%; display:inline-block;background-color:lightgray;padding-left: 20px;">Contabilização Efetiva</div>
+                            <div style="width:33%; display:inline-block;background-color:lightgray">Contabilização Não Eefetiva</div>
+                            <div style="width:33%; display:inline-block;background-color:lightgray">Reversão da Contabilização Não Efetiva</div>
+                        </div>
+                            <div style="display:flex">
+                                <div style="width:33%; display:flex">
+                                    <table>
+                                        <tr>
+                                            <th style="padding-right:50px;padding-left: 20px;">GANHO</th>
+                                            <th style="padding-right:50px;padding-left: 20px;">PERDA</th>
+                                        </tr>
+                                    </table>
+                                    @*<div style="width:50%; display:inline-block;">GANHO</div>
+                                    <div style="width:50%; display:inline-block;">PERDA</div>*@
+                                </div>
+                                <div style="width:33%; display:flex">
+                                    <table>
+                                        <tr>
+                                            <th style="padding-right:54px">GANHO</th>
+                                            <th style="padding-right:50px">PERDA</th>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div style="width:33%; display:flex">
+                                    <table>
+                                        <tr>
+                                            <th style="padding-right:50px">GANHO</th>
+                                            <th style="padding-right:50px">PERDA</th>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+@if (Model != null)
+{
+    if (Model.lstRegistrosContabilizacao != null)
+    {
+        foreach (Entities.ComposicaoVariacao item in Model.lstRegistrosContabilizacao)
+        {
+            <div style="display:flex">
+                <div style="width:33%; display:flex;padding-left: 20px;">
+                    <table>
+                        <tr>
+                            <td style="width:100px;"><span>@string.Format("{0:#,##0.00#}", @item.VC_EFETIVA_GANHO)</span></td>
+                            <td style="width:100px;padding-left: 18px;">@string.Format("{0:#,##0.00#}", @item.VC_EFETIVA_PERDA)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="width:33%; display:flex">
+                    <table>
+                        <tr>
+                            <td style="width:100px">@string.Format("{0:#,##0.00#}", @item.VC_NAO_EFETIVA_GANHO)</td>
+                            <td style="width:100px">@string.Format("{0:#,##0.00#}", @item.VC_NAO_EFETIVA_PERDA)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="width:33%; display:flex">
+                    <table>
+                        <tr>
+                            <td style="width:100px">@string.Format("{0:#,##0.00#}", @item.VC_REVERSAO_NAO_EFETIVA_GANHO)</td>
+                            <td style="width:100px">@string.Format("{0:#,##0.00#}", @item.VC_REVERSAO_NAO_EFETIVA_PERDA)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+}
+
+                            @*<div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                <div style="display:flex;column-gap: 120px;">
+                                    <div style="vertical-align:middle;padding:5px 10px">
+                                        <span>Registros da Variação Cambial</span>
+                                    </div>
+                                    <div style="vertical-align:middle;padding:5px 10px">
+                                        <span>Registros da Variação Cambial</span>
+                                    </div>
+                                    <div style="vertical-align:middle;padding:5px 10px">
+                                        <span>Registros da Variação Cambial</span>
+                                    </div>
+                                </div>
+                            </div>*@
+                            @*<div class="panel-body" style="padding-bottom: 0;margin-bottom:0">
+                                <div>
+                                    <table class="table table-striped table-responsive" id="tblItens" style="margin-bottom:0;">
+                                        <tr class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                            <th colspan="2" style="background-color:lightgray;font-weight:bold;padding: 0 !important;vertical-align:middle;padding: 5px 10px !important;font-size: 12px !important;">Contabilização Efetiva</th>
+                                            <th colspan="2" style="background-color:lightgray;font-weight:bold;padding: 0 !important;vertical-align:middle;padding: 5px 10px !important;font-size: 12px !important;">Contabilização Efetiva</th>
+                                            <th colspan="2" style="background-color:lightgray;font-weight:bold;padding: 0 !important;vertical-align:middle;padding: 5px 10px !important;font-size: 12px !important;">Contabilização Efetiva</th>
+                                        </tr>
+                                        <tr>
+                                            <td>GANHO</td>
+                                            <td>PERDA</td>
+                                            <td>GANHO</td>
+                                            <td>PERDA</td>
+                                            <td>GANHO</td>
+                                            <td>PERDA</td>
+                                        </tr>
+                                        <tr>
+                                            @if (Model != null)
+                                            {
+                                                if (Model.lstRegistrosContabilizacao != null)
+                                                {
+                                                    foreach (Entities.ComposicaoVariacao item in Model.lstRegistrosContabilizacao)
+                                                    {
+                                                        <td style="text-align: right"><span>@string.Format("{0:#,##0.00#}", @item.VC_EFETIVA_GANHO)</span></td>
+                                                        <td style="text-align: right">@string.Format("{0:#,##0.00#}", @item.VC_EFETIVA_PERDA)</td>
+                                                        <td style="text-align: right">@string.Format("{0:#,##0.00#}", @item.VC_NAO_EFETIVA_GANHO)</td>
+                                                        <td style="text-align: right">@string.Format("{0:#,##0.00#}", @item.VC_NAO_EFETIVA_PERDA)</td>
+                                                        <td style="text-align: right">@string.Format("{0:#,##0.00#}", @item.VC_REVERSAO_NAO_EFETIVA_GANHO)</td>
+                                                        <td style="text-align: right">@string.Format("{0:#,##0.00#}", @item.VC_REVERSAO_NAO_EFETIVA_PERDA)</td>
+                                                    }
+                                                }
+                                            }
+                                        </tr>
+
+                                    </table>
+                                </div>
+                                    @*<div style="display:flex;column-gap: 206px;">
+                <div style="vertical-align:middle;padding:5px 10px">
+                    <table class="table table-striped table-responsive">
+                        <tr style="background-color: white;">
+                            <th style="border-top: none !important;">GANHO</th>
+                            <th style="border-top: none !important;">PERDA</th>
+                        </tr>
+                        <tr>
+                        @if (Model != null)
+                        {
+                            if (Model.lstRegistrosContabilizacao != null)
+                            {
+                                foreach (Entities.ComposicaoVariacao item in Model.lstRegistrosContabilizacao)
+                                {
+                                    <td>@item.VC_EFETIVA_GANHO</td>
+                                    <td>@item.VC_EFETIVA_PERDA</td>
+                                }
+                            }
+                        }
+                        </tr>
+                    </table>
+                </div>
+                <div style="vertical-align:middle;padding:5px 10px">
+                    <table class="table table-striped table-responsive">
+                        <tr style="background-color: white;">
+                            <th style="border-top: none !important;">GANHO</th>
+                            <th style="border-top: none !important;">PERDA</th>
+                        </tr>
+                    </table>
+                </div>
+                <div style="vertical-align:middle;padding:5px 10px">
+                    <table class="table table-striped table-responsive">
+                        <tr style="background-color: white;">
+                            <th style="border-top: none !important;">GANHO</th>
+                            <th style="border-top: none !important;">PERDA</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>*@
+                        </div>
+                        <br />
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                <div style="display:flex;justify-content:space-between">
+                                    <div style="vertical-align:middle;padding:5px 10px"><span>Registros da Variação Cambial</span></div>
+                                </div>
+                            </div>
+                            <div class="panel-body tableFixHead" style="padding-bottom: 0;margin-bottom:0;padding:0;height:40vh;white-space: nowrap">
+                                <table class="table table-striped table-responsive" id="tblItens" style="margin-bottom:0;">
+                                    <thead>
+                                        <tr>
+                                            <th class="" style="text-align:center;min-width: 70px;">SITUAÇÃO</th>
+                                            <th class="" style="text-align:center;min-width: 70px;">COMPLEMENTO</th>
+                                            <th class="" style="text-align:center;min-width: 110px">QUALIFICAÇÃO</th>
+                                            <th class="" style="text-align:center;">TIPO</th>
+                                            <th class="" style="text-align:center;min-width:120px">DT. CONTABILIZAÇÃO</th>
+                                            <th style="text-align:center;min-width:100px">REFERÊNCIA1</th>
+                                            <th style="text-align:center;min-width:100px">CONTA DÉBITO</th>
+                                            <th style="text-align:center;min-width:100px">CONTA CRÉDITO</th>
+                                            <th style="text-align:center;min-width:90px">VALOR</th>
+                                            <th style="text-align:center;min-width:110px">CÓD. PROCESSO</th>
+                                            <th style="text-align:center;min-width:0px">FILIAL</th>
+                                            <th style="text-align:center;min-width:50px">MVTO</th>
+                                            <th style="text-align:center;min-width:70px">NÚMERO</th>
+                                            <th style="text-align:left;min-width:120px">HISTÓRICO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstRegistros != null)
+                                            {
+                                                foreach (Entities.ComposicaoVariacao item in Model.lstRegistros)
+                                                {
+                                                    <tr>
+                                                        @if (@item.Situacao == "Erro")
+                                                        {
+                                                            <td style="text-align:center;background-color:#ffc176">@item.Validacao</td>
+                                                            <td style="text-align:center;background-color:#ffc176">@item.Validacao_Complemento</td>
+                                                            <td style="text-align:center;background-color:#ffc176">@item.Qualificacao</td>
+                                                            <td style="text-align:center;background-color:#ffc176">@item.Tipo</td>
+                                                            <td style="text-align:center;background-color:#ffc176">@item.Data_contabilizacao.Value.ToString("dd/MM/yyyy")</td>
+                                                            <td style="text-align:center;background-color:#ffc176">
+                                                                <a style="cursor:pointer" onclick="modalReferencia(@item.Id_Integracao, @item.Id_Lancamento, '@item.CHAVE_LANCAMENTO', @item.Id_Entidade, '@item.Referencia1')">@item.Referencia1</a>
+                                                            </td>
+                                                            <td style="text-align:center;background-color:#ffc176">@item.Conta_debito</td>
+                                                            <td style="text-align:center;background-color:#ffc176">@item.Conta_credito</td>
+                                                            <td style="text-align:center;background-color:#ffc176">
+                                                                @if(@item.Tipo == "PERDA"){
+                                                                <span style="color:red">@string.Format("{0:#,##0.0#}", @item.Valor)</span>
+                                                                }
+                                                                else{
+                                                                <span>@string.Format("{0:#,##0.0#}", @item.Valor)</span>
+                                                                }
+                                                            </td>
+                                                            <td style="text-align:center;background-color:#ffc176">@item.Cod_processo</td>
+                                                            if (@item.CodFilial == 0)
+                                                            {
+                                                                <td style="text-align:center;background-color:#ffc176"></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td style="text-align:center;background-color:#ffc176">@item.CodFilial</td>
+                                                            }
+                                                            <td style="text-align:center;background-color:#ffc176">@item.CodTMV</td>
+                                                            <td style="text-align:center;background-color:#ffc176">@item.NumeroMov</td>
+                                                            <td class="historico" style="text-align:center;background-color:#ffc176">@item.Historico</td>
+                                                        }
+                                                        else if (@item.Situacao == "Inconsistente")
+                                                        {
+                                                            <td style="text-align:center;background-color:#cdb8cd;">@item.Validacao</td>
+                                                            <td style="text-align:center;background-color:#cdb8cd;">@item.Validacao_Complemento</td>
+                                                            <td style="text-align:center;background-color:#cdb8cd;">@item.Qualificacao</td>
+                                                            <td style="text-align:center;background-color:#cdb8cd;">@item.Tipo</td>
+                                                            <td style="text-align:center;background-color:#cdb8cd;">@item.Data_contabilizacao.Value.ToString("dd/MM/yyyy")</td>
+                                                            <td style="text-align:center;background-color:#cdb8cd;">
+                                                                <a style="cursor:pointer" onclick="modalReferencia(@item.Id_Integracao, @item.Id_Lancamento, '@item.CHAVE_LANCAMENTO', @item.Id_Entidade, '@item.Referencia1')">@item.Referencia1</a>
+                                                            </td>
+                                                            <td style="text-align:center;background-color:#cdb8cd;">@item.Conta_debito</td>
+                                                            <td style="text-align:center;background-color:#cdb8cd;">@item.Conta_credito</td>
+                                                            <td style="text-align:center;background-color:#cdb8cd;">
+                                                                @if(@item.Tipo == "PERDA"){
+                                                                <span style="color:red">@string.Format("{0:#,##0.0#}", @item.Valor)</span>
+                                                                }
+                                                                else{
+                                                                <span>@string.Format("{0:#,##0.0#}", @item.Valor)</span>
+                                                                }
+                                                            </td>
+                                                            <td style="text-align:center;background-color:#c7c0c0;">@item.Cod_processo</td>
+                                                            if (@item.CodFilial == 0)
+                                                            {
+                                                                <td style="text-align:center;background-color:#c7c0c0;"></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td style="text-align:center;background-color:#c7c0c0;">@item.CodFilial</td>
+                                                            }
+
+                                                            <td style="text-align:center;background-color:#c7c0c0;">@item.CodTMV</td>
+                                                            <td style="text-align:center;background-color:#c7c0c0;">@item.NumeroMov</td>
+                                                            <td class="historico" style="text-align:center;background-color:#c7c0c0;">@item.Historico</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td style="text-align:center">@item.Validacao</td>
+                                                            <td style="text-align:center">@item.Validacao_Complemento</td>
+                                                            <td style="text-align:center">@item.Qualificacao</td>
+                                                            <td style="text-align:center">@item.Tipo</td>
+                                                            <td style="text-align:center">@item.Data_contabilizacao.Value.ToString("dd/MM/yyyy")</td>
+                                                            <td style="text-align:center">
+                                                                <a style="cursor:pointer" onclick="modalReferencia(@item.Id_Integracao, @item.Id_Lancamento, '@item.CHAVE_LANCAMENTO', @item.Id_Entidade, '@item.Referencia1')">@item.Referencia1</a>
+                                                            </td>
+                                                            <td style="text-align:center">@item.Conta_debito</td>
+                                                            <td style="text-align:center">@item.Conta_credito</td>
+                                                            <td style="text-align:center">
+                                                                @if(@item.Tipo == "PERDA"){
+                                                                    <div style="width:100px; overflow: hidden">
+                                                                        <span style="color:red">@string.Format("{0:#,##0.0#}", @item.Valor)</span>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div style="width:100px">
+                                                                        <span>@string.Format("{0:#,##0.0#}", @item.Valor)</span>
+                                                                    </div>
+                                                                }
+                                                            </td>
+                                                            <td style="text-align:center">@item.Cod_processo</td>
+                                                            if (@item.CodFilial == 0)
+                                                            {
+                                                                <td style="text-align:center"></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td style="text-align:center">@item.CodFilial</td>
+                                                            }
+                                                            <td style="text-align:center">@item.CodTMV</td>
+                                                            <td style="text-align:center">@item.NumeroMov</td>
+                                                            <td class="historico" style="text-align:center">@item.Historico</td>
+
+                                                        }
+
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div class="modal fade" id="modalReferencia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px;">
+            <div class="modal-dialog" role="document" style="margin-top:5px !important">
+                <div class="modal-content" style="width:100%">
+                    <div class="modal-header text-center" style="padding:2px;background-color:lightgray">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        @*<h4 style="text-align:left">Alterar Perfil: <span id="titulo"></span></h4>*@
+                        <h4 style="text-align:left;margin:5px" id="modal_titulo">Registro de Fechamento Contábil</h4>
+                    </div>
+                    <div class="modal-body" style="padding-top:0">
+                        <br />
+                        <input type="hidden" id="id_integracao"/>
+                        <input type="hidden" id="id_lancamento" />
+                        <input type="hidden" id="chave_lancamento" />
+                        <input type="hidden" id="id_entidade" />
+                        <input type="hidden" id="referencia" />
+
+                        <div style="display:flex;justify-content:space-around">
+                            <div>
+                                <input type="radio" value="1" id="modal_tp_fatura_1" name="modal_tp_fatura" checked/> Fatura Comercial
+                            </div>
+                            <div>
+                                <input type="radio" value="3" id="modal_tp_fatura_3" name="modal_tp_fatura"/> Adiantamento a Fornecedor (Fatura pró-forma)
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <table class="table table-striped table-responsive table-bordered" width="100%">
+                                <tr>
+                                    <th style="width:33%;text-align:center !important">QUALIFICAÇÃO</th>
+                                    <th style="width:33%;text-align:center !important">TIPO</th>
+                                    <th style="width:33%;text-align:center !important">DATA CONTABILIZAÇÃO</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center !important"><span id="modal_qualificacao"></span></td>
+                                    <td style="text-align:center"><span id="modal_tipo"></span></td>
+                                    <td style="text-align:center"><span id="modal_data_contabilizacao"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table table-striped table-responsive table-bordered" width="100%">
+                                <tr>
+                                    <th style="width:33%;text-align:center !important">DT EMISSÃO DOC</th>
+                                    <th style="width:33%;text-align:center !important">DT TRANSAÇÃO</th>
+                                    <th style="width:33%;text-align:center !important">DT CONTÁBIL</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center !important"><span id="modal_dt_emissao_doc"></span></td>
+                                    <td style="text-align:center"><span id="modal_dt_transacao"></span></td>
+                                    <td style="text-align:center"><span id="modal_dt_contabil"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table table-striped table-responsive table-bordered" width="100%">
+                                <tr>
+                                    <th style="width:33%;text-align:center !important">COD PROCESSO</th>
+                                    <th style="width:33%;text-align:center !important">REFERÊNCIA1</th>
+                                    <th style="width:33%;text-align:right !important">VALOR</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center !important"><span id="modal_cod_processo"></span></td>
+                                    <td style="text-align:center"><span id="modal_referencia1"></span></td>
+                                    <td style="text-align:right"><span id="modal_valor"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table table-striped table-responsive table-bordered" width="100%">
+                                <tr>
+                                    <th style="width:100%;text-align:left !important">CONTA DÉBITO</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left"><span id="modal_conta_debito"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table table-striped table-responsive table-bordered" width="100%">
+                                <tr>
+                                    <th style="width:100%;text-align:left !important">CONTA CRÉDITO</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left"><span id="modal_conta_credito"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table table-striped table-responsive table-bordered" width="100%">
+                                <tr>
+                                    <th style="width:33%;text-align:center !important">FILIAL</th>
+                                    <th style="width:33%;text-align:center !important">MVTO</th>
+                                    <th style="width:33%;text-align:center !important">NÚMERO</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center !important"><span id="modal_filial"></span></td>
+                                    <td style="text-align:center"><span id="modal_mvto"></span></td>
+                                    <td style="text-align:center"><span id="modal_numero"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table table-striped table-responsive table-bordered" width="100%">
+                                <tr>
+                                    <th style="width:100%;text-align:left !important">HISTÓRICO</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left"><span id="modal_historico"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table table-striped table-responsive table-bordered" width="100%">
+                                <tr>
+                                    <th style="width:100%;text-align:left !important">COMENTÁRIO</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left"><span id="modal_comentario"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table width="100%">
+                                <tr>
+                                    <td style="text-align:left;width:33%"><button class="btn btn-sm btn-primary" id="AdicionarExcecao" type="button">Adicionar Bloqueio</button></td>
+                                    <td style="text-align:center;width:33%"><button class="btn btn-sm btn-primary" id="Salvar" type="button">Salvar</button></td>
+                                    <td style="text-align:right;width:33%"><button class="btn btn-sm btn-primary" id="btnFechar" type="button">Fechar</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+        <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+        <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+        <link href="~/content/indexCompras.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+        <link href="~/content/indeximportacaodocumento.css" rel="stylesheet" />
+
+
+        <link href="~/content/chosen.css" rel="stylesheet" />
+        <script src="~/scripts/chosen.jquery.js"></script>
+
+        <script>
+
+            $(function () {
+                $(".datepickerInput").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+                $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val(); $("#checkin").datepicker();
+                //$("#modal_dt_contabil").datepicker({ dateFormat: 'dd/mm/yy' }).val(); $("#checkin").datepicker();
+
+
+            });
+
+            $("#btnExibir").click(function () {
+                    let exibir = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "exibir").val("exibir");
+                    $('#myForm').append($(exibir));
+                    document.getElementById("myForm").submit();
+            });
+
+            function modalReferencia(id_integracao, id_lancamento, chave_lancamento, id_entidade, referencia) {
+                let tp_fatura = 0;
+                $("#id_integracao").val(id_integracao);
+                $("#id_lancamento").val(id_lancamento);
+                $("#chave_lancamento").val(chave_lancamento);
+                $("#id_entidade").val(id_entidade);
+                $("#modal_referencia1").val(referencia);
+
+                $.ajax({
+                    url: '@Url.Action("PopupReferencia", "ComposicaoVariacao")',
+                    traditional: true,
+                    contentType: 'json',
+                    data: { id_integracao:id_integracao, id_lancamento:id_lancamento, chave_lancamento:chave_lancamento, id_entidade:id_entidade, referencia:referencia },
+                    success: function (response) {
+                        let dt_contabil = new Date(parseInt(response.Resultado[0].Data_contabilizacao.substr(6)));
+                        dia = dt_contabil.getDate().toString(),
+                        diaF = (dia.length == 1) ? '0' + dia : dia,
+                        mes = (dt_contabil.getMonth() + 1).toString(),
+                        mesF = (mes.length == 1) ? '0' + mes : mes,
+                        anoF = dt_contabil.getFullYear();
+                        let ftm_dt_contabil = diaF + "/" + mesF + "/" + anoF;
+
+                        let dt_contabil2 = new Date(parseInt(response.Resultado[0].Dt_Contabil.substr(6)));
+                        dia = dt_contabil2.getDate().toString(),
+                        diaF = (dia.length == 1) ? '0' + dia : dia,
+                        mes = (dt_contabil2.getMonth() + 1).toString(),
+                        mesF = (mes.length == 1) ? '0' + mes : mes,
+                        anoF = dt_contabil2.getFullYear();
+                        let ftm_dt_contabil2 = diaF + "/" + mesF + "/" + anoF;
+
+                        let dt_emissao_doc = new Date(parseInt(response.Resultado[0].Dt_Emissao_Doc.substr(6)));
+                        dia = dt_emissao_doc.getDate().toString(),
+                        diaF = (dia.length == 1) ? '0' + dia : dia,
+                        mes = (dt_emissao_doc.getMonth() + 1).toString(),
+                        mesF = (mes.length == 1) ? '0' + mes : mes,
+                        anoF = dt_emissao_doc.getFullYear();
+                        let ftm_dt_emissao_doc = diaF + "/" + mesF + "/" + anoF;
+
+                        let dt_transacao = new Date(parseInt(response.Resultado[0].Dt_Transacao.substr(6)));
+                        dia = dt_transacao.getDate().toString(),
+                        diaF = (dia.length == 1) ? '0' + dia : dia,
+                        mes = (dt_transacao.getMonth() + 1).toString(),
+                        mesF = (mes.length == 1) ? '0' + mes : mes,
+                        anoF = dt_transacao.getFullYear();
+                        let ftm_dt_transacao = diaF + "/" + mesF + "/" + anoF;
+
+                        var valor = response.Resultado[0].Valor;
+                        valor = valor != 0 ? parseFloat(valor).toLocaleString() : '';
+                        if (response.Resultado[0].FAT_TIPO_FATURA == 1) {
+                            $('#modal_tp_fatura_1').prop('checked', true);
+                        }
+                        else {
+                            $('#modal_tp_fatura_3').prop('checked', true);
+                        }
+                        $('#modal_titulo').html(response.Resultado[0].Titulo);
+                        $('#modal_qualificacao').html(response.Resultado[0].Qualificacao);
+                        $('#modal_tipo').html(response.Resultado[0].Tipo);
+                        $('#modal_data_contabilizacao').html(ftm_dt_contabil);
+                        $('#modal_dt_contabil').html(ftm_dt_contabil2);
+                        $('#modal_dt_emissao_doc').html(ftm_dt_emissao_doc);
+                        $('#modal_dt_transacao').html(ftm_dt_transacao);
+                        $('#modal_cod_processo').html(response.Resultado[0].Cod_processo);
+                        $('#modal_referencia1').html(response.Resultado[0].Referencia1);
+                        $('#modal_valor').html(valor);
+                        $('#modal_conta_debito').html(response.Resultado[0].Conta_debito);
+                        $('#modal_conta_credito').html(response.Resultado[0].Conta_credito);
+                        if (response.Resultado[0].Filial > 0) {
+                            $('#modal_filial').html(response.Resultado[0].Filial);
+                        }
+                        $('#modal_mvto').html(response.Resultado[0].Mvto);
+                        $('#modal_numero').html(response.Resultado[0].Numero);
+                        $('#modal_comentario').html(response.Resultado[0].Comentario);
+                        $('#modal_historico').html(response.Resultado[0].Historico);
+
+                        $('#modalReferencia').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+
+                        }
+                });
+
+            }
+            $('#AdicionarExcecao').click(function () {
+                let referencia = $('#modal_referencia1').html();
+
+                if (confirm('Este procedimento remove a contabilização da fatura ' + referencia + ' da variação cambial. Deseja continuar?')) {
+                    $.ajax({
+                        url: '@Url.Action("AddExcecao", "ComposicaoVariacao")',
+                        traditional: true,
+                        contentType: 'json',
+                        data: { referencia: referencia },
+                        success: function (response) {
+                            let exibir = $("<input>")
+                            .attr("type", "hidden")
+                            .attr("name", "exibir").val("exibir");
+                            $('#myForm').append($(exibir));
+                            $('#myForm').submit();
+                        }
+                    });
+                }
+            });
+
+            $('#Salvar').click(function () {
+                let referencia = $('#modal_referencia1').html();
+                let id_integracao = $("#id_integracao").val();
+                let id_lancamento = $("#id_lancamento").val();
+                let chave = $("#chave_lancamento").val();
+                let id_entidade = $("#id_entidade").val();
+                let tp_fatura = 0;
+                if ($('#modal_tp_fatura_1').is(':checked'))
+                {
+                    tp_fatura = 1
+                }
+                else {
+                    tp_fatura = 3;
+                }
+
+                    $.ajax({
+                        url: '@Url.Action("Salvar", "ComposicaoVariacao")',
+                        traditional: true,
+                        contentType: 'json',
+                        data: { id_integracao: id_integracao, id_lancamento: id_lancamento, chave:chave,id_entidade:id_entidade, referencia: referencia, tp_fatura:tp_fatura },
+                        success: function (response) {
+                            let exibir = $("<input>")
+                            .attr("type", "hidden")
+                            .attr("name", "exibir").val("exibir");
+                            $('#myForm').append($(exibir));
+                            $('#myForm').submit();
+                        }
+                    });
+            });
+
+            $('#btnFechar').click(function(){
+                let exibir = $("<input>")
+                .attr("type", "hidden")
+                .attr("name", "exibir").val("exibir");
+                $('#myForm').append($(exibir));
+                $('#myForm').submit();
+                $('#modalReferencia').modal("hide");
+            });
+
+            $('#modalReferencial').on('hidden.bs.modal', function (e) {
+                $("#m_situacao option[value='-- Selecione --']").remove();
+            });
+            $('.menuContabilizacao .sidebar-submenu').addClass("active");
+            $('.menuContabilizacao .sidebar-submenu').toggle();
+
+        </script>
+    </body>
+}
+</html>
+
+

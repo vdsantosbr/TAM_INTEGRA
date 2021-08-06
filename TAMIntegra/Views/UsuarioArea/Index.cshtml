@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Entities.UsuarioArea>
+
+@{
+    ViewBag.Title = "Configurações - Usuários - Áreas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Configurações - Usuários - Áreas</h3>
+
+<p class="texto-direita"><input type="button" value="Novo registro" class="btn btn-success" onclick="AbreAdmin('Admin', 'UsuarioArea', '', 600, 300)" /></p>
+
+<table class="tabela-grid">
+    <thead>
+        <tr>
+            <th width="70%">
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th width="10%">
+                @Html.DisplayNameFor(model => model.Administrativa)
+            </th>
+            <th width="10%">
+                @Html.DisplayNameFor(model => model.Cor)
+            </th>
+            <th colspan="2" class="texto-centro">Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Administrativa)</td>
+                    <td style="background-color: #@item.Cor;">&nbsp;</td>                    
+                    <td class="texto-centro"><img src="~/Images/Actions-document-edit-icon.png" onclick="AbreAdmin('Admin', 'UsuarioArea', '@item.Id', 600, 300)"></td>
+                    <td class="texto-centro"><a href="@Url.Action("Delete", "UsuarioArea", new { id = item.Id })"><img src="~/Images/Actions-edit-delete-icon.png" onclick="return confirm('Tem certeza que deseja excluir?')"></a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,443 @@
+﻿@model Entities.StatementContas
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teste = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <style>
+    .panel-heading{
+     background-color:lightgray
+}
+    body{
+        overflow:hidden
+    }
+    #lstProdutos th{
+        position:sticky;
+        top:0;
+        background:white;
+    }
+    </style>
+</head>
+@using (Html.BeginForm("Index", "StatementContas", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+
+    <body>
+        <input hidden id="fornecedorSelected" name="fornecedorSelected" />
+        <input hidden id="documentoSelected" name="documentoSelected" />
+       
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                    <div class="stepwizard">
+                        <fieldset>
+                            <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Contas</legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </main>
+
+
+            <main class="page-content" style="padding-top:50px">
+                <div class="container-fluid" style="padding-top:0">
+                    <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ style="position:absolute;top:60px;width:97%;padding-left:10px">
+
+                        <div class="panel with-nav-tabs panel-default" style="margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Contas
+                            </div>
+                            <div class="panel-body" style="padding-bottom:0">
+                                <div class="tab-content">
+
+                                    <div class="row">
+                                        <div class="col-md-3 col-lg-3 col-sm-6">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Conta</label>
+                                                    @Html.Editor("conta", new { htmlAttributes = new { @class = "form-control", @style = "width:100px;height:26px", @maxlengh = "25" } })
+                                                    @*<div class="input-group date" data-provide="datepicker">
+                                                        <input type="text" class="form-control datepickerInput" >
+                                                    </div>*@
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 col-lg-3 col-sm-6 col-lg-offset-1">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    @Html.Label("Descrição", new { @class = "form-negrito" })
+                                                    @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("descricao", new { htmlAttributes = new { @class = "form-control", @maxlengh = "250", @style = "width:150px;height:26px" } })
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                        </div>
+
+                                        @*<div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="col-md-11">
+                                                    @Html.Label("Situação", new { @class = "form-negrito" })
+                                                    @Html.Editor("codigoFiltro", new { htmlAttributes = new { @class = "form-control", style = "width:60%" } })
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>*@
+
+                                        <div class="col-md-4 col-lg-3 col-sm-10 col-lg-offset-1">
+                                            <div class="form-group">
+                                                <div class="col-md-10 col-sm-6">
+                                                    @Html.Label("Situação", new { @class = "form-negrito" })
+                                                    @Html.DropDownList("situacaoFiltro", (SelectList)ViewBag.Situacao, "-- Selecione --", new { @class = "chosen-select", @style = "width:100px;height:26px" })
+                                                    @*<select class="chosen-select" name="situacaoFiltro">
+                                                        <option>-- Selecione --</option>
+                                                        <option value="A">Ativo</option>
+                                                        <option value="I">Inativo</option>
+                                                    </select>*@
+                                                    <div class="clearfix"></div>
+                                                </div>
+
+                                                @*<div class="col-md-2 col-sm-4 col-sm-offset-4" style="top:20px;right:0;position:absolute">
+                                                    <button class="btn btn-primary nextBtn btn-md " id="btnFiltro" type="submit" name="Filtrar">Filtrar</button>
+                                                </div>
+                                                <div class="clearfix"></div>*@
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-2 col-lg-1 col-sm-2">
+                                            <div class="form-group">
+                                                <div class="col-md-12 col-sm-12">
+
+                                                    <div style="margin-top:10px">
+                                                        <button class="btn btn-primary btn-md pull-right" id="btnFiltro" type="submit" name="Filtrar">Exibir</button>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                @*<div class="btn-toolbar">
+                                    <button class="btn btn-primary nextBtn btn-md pull-right" type="submit" name="Filtrar">Filtrar</button>
+                                    <button class="btn btn-primary nextBtn btn-md pull-right" type="submit" name="Exportar">Exportar</button>
+                                </div>*@
+                            </div>
+
+                        </div>
+                        <br />
+
+                        <a class="btn inserirContaModal btn-success" role="button" style="margin-bottom:15px;">Nova conta</a>
+                        <br />
+
+
+                        <div class="panel with-nav-tabs panel-default">
+                            @*<div class="panel-heading">
+                                Selecionar pedidos de compra
+                            </div>*@
+                            <div class="panel-body">
+                                <div class="table-responsive" style="min-height:10vh;max-height:62vh;overflow:auto">
+                                    <table class="table table-hover table-striped" id="lstProdutos" style="margin-bottom:0">
+                                        <thead>
+                                            <tr>
+                                                <th>Conta</th>
+                                                <th>Descrição</th>
+                                                <th>Situação</th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstContas != null)
+                                            {
+                                                <tbody>
+                                                    @foreach (Entities.StatementContas wk in Model.lstContas)
+                                                    {
+
+                                                        <tr>
+                                                            @*  <td><input type="checkbox" id="idMov" name="idMovArr" value="@wk.idMov" /> <a style="padding-left:0px" class="btn modalBTN">@wk.NumNoFabric</a></td>*@
+                                                            <td><a class="btn modalBTN" onclick="populaModal(@wk.Id_Conta, '@wk.Conta', '@wk.Descricao', '@wk.Situacao')">@wk.Conta</a></td>
+                                                            <td>@wk.Descricao</td>
+                                                            <td>@wk.Situacao</td>
+                                                            <td hidden id="idConta" name="idConta">@wk.Id_Conta</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            }   
+                                        }
+                                    </table>
+                                    @*<button class="btn btn-primary btn-md pull-right" id="btnAgendar" type="submit" name="btnAgendar" enabled="enabled">Agendar</button>*@
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="my-modal" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content" style="height:100%;width:100%">
+                                @*<div class="modal-header text-center" style="padding:5px">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                                </div>*@
+                                <div class="modal-body" style="padding:20px 15px 0 15px">
+
+                                    <div class="panel with-nav-tabs panel-default" style="margin-bottom: 10px;">
+                                        <div class="panel-heading">
+                                            CONTA <span class="contaModalSpan"></span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="tab-content" style="padding: 10px;">
+                                                <div class="table-responsive">
+                                                    <table class="" id="tabelaPedido" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:30%">Conta</th>
+                                                                <th style="width:50%">Descrição</th>
+                                                                <th style="width:20%">Situação</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><input class="form-control contaModalInput" style="width:80%"></td>
+                                                                <td><input id="descricaoModal" class="form-control" style="width:90%"/></td>
+                                                                <td>
+                                                                    <select id="situacaoModal" class="form-control">
+                                                                        <option value="Ativo">Ativo</option>
+                                                                        <option value="Inativo">Inativo</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td hidden id="id_Conta_Modal"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-toolbar" style="margin-bottom: 10px;">
+                                        <button type="button" class="btn btn-primary" onclick="ExcluirConta()">Excluir</button>
+                                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualizar()">Fechar</button>
+                                        <button type="button" class="btn btn-primary pull-right" onclick="updateConta()">Salvar</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+
+                    <div class="modal fade" id="inserirConta" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content" style="height:100%;width:100%">
+                                @*<div class="modal-header text-center" style="padding:5px">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                                </div>*@
+                                <div class="modal-body" style="padding:20px 15px 0 15px">
+
+                                    <div class="panel with-nav-tabs panel-default" style="margin-bottom: 10px;">
+                                        <div class="panel-heading">
+                                            NOVA CONTA <span class="contaModalSpan"></span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="tab-content" style="padding: 10px;">
+                                                <div class="table-responsive">
+                                                    <table class="" id="tabelaPedido" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:30%">Conta</th>
+                                                                <th style="width:50%">Descrição</th>
+                                                                <th style="width:20%">Situação</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><input id="contaAdd" class="form-control" maxlength="25" style="width:80%"></td>
+                                                                <td><input id="descricaoAdd" class="form-control" maxlength="250" style="width:90%" /></td>
+                                                                <td>
+                                                                    <select id="situacaoAdd" class="form-control">
+                                                                        <option value="Ativo">Ativo</option>
+                                                                        <option value="Inativo">Inativo</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td hidden id="id_Conta"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-toolbar" style="margin-bottom: 10px;">
+                                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualizar()">Fechar</button>
+                                        <button type="button" class="btn btn-primary pull-right" onclick="inserirConta()">Salvar</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div>
+
+
+            </main>
+        </div>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        @*<script src="~/scripts/importacaoproduto2.js"></script>*@
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        <link href="~/content/indexCompras.css" rel="stylesheet" />
+        <link href="~/content/indexImportacaoProduto.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+        <!-- bootstrap Validator JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+
+        <script>
+        $(function () {
+            $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+        });
+
+        $(function () {
+
+            var menuAtivo = $('#menuAtivo').val();
+
+            $('.menuStatement .sidebar-submenu').toggle();
+
+            $(".menuStatement").click(function () {
+
+
+            });
+            //if (divShow == '#divModal')
+            //{
+            //    $('.menuStatement .sidebar-submenu').toggle();
+            //}
+
+            Windows.scroll(0);
+
+        });
+
+            $('a.modalBTN').click(function () {
+                $('#my-modal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+            $('a.inserirContaModal').click(function () {
+                $('#inserirConta').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+            function populaModal(idConta, conta, descricao, situacao) {
+                $('.contaModalInput').val(conta);
+                $('.contaModalSpan').html(conta);
+               $('#descricaoModal').val(descricao);
+               document.getElementById("situacaoModal").value = situacao;
+               $('#id_Conta_Modal').val(idConta);
+           }
+
+            function updateConta() {
+                var idConta = $('#id_Conta_Modal').val();
+                var conta = $('.contaModalInput').val();
+                var descricao = $('#descricaoModal').val();
+                var situacao = document.getElementById("situacaoModal").value
+
+                $.ajax({
+                    url: '@Url.Action("Atualizar", "StatementContas")',
+                    type: 'get',
+                    data: { idConta: idConta, conta: conta, descricao: descricao, situacao: situacao },
+                    success: function (data) { $('#my-modal').modal('toggle'); alert("Registro alterado com sucesso!"); $('#myForm').submit();}
+                });
+            }
+
+            function ExcluirConta() {
+                var idConta = $('#idConta').html();
+
+                $.ajax({
+                    url: '@Url.Action("Excluir", "StatementContas")',
+                    type: 'get',
+                    data: { idConta: idConta },
+                    success: function (data) { $('#my-modal').modal('toggle'); alert("Registro alterado com sucesso!"); $('#myForm').submit(); }
+                });
+            }
+
+            function inserirConta() {
+                var conta = $('#contaAdd').val();
+                var descricao = $('#descricaoAdd').val();
+                var situacao = document.getElementById("situacaoAdd").value
+
+                $.ajax({
+                    url: '@Url.Action("Inserir", "StatementContas")',
+                    type: 'get',
+                    data: {conta: conta, descricao: descricao, situacao: situacao },
+                    success: function (data) {
+                        //$('#inserirConta').modal('toggle');
+                        if (data.length > 0) {
+                            alert('1')
+
+                            if (data.Observacao != null) {
+                                alert(data.Observacao);
+                            }
+                        }
+                        else {
+                            alert("Registro inserido com sucesso!");
+                            $('#myForm').submit();
+                        }
+                    }
+                });
+            }
+
+            function Atualizar() {
+                $('#myForm').submit();
+            }
+
+        </script>
+
+
+    </body>
+}
+</html>

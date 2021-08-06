@@ -1,0 +1,1178 @@
+﻿@model Entities.ImportacaoReceipt
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pedidoModal = (IEnumerable<Entities.Compra>)ViewData["pedidoModal"];
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        #tblGrid th{
+            background-color: white !important;
+        }
+           .tableFixHead{
+            overflow:auto;
+            height:100px;
+        }
+        .fixHead th{
+                position: sticky !important;
+    top: 0 !important;
+    /*z-index: 9999 !important;*/
+    background: #cbc6c6 !important;
+        }
+                .tableFixHead td{
+            z-index:9;
+        }
+                body {
+                    padding-right: 0px !important;
+                    overflow: hidden;
+                }
+
+
+
+                /*.modal-open {
+          overflow-y: auto;
+        }
+
+                .modalDialog {
+                    overflow: scroll;
+                }
+
+                .modal-body {
+                    max-height: calc(110vh - 210px);
+                    overflow-y: auto;
+                }*/
+
+                .clearfix {
+                    clear: both;
+                    padding: 0;
+                    margin: 0;
+                    height: 5px;
+                    display: block;
+                }
+
+                .panel-body {
+                    padding-bottom: 0;
+                }
+
+                .panel {
+                    border-width: 5px;
+                    border-color: #3A2303;
+                    padding-bottom: 0em;
+                    height: 100%;
+                }
+
+                .form-group {
+                    padding-bottom: 0;
+                    margin-bottom: 0;
+                }
+
+                .col-md-4 {
+                    padding-bottom: 5px;
+                }
+
+                .btnSemLink {
+                    display: inline-block;
+                    padding: 6px 12px;
+                    margin-bottom: 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 1.42857143;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: middle;
+                    -webkit-user-select: none;
+                    border: 1px solid transparent;
+                }
+
+                /*.modal-dialog {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .modal-content {
+                    margin: 0 auto;
+                }*/
+
+                @@media (min-width: 992px) {
+                    .grid-container {
+                        display: grid;
+                        grid-template-columns: 120px 120px 290px 120px 150px auto;
+                        grid-gap: 35px;
+                        padding: 5px;
+                    }
+
+                    .grid-item {
+                        padding: 5px;
+                        text-align: left;
+                    }
+
+                    .grid-item {
+                        padding-bottom: 0PX;
+                    }
+                }
+
+                .grid-item {
+                    padding-bottom: 10PX;
+                }
+
+                .page-content {
+                    height: 100vh;
+                }
+
+                textarea {
+                    font-family: inherit;
+                    font-size: inherit;
+                    line-height: inherit;
+                    width: 100%;
+                }
+
+                .with-nav-tabs.panel-primary .nav-tabs > li > a,
+                .with-nav-tabs.panel-primary .nav-tabs > li > a:hover,
+                .with-nav-tabs.panel-primary .nav-tabs > li > a:focus {
+                    color: #fff;
+                }
+
+                    .with-nav-tabs.panel-primary .nav-tabs > .open > a,
+                    .with-nav-tabs.panel-primary .nav-tabs > .open > a:hover,
+                    .with-nav-tabs.panel-primary .nav-tabs > .open > a:focus,
+                    .with-nav-tabs.panel-primary .nav-tabs > li > a:hover,
+                    .with-nav-tabs.panel-primary .nav-tabs > li > a:focus {
+                        color: #fff;
+                        background-color: #3071a9;
+                        border-color: transparent;
+                    }
+
+                .with-nav-tabs.panel-primary .nav-tabs > li.active > a,
+                .with-nav-tabs.panel-primary .nav-tabs > li.active > a:hover,
+                .with-nav-tabs.panel-primary .nav-tabs > li.active > a:focus {
+                    color: #428bca;
+                    background-color: #fff;
+                    border-color: #428bca;
+                    border-bottom-color: transparent;
+                }
+
+                .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu {
+                    background-color: #428bca;
+                    border-color: #3071a9;
+                }
+
+                    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > li > a {
+                        color: #fff;
+                    }
+
+                        .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > li > a:hover,
+                        .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > li > a:focus {
+                            background-color: #3071a9;
+                        }
+
+                    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a,
+                    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a:hover,
+                    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a:focus {
+                        background-color: #4a9fe9;
+                    }
+
+                .view {
+                    width: 1800px;
+                }
+
+                .wrapper {
+                    position: relative;
+                    overflow: auto;
+                    white-space: nowrap;
+                }
+
+                .sticky-col {
+                    position: sticky;
+                    position: -webkit-sticky;
+                    background-color: white;
+                }
+
+                .first-col {
+                    width: 120px;
+                    min-width: 100px;
+                    max-width: 340px;
+                    left: 0px;
+                }
+
+                .second-col {
+                    width: 150px;
+                    min-width: 110px;
+                    max-width: 340px;
+                    left: 100px;
+                }
+
+                .third-col {
+                    width: 100px;
+                    min-width: 100px;
+                    max-width: 340px;
+                    left: 206px;
+                }
+
+                .quarta-col {
+                    width: 100px;
+                    min-width: 100px;
+                    max-width: 340px;
+                    left: 300px;
+                }
+
+                td, th {
+                    padding: 15px;
+                }
+
+
+                .outer {
+                    display: flex;
+                    flex-direction: column;
+                    overflow-x: auto;
+                }
+
+                .middle {
+                    display: flex;
+                    flex: 1;
+                }
+
+                .inner {
+                    flex: 0 0 100%;
+                    height: 1em;
+                }
+
+                * {
+                    box-sizing: border-box;
+                }
+
+                .column {
+                    float: left;
+                    width: 50%;
+                    height: 80px;
+                }
+
+                .row:after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .page-wrapper .page-content {
+                    overflow-x: initial;
+                }
+    </style>
+
+</head>
+@using (Html.BeginForm("Index", "ImportacaoReceipt", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+    <body style="overflow-x:hidden">
+        <input hidden id="modal" />
+        <input hidden id="codProcessoModal" />
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                    <fieldset>
+                        <legend>Importação - Integração de Receipt</legend>
+                    </fieldset>
+                </div>
+            </main>
+            <main class="page-content" style="margin-bottom:10px;">
+                <br />
+                @*<main class="page-content">*@
+                <div class="container-fluid" style="padding-top:25px;padding-left: 21px;">
+
+                    <div class="col-xs-12" style="padding-left:0">
+                        <div class="col-md-12">
+                            <div class="form-horizontal">
+                                <form role="form">
+                                    <fieldset>
+                                        <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ stle="position:absolute;top:70px;width:97%">
+
+                                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Invoice
+                                                </div>
+                                                <div class="panel-body" style="padding-bottom:0;">
+                                                    <div style="display:flex;justify-content:space-between;padding-bottom:10px;padding-left:10px;padding-right:10px">
+                                                        <div style="width:150px">
+                                                            <label>Status</label> <br />
+                                                            <select class="chosen-select" name="status">
+                                                                <option value="0">Todos</option>
+                                                                <option value="1" selected>Não confirmado</option>
+                                                                <option value="2">Confirmado</option>
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <label class="form-negrito">Dt. Início</label>
+                                                            @Html.Editor("strDataInicio", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", @onchange = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })
+                                                            <div style="color: red" id="dtIniciDivErro">
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label class="form-negrito">Dt. Fim</label>
+                                                            @Html.Editor("strDataFim", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                            <div style="color: red" id="dtFimDivErro">
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label>Transaction Number</label>
+                                                            @Html.Editor("transactionNumber", new { htmlAttributes = new { @style = "width:150px;height:26px", @class = "form-control", @maxlengh = "25" } })
+                                                            <div style="color: red" id="">
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label>Bill of Loading Number</label>
+                                                            @Html.Editor("bill", new { htmlAttributes = new { @style = "width:150px;height:26px", @maxlengh = "25", @class = "form-control" } })
+                                                            <div style="color: red" id="">
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label>Part Number</label>
+                                                            @Html.Editor("partNumber", new { htmlAttributes = new { @style = "width:110px;height:26px", @maxlengh = "25", @class = "form-control" } })
+                                                            <div style="color: red" id="">
+                                                            </div>
+                                                        </div>
+                                                        <div style="padding-top:18px">
+                                                            <button class="btn btn-primary btn-sm" id="btnFiltrar" type="button">Exibir</button>
+                                                            <button class="btn btn-success btn-sm" id="btnExportar" type="button" onclick="location.href='@Url.Action("DownloadExcel", "ImportacaoReceipt")'">Exportar</button>
+
+                                                            @*@if (ViewBag.PermitirExportar == "S" || ViewBag.PermitirExportar == "SIM")
+                                                            {
+                                                                <a class="btn btn-success btn-sm" title="Download Excel" onclick="downloadExcel()">Exportar</a>
+                                                            }*@
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <br />
+                                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                                                @*<div class="panel-heading" style="background-color:lightgray">
+                                                </div>*@
+                                                <div class="panel-body" style="padding-bottom: 0;margin-bottom:0;font-size:11px;">
+                                                    @*<div class="table-responsive fixHead" style="height:60vh;overflow:auto;">*@
+                                                    <div class="table-responsive fixHead" style="max-height:60vh;min-height:10vh;overflow:auto;">
+
+                                                        <table class="table table-hover table-striped" id="tblGrid">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="text-align:center">Status</th>
+                                                                    <th style="text-align:center">Data</th>
+                                                                    <th style="text-align:center">Transaction</th>
+                                                                    <th style="text-align:center">Invoice</th>
+                                                                    <th style="text-align:center">Invoice Date</th>
+                                                                    <th style="text-align:center">Customer</th>
+                                                                    <th style="text-align:center">Means of Transport</th>
+                                                                    <th style="text-align:center">Country of Shipping</th>
+                                                                    <th style="text-align:center">Warehouse</th>
+                                                                    <th style="text-align:center">Bill of Lading</th>
+                                                                    <th style="text-align:center">Total Weight</th>
+                                                                    <th style="text-align:center">Total Value</th>
+                                                                    <th style="text-align:center">Mvto</th>
+                                                                    <th style="text-align:center">Num. Mvto</th>
+                                                                    <th style="text-align:center">Emissão</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model != null)
+                                                                {
+                                                                    if (Model.lstReceipts != null)
+                                                                    {
+                                                                        foreach (Entities.ImportacaoReceipt item in Model.lstReceipts)
+                                                                        {
+                                                                            <tr>
+                                                                                @*<td id="processoLink" style="text-align:center"><a href="#" onclick="abrirProcesso('@item.COD_PROCESSO')">@item.COD_PROCESSO</a></td>*@
+                                                                                @if (item.Status == 1)
+                                                                                {
+                                                                                    <td style="text-align:center"><input type="checkbox" /></td>
+                                                                                }
+                                                                                else if (item.Status == 2)
+                                                                                {
+                                                                                    <td style="text-align:center"><span class="fa fa-check" style="color:forestgreen;font-size:15px"></span></td>
+                                                                                }
+                                                                                <td hidden class="id_integracao">@item.Id_Integracao</td>
+                                                                                <td style="text-align:center">@item.Data.Value.ToString("dd/MM/yyyy").Replace("01/01/0001", "")</td>
+                                                                                <td style="text-align:center" class="transaction_number"><a style="cursor:pointer" onclick="modalInformativo(@item.Id_Integracao, '@item.Transaction_Number', '@item.Bill_of_Lading_Number')">@item.Transaction_Number</a></td>
+                                                                                <td style="text-align:center"><a style="cursor:pointer" onclick="modalInformativo(@item.Id_Integracao, '@item.Transaction_Number', '@item.Bill_of_Lading_Number')">@item.Invoice_Number</a></td>
+                                                                                <td style="text-align:center">@item.Invoice_Date.AsDateTime().ToString("dd/MM/yyyy").Replace("01/01/0001", "")</td>
+                                                                                <td style="text-align:center">@item.Customer</td>
+                                                                                <td style="text-align:center">@item.Means_of_Transport</td>
+                                                                                <td style="text-align:center">@item.Country_of_Shipping</td>
+                                                                                <td style="text-align:center">@item.Warehouse</td>
+                                                                                <td style="text-align:center" class="bill"><a style="cursor:pointer" onclick="modalInformativo(@item.Id_Integracao, '@item.Transaction_Number', '@item.Bill_of_Lading_Number')">@item.Bill_of_Lading_Number</a></td>
+                                                                                <td style="text-align:right">@item.Total_Weight</td>
+                                                                                <td style="text-align:right">@item.Total_Value</td>
+                                                                                <td style="text-align:center">@item.CodTmv</td>
+                                                                                <td style="text-align:center">@item.NumeroMov</td>
+                                                                                <td style="text-align:center">@item.DataEmissao.Value.ToString("dd/MM/yyyy").Replace("01/01/0001", "")</td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            @if (Model != null)
+                                            {
+                                                if (Model.lstReceipts != null)
+                                                {
+                                                    <button class="btn btn-primary btn-sm pull-right" id="" type="button" onclick="btnConfirmarConferencia()">Confirmar Conferência</button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-primary btn-sm pull-right" disabled id="" type="button" onclick="btnConfirmarConferencia()">Confirmar Conferência</button>
+                                                }
+                                            }
+                                        </div>
+
+                                    </fieldset>
+                                </form>
+                            </div><!-- /.modal-dialog -->
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+
+        <!-- Modal -->
+        @*@if (Model != null)
+            {
+                if (Model.lstInforme != null)
+                {*@
+        <div class="modal fade" id="modalInformativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color:lightgray; padding: 5px 10px;">
+                        <table width="100%">
+                            <tr>
+                                <td><h5 style="font-weight" class="modal-title" id="exampleModalLabel">Receipt - <span id="m_transaction_number"></span></h5></td>
+                                <td style="text-align:right">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;border:none">
+                            @*<div class="panel-heading" style="background-color:lightgray">
+                                Documento: <span id="documento_Modal"></span>
+                            </div>*@
+                            <table id="tblInformativo1" class="table table-bordered" style="border: 1px solid #ddd">
+                                <thead>
+                                    <tr style="background:#cbc6c6">
+                                        <th style="text-align:center;width:33%">ID_INTEGRAÇÃO</th>
+                                        <th style="text-align:center;width:33%">DATA</th>
+                                        <th style="text-align:center;width:33%">STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyInformativo1"></tbody>
+                            </table>
+                            <br />
+                            <table id="tblInformativo2" class="table table-bordered" style="border: 1px solid #ddd">
+                                <thead>
+                                    <tr style="background:#cbc6c6">
+                                        <th style="text-align:center;width:33%">TRANSACTION NUMBER</th>
+                                        <th style="text-align:center;width:33%">INVOICE NUMBER</th>
+                                        <th style="text-align:center;width:33%">INVOICE DATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyInformativo2"></tbody>
+                            </table>
+                            <br />
+                            <table id="tblInformativo3" class="table table-bordered" style="border: 1px solid #ddd">
+                                <thead>
+                                    <tr style="background:#cbc6c6">
+                                        <th style="text-align:center;width:33%">MEANS OF TRANSPORT</th>
+                                        <th style="text-align:center;width:33%">COUNTRY OF SHIPPING</th>
+                                        <th style="text-align:center;width:33%">WAREHOUSE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyInformativo3"></tbody>
+                            </table>
+                            <br />
+                            <table id="tblInformativo4" class="table table-bordered" style="border: 1px solid #ddd;width:33%">
+                                <thead>
+                                    <tr style="background:#cbc6c6">
+                                        <th style="text-align:center;width:33%">CURRENCY CODE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyInformativo4"></tbody>
+                            </table>
+                            <br />
+                            <table id="tblInformativo5" class="table table-bordered" style="border: 1px solid #ddd">
+                                <thead>
+                                    <tr style="background:#cbc6c6">
+                                        <th style="text-align:center;width:33%">BILL OF LADING NUMBER</th>
+                                        <th style="text-align:center;width:33%">TOTAL WEIGHT</th>
+                                        <th style="text-align:center;width:33%">TOTAL VALUE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyInformativo5"></tbody>
+                            </table>
+                            <br />
+                            <table id="tblInformativo6" class="table table-bordered" style="border: 1px solid #ddd">
+                                <thead>
+                                    <tr style="background:#cbc6c6">
+                                        <th style="text-align:center;width:33%">CODTMV</th>
+                                        <th style="text-align:center;width:33%">NUMEROMOV</th>
+                                        <th style="text-align:center;width:33%">DATA EMISSÃO</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyInformativo6"></tbody>
+                            </table>
+                            <br />
+                            <div class="fixHead" style="height:100px;overflow:auto">
+
+                                <div>
+                                    <table id="tblInformativo7" class="table table-bordered" style="display: block;white-space:nowrap">
+                                        <thead>
+                                            <tr style="background:#cbc6c6">
+                                                <th style="text-align:center;width:20%">TRANSACTION LINE</th>
+                                                <th style="text-align:center;width:20%">UNIT OF MEANSUREMENT</th>
+                                                <th style="text-align:center;width:20%">PART NUMBER</th>
+                                                <th style="text-align:center;width:20%">QUANTITY</th>
+                                                <th style="text-align:center;width:20%">VALUE PER UNIT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyInformativo7" style="height:100px;overflow:auto"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                                @*<table id="tblInformativo" class="table table-hover  table-bordered" style="border: 1px solid #ddd">
+                                    <tr>
+                                        <td>Processo: <span id="processo_Modal"> </span></td>
+                                        <td>Cadastro: <span id="cadastro_Modal"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Liberação: <span id="liberação_Modal"> </span></td>
+                                        <td>Vencimento: <span id="vencimento_Modal"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Despesa: <span id="despesa_Modal"> </span></td>
+                                        <td>Documento: <span id="documento_Modal"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Série: <span id="serie_Modal"> </span></td>
+                                        <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Código Credor Despesa: <span id="cod_Credor_Modal"> </span></td>
+                                        <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Valor Previsto Despesa: <span id="vr_previsto_despesa_Modal"> </span></td>
+                                        <td>Valor Adiantado Despesa: <span id="vr_adiantado_despesa_Modal"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Valor Real Despesa: <span id="valor_real_Modal"> </span></td>
+                                        <td>Valor a Pagar Despesa: <span id="valor_pagar_despesa_Modal"> </span></td>
+                                    </tr>
+                                </table>*@
+
+</div>
+
+                        @*<div class="modal-footer" style="padding:5px;">*@
+                        @*<button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>*@
+                        @*</div>*@
+                    </div>
+                    <div class="modal-footer" style="border-top:none !important">
+                        <button id="btnConfirmarConferenciaModal" class="btn btn-primary btn-sm" style="float:left" type="button" onclick="confirmarConferenciaModal()">Confirmar Conferência</button>
+                        <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Fechar</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+                $(document).ready(function () {
+                    $('#modalProcesso').css({
+                        'padding-right': 0
+                    });
+
+                allWells = $('#Security-Setup-step'),
+                allWells2 = $('#VerifyEmail-step')
+                //,allNextBtn = $('.nextBtn');
+
+                allWells.hide();
+                allWells2.hide();
+
+                var menuAtivo = $('#menuAtivo').val();
+                //$('.menuFinanceiro .sidebar-submenu').toggle();
+            });
+
+
+            $('.consultaPedido').click(function () {
+                $(".divConsultaPedido").toggle();
+                $(".divParametrosPedido").toggle();
+            });
+
+            $('a.modalBTN').click(function () {
+                $('#my-modal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+
+
+
+            $('#opcoesImportacaoRegular *').attr("disabled", true);
+
+            $('#importacaoRegularInput').click(function () {
+                //$('#opcoesImportacaoRegular').show();
+                $('#opcoesImportacaoRegular *').attr("disabled", false);
+            });
+            $('#depositoEspecialInput').click(function () {
+                //$('#opcoesImportacaoRegular').hide();
+                $('#opcoesImportacaoRegular *').attr("disabled", true);
+            });
+        </script>
+
+
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+
+        <script>
+            $(window).load(function () {
+                $(".chosen-select").chosen()
+            });
+        </script>
+
+        <script>
+            function salvarPedidoCompra() {
+
+                var numeroPedido = $('#numeroMovModal').html();
+                var dataInicio = $('#strDataInicio').val();
+                var dataFim = $('#strDataFim').val();
+                var idMov = $('#idMov').html();
+                var status = $('#status').html();
+                var situacao = $('#situacaoModal').html();
+                var id_integracao = $('#idIntegracao').html();
+                var origem = '';
+
+                var de = document.getElementById('depositoEspecialInput');
+                if (de.checked) {
+                    origem = 'DE';
+                }
+
+                var ir = document.getElementById('importacaoRegularInput');
+                if (ir.checked) {
+                    origem = 'IR';
+                }
+
+                $.ajax({
+                    url: '@Url.Action("AgendarIntegracao", "Compra")',
+                    type: 'get',
+                    //data: { nroPedidoModal: numeroPedido, strDataInicio: dataInicio, strDataFim: dataFim, idMov: idMov, statusModal: status, situacaoModal: situacao}
+                    data: { idMov: idMov, id_integracao: id_integracao, origem: origem },
+                    success: function (data) {
+                        $("#myForm").submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    },
+                });
+            }
+
+            function Atualiza() {
+                $('#myForm').submit();
+            }
+        </script>
+
+        <script>
+            $(function () {
+                //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' }).val();
+                //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' });
+                $(".datepickerInput").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+                $('#importacaoRegularInput').attr("disabled", true);
+            });
+
+            function isValidDate(date, campo) {
+
+                var regEx = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+
+                if (regEx.test(date) == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            
+
+          
+            function Informativo(id_integracao, sp_id, sp_id_despesa_processo)
+            {
+                $.ajax({
+                    url: '@Url.Action("Informativo", "FinanceiroDespesas")',
+                    //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                    //dataType: "json",
+                    traditional: true,
+                    //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                    data: { id_integracao, sp_id, sp_id_despesa_processo},
+                    contentType: 'json',
+
+                    success: function (response) {
+                        var credor = response[0].Credor;
+                        var processo = response[0].Processo;
+                        var cadastro = response[0].Cadastro;
+                        var liberacao = response[0].Liberacao;
+                        var vencimento = response[0].Vencimento;
+                        var despesa = response[0].Despesa;
+                        var documento = response[0].Documento;
+                        var serie = response[0].Serie;
+                        var moeda = response[0].Moeda;
+                        var codDespesa = response[0].CodCredorDespesa;
+                        var vrDespesa = response[0].VrPrevistoDespesa;
+                        vrDespesa = vrDespesa != 0 ? parseFloat(vrDespesa).toLocaleString() : '';
+                        var vrAdiantado = response[0].VrAdiantadoDespesa;
+                        vrAdiantado = vrAdiantado != 0 ? parseFloat(vrAdiantado).toLocaleString() : '';
+                        var vrRealDespesa = response[0].VrRealDespesa;
+                        vrRealDespesa = vrRealDespesa != 0 ? parseFloat(vrRealDespesa).toLocaleString() : '';
+                        var vrPagarDespesa = response[0].VrPagarDespesa;
+                        vrPagarDespesa = vrPagarDespesa != 0 ? parseFloat(vrPagarDespesa).toLocaleString() : '';
+                        var processoIntegracao = response[0].ProcessoIntegracao;
+                        var id_int = response[0].Id_Integracao;
+                        var id = response[0].Id;
+                        var data = '';
+                        data = response[0].Data;
+                        var situacao = response[0].Situacao;
+                        var tipo = response[0].Tipo;
+                        var complemento = response[0].Complemento;
+                        var idIntegracao = response[0].Id_Integracao;
+                        var idInt = response[0].IdInt;
+                        var codTMVInt = response[0].CodTMVInt;
+                        var chaveOrigem = response[0].ChaveOrigem;
+                        var identificador = response[0].Identificador;
+                        var movimento = response[0].Movimento;
+                        var numMovimento = response[0].NumMovimento;
+                        var cor = response[0].Cor;
+                        var consideracoes = response[0].Consideracoes;
+                        var cor = response[0].Cor;
+                        if (cor == 'B') {
+                            $("#corConsideracoes").css("background-color", "white");
+                        }
+                        else if (cor == 'A') {
+                            $("#corConsideracoes").css("background-color", "lightgoldenrodyellow");
+                        }
+                        else {
+                            $("#corConsideracoes").css("background-color", "orangered");
+                        }
+
+                        $('#credor_Modal').html(credor);
+                        $('#processo_Modal').html(processo);
+                        $('#cadastro_Modal').html(cadastro);
+                        $('#liberacao_Modal').html(liberacao);
+                        $('#vencimento_Modal').html(vencimento);
+                        $('#despesa_Modal').html(despesa);
+                        $('#documento_Modal').html(documento);
+                        $('#serie_Modal').html(serie);
+                        $('#moeda_Modal').html(moeda);
+                        $('#cod_Credor_Modal').html(codDespesa);
+                        $('#vrDespesa_Modal').html(vrDespesa);
+                        $('#vr_adiantado_despesa_Modal').html(vrAdiantado);
+                        $('#valor_real_Modal').html(vrRealDespesa);
+                        $('#valor_pagar_despesa_Modal').html(vrPagarDespesa);
+                        $('#processo_integracao_Modal').html(processoIntegracao);
+                        $('#integracao_Modal').html(id_int);
+                        $('#id_Modal').html(id);
+                        $('#data_Modal').html(data);
+                        $('#situacao_Modal').html(situacao);
+                        $('#tipo_Modal').html(tipo);
+                        $('#complemento_Modal').html(complemento);
+                        $('#idint_Modal').html(idInt);
+                        $('#codtmvint_Modal').html(codTMVInt);
+                        $('#chave_origem_int_Modal').html(chaveOrigem);
+                        $('#identificador_Modal').html(identificador);
+                        $('#numMovimento_Modal').html(numMovimento);
+                        $('#movimento_Modal').html(movimento);
+                        $('#consideracoes').html(consideracoes);
+
+
+                        //$('#situacao_Modal').html(situacao);
+                        //$('#data_Modal').html(data);
+                        //$('#tipo_Modal').html(tipo);
+                        //$('#forma_pagamento_Modal').html(forma_pag);
+                        //$('#moeda_Modal').html(moeda);
+                        //$('#valor_Modal').html(valor);
+                        //$('#cotacao_Modal').html(cotacao);
+                        //$('#valor_total_Modal').html(valor_total);
+                        //$('#valor_total_reais_Modal').html(valor_total_reais);
+                        //$('#cliente_Modal').html(cliente);
+                        //$('#consideracoes_Modal').html(consideracoes);
+
+                        $('#modalInformativo').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+
+
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //alert(exceptionThrown);
+                    },
+                });
+            }
+
+                $('#btnFiltrar').click(function ()
+                {
+                    var dtInicio = $('#strDataInicio').val();
+                    var dtFim = $('#strDataFim').val();
+                    var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "exibir").val("exibir");
+                     $('#myForm').append($(input));
+
+
+                    if ((dtInicio == "" || dtInicio == null) || (dtFim == "" || dtFim == null)) {
+                        if ((dtInicio == "" || dtInicio == null)) {
+                            $('#dtIniciDivErro').text('Selecione a data início.');
+                        }
+                        if ((dtFim == "" || dtFim == null)) {
+                            $('#dtFimDivErro').text('Selecione a data fim.');
+                        }
+                        $("#btnFiltrar").attr("disabled", true)
+                    }
+                    else {
+
+                        var validaDTInicio = isValidDate(dtInicio, 'strDataInicio');
+
+                        var validaDTFim = isValidDate(dtFim, 'strDataFim');
+
+                        if (validaDTInicio == true & validaDTFim == true) {
+                            $("#btnFiltrar").attr("disabled", false)
+                            document.getElementById("myForm").submit();
+                        }
+                        else {
+                            if (validaDTInicio == false) {
+                                $('#dtIniciDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                            if (validaDTFim === false) {
+                                $('#dtFimDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                        }
+
+                    }
+                })
+
+
+                function downloadExcel() {
+                    var tabela = $('#tblProcesso tbody tr').length;
+                    if (tabela > 0)
+                    {
+                        window.location.href = 'FinanceiroProcesso/DownloadExcel'
+                    }
+                    else
+                    {
+                        alert('Não há dados a serem exportados.')
+                    }
+
+                }
+
+                function btnConfirmarConferencia() {
+                    var linhas = "";
+                    var dado = '';
+                    var arrayDados = [];
+                    var numeroMovArr1 = [];
+                    let numeroMovStr = "";
+
+                    $('#tblGrid tr input[type="checkbox"]:checked').each(function () {
+                        var $row = $(this).closest('tr');
+                        dado = "";
+                        //used :not(:first-child) to skip first element (the checkbox td)
+                        $('td', $row).each(function (i) {
+                            //if ($(this).attr('id') == 'documento_pedido') {
+                            //    numeroMovArr1.push($(this).text().trim());
+
+                            //    numeroMovStr += $(this).text().trim() + ',';
+                            //}
+                            if ($(this).attr('class') == 'id_integracao' || $(this).attr('class') == 'transaction_number' || $(this).attr('class') == 'bill') {
+                                linhas = $(this).text().trim();
+                                dado += linhas + ',';                               
+                            }                         
+                        })
+                        arrayDados.push(dado);
+                        linhas = "";
+                    });
+                    console.log(arrayDados);
+                    $.ajax({
+                        url: '@Url.Action("ConfirmarConferencia", "ImportacaoReceipt")',
+                        //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                        //dataType: "json",
+                        traditional: true,
+                        //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                        data: { dados: arrayDados },
+                        contentType: 'json',
+
+                        success: function (response) {
+                            if (response.length > 0) {
+                                if (response[0].Observacao != null & response[0].Observacao != '') {
+                                    alert(response[0]);
+                                }
+                                else {
+                                    $('#exibir').remove();
+                                    var input = $("<input>")
+                                    .attr("type", "hidden")
+                                    .attr("name", "exibir").val("exibir");
+                                    $('#myForm').append($(input));
+
+                                    $('#myForm').submit();
+                                }
+                            }
+                            else {
+                                $('#exibir').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            alert(exceptionThrown);
+                        },
+                    });
+                }
+
+            function confirmarConferenciaModal() {
+                let id_integracao = $("#m_id_integracao").html();
+                let transaction_number = $("#m_transaction_number").html();
+                let bill = $("#m_bill").html();
+
+                $.ajax({
+                    url: '@Url.Action("ConfirmarConferencia", "ImportacaoReceipt")',
+                    traditional: true,
+                    data: { id_integracao: id_integracao, transaction_number: transaction_number, bill : bill },
+                    contentType: 'json',
+
+                    success: function (response) {
+                        if (response.length > 0) {
+                            if (response[0].Observacao != null & response[0].Observacao != '') {
+                                alert(response[0]);
+                            }
+                            else {
+                                $('#exibir').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+                            }
+                        }
+                        else {
+                            $('#exibir').remove();
+                            var input = $("<input>")
+                            .attr("type", "hidden")
+                            .attr("name", "exibir").val("exibir");
+                            $('#myForm').append($(input));
+
+                            $('#myForm').submit();
+                        }
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        alert(exceptionThrown);
+                    },
+                });
+            }
+
+            function modalInformativo(id_integracao, transaction_number, bill){
+                $.ajax({
+                    type: 'GET',
+                    url: "ImportacaoReceipt/Informativo",
+                    data: { id_integracao : id_integracao, transaction_number : transaction_number, bill : bill },
+                    dataType: 'json',
+                    success: function (data) {
+                        //alert(JSON.stringify(data));
+                        $('#modalInformativo').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                        $('#m_transaction_number').html(transaction_number);
+                        if (data != null) {
+                            let m_data = new Date(parseInt(data[0].Data.substr(6)));
+                            let hora = m_data.getHours().toString();
+                            let horaF = (hora < 10) ? '0' + hora : hora;
+                            let minuto = m_data.getMinutes().toString();
+                            let minutoF = '';
+                            minutoF = (minuto < 10) ? '0' + minutoF : minuto;
+                            let segundo = m_data.getSeconds().toString();
+                            let segundoF = (m_data < 10) ? '0' + segundo : segundo;
+                            let milesegundos = m_data.getMilliseconds().toString();
+                            let milesegundosF = (milesegundos < 10) ? '00' + milesegundos : milesegundos;
+                            let ano = '';
+                            let mes = '';
+                            let dia = '';
+
+                            let fmtData = ("0" + m_data.getDate()).slice(-2) + '/' +
+                                 ("0" + (m_data.getMonth() + 1)).slice(-2) + "/" +
+                                m_data.getFullYear() + ' ' +
+                                horaF + ':' +
+                                minutoF + ':' +
+                                segundoF + '.' +
+                                milesegundosF;
+                            var tr;
+                            tr =
+                            '<tr>' +
+                            '<td style="text-align:center" id="m_id_integracao">' + data[0].Id_Integracao + '</td>' +
+                            '<td style="text-align:center">' + fmtData + '</td>' +
+                            '<td style="text-align:center">' + data[0].Status + '</td>' +
+                            '</tr>';
+                            $("#tbodyInformativo1").append(tr);
+
+                            if (data[0].Status == "Confirmado") {
+                                $('#btnConfirmarConferenciaModal').hide();
+                            }
+                            else {
+                                $('#btnConfirmarConferenciaModal').show();
+                            }
+
+                            let data_invoice = parseInt(data[0].Invoice_Date.replace("-", "").replace("-", ""));
+                            mes = data[0].Invoice_Date.replace("-", "").replace("-", "").substr(4, 2);
+                            ano = data[0].Invoice_Date.replace("-", "").replace("-", "").substr(0, 4);
+                            dia = data[0].Invoice_Date.replace("-", "").replace("-", "").substr(6, 2);
+                            fmtData = dia + '/' + mes + '/' + ano
+                            //fmtData = ("0" + data_invoice.getDate()).slice(-2) + '/' +
+                            //     ("0" + (data_invoice.getMonth() + 1)).slice(-2) + "/" +
+                            //    data_invoice.getFullYear();
+                            tr =
+                            '<tr>' +
+                            '<td style="text-align:center" id="m_transaction_number">' + data[0].Transaction_Number + '</td>' +
+                            '<td style="text-align:center">' + data[0].Invoice_Number + '</td>' +
+                            '<td style="text-align:center">' + fmtData + '</td>' +
+                            '</tr>';
+                            $("#tbodyInformativo2").append(tr);
+
+                            tr =
+                            '<tr>' +
+                            '<td style="text-align:center">' + data[0].Means_of_Transport + '</td>' +
+                            '<td style="text-align:center">' + data[0].Country_of_Shipping + '</td>' +
+                            '<td style="text-align:center">' + data[0].Warehouse + '</td>' +
+                            '</tr>';
+                            $("#tbodyInformativo3").append(tr);
+
+                            tr =
+                            '<tr>' +
+                            '<td style="text-align:center">' + data[0].Currency_Code + '</td>' +
+                            '</tr>';
+                            $("#tbodyInformativo4").append(tr);
+
+                            tr =
+                            '<tr>' +
+                            '<td style="text-align:center" id="m_bill">' + data[0].Bill_of_Lading_Number + '</td>' +
+                            '<td style="text-align:center">' + data[0].Total_Weight + '</td>' +
+                            '<td style="text-align:center">' + data[0].Total_Value + '</td>' +
+                            '</tr>';
+                            $("#tbodyInformativo5").append(tr);
+
+                            m_data = new Date(parseInt(data[0].DataEmissao.substr(6)));
+                            fmtData = ("0" + m_data.getDate()).slice(-2) + '/' +
+                                 ("0" + (m_data.getMonth() + 1)).slice(-2) + "/" +
+                                m_data.getFullYear();
+                            tr =
+                            '<tr>' +
+                            '<td style="text-align:center">' + data[0].CodTMV + '</td>' +
+                            '<td style="text-align:center">' + data[0].NumeroMov + '</td>' +
+                            '<td style="text-align:center">' + fmtData + '</td>' +
+                            '</tr>';
+                            $("#tbodyInformativo6").append(tr);
+
+                            $.each(data, function (index, value) {
+                                tr =
+                                '<tr>' +
+                                '<td style="text-align:center">' + parseInt(value.Transaction_Line) + '</td>' +
+                                '<td style="text-align:center">' + value.Unit_of_Meansurement + '</td>' +
+                                '<td style="text-align:center">' + value.Part_Number + '</td>' +
+                                '<td style="text-align:center">' + value.Quantity + '</td>' +
+                                '<td style="text-align:center">' + value.Value_Per_Unit + '</td>' +
+                                '</tr>';
+
+                                $(tr).appendTo('#tblInformativo7');
+                            })
+                        }
+
+
+
+                    },
+                    error: function (e) {
+                        alert("Error:Unable to load data from server");
+                    }
+                });
+            }
+
+            $('#modalInformativo').on('hidden.bs.modal', function () {
+                $('#tbodyInformativo1').empty();
+                $('#tbodyInformativo2').empty();
+                $('#tbodyInformativo3').empty();
+                $('#tbodyInformativo4').empty();
+                $('#tbodyInformativo5').empty();
+                $('#tbodyInformativo6').empty();
+                $('#tbodyInformativo7').empty();
+            });
+        </script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        @*<link href="~/content/financeiroprocesso.css" rel="stylesheet" />*@
+
+    </body>
+}
+</html>

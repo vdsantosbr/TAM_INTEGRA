@@ -1,0 +1,751 @@
+﻿@model  Entities.RecebimentoCombosViewModel
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int cont = 0;
+    int qtde = 0;
+    bool exibe = false;
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+
+    <!-- Bootstrap CSS -->
+    <link href="~/content/recebimentos/css/bootstrap.min.css" rel="stylesheet">
+    <!-- bootstrap theme -->
+    <link href="~/content/recebimentos/bootstrap-theme.css" rel="stylesheet">
+    <!--external css-->
+    <!-- font icon -->
+    <link href="~/content/recebimentos/css/elegant-icons-style.css" rel="stylesheet" />
+    <link href="~/content/recebimentos/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- full calendar css-->
+    <link href="~/content/recebimentos/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet" />
+    <link href="~/content/recebimentos/assets/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" />
+    <!-- easy pie chart-->
+    <link href="~/content/recebimentos/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen" />
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="~/content/recebimento/css/owl.carousel.css" type="text/css">
+    <link href="~/content/recebimentos/css/jquery-jvectormap-1.2.2.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="~/content/recebimento/css/fullcalendar.css">
+    <link href="~/content/recebimentos/css/widgets.css" rel="stylesheet">
+    <link href="~/content/recebimentos/css/style.css" rel="stylesheet">
+    <link href="~/content/recebimentos/css/style-responsive.css" rel="stylesheet" />
+    <link href="~/content/recebimentos/css/xcharts.min.css" rel=" stylesheet">
+    <link href="~/content/recebimentos/css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+
+
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <script src=" ~/Content/Recebimentos/script/Recebimento.js"></script>
+
+</head>
+<body>
+    <div class="page-wrapper chiller-theme">
+        @*<main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                    <div class="stepwizard">
+                        <fieldset>
+                            <legend style="margin-bottom:0;top:0;font-size:18px;">Painel</legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </main>*@
+
+        <form method="post" id="btnsubmit" action="/RecebimentoAvalaraPedidos/ShowForm">
+
+            <main class="page-content" style="padding-top:20px">
+                <div class="container-fluid" style="padding-top:0">
+
+                    <section id="container" class="">
+
+                        <!--sidebar end-->
+                        <!--main content start-->
+                        <section>
+                            <section class="wrapper">
+                                <!--overview start-->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h3 class="page-header"><i class="fa fa-laptop"></i> TaxDocs - NF sem pedido associado - <strong> @Model.RecebimentoNota.FirstOrDefault().NOME.ToUpper() </strong></h3>
+                                        <ol class="breadcrumb">
+                                            <li><i class="fa fa-home"></i><a href="/RecebimentoAvalara/Index">TaxDocs</a></li>
+                                            <li><i class="fa fa-laptop"></i><a href="/RecebeInformacoesTela_2/index">NF sem pedido associado </a>/  NF sem pedido associado Detalhe</li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-10">
+
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <section class="panel-heading">
+
+                                                    <h3 class="page-header-pedidos">
+                                                        <i class="fa fa-pencil-square-o"></i> <a href="#" style="cursor:pointer"> @Model.RecebimentoNota.FirstOrDefault().NOME -  <strong> @(@Model.RecebimentoNota.FirstOrDefault().CGCCFO.Substring(0, 2) + "." + @Model.RecebimentoNota.FirstOrDefault().CGCCFO.Substring(2, 3) + "." + @Model.RecebimentoNota.FirstOrDefault().CGCCFO.Substring(5, 3) + "/" + @Model.RecebimentoNota.FirstOrDefault().CGCCFO.Substring(8, 4) + "-" + @Model.RecebimentoNota.FirstOrDefault().CGCCFO.Substring(12, 2)) /  <span style="color:red; font-size:small">@Model.RecebimentoNota.FirstOrDefault().XMOTIVO</span> </strong></a>   <br />
+                                                        <h4>
+                                                            <b>NF:</b> <strong style="color:red"> @Model.RecebimentoNota.FirstOrDefault().NF_NUMERO  </strong>  | <b> R$:</b> <strong style="color:dodgerblue">@string.Format("{0:0,0.00}", Math.Round(Convert.ToDouble(Model.RecebimentoNota.FirstOrDefault().NF_VALOR.Replace(".", ",")))) </strong>
+                                                        </h4>
+
+                                                    </h3>
+                                                </section>
+                                                @if (Model.remessa == false)
+                                                {
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>PEDIDO</th>
+                                                                    <th>REQUISITANTE</th>
+                                                                    <th>DATA</th>
+                                                                    <th>VALOR</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var itemSess in Model.SelectIDMOV.Where(a=>a.IdAvalara== Model.RecebimentoNota.FirstOrDefault().ID_AVALARA).ToList())
+                                                                {
+                                                                    foreach (var item in Model.RecebimentoNotaRM.Where(a => a.IDMOV == Convert.ToInt32(itemSess.IdMov)).ToList())
+                                                                    {
+                                                                        <tr>
+
+                                                                            <td>@item.PEDIDO_NUMERO</td>
+                                                                            <td>@item.PEDIDO_REQUISITANTE</td>
+                                                                            <td>@item.PEDIDO_EMISSAO.ToShortDateString()</td>
+                                                                            <td>@item.PEDIDO_PRECO</td>
+
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                }
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--
+                                        colocar um confirm
+                                        Esta acao ira desfazer os vinculos de recebimento desta nota e reclassifica la como NF SEM VINCULO DE RECEBIMENTO.
+
+                                        DESEJA CONTINUAR ?
+
+                                        SIM NAO
+
+                                        UPDATE DOWNLOAD EMIT IS NULL
+                                        DELETAR ITENS VINCULADO
+
+                                        CASO O USUARIO ACEITE !!!
+                                        CARREGAR TELA DOIS FILTRADO COM CNPJ SELECIONADO / NOTA.
+
+                                    -->                                    
+                                        <a class="btn btn-danger " href="#" title="Bootstrap 3 themes generator" style="width:180px;color:white;" onclick="ReiniciarAnalise(@Model.RecebimentoNota.FirstOrDefault().ID_AVALARA,@Model.RecebimentoNota.FirstOrDefault().NF_NUMERO)">Refazer Recebimento</a>
+                                        <p></p>
+
+                                    @*<a class="btn btn-warning" href="#" title="Bootstrap 3 themes generator" style="width:180px; color:black" onclick="salvaranalise('@Model.ListNotaDetalhe.FirstOrDefault().CHAVENF')">Salvar análise do recebimento</a>
+                                    <p></p>*@
+
+                                        <a class="btn btn-success" href="" title="Bootstrap 3 themes generator" style="width:180px;color:black">Integrar Recebimento</a>
+                                   
+                                   
+
+
+
+
+
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <br />
+                                        <ol class="breadcrumb">
+                                            <select name="tipomovimento" id="tipomovimento" class="form-control input-sm m-bot15">
+                                                <option value="0">Escolha o tipo de movimento ...</option>
+                                               @foreach (var cb1 in Model.Combo1)
+                                               {
+                                                   if (Model.remessa == false)
+                                                   {
+                                                       if (Model.ListNotaVinculada.Where(a => a.TipoMovimento == cb1.CODTMVFAT.Trim() && a.NotaFiscal.Trim() == Model.RecebimentoNota.FirstOrDefault().NF_NUMERO.Trim()).Count() > 0)
+                                                       {
+                                                        <option selected value="@cb1.CODTMVFAT">@cb1.CODTMVFAT - @cb1.NOME.ToUpper()</option>
+                                                       }
+                                                       else
+                                                       {
+                                                        <option value="@cb1.CODTMVFAT">@cb1.CODTMVFAT - @cb1.NOME.ToUpper()</option>
+                                                       }
+
+                                                   }
+                                                   else
+                                                   {
+                                                       if (Model.ListNotaVinculada.Where(a => a.TipoMovimento == cb1.CODTMV.Trim() && a.NotaFiscal.Trim() == Model.RecebimentoNota.FirstOrDefault().NF_NUMERO.Trim()).Count() > 0)
+                                                       {
+                                                        <option selected value="@cb1.CODTMV">@cb1.CODTMV - @cb1.NOME.ToUpper()</option>
+                                                       }
+                                                       else
+                                                       {
+                                                        <option value="@cb1.CODTMV">@cb1.CODTMV - @cb1.NOME.ToUpper()</option>
+                                                       }
+                                                   }
+                                               }
+
+
+                                            </select>
+                                            <br />
+
+                                            @*@if (Model.remessa == false)
+                                                {*@
+                                            <select name="classefinanceira" id="classefinanceira" class="form-control input-sm m-bot15">
+                                                <option value="0">Escolha a classificação financeira ...</option>
+                                                @foreach (var cb2 in Model.Combo2)
+                                                {
+                                                    if (Model.ListNotaVinculada.Where(a => a.ClasseFinanceira == cb2.CODTB2FLX.Trim() && a.NotaFiscal.Trim() == Model.RecebimentoNota.FirstOrDefault().NF_NUMERO.Trim()).Count() > 0)
+                                                    {
+                                                        <option selected value="@cb2.CODTB2FLX">@cb2.CODTB2FLX - @cb2.DESCRICAO.ToUpper()</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@cb2.CODTB2FLX">@cb2.CODTB2FLX - @cb2.DESCRICAO.ToUpper()</option>
+                                                    }
+                                                }
+                                            </select>
+
+                                            <br />
+                                            <select name="formapagamento" id="formapagamento" class="form-control input-sm m-bot15">
+                                                <option value="0">Escolha a forma de pagamento ...</option>
+                                                @foreach (var cb3 in Model.Combo3)
+                                                {
+                                                    if (Model.ListNotaVinculada.Where(a => a.TipoPagamento == cb3.CODTB3FLX.Trim() && a.NotaFiscal.Trim() == Model.RecebimentoNota.FirstOrDefault().NF_NUMERO.Trim()).Count() > 0)
+                                                    {
+                                                        <option selected value="@cb3.CODTB3FLX">@cb3.CODTB3FLX -  @cb3.DESCRICAO.ToUpper()</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@cb3.CODTB3FLX">@cb3.CODTB3FLX -  @cb3.DESCRICAO.ToUpper()</option>
+                                                    }
+                                                }
+                                            </select>
+                                            @*}*@
+
+
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <!--lixo esta aqui-->
+                                <div class="row">
+
+
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h2><i class="fa fa-pencil-square-o"></i><strong>NOTA - @Model.RecebimentoNota.FirstOrDefault().NF_NUMERO </strong></h2><br />
+                                                @*<div class="panel-actions">
+                                                        <a href="index.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
+                                                        <a href="index.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+                                                        <a href="index.html#" class="btn-close"><i class="fa fa-times"></i></a>
+                                                    </div>*@
+                                            </div>
+                                            <div class="panel-body">
+                                                <table class="table bootstrap-datatable countries">
+                                                    <thead>
+                                                        <tr>
+                                                            @if (Model.remessa == false)
+                                                            {
+                                                                <th></th>
+                                                            }
+                                                            <th>ITEM</th>
+                                                            <th>DESCRIÇÃO</th>
+                                                            <th></th>
+                                                            <th style="text-align:right">QTD</th>
+                                                            <th style="text-align:right">VALOR</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var itemcompra in Model.ListNotaDetalhe)
+                                                        {
+                                                            cont = cont + 1;
+
+
+                                                            <tr>
+
+
+
+                                                                @if (Model.ListNotaVinculada.Where(a => a.NotaFiscal == itemcompra.NUMERONOTA.Trim() && a.nItem == cont).Count() > 0)
+                                                                {
+
+                                                                    <td>
+                                                                        <input type="radio" name="radioNotaFiscal" id="@cont@itemcompra.NUMERONOTA.Replace(" ","")" disabled readonly />
+                                                                    </td>
+                                                                        <td width="500px" style="text-decoration: line-through;">@cont</td>
+                                                                        <td width="600px" style="text-decoration: line-through;">@itemcompra.NOMEPRODUTO</td>
+                                                                        <td width="150px"></td>
+                                                                        <td width="150px" style="text-align:right;text-decoration: line-through;">@itemcompra.QCOM</td>
+                                                                            <td width="150px" style="text-align:right; text-decoration: line-through;">
+
+                                                                                R$ @string.Format("{0:0,0.00}", Math.Round(Convert.ToDouble(itemcompra.VALORPRODUTO.Replace(".", ","))))
+                                                                            </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (Model.remessa == false)
+                                                                    {
+
+                                                                        <td>
+                                                                            <input type="radio" name="radioNotaFiscal" value="@cont@itemcompra.NUMERONOTA.Trim()" id="@cont@itemcompra.NUMERONOTA.Replace(" ","")" onclick="iniciaprocesso(@cont, '@itemcompra.NUMERONOTA.Replace(" ","")',@cont, '@itemcompra.QCOM')" />
+
+                                                                        </td>
+                                                                    }
+                                                                    <td width="500px">@cont</td>
+                                                                            <td width="600px">@itemcompra.NOMEPRODUTO</td>
+                                                                            <td width="150px"></td>
+                                                                            <td width="150px" style="text-align:right">@itemcompra.QCOM</td>
+                                                                            <td width="150px" style="text-align:right">
+
+                                                                                R$ @string.Format("{0:0,0.00}", Math.Round(Convert.ToDouble(itemcompra.VALORPRODUTO.Replace(".", ","))))
+                                                                            </td>
+                                                                }
+
+
+
+
+                                                            </tr>
+
+                                                        }
+
+                                                        @if (Model.ListNotaDetalhe.Count() == 0)
+                                                        {
+                                                            <tr>
+                                                                <td colspan="12" align="center">
+                                                                    <div class="alert alert-block alert-danger fade in" style="font-size:larger">
+
+                                                                        <strong>Ops error!</strong> Não há Notas disponíveis.
+                                                                    </div>
+
+                                                                </td>
+                                                            </tr>
+                                                        }
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                               <div style="width: 80px;float:right; ">
+    <p></p>
+    <button class="btn btn-warning" onclick="vinculadados('@Convert.ToInt32(Session["tiponota"])')" type="button">VINCULAR</button>
+</div>
+@if (Model.remessa == false)
+{
+    <h2><i class="fa fa-pencil-square-o"></i><strong>PEDIDO / SOLICITAÇÃO</strong></h2><br />
+}
+
+                                                @*<div class="panel-actions">
+                                                        <a href="index.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
+                                                        <a href="index.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+                                                        <a href="index.html#" class="btn-close"><i class="fa fa-times"></i></a>
+                                                    </div>*@
+                                            </div>
+                                            @if (Model.remessa)
+                                            {
+                                                <div class="panel-body">
+                                                    <table class="table bootstrap-datatable countries">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>NCM - DESCRIÇÃO (NF)</th>
+                                                                <th>ITEM (RM) </th>
+                                                                <th>CFOP</th>
+                                                                <th width="150px" style="text-align:right"><b>QTDE</b></th>
+                                                                <th width="150px" style="text-align:right"><b>VALOR</b></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model.ListNotaDetalhe)
+                                                            {
+                                                                <tr>
+
+                                                                    @*<td><img src="img/Germany.png" style="height:18px; margin-top:-2px;"></td>*@
+                                                                    <td width="500px">
+                                                                        @item.NCM - @item.NOMEPRODUTO
+                                                                    </td>
+                                                                    <td width="600px">
+
+                                                                        <select name="itemncm" id="itemRM-@item.NCM" class="form-control input-sm m-bot15">
+
+                                                                            <option value="0">Selecione o Item</option>
+                                                                            @foreach (var itemcombo in Model.NCM_Avalara.Where(a => a.CODNCM == item.NCM).ToList())
+                                                                            {
+                                                                                if (Model.ListNotaVinculada.Where(a => a.NumpedidoRM.Trim() == itemcombo.CODNCM.Trim()).Count() > 0)
+                                                                                {
+                                                                                    <option selected value="@itemcombo.CODNCM"> @itemcombo.DESCRICAO</option>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <option value="@itemcombo.CODNCM"> @itemcombo.DESCRICAO</option>
+                                                                                }
+
+                                                                            }
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td width="150px">
+                                                                        <select name="itemCFOP" id="itemCFOP-@item.NCM" class="form-control input-sm m-bot15">
+                                                                            <option value="0">Selecione CFOP</option>
+                                                                            @foreach (var itemcombo in Model.cfop_Avalara.ToList())
+                                                                            {
+                                                                                if (Model.ListNotaVinculada.Where(a => a.itemCFOP == itemcombo.CODNAT.Trim()).Count() > 0)
+                                                                                {
+                                                                                    <option selected value="@itemcombo.CODNAT">@itemcombo.CODNAT</option>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <option value="@itemcombo.CODNAT">@itemcombo.CODNAT</option>
+                                                                                }
+                                                                            }
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td width="150px" align="right">@item.QCOM</td>
+                                                                    <td width="150px" align="right">
+                                                                        R$ @string.Format("{0:0,0.00}", Math.Round(Convert.ToDouble(item.VALORPRODUTO.Replace(".", ","))))
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                            @if (Model.ListNotaDetalhe.Count() == 0)
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="12" align="center">
+                                                                        <div class="alert alert-block alert-danger fade in" style="font-size:larger">
+
+                                                                            <strong>Ops error!</strong> Não há pedidos de  formalização.
+                                                                        </div>
+
+                                                                    </td>
+                                                                </tr>
+                                                            }
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="panel-body">
+                                                    <table class="table bootstrap-datatable countries">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>NUMERO - ITEM</th>
+                                                                <th>DESCRIÇÃO</th>
+                                                                <th>CFOP</th>
+                                                                <th width="100px" style="text-align:right">QTDE</th>
+                                                                <th width="150px" style="text-align:right">QTDE a receber</th>
+                                                                <th width="150px" style="text-align:right">VALOR</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @foreach (var item in Model.item_Avalara)
+                                                            {
+                                                                if (Model.ListNotaVinculada.Where(a => a.NumpedidoRM.Trim().Replace(" ", "") == item.PEDIDO_NUMERO).Count() > 0)
+                                                                {
+                                                                    <tr>
+
+                                                                        <td>
+                                                                            <input type="checkbox" name="check-@cont" id="check-@cont" readonly disabled />
+
+                                                                        </td>
+                                                                        <td style="text-decoration: line-through;">@item.PEDIDO_NUMERO</td>
+                                                                        <td style="text-decoration: line-through;">@item.PEDIDO_DESCRICAO</td>
+                                                                        <td>
+                                                                            <select name="itemCFOP-@item.PEDIDO_NUMERO" name="itemCFOP" class="form-control input-sm m-bot15" disabled>
+                                                                                <option value="0">Selecione CFOP</option>
+                                                                                @foreach (var itemcombo in Model.cfop_Avalara)
+                                                                                {
+                                                                                    if (Model.ListNotaVinculada.Where(a => a.itemCFOP == itemcombo.CODNAT.Trim()).Count() > 0)
+                                                                                    {
+                                                                                        <option value="@itemcombo.CODNAT" selected>@itemcombo.CODNAT</option>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <option value="@itemcombo.CODNAT">@itemcombo.CODNAT</option>
+                                                                                    }
+                                                                                }
+
+                                                                            </select>
+                                                                        </td>
+                                                                        <td width="100px" align="right" style="text-decoration: line-through;">@item.PEDIDO_QUANTIDADE</td>
+                                                                        <input type="hidden" id="qtdapoio-@item.PEDIDO_NUMERO" value="@item.PEDIDO_QUANTIDADE" />
+                                                                        <td width="150px" align="right">
+                                                                            <input style="text-decoration: line-through;" type="text" disabled id="pqtd-@item.PEDIDO_NUMERO" name="quantidadeReceber" readonly value="@item.PEDIDO_QUANTIDADE" style="text-align:right" />
+
+                                                                        </td>
+                                                                        <td width="150px" align="right" style="text-decoration: line-through;">
+
+                                                                            R$ @string.Format("{0:0,0.00}", Math.Round(Convert.ToDouble(item.PEDIDO_PRECO.ToString().Replace(".", ","))))
+                                                                        </td>
+                                                                    </tr>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <tr>
+
+                                                                        <td><input type="checkbox" name="checkpedidos" id="check-@cont" value="@item.PEDIDO_NUMERO.Trim()" onclick="desativaativa(@item.PEDIDO_NUMERO.Trim())" /> </td>
+                                                                        <td>@item.PEDIDO_NUMERO</td>
+                                                                        <td>@item.PEDIDO_DESCRICAO</td>
+                                                                        <td>
+                                                                            <select disabled name="itemCFOP" id="itemCFOP-@item.PEDIDO_NUMERO" class="form-control input-sm m-bot15">
+                                                                                <option value="0">Selecione CFOP</option>
+                                                                                @foreach (var itemcombo in Model.cfop_Avalara)
+                                                                                {
+
+
+                                                                                    <option value="@itemcombo.CODNAT">@itemcombo.CODNAT</option>
+
+                                                                                }
+
+                                                                            </select>
+                                                                        </td>
+                                                                        <td width="100px" align="right">@item.PEDIDO_QUANTIDADE</td>
+                                                                        <input type="hidden" id="qtdapoio-@item.PEDIDO_NUMERO" value="@item.PEDIDO_QUANTIDADE" />
+                                                                        <td width="150px" align="right">
+                                                                            <input type="text" id="pqtd-@item.PEDIDO_NUMERO" name="quantidadeReceber" onblur="validaquantidade('@Convert.ToInt16(item.PEDIDO_QUANTIDADE)',@item.PEDIDO_NUMERO.Trim())" disabled value="@item.PEDIDO_QUANTIDADE" style="text-align:right" />
+                                                                            <input type="text" name="IDPRD" value="@item.IDPRD" style="display:none" />
+                                                                            <input type="text" name="IDMOV" value="@item.IDMOV" style="display:none" />
+                                                                            <input type="text" name="COLIGADA" value="@item.COLIGADA" style="display:none" />
+                                                                        </td>
+                                                                        <td width="150px" align="right">
+
+                                                                            R$ @string.Format("{0:0,0.00}", Math.Round(Convert.ToDouble(item.PEDIDO_PRECO.ToString().Replace(".", ","))))
+                                                                        </td>
+                                                                    </tr>
+
+                                                                }
+                                                            }
+
+                                                            @if (Model.item_Avalara.Count() == 0)
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="12" align="center">
+                                                                        <div class="alert alert-block alert-danger fade in" style="font-size:larger">
+
+                                                                            <strong>Ops error!</strong> Não há pedidos de  formalização.
+                                                                        </div>
+
+                                                                    </td>
+                                                                </tr>
+                                                            }
+
+                                                            <tr>
+                                                                <td colspan="10" align="center">
+                                                                    <p></p>
+                                                                    @*<input class=""btn btn-danger btn-xs btn-block" onclick="vinculadados()" type="button" value="Vincular" size="25" />*@
+
+                                                                    @*<div class="btn-group">
+                                                                        <button class="btn btn-warning" onclick="vinculadados()" type="button">Vincular</button>
+                                                                    </div>*@
+                                                                    <input type="text" name="TipoNota" style="display:none" value="@Convert.ToInt32(Session["tiponota"])" />
+                                                                    <input class="form" onclick="" type="submit" style="display:none" value="Vincular" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            }
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <!--/col-->
+                                    @*<div class="col-md-3">
+
+                                            <div class="social-box google-plus">
+                                                <i class="fa fa-pie-chart"></i>
+                                                <ul>
+                                                    <li >
+                                                        <strong>0</strong>
+                                                        <span>Pendentes</span>
+                                                    </li>
+                                                    <li>
+                                                        <strong>0</strong>
+                                                        <span>Resolvido</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            /social-box
+
+                                        </div>*@
+
+
+                                </div>
+
+
+
+                                <!-- statics end -->
+                                <!-- project team & activity start -->
+                                <br><br>
+
+
+                                <!-- project team & activity end -->
+
+                            </section>
+
+                        </section>
+                        <!--main content end-->
+                    </section>
+
+
+
+
+
+
+                </div>
+            </main>
+
+
+        </form>
+
+    </div>
+
+    <!-- javascripts -->
+    <script src="~/Content/Recebimentos/js/jquery.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery-ui-1.10.4.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="~/Content/Recebimentos/js/jquery-ui-1.9.2.custom.min.js"></script>
+    <!-- bootstrap -->
+    <script src="~/Content/Recebimentos/js/bootstrap.min.js"></script>
+    <!-- nice scroll -->
+    <script src="~/Content/Recebimentos/js/jquery.scrollTo.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.nicescroll.js" type="text/javascript"></script>
+    <!-- charts scripts -->
+    <script src="~/Content/Recebimentos/assets/jquery-knob/js/jquery.knob.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.sparkline.js" type="text/javascript"></script>
+    <script src="~/Content/Recebimentos/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+    <script src="~/Content/Recebimentos/js/owl.carousel.js"></script>
+    <!-- jQuery full calendar -->
+    <
+    <script src="~/Content/Recebimentos/js/fullcalendar.min.js"></script>
+    <!-- Full Google Calendar - Calendar -->
+    <script src="~/Content/Recebimentos/assets/fullcalendar/fullcalendar/fullcalendar.js"></script>
+    <!--script for this page only-->
+    <script src="~/Content/Recebimentos/js/calendar-custom.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.rateit.min.js"></script>
+    <!-- custom select -->
+    <script src="~/Content/Recebimentos/js/jquery.customSelect.min.js"></script>
+    <script src="~/Content/Recebimentos/assets/chart-master/Chart.js"></script>
+
+    <!--custome script for all page-->
+    <script src="~/Content/Recebimentos/js/scripts.js"></script>
+    <!-- custom script for this page-->
+    <script src="~/Content/Recebimentos/js/sparkline-chart.js"></script>
+    <script src="~/Content/Recebimentos/js/easy-pie-chart.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="~/Content/Recebimentos/js/xcharts.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.autosize.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.placeholder.min.js"></script>
+    <script src="~/Content/Recebimentos/js/gdp-data.js"></script>
+    <script src="~/Content/Recebimentos/js/morris.min.js"></script>
+    <script src="~/Content/Recebimentos/js/sparklines.js"></script>
+    <script src="~/Content/Recebimentos/js/charts.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.slimscroll.min.js"></script>
+    <script>
+      //knob
+      $(function() {
+        $(".knob").knob({
+          'draw': function() {
+            $(this.i).val(this.cv + '%')
+          }
+        })
+      });
+
+      //carousel
+      $(document).ready(function() {
+        $("#owl-slider").owlCarousel({
+          navigation: true,
+          slideSpeed: 300,
+          paginationSpeed: 400,
+          singleItem: true
+
+        });
+      });
+
+      //custom select box
+
+      $(function() {
+        $('select.styled').customSelect();
+      });
+
+      /* ---------- Map ---------- */
+      $(function() {
+        $('#map').vectorMap({
+          map: 'world_mill_en',
+          series: {
+            regions: [{
+              values: gdpData,
+              scale: ['#000', '#000'],
+              normalizeFunction: 'polynomial'
+            }]
+          },
+          backgroundColor: '#eef3f7',
+          onLabelShow: function(e, el, code) {
+            el.html(el.html() + ' (GDP - ' + gdpData[code] + ')');
+          }
+        });
+      });
+
+        function EnviaCliente(cliente){
+
+        		//alert(cliente);
+
+        $(document).ready(function () {
+
+                var val = cliente;
+                var url = "/RecebimentoAvalaraParte_3/RecebeInformacoesTela_3";
+                alert(val);
+                $.post(url, { cnpj: val }, function (data) {
+                   location='/Recebimento/'
+                });
+
+        });
+
+
+        }
+
+        $(document).ready(function () {
+
+        //alert('LIMPATUDO')
+
+        localStorage.removeItem('notafiscal');
+        localStorage.removeItem('ValorQuantidade');
+
+        });
+
+
+    </script>
+
+
+
+</body>
+
+</html>

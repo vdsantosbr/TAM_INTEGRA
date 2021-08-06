@@ -1,0 +1,63 @@
+﻿@model Entities.Home
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+    <ul class="nav navbar-nav" id="menu">
+        <li>
+            <a href="/emplookup.html">Lookup</a>
+        </li>
+        <li>
+            <a href="/modalexample.html">Modals</a>
+        </li>
+        <li>
+            <a href="#" onclick="modal()">Lab 6</a>
+        </li>
+    </ul>
+   <div>
+     @if (Model != null)
+     {
+         if (Model.Id_Integracao > 0)
+         {
+            @Html.Partial("ModalPartial", Model)
+         }
+     }
+   </div>
+    <div id="theModal" class="modal fade text-center">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <script>
+        function modal() {
+
+            $.ajax({
+                 url: '@Url.Action("Index", "Teste")',
+                //type: 'GET',
+                //dataType: 'html',
+                success: function (data) {
+                     @*@Html.Partial("ModalPartial", Model)*@
+
+                    //window.location.href = 'Teste/modalpartial'
+                   // $('#info').html('teste');
+                },
+                error: function () { }
+            });
+        }
+
+
+    </script>
+
+</body>
+
+</html>

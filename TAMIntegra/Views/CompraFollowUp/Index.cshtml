@@ -1,0 +1,2183 @@
+﻿@model Entities.CompraFollowUp
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pedidoModal = (IEnumerable<Entities.CompraFollowUp>)ViewData["pedidoModal"];
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        .tableFixHead th {
+    position: sticky;
+    top: 0;
+    background: #eee;
+    z-index: 2;
+}
+td:first-child, th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+.tableFixHead th, .tableFixHead td {
+    padding: 8px 16px;
+}
+th {
+    text-align: left;
+}
+td, th {
+    padding: 0;
+}
+th {
+    text-align: left;
+}
+td, th {
+    padding: 0;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+user agent stylesheet
+th {
+    display: table-cell;
+    vertical-align: inherit;
+    font-weight: bold;
+    text-align: -internal-center;
+}
+.tableFixHead table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+        /*.modal-dialog {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  top: 0
+}
+
+.modal-content {
+  height: auto;
+  min-height: 100%;
+  border-radius: 0;
+}*/
+    /*loader*/
+    .loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 30px;
+  height: 30px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+    .file-upload {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:100%;
+    opacity: 0;
+    cursor: pointer;
+}
+        .container{
+    margin-top:20px;
+}
+.image-preview-input {
+    position: relative;
+	overflow: hidden;
+	margin: 0px;    
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;    
+}
+.image-preview-input input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+.image-preview-input-title {
+    margin-left:2px;
+}
+        .btn-group-sm > .btn, .btn-sm {
+            padding: 5px 5px !important;
+        }
+        .panel {
+            border-color: #ddd !important;
+
+        }
+        .modal-open .modal {
+     overflow-x: hidden; 
+     overflow-y: auto; 
+}
+        .input-group-btn.input-space {
+  padding-left: 5px;
+}
+        @@media (min-width: 992px) {
+            .col-md-2 {
+                width: 15% !important;
+            }
+        }
+                /*#my-modal{
+         width: 1500px;
+         height:1150px;
+          margin: auto;
+          padding-top: 17%;
+         vertical-align: middle;
+        }*/
+                /*.modal-body{
+            overflow-y: auto;
+        }*/
+                .page-wrapper {
+                    height: 100vh;
+                }
+
+                .modalDialog {
+                    /*Insira o código debaixo de tudo*/
+                    overflow: scroll;
+                }
+
+                .modal-body {
+                    max-height: calc(110vh - 210px);
+                    overflow-y: auto;
+                }
+
+                .clearfix {
+                    clear: both;
+                    padding: 0;
+                    margin: 0;
+                    height: 5px;
+                    display: block;
+                }
+
+                .panel-body {
+                    padding-bottom: 0;
+                }
+
+                .panel {
+                    /*border: 0;*/
+                    border-width: 5px;
+                    border-color: #3A2303;
+                    padding-bottom: 0em;
+                    height: 100%;
+                }
+
+                .form-group {
+                    padding-bottom: 0;
+                    margin-bottom: 0;
+                }
+
+                .col-md-4 {
+                    padding-bottom: 5px;
+                }
+
+                .btnSemLink {
+                    display: inline-block;
+                    padding: 6px 12px;
+                    margin-bottom: 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 1.42857143;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: middle;
+                    /*touch-action: manipulation;*/
+                    /*cursor: pointer;*/
+                    -webkit-user-select: none;
+                    border: 1px solid transparent;
+                }
+
+                .modal-dialog {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .modal-content {
+                    margin: 0 auto;
+                }
+
+                .grid-container {
+                    display: grid;
+                    grid-template-columns: auto auto auto auto auto;
+                    padding: 5px;
+                }
+
+                .grid-container2 {
+                    display: grid;
+                    grid-template-columns: auto auto auto auto auto;
+                    padding: 5px;
+                }
+
+                .grid-item {
+                    padding: 5px;
+                    text-align: left;
+                }
+
+                }
+
+                body {
+                    overflow: auto;
+                }
+
+                .page-wrapper .page-content {
+                    overflow-x: initial;
+                }
+
+                .row {
+                    margin-left: 0 !important;
+                    margin-right: 0 !important;
+                }
+    </style>
+
+</head>
+@using (Html.BeginForm("Index", "CompraFollowUp", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+
+    <body style="">
+        <input hidden value="@Model.ckDatas" id="ckDatasVal2"/>
+        <div class="page-wrapper chiller-theme">
+            <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                    <div class="stepwizard">
+                        <fieldset>
+                            <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Compras - Follow Up </legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </main>
+            <br />
+
+            <main class="page-content" style="height:100vh">
+                <div class="container-fluid" style="padding-top:25px;padding-left: 21px;">
+                    <div class="col-xs-12" style="padding-left:0">
+                        <div class="col-md-12">
+                            <div class="form-horizontal">
+                                <form role="form">
+
+                                    <fieldset>
+
+                                        @*<legend>Integração com fornecedor</legend>*@
+
+                                        <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@>
+
+                                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Filtros
+                                                </div>
+                                                <div class="panel-body" style="padding-bottom:0;">
+                                                    <div class="tab-content">
+                                                        @*<div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group" style="margin-bottom:0">
+                                                                    <div class="col-md-2" style="padding-bottom:5px;">
+                                                                        @Html.Label("Pedido", new { @class = "form-negrito" })
+                                                                        @Html.Editor("pedido", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:150px;height:26px" } })
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        @Html.Label("Aplicação", new { @class = "form-negrito" })
+                                                                        @Html.Editor("aplicacao", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:170px;height:26px" } })
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        @Html.Label("PN", new { @class = "form-negrito" })
+                                                                        @Html.Editor("pn", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:150px;height:26px" } })
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        @Html.Label("Invoice", new { @class = "form-negrito" })
+                                                                        @Html.Editor("invoice", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:150px;height:26px" } })
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        @Html.Label("Status da Compra", new { @class = "form-negrito" })
+                                                                        @Html.ListBox("status", (SelectList)ViewBag.StatusCompra, new { @class = "chosen-select", @style = "width:100px;height:26px" })
+                                                                    </div>
+                                                                    <div class="col-md-1">
+                                                                        @Html.Label("House", new { @class = "form-negrito" })
+                                                                        @Html.Editor("conhecimento", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:110px;height:26px" } })
+                                                                    </div>
+                                                                    <div class="col-md-1">
+                                                                        <div style="padding-top:20px;width:170px" class="col-md-1 btn-toolbar pull-right">
+                                                                            <button style="height:27px" class="btn btn-primary btn-sm" id="btnFiltrar" value="exibir" name="exibir" type="submit">Exibir</button>
+
+                                                                            @if (ViewBag.ExportaExcel == true)
+                                                                            {
+                                                                            <a style="height:27px" class="btn btn-success btn-sm" title="Download Excel" onclick="exportaExcel()">Exportar</a>
+                                                                            }
+
+                                                                        </div>
+                                                                    </div>
+                                                                        <div class="clearfix"></div>
+                                                                    </div>
+                                                            </div>
+                                                        </div>*@
+
+                                                        </div>
+                                                    
+                                                        <div style="display:flex;justify-content:space-between;padding-bottom:10px;padding-left:10px; padding-right:10px">
+                                                           <div style="padding-top:20px">
+                                                               <input type="checkbox" id="ckDatas" name="ckDatas"/>
+                                                           </div>
+                                                             <div>
+                                                                <label class="form-negrito">Data início</label>
+                                                                @Html.Editor("strDataInicio", new { htmlAttributes = new { @class = "form-control datepickerInput", id = "strDataInicio", @onchange = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off", @style = "width:80px;height:26px;padding:0" } })
+                                                                <div style="color: red" id="dtIniciDivErro"></div>
+                                                             </div>
+                                                            <div>
+                                                                @Html.Label("Data fim", new { @class = "form-negrito" })
+                                                                @Html.Editor("strDataFim", new { htmlAttributes = new { @class = "form-control datepickerInput", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off", @style = "width:80px;height:26px;padding:0" } })
+                                                                <div style="color: red" id="dtFimDivErro">
+
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div style="float:left">
+                                                                    <label class="form-negrito">Pedido</label><br />
+                                                                    @Html.Editor("pedido", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "height:26px;width:70px;padding:0" } })
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                @Html.Label("Aplicação", new { @class = "form-negrito" })<br />
+                                                                @Html.Editor("aplicacao", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "height:26px;width:150px;padding:0" } })
+                                                            </div>
+                                                            <div>
+                                                                @Html.Label("PN", new { @class = "form-negrito" })
+                                                                @Html.Editor("pn", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:100px;height:26px;padding:0" } })
+
+                                                            </div>
+                                                            <div>
+                                                                <label>Invoice</label>
+                                                                @Html.Editor("invoice", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:90px;height:26px;padding:0" } })
+                                                            </div>
+
+                                                            <div style="width:12%">
+                                                                <label>Status da Compra</label>
+                                                                @Html.DropDownList("Status_Compra", (SelectList)ViewBag.StatusCompra, "-- Selecione -- ", new { @class = "chosen-select", @style = "width:40px;height:26px;padding:0" })
+                                                            </div>
+                                                            <div>
+                                                                <label>House</label>
+                                                                @Html.Editor("conhecimento", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:80px;height:26px;padding:0" } })
+                                                            </div>
+                                                            <div style="width:12%">
+                                                                <label>Status do Pedido</label>
+                                                                @Html.DropDownList("Status_Pedido", (SelectList)ViewBag.StatusPedido, "-- Selecione -- ", new { @class = "chosen-select", @style = "width:40px;height:26px;padding:0" })
+                                                            </div>
+                                                            <div>
+                                                                <label>Processo</label>
+                                                                @Html.Editor("processo", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:70px;height:26px;padding:0" } })
+                                                            </div>
+                                                         
+
+                                                            <div style="padding-top:20px">
+                                                                @*<div style="padding-top:20px;width:170px" class="col-md-1 btn-toolbar pull-right">*@
+                                                                    <button style="height:27px" class="btn btn-primary btn-sm" id="btnFiltrar" value="exibir" name="exibir" type="button">Exibir</button>
+
+                                                                    @if (ViewBag.ExportaExcel == true & (ViewBag.PermitirExportar == "SIM" || ViewBag.PermitirExportar == "S"))
+                                                                    {
+                                                                        <a style="height:27px" class="btn btn-success btn-sm" onclick="exportaExcel()">Exportar</a>
+                                                                    }
+
+                                                                @if ((ViewBag.PermitirEditar == "SIM" || ViewBag.PermitirEditar == "S"))
+                                                                {
+                                                                    <a style="height:27px" id="btnImportar" class="btn btn-success btn-sm" onclick="Importar()">Importar</a>
+                                                                }
+                                                              </div>
+                                                        </div>
+                                                </div>
+
+                                            </div>
+                                            @*<legend>Selecionar pedidos de compra</legend>*@
+                                            <br />
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Pedidos
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="table-responsive" style="padding:10px">
+                                                        <table id="tblGrid" class="table table-hover table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="text-align:center;width:7%">Emissão</th>
+                                                                    <th style="text-align:left;width:8%">Status do Pedido</th>
+                                                                    <th style="text-align:center;width:6%">Pedido</th>
+                                                                    <th style="text-align:center;width:5%">Item</th>
+                                                                    <th style="text-align:left;width:10%">PN</th>
+                                                                    @*<th style="text-align:center">Qtd</th>*@
+                                                                    <th style="text-align:left;width:12%">Aplicação</th>
+                                                                    <th style="text-align:left;width:12%">Tipo Importação</th>
+                                                                    <th style="text-align:left;width:10%">Status da Compra</th>
+                                                                    <th style="text-align:center;width:7%">Entrega</th>
+                                                                    <th style="text-align:center;width:7%">NFE:Emissão</th>
+                                                                    <th style="text-align:center;width:7%">NFE:Número</th>
+                                                                    @if ((ViewBag.PermitirEditar == "SIM" || ViewBag.PermitirEditar == "S"))
+                                                                    {
+                                                                        <th style="text-align:center;width:10%">Opções</th>
+                                                                    }
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model != null)
+                                                                {
+                                                                    if (Model.LstDados != null & Model.LstDados.Count() > 0)
+                                                                    {
+                                                                        foreach (Entities.CompraFollowUp item in Model.LstDados)
+                                                                        {
+                                                                            <tr>
+                                                                                <td hidden>@item.Idmov, @item.NSEQITMMOV, @item.Idprd</td>
+                                                                                <td style="text-align:center">
+                                                                                @*<input type="checkbox" name="idsSelecionados" value="@item.Idmov, @item.NSEQITMMOV, @item.Idprd" />*@
+                                                                                @item.PDC_EMISSAO.Value.ToString("dd/MM/yyyy")
+                                                                                </td>
+                                                                                <td style="text-align:left">@item.PDC_STATUS</td>
+                                                                                <td style="text-align:center">@item.PDC_NUMERO</td>
+                                                                                <td style="text-align:center">@item.PDC_ITEM</td>
+                                                                                @if (ViewBag.PermiteEdicao == true)
+                                                                                {
+                                                                                    <td style="text-align:left"><a style="cursor:pointer;" onclick="modalEditar(@item.Idmov, @item.NSEQITMMOV, @item.Idprd)">@item.PDC_CODIGO</a></td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td style="text-align:center">@item.PDC_CODIGO</td>
+                                                                                }
+                                                                                @*<td style="text-align:center">@item.Qtd</td>*@
+                                                                                <td style="text-align:left">@item.Aplicacao</td>
+                                                                                <td style="text-align:left">@item.TIPO_IMPORTACAO</td>
+                                                                                <td style="text-align:left">@item.Status_Compra</td>
+                                                                                @if (@item.Prazo_Entrega != null)
+                                                                                {
+                                                                                    <td style="text-align:center">@item.Prazo_Entrega</td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td></td>
+                                                                                }
+                                                                                @if (@item.NFE_EMISSAO != null)
+                                                                                {
+                                                                                    <td style="text-align:center">@item.NFE_EMISSAO.Value.ToString("dd/MM/yyyy")</td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td></td>
+                                                                                }
+                                                                                <td style="text-align:left">@item.NFE_NUMERO</td>
+
+                                                                                @if ((ViewBag.PermitirEditar == "SIM" || ViewBag.PermitirEditar == "S"))
+                                                                                {
+                                                                                    <td style="vertical-align:top;text-align:center;padding:0">
+                                                                                        <a class="btn" style="padding:0 !important"><span class="fa fa-info-circle" style="font-size:17px;" onclick="Informativo(@item.Idmov, @item.NSEQITMMOV, @item.Idprd)"></span></a>
+                                                                                        <a class="btn" style="padding:0 !important"><span class="far fa-file-alt" style="font-size:15px;" onclick="modalEditarLst(@item.Idmov, @item.NSEQITMMOV, @item.Idprd)"></span></a>
+                                                                                    </td>
+                                                                                }
+                                                                                @*<td hidden id="idMov">@item.idMov</td>
+                                                                                    <td hidden id="idMov">@item.Comentario</td>*@
+                                                                            </tr>
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                            </tbody>
+                                                        </table>
+                                                        @*<button type="button" class="btn btn-primary pull-right btnAgendar" onclick="editarPedidos();">Inserir Prazo</button>*@
+                                                    </div>
+                                                    @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Continuar</button>*@
+                                                </div>
+                                            </div>
+                                            @*teste*@
+
+
+
+                                            <div class="modal fade" id="my-modal" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                                                <div class="modal-dialog modal-lg modal-dialog-centered" style="height:91%">
+                                                    <div class="modal-content" style="height:100%">
+                                                        <div class="modal-header text-center" style="padding:5px">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4>Pedido para <span class="fornecedor"></span></h4>
+                                                        </div>
+                                                        <div class="modal-body" style="padding:0 15px 0 15px">
+
+                                                            <div class="panel with-nav-tabs panel-default">
+                                                                <div class="panel-heading" style="background-color:lightgray">
+                                                                    Pedido de Compra
+                                                                </div>
+                                                                <div class="panel-body">
+                                                                    <div class="tab-content">
+                                                                        <div class="table-responsive">
+                                                                            <table class="table table-hover table-striped">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Pedido</th>
+                                                                                        <th>Situação</th>
+                                                                                        <th>Aprovação</th>
+                                                                                        <th>Status</th>
+                                                                                        <th>Data</th>
+                                                                                        <th>Valor</th>
+                                                                                        <th>Comprador</th>
+                                                                                        <th hidden>idmov</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        @*<td><a class="btn modalBTN" href="#">@item.NUMEROMOV</a></td>*@
+                                                                                        @*<td><a href="#" data-toggle="modal" data-target="#my-modal">@ViewBag.NumeroMov</a></td>*@
+                                                                                        <td id="numeroMovModal" name="nroPedidoModal"></td>
+                                                                                        <td id="situacaoModal"></td>
+                                                                                        <td id="aprovacao"></td>
+                                                                                        <td id="status"></td>
+                                                                                        <td id="data"></td>
+                                                                                        <td id="valor"></td>
+                                                                                        <td id="comprador"></td>
+                                                                                        <td hidden id="idMov" name="idMov2"></td>
+                                                                                        <td hidden id="idIntegracao" name="idIntegracao"></td>
+
+                                                                                        @*<td>@item.Situacao</td>
+                                                                                            <td>@item.Aprovacao</td>
+                                                                                            <td>@item.dataEmissao</td>
+                                                                                            <td>@item.ValorLiquido</td>
+                                                                                            <td>@item.Fornecedor</td>
+                                                                                            <td>@item.Comprador2</td>*@
+
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div>
+
+
+                                    </fieldset>
+                                </form>
+                            </div><!-- /.modal-dialog -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        </div>
+
+
+        <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document" style="width:100%;">
+                <div class="modal-content" style="width:100%">
+
+                    <div class="modal-body" style="padding:0;width: 100%;overflow:visible">
+
+                        <div class="panel with-nav-tabs panel-default" style="border-bottom:hidden;margin-bottom:5px">
+                            <div class="panel-heading" style="background-color:lightgray">
+
+                                <table style="width:100%">
+
+                                    <tr>
+                                        <td>Pedido: <span id="pedido_modal"></span></td>
+                                        <td>Aplicação: <span id="aplicacao_modal"></span></td>
+                                        <td>Dt. Necessidade: <span id="dt_necessidade"></span></td>
+                                        <td>Dt. Emissão: <span id="dt_emissao"></span></td>
+                                        <td>Dt. Prazo: <span id="dt_prazo"></span></td>
+                                        <td>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4" style="padding-bottom:5px;">
+                                            @Html.Label("Status da Compra", new { @class = "form-negrito" })
+                                            @Html.DropDownList("Status_CompraModal", (SelectList)ViewBag.StatusCompra, "-- Selecione --", new { @class = "chosen-select", @style = "width:100px;height:26px" })
+                                        </div>
+                                        <div class="col-md-2" style="padding-bottom:5px;">
+                                            <label class="form-negrito">Prazo de Entrega</label>
+                                            <div>
+                                                <table style="border-spacing:5px;border-collapse:separate">
+                                                    <tr>
+                                                        <td>@Html.Editor("prazoEntrega", new { htmlAttributes = new { @style = "width:120px;height:26px", @class = "form-control datepickerInput", @onchange = "isValidDate(this.value, '#dtPrazoErro')", @autocomplete = "off" } })</td>
+                                                        <td> <input type="checkbox" id="ckData"></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div style="color: red" id="dtPrazoErro">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" style="padding-bottom:5px;">
+                                            @Html.Label("House ", new { @class = "form-negrito" })
+                                            @Html.Editor("houseModal", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:100px;height:26px;padding:0" } })
+                                        </div>
+                                        <div class="col-md-2" style="padding-bottom:5px;">
+                                            @Html.Label("Processo ", new { @class = "form-negrito" })
+                                            @Html.Editor("processoModal", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:100px;height:26px;padding:0" } })
+                                        </div>
+                                    </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Comentários</label>
+                                        @Html.TextAreaFor(m => m.OBSERVACAO, new
+                                   {
+                                       maxlength = 2000, // or other value
+                                       style = "width: 100%; min-height: 30px; height: 30px; max-height: 500px;",
+                                       id = "txtJustificativa",
+                                   })                                       
+                                    </div>
+                                </div>
+                                <div class="panel with-nav-tabs panel-default" style="max-height:350px;margin-bottom:0" >
+                                    <div class="panel-heading" style="background-color:lightgray">
+                                        Pedidos
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                                <table id="tblPedidos" class="table table-striped table-responsive tableFixHead tblPedidos" cellspacing="20" style="white-space: nowrap;font-size:11px;margin-bottom:0;max-height:280px;overflow-y:scroll">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:7%;padding-left: 26px !important;">
+                                                                @if (ViewBag.PermitirEditar == "SIM" || ViewBag.PermitirEditar == "S")
+                                                                {
+                                                                    <input type="checkbox" id="selectAll" />
+                                                                }
+                                                                    Emissão
+                                                                </th>
+                                                                <th style="text-align:left;width:8%">Status do Pedido</th>
+                                                                <th style="text-align:center;width:6%">Pedido</th>
+                                                                <th style="text-align:center;width:5%">Item</th>
+                                                                <th style="text-align:center;width:7%">PN</th>
+                                                                <th style="text-align:left;width:12%">Aplicação</th>
+                                                                <th style="text-align:left;width:12%">Tipo Importação</th>
+                                                                <th style="text-align:center;width:10%">Status da Compra</th>
+                                                                <th style="text-align:center;width:7%">Entrega</th>
+                                                                <th style="text-align:center;width:7%">NFE:Emissão</th>
+                                                                <th style="text-align:center;width:7%">NFE:Número</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyPedidos">
+                                                        </tbody>
+                                                </table>
+                                        </div>
+                                    </div>                                  
+                                </div>                               
+                            </div>                        
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="btn-toolbar">
+                                <button type="button" class="btn btn-primary btn-sm pull-right" style="margin-bottom: 10px;" data-dismiss="modal">Fechar</button>
+                                <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm pull-right" id="btnEnviarComentario" value="exibir" name="exibir" type="button" onclick="salvarPedido()">Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalEditarEstatico" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document" style="width:100%;">
+                <div class="modal-content" style="width:100%">
+
+                    <div class="modal-body" style="padding:0;width: 100%;overflow:visible">
+
+                        <div class="panel with-nav-tabs panel-default" style="border-bottom:hidden;margin-bottom:5px">
+                            <div class="panel-heading" style="background-color:lightgray">
+
+                                <table style="width:100%">
+
+                                    <tr>
+                                        <td>Pedido: <span id="pedido_modal"></span></td>
+                                        <td>Aplicação: <span id="aplicacao_modal"></span></td>
+                                        <td>Dt. Necessidade: <span id="dt_necessidade"></span></td>
+                                        <td>Dt. Emissão: <span id="dt_emissao"></span></td>
+                                        <td>Dt. Prazo: <span id="dt_prazo"></span></td>
+                                        <td>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-bottom:5px;">
+                                            @Html.Label("Status da Compra", new { @class = "form-negrito", @style = "margin-bottom:0" })
+                                            @*@Html.DropDownList("Status_CompraModal", (SelectList)ViewBag.StatusCompra, "-- Selecione --", new { @class = "chosen-select", @style = "width:100px;height:26px" })*@
+                                            @Html.Editor("Status_CompraModal_Estatico", new { htmlAttributes = new { @readonly = "readonly", @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "height:26px;padding:0; border:none;box-shadow:none;background:white" } })
+                                        </div>
+                                        <div class="col-md-2" style="padding-bottom:5px;">
+                                            <label class="form-negrito" style="margin-bottom:0">Prazo de Entrega</label>
+                                            <div>
+                                                <table style="border-spacing:5px;border-collapse:separate">
+                                                    <tr>
+                                                        <td>@Html.Editor("prazoEntrega", new { htmlAttributes = new { @readonly = "readonly", @style = "width:120px;height:26px;border:none;box-shadow:none;background:white", @class = "form-control", @autocomplete = "off" } })</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div style="color: red" id="dtPrazoErro">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" style="padding-bottom:5px;">
+                                            @Html.Label("House ", new { @class = "form-negrito", @style = "margin-bottom:0" })
+                                            @Html.Editor("houseModal", new { htmlAttributes = new { @readonly = "readonly", @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:100px;height:26px;padding:0;border:none;box-shadow:none;background:white" } })
+                                        </div>
+                                        <div class="col-md-2" style="padding-bottom:5px;">
+                                            @Html.Label("Processo ", new { @class = "form-negrito", @style = "margin-bottom:0" })
+                                            @Html.Editor("processoModal", new { htmlAttributes = new { @readonly = "readonly", @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:100px;height:26px;padding:0;border:none;box-shadow:none;background:white" } })
+                                        </div>
+                                    </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Comentários</label>
+                                        @Html.TextAreaFor(m => m.OBSERVACAO, new
+                                   {
+                                       maxlength = 2000, // or other value
+                                       style = "width: 100%; min-height: 30px; height: 30px; max-height: 500px;resize: none;border:none;box-shadow:none;background:white",
+                                       id = "txtJustificativa",
+                                       @disabled = "true"
+                                   })
+                                    </div>
+                                </div>
+                                <div class="panel with-nav-tabs panel-default" style="max-height:350px;margin-bottom:0">
+                                    <div class="panel-heading" style="background-color:lightgray">
+                                        Pedidos
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table id="tblPedidos" class="table table-striped table-responsive tableFixHead tblPedidos" cellspacing="20" style="white-space: nowrap;font-size:11px;margin-bottom:0;max-height:280px;overflow-y:scroll">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:7%;padding-left: 26px !important;">
+                                                            @if (ViewBag.PermitirEditar == "SIM" || ViewBag.PermitirEditar == "S")
+                                                            {
+                                                                <input type="checkbox" id="selectAll" />
+                                                            }
+                                                            Emissão
+                                                        </th>
+                                                        <th style="text-align:left;width:8%">Status do Pedido</th>
+                                                        <th style="text-align:center;width:6%">Pedido</th>
+                                                        <th style="text-align:center;width:5%">Item</th>
+                                                        <th style="text-align:center;width:7%">PN</th>
+                                                        <th style="text-align:left;width:12%">Aplicação</th>
+                                                        <th style="text-align:left;width:12%">Tipo Importação</th>
+                                                        <th style="text-align:center;width:10%">Status da Compra</th>
+                                                        <th style="text-align:center;width:7%">Entrega</th>
+                                                        <th style="text-align:center;width:7%">NFE:Emissão</th>
+                                                        <th style="text-align:center;width:7%">NFE:Número</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbodyPedidos"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="btn-toolbar">
+                                <button type="button" class="btn btn-primary btn-sm pull-right" style="margin-bottom: 10px;" data-dismiss="modal">Fechar</button>
+                                @if (ViewBag.PermitirEditar == "SIM" || ViewBag.PermitirEditar == "S")
+                                {
+                                    <button style="margin-bottom: 10px;" class="btn btn-primary btn-sm pull-right" id="btnEnviarComentario" value="exibir" name="exibir" type="button" onclick="salvarPedido()">Salvar</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalInformativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px !important">
+            <div class="modal-dialog" role="document" style="width:100%">
+                <div class="modal-content" style="width:100%">
+                    <div class="modal-header text-center" style="padding:5px">
+
+                        <div class="modal-body" style="height:100%;padding:0;width: 100%;">
+
+                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                                <div class="panel-heading" style="background-color:lightgray">
+
+                                    <table style="width:100%">
+
+                                        <tr>
+                                            <td style="text-align:left">Aplicação: <span id="aplicacao_info"></span></td>
+                                            <td style="text-align:left">Dt. Necessidade: <span id="dt_necessidade_info"></span></td>
+                                            <td style="text-align:left">Dt. Emissão: <span id="dt_emissao_info"></span></td>
+                                            <td>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left">Pedido: <span id="pedido_info"></span></td>
+                                            <td style="text-align:left">Item: <span id="item_info"></span></td>
+                                            <td style="text-align:left">PN: <span id="pn_info"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left">Descrição: <span id="descricao_info"></span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                @*<div class="panel-heading" style="background-color:lightgray">
+                                    <span style="text-align:left"></span> <span id="documento_Modal"></span>
+                                </div>*@
+                                <table class="table table-hover  table-bordered" width="100%">
+                                    <tr>
+                                        <td style="text-align:left" colspan="3">Qtd. Pedido: <span id="qtd_pedido_info"> </span></td>
+                                        <td style="text-align:left" colspan="3">Processo: <span id="processo_info"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left" colspan="3">Qtd. Pendente: <span id="qtd_pendente_info"> </span></td>
+                                        <td style="text-align:left" colspan="3">Invoice: <span id="invoice_info"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left" colspan="3">Status Pedido: <span id="status_pedido_info"> </span></td>
+                                        <td style="text-align:left" colspan="3">House: <span id="conhecimento_info"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td  style="text-align:left" colspan="3">Status Compra: <span id="status_compra_info"> </span></td>
+                                        <td style="text-align:left" colspan="3">Dt. Prazo: <span id="dt_prazo_info"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left" colspan="3">NFE Emissão: <span id="nfe_emissao_info"> </span></td>
+                                        <td style="text-align:left" colspan="3">NFE Número: <span id="nfe_numero_info"></span></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <br />
+
+                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                                @*<div class="panel-heading" style="background-color:lightgray">
+                                    Processo: <span id="processo_Modal"></span>
+                                </div>*@
+                                <table class="table table-hover  table-bordered" width="100%">
+                                    <tr>
+                                        <td style="text-align:left">Fornecedor: <span id="fornecedor_info"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">Requisitante: <span id="requisitante_info"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left">Comprador: <span id="comprador_info"> </span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br />
+                            <div class="panel with-nav-tabs panel-default">
+                                @*<div class="panel-heading" style="background-color:lightgray">
+                                    Observação
+                                </div>*@
+                                <table class="table table-hover  table-bordered" width="100%">
+                                    <tr id="" width="100%" style="background-color:white">
+                                        <td style="text-align:left" colspan="6">Observação: <div class="pre-scrollable" id="observacao_info" style="max-height:100px"></div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm pull-right" data-dismiss="modal">Fechar</button>
+
+                            @*<div class="modal-footer" style="padding:5px;">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        <div class="modal fade" id="modalImportar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px !important">
+            <div class="modal-dialog" role="document" style="width:60%">
+                <div class="modal-content" style="width:100%">
+                    <div class="modal-header text-center" style="padding:5px">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4>Importar Relatório</h4>
+                        </div>
+                        <div class="modal-body" style="height:100%;padding:0;width: 100%;overflow:scroll">
+
+                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                               
+                                <br />
+                                @using (Html.BeginForm("Importar", "CompraFollowUp", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                { 
+                                    <input hidden name="strDataInicio" value="@Model.strDataInicio"/>
+                                    <input hidden name="strDataFim" value="@Model.strDataFim" />
+                                    <input hidden type="text" id="pedidoImp" name="pedidoImp" />
+                                    <input hidden name="aplicacao" value="@Model.Aplicacao" />
+                                    <input hidden name="pn" value="@Model.PN" />
+                                    <input hidden name="invoice" value="@Model.INVOICE" />
+                                    <input hidden name="conhecimento" value="@Model.CONHECIMENTO" />
+                                    <input hidden name="status_compra" value="@Model.Status_Compra" />
+                                    <input hidden name="status_pedido" value="@Model.Status_Pedido" />
+                                    <input hidden name="processo" value="@Model.PROCESSO" />
+
+                                    @*<input type="file" id="excel-file" name="upload" />
+                                    <button style="height:27px" class="btn btn-primary btn-sm pull-right" type="submit">Enviar</button>*@
+
+                                    <div class="input-group" style="padding:10px">
+                                        <input type="text" id="excelNome" class="form-control file-upload-text" disabled placeholder="selecione o arquivo..."  style="height:26px"/>
+                                        <span class="input-group-btn">
+                                            @*<button type="button" class="btn btn-default file-upload-btn" style="height:27px">
+                                                Abrir
+                                                <input type="file" class="file-upload" name="upload" style="height:27px" />
+                                            </button>*@
+                                            <button type="button" class="btn btn-success file-upload-btn" style="height:27px">
+                                               
+                                                <input type="file" class="file-upload" id="upload" name="upload" style="height:27px" />
+                                                <i class="glyphicon glyphicon-upload"></i>
+                                                Upload
+                                            </button>
+                                        </span>
+                                        
+                                    </div>
+
+                                    <div  style="padding:10px">
+                                        <button style="height:27px; width: 80px" class="btn btn-primary btn-sm pull-right" id="btnEnviar" type="button">Enviar</button>
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+
+                                }
+                                <br />
+                                <br />
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+         </div>
+
+            <script>
+                   
+
+                $(document).ready(function () {
+
+                    $(".checkBoxClass").removeAttr("checked");
+                    $("#selectAll").removeAttr("checked");
+
+                    $("#modalEditar").on('hide.bs.modal', function () {
+                        $('.checkBoxClass').prop('checked', false);
+                        $("#selectAll").prop('checked', false);
+                        $('#houseModal').val('');
+                        $('#processoModal').val('');
+                    });
+
+                    $("#selectAll").click(function () {
+                        $(".checkBoxClass").prop('checked', $(this).prop('checked'));
+                    });
+
+                    var ckDatas = $('#ckDatasVal2').val();
+    
+                    if (ckDatas == "on")
+                    {
+                        $('#strDataInicio').prop('disabled', false);
+                        $('#strDataFim').prop('disabled', false);
+                        $('#ckDatas').prop('checked', true);
+
+                        //let dtFiltro = new Date();
+                        //let ddFiltro = String(dtFiltro.getDate()).padStart(2, '0');
+                        //let mmFiltro = String(dtFiltro.getMonth() + 1).padStart(2, '0'); //January is 0!
+                        //let yyyyFiltro = dtFiltro.getFullYear();
+
+                        //dtFiltro = ddFiltro + '/' + mmFiltro + '/' + yyyyFiltro;
+                        //alert($('#strDataInicio').val());
+                        //$('#strDataInicio').val(dtFiltro);
+                        //$('#strDataFim').val(dtFiltro);
+                    }
+                    else
+                    {
+                        $('#strDataInicio').prop('disabled', true);
+                        $('#strDataFim').prop('disabled', true);
+                        $('#ckDatas').prop('checked', false);
+                        $('#strDataInicio').val('');
+                        $('#strDataFim').val('');
+
+                       
+                    }
+                    $('#prazoEntrega').prop('disabled', true);
+                  
+                });
+                $('#ckDatas').click(function () {
+                    if ($('#ckDatas').is(':checked')) {
+                        $('#strDataInicio').prop('disabled', false);
+                        $('#strDataFim').prop('disabled', false);
+
+                        let dtFiltro = new Date();
+                        let ddFiltro = String(dtFiltro.getDate()).padStart(2, '0');
+                        let mmFiltro = String(dtFiltro.getMonth() + 1).padStart(2, '0'); //January is 0!
+                        let yyyyFiltro = dtFiltro.getFullYear();
+
+                        dtFiltro = ddFiltro + '/' + mmFiltro + '/' + yyyyFiltro;
+                        $('#strDataInicio').val(dtFiltro);
+                        $('#strDataFim').val(dtFiltro);
+                    }
+                    else {
+                        $('#strDataInicio').prop('disabled', true);
+                        $('#strDataFim').prop('disabled', true);
+                        $('#dtIniciDivErro').html('');
+                        $('#dtFimDivErro').html('');
+                        $("#btnFiltrar").attr("disabled", false);
+                        $('#strDataInicio').val('');
+                        $('#strDataFim').val('');
+                    }
+                });
+
+                $('#ckData').click(function () {
+                    if ($('#ckData').is(':checked')) {
+                        $('#prazoEntrega').prop('disabled', false);
+
+                        let dtFiltro = new Date();
+                        let ddFiltro = String(dtFiltro.getDate()).padStart(2, '0');
+                        let mmFiltro = String(dtFiltro.getMonth() + 1).padStart(2, '0'); //January is 0!
+                        let yyyyFiltro = dtFiltro.getFullYear();
+
+                        dtFiltro = ddFiltro + '/' + mmFiltro + '/' + yyyyFiltro;
+                        $('#prazoEntrega').val(dtFiltro);
+                    }
+                    else {
+                        $('#prazoEntrega').prop('disabled', true);
+                        $('#prazoEntrega').val('');
+                    }
+                });
+
+
+                $('.consultaPedido').click(function () {
+                    $(".divConsultaPedido").toggle();
+                    $(".divParametrosPedido").toggle();
+                });
+
+              
+
+                $('a.modalBTN').click(function () {
+                    $('#my-modal').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                });
+
+
+
+
+            
+            </script>
+
+            <!-- jQuery library -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+            <!-- Latest compiled JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
+          
+            <link href="~/content/indexcompras.css" rel="stylesheet" />
+            <script>
+                $(window).load(function () {
+                    $(".chosen-select").chosen()
+                });
+            </script>
+
+            <script>
+                $(document).ready(function () {
+                    $('#modalInformativo').css({
+                        'padding-right': 0
+                    });
+                })
+
+                function populaModal(idIntegracao, numeroMov, situacao, aprovacao, status, data, valor, fornecedor, idMov, comprador) {
+                    $('#idIntegracao').html(idIntegracao);
+                    $('#numeroMovModal').html(numeroMov);
+                    $('#situacaoModal').html(situacao);
+                    $('#aprovacao').html(aprovacao);
+                    $('#status').html(status);
+                    $('#data').html(data);
+                    $('#valor').html(valor);
+                    $('#fornecedor').html(fornecedor);
+                    $('#comprador').text(comprador);
+                    $('#idMov').text(idMov);
+                    $('.fornecedor').html(fornecedor);
+                }
+
+
+                $(function () {
+                    $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+                    $('#importacaoRegularInput').attr("disabled", true);
+                });
+
+                function isValidDate(date, campo) {
+                    //if ($('#ckDatas').is(':checked') || $('#ckData').is(':checked')) {
+                        var temp = date.split('/');
+                        var d = new Date(temp[1] + '/' + temp[0] + '/' + temp[2]);
+                        var result = (d && (d.getMonth() + 1) == temp[1] && d.getDate() == Number(temp[0]) && d.getFullYear() == Number(temp[2]));
+                        if (result == false) {
+                            $(campo).text("Data inválida.");
+                            $("#btnFiltrar").attr("disabled", true)
+                        }
+                        else {
+                            $("#btnFiltrar").attr("disabled", false)
+                            $(campo).text('');
+                        }
+                        return result;
+                   // }
+                }
+
+                $('#strDataInicio').blur(function () {
+                    var dtInicio = $('#strDataInicio').val();
+
+                    if (dtInicio.length == 0) {
+                        $('#dtIniciDivErro').html('');
+                        $("#btnFiltrar").attr("disabled", false)
+                    }
+                })
+
+                $('#strDataFim').blur(function () {
+                    var dtFim = $('#strDataFim').val();
+
+                    if (dtFim.length == 0) {
+                        $('#dtFimDivErro').html('');
+                        $("#btnFiltrar").attr("disabled", false)
+                    }
+                })
+                $('#prazoEntrega').blur(function () {
+                    var dtPrazo = $('#prazoEntrega').val();
+
+
+                    if (dtPrazo.length == 0) {
+                        $('#dtPrazoErro').html('');
+                        $("#btnFiltrar").attr("disabled", false)
+                    }
+                })
+
+                $('#btnFiltrar').click(function () {
+                    if ($('#pedido').val() || $('#aplicacao').val() || $('#pn').val() || $('#invoice').val() || ($('#status').val() != "") || $('#conhecimento').val()
+                        || ($('#strDataInicio').val() != "" & $('#strDataFim').val() != "") || $('#processo').val() != "") {
+                        var dtInicio = $('#strDataInicio').val();
+                        var dtFim = $('#strDataFim').val();
+
+
+                        if ($('#ckDatas').is(':checked')) {
+
+
+                            if (dtInicio.length > 0 & dtFim.length > 0) {
+                                if (isValidDate(dtInicio, 'strDataInicio') == true & isValidDate(dtInicio, 'strDataFim') == true)
+                                {
+                                    var input = $("<input>")
+                                   .attr("name", "exibir").val("exibir");
+                                    let ck = $("<input>")
+                                    .attr("name", "ckDatasVal").val("on");
+
+                                    $('#myForm').append(input);
+                                    $('#myForm').append(ck);
+                                    $('#myForm').submit();
+                                }
+                                else
+                                {
+                                    if(isValidDate(dtInicio, 'strDataInicio') == false)
+                                    {
+                                        $('#dtIniciDivErro').html('Data inválida');
+                                    }
+                                    if (isValidDate(dtFim, 'strDataFim') == false) {
+                                        $('#dtFimDivErro').html('Data inválida');
+                                    }
+                                }
+
+                            }
+                            else {
+                                if (dtInicio.length == 0) {
+                                    $('#dtIniciDivErro').html('Selecione a data.');
+                                }
+
+                                if (dtFim.length == 0) {
+                                    $('#dtFimDivErro').html('Selecione a data.');
+                                }
+
+                                //$('#fatDivErro').html('Selecione Faturamento');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                        }
+                        else
+                        {
+                            let ck = $("<input>")
+                               .attr("name", "ckDatasVal").val("on");
+                            $('#myForm').append(ck);
+                            $('#myForm').submit();
+                        }
+
+                    }
+                    else
+                    {
+                        alert("Preencha ao menos um dos filtros para realizar a pesquisa.")
+                        //$("#btnFiltrar").attr("disabled", true)
+                    }
+
+                })
+
+
+                function desbloquearPedido(idIntegracao, idMov) {
+                    $.ajax({
+                        url: '@Url.Action("DesbloquearPedido", "Compra")',
+                        type: 'get',
+                        data: { idIntegracao: idIntegracao, idMov: idMov },
+                        //success: function (data) { $('#exampleModal').toggle(); }
+                        success: function (data) {
+                            $('#idMov').remove();
+                            var input = $("<input>")
+                              .attr("type", "hidden")
+                              .attr("name", "idMov").val(idMov);
+                            $('#myForm').append($(input));
+                            $('#myForm').submit();
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //$('#btnagendar').attr("disabled", true);
+                            alert(exceptionThrown);
+                        }
+                    });
+                }
+
+                function modalEditar(idMov, nseqitmov, idprd) {
+                    let permitir_editar = "@Html.Raw(ViewBag.PermitirEditar.ToString())";
+                    $(".checkBoxClass").prop('checked', 'true');
+                    $("#selectAll").prop('checked', 'true');
+
+                    $.ajax({
+                        url: '@Url.Action("Editar", "CompraFollowUp")',
+                        traditional: true,
+                        data: { idMov, nseqitmov, idprd},
+                        contentType: 'json',
+
+                        success: function (response) {
+                                let ftm_dt_necessidade = "";
+                                let ftm_dt_emissao = "";
+                                let ftm_dt_prazo = "";
+                                let ftm_dt_prazo_entrega = "";
+                                let house = "";
+                                let processo = "";
+
+                                if (response.LstDados[0].NEC_EMISSAO != null & response.LstDados[0].NEC_EMISSAO != '') {
+                                    let dt_necessidade = new Date(parseInt(response.LstDados[0].NEC_EMISSAO.substr(6)));
+                                    ftm_dt_necessidade = ("0" + dt_necessidade.getDate()).slice(-2) + '/' +
+                                         ("0" + (dt_necessidade.getMonth() + 1)).slice(-2) + "/" +
+                                        dt_necessidade.getFullYear()
+                                    $('#dt_necessidade').html(ftm_dt_necessidade);
+                                }
+
+                                if (response.LstDados[0].PDC_EMISSAO != null) {
+                                    let dt_emissao = new Date(parseInt(response.LstDados[0].PDC_EMISSAO.substr(6)));
+                                    ftm_dt_emissao = ("0" + dt_emissao.getDate()).slice(-2) + '/' +
+                                         ("0" + (dt_emissao.getMonth() + 1)).slice(-2) + "/" +
+                                        dt_emissao.getFullYear()
+                                    $('#dt_emissao').html(ftm_dt_emissao);
+                                }
+
+                                //if (response[0].Prazo_Entrega != null) {
+                                //    let dt_prazo = new Date(parseInt(response[0].Prazo_Entrega.substr(6)));
+                                //    ftm_dt_prazo = ("0" + dt_prazo.getDate()).slice(-2) + '/' +
+                                //         ("0" + (dt_prazo.getMonth() + 1)).slice(-2) + "/" +
+                                //        dt_prazo.getFullYear()
+                                //    $('#dt_prazo').html(ftm_dt_prazo);
+                                //}
+
+                                let aplicacao = response.LstDados[0].Aplicacao;
+                                $('#aplicacao_modal').html(aplicacao);
+                                $('#dt_prazo').html(response.LstDados[0].Prazo_Entrega);
+                                $('#pedido_modal').html(response.LstDados[0].PDC_NUMERO);
+                                $('#item').html(response.LstDados[0].PDC_ITEM);
+                                $('#pn_modal').html(response.LstDados[0].PDC_CODIGO);
+                                $('#descricao_modal').html(response.LstDados[0].Descricao);
+                                $('#idmov_modal').html(response.LstDados[0].Idmov);
+                                $('#nseqitmmov_modal').html(response.LstDados[0].NSEQITMMOV);
+                                $('#idprd_modal').html(response.LstDados[0].Idprd);
+
+                                if (response.LstDados[0].HOUSE != null & response.LstDados[0].HOUSE != "") {
+                                    $('#houseModal').val(response.LstDados[0].HOUSE);
+                                }
+
+                                if (response.LstDados[0].CONHECIMENTO != null & response.LstDados[0].CONHECIMENTO != "") {
+                                    $('#houseModal').val(response.LstDados[0].CONHECIMENTO);
+                                }
+                                $('#processoModal').val(response.LstDados[0].PROCESSO);
+
+                                if (response.LstDados[0].OBSERVACAO != null & response.LstDados[0].OBSERVACAO != "")
+                                {
+                                    $('#txtJustificativa').html(response.LstDados[0].OBSERVACAO);
+                                }
+                                else
+                                {
+                                    $('#txtJustificativa').val('');
+                                }
+                                if (response.LstDados[0].Prazo_Entrega != null)
+                                {
+                                    //let prazo_entrega = new Date(parseInt(response[0].Prazo_Entrega.substr(6)));
+                                    //ftm_dt_prazo_entrega = ("0" + prazo_entrega.getDate()).slice(-2) + '/' +
+                                    //     ("0" + (prazo_entrega.getMonth() + 1)).slice(-2) + "/" +
+                                    //    prazo_entrega.getFullYear()
+                                    $('#prazoEntrega').val(response.LstDados[0].Prazo_Entrega);
+                                    $('#ckData').prop('checked', true);
+                                    $('#prazoEntrega').prop('disabled', false);
+                                }
+                                else {
+                                    $('#ckData').prop('checked', false);
+                                    $('#prazoEntrega').prop('disabled', true);
+                                    $('#prazoEntrega').val('');
+                                    //var today = new Date();
+                                    //var dd = String(today.getDate()).padStart(2, '0');
+                                    //var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                    //var yyyy = today.getFullYear();
+
+                                    //today = dd + '/' + mm + '/' + yyyy;
+                                    //$('#prazoEntrega').val(today);
+                                }
+
+                                //let value = 0;
+                                //if (response[0].Status_Compra == "AG. APROVAÇÃO") {
+                                //    value = 1
+                                //}
+                                //else if (response[0].Status_Compra == "AG. EMBARQUE")
+                                //{
+                                //    value = 2
+                                //}
+                                //else if (response[0].Status_Compra == "AG. SAIR") {
+                                //    value = 3
+                                //}
+                                //else if (response[0].Status_Compra == "BACKORDER") {
+                                //    value = 4
+                                //}
+                                //else if (response[0].Status_Compra == "DG") {
+                                //    value = 5
+                                //}
+                                //else if (response[0].Status_Compra == "EMBARCADO") {
+                                //    value = 6
+                                //}
+                                //else if (response[0].Status_Compra == "REPARO EXTERNO") {
+                                //    value = 7
+                                //}
+                                //else if (response[0].Status_Compra == "VACKORDER") {
+                                //    value = 8
+                                //}
+                                $('#Status_CompraModal').val(response.LstDados[0].Status_Compra);
+                                $('#Status_CompraModal').trigger('chosen:updated');
+                                $('#Status_CompraModal_Estatico').val(response.LstDados[0].Status_Compra);
+
+                                var today = new Date();
+                                var dd = String(today.getDate()).padStart(2, '0');
+                                var mm = String(today.getMonth() + 1).padStart(2, '0');
+                                var yyyy = today.getFullYear();
+                                today = dd + '/' + mm + '/' + yyyy;
+
+                                var table = $('.tblPedidos');
+                                for (var x = 0; x < response.LstDados.length; x++) {
+                                    if (response.LstDados[x].Prazo_Entrega != null) {
+                                        var dtprazo = response.LstDados[x].Prazo_Entrega;
+                                    }
+                                    else {
+                                        var dtprazo = '';
+                                    }
+
+                                    if (response.LstDados[x].Status_Compra != null) {
+                                        var statusCompra = response.LstDados[x].Status_Compra;
+                                    }
+                                    else {
+                                        var statusCompra = '';
+                                    }
+                                    let ftm_nfeEmissao = ''
+                                    if (response.LstDados[x].NFE_EMISSAO != null) {
+                                        let nfeEmissao = new Date(parseInt(response.LstDados[x].NFE_EMISSAO.substr(6)));
+                                        ftm_nfeEmissao = ("0" + nfeEmissao.getDate()).slice(-2) + '/' +
+                                             ("0" + (nfeEmissao.getMonth() + 1)).slice(-2) + "/" +
+                                            nfeEmissao.getFullYear()
+                                    }
+                                    else {
+                                        ftm_nfeEmissao = '';
+                                    }
+                                    if (response.LstDados[x].NFE_NUMERO != null) {
+                                        var nfeNumero = response.LstDados[x].NFE_NUMERO;
+                                    }
+                                    else {
+                                        var nfeNumero = '';
+                                    }
+
+                                    $(".tblPedidos").find("tr:gt(0)").remove();
+                                    row = $('<tr></tr>');
+                                    for (var j = 0; j < response.LstDados.length; j++) {
+                                        $('#tbodyPedidos tbody').append('<tr style="padding-left:15px">');
+                                        var rowData = $('<td></td>').addClass('bar').text('result ' + j);
+
+                                        var rowData1 = $('<td hidden>' + response.LstDados[x].Idmov + ',' + response.LstDados[x].NSEQITMMOV + ',' + response.LstDados[x].Idprd + '</td>');
+                                        if (permitir_editar != "SIM" & permitir_editar != "S") {
+                                            var rowData2 = $('<td style="text-align:center">' +
+                                                           ftm_dt_emissao + '</td>');
+                                        }
+                                        else {
+                                            var rowData2 = $('<td style="text-align:center">' +
+                                                          '<input class="checkBoxClass" type="checkbox" name="idsSelecionados" checked = "checked" value="' + response.LstDados[0].Idmov + ',' + response.LstDados[0].NSEQITMMOV + ',' + response.LstDados[0].Idprd + '" />' +
+                                                           ftm_dt_emissao + '</td>');
+                                        }
+                                        var rowData3 = $('<td style="text-align:left">' + response.LstDados[x].PDC_STATUS + '</td>');
+                                        var rowData4 = $('<td style="text-align:center">' + response.LstDados[x].PDC_NUMERO + '</td>');
+                                        var rowData5 = $('<td style="text-align:center">' + response.LstDados[x].PDC_ITEM + '</td>');
+                                        var rowData6 = $('<td style="text-align:center">' + response.LstDados[x].PDC_CODIGO + '</td>');
+                                        var rowData8 = $('<td style="text-align:left">' + response.LstDados[x].Aplicacao + '</td>');
+                                        var rowData9 = $('<td style="text-align:left">' + response.LstDados[x].TIPO_IMPORTACAO + '</td>');
+                                        var rowData10 = $('<td style="text-align:center">' + statusCompra + '</td>');
+                                        var rowData12 = $('<td style="text-align:center">' + dtprazo + '</td>');
+                                        var rowData13 = $('<td style="text-align:center">' + ftm_nfeEmissao + '</td>');
+                                        var rowData14 = $('<td style="text-align:center">' + nfeNumero + '</td>');
+
+
+                                        @*@if (@item.NFE_EMISSAO != null)
+                                        {
+                                            <td style="text-align:center">@item.NFE_EMISSAO.ToString("dd/MM/yyyy")</td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
+                                        <td style="text-align:left">@item.NFE_NUMERO</td>*@
+                                    }
+                                    row.append(rowData1);
+                                    row.append(rowData2);
+                                    row.append(rowData3);
+                                    row.append(rowData4);
+                                    row.append(rowData5);
+                                    row.append(rowData6);
+                                    row.append(rowData8);
+                                    row.append(rowData9);
+                                    row.append(rowData10);
+                                    row.append(rowData12);
+                                    row.append(rowData13);
+                                    row.append(rowData14);
+                                    table.append(row);
+                                }
+
+                                $('.tblPedidos').append(table);
+                                $(".tblPedidos").css('display', 'table');
+
+                                let modalEditar = "@Html.Raw(ViewBag.PermitirEditar.ToString())";
+
+                            if (modalEditar !== 'SIM' & modalEditar !== 'S') {
+                                    $('#modalEditarEstatico').modal({
+                                        show: true,
+                                        closeOnEscape: true,
+                                        backdrop: 'static',
+                                        keyboard: false
+                                    });
+                                }
+                            else {
+                                    $('#modalEditar').modal({
+                                        show: true,
+                                        closeOnEscape: true,
+                                        backdrop: 'static',
+                                        keyboard: false
+                                    })
+                                }
+
+
+                            },
+                            error: function (xhr, textStatus, exceptionThrown) {
+                                //alert(exceptionThrown);
+                            }
+
+
+                        });
+
+                };
+                function modalEditarLst(idMov, nseqitmov, idprd) {
+                    let permitir_editar = "@Html.Raw(ViewBag.PermitirEditar.ToString())";
+
+                    $(".checkBoxClass").removeAttr("checked");
+                    $("#selectAll").removeAttr("checked");
+
+                    $.ajax({
+                        url: '@Url.Action("Editar", "CompraFollowUp")',
+                        traditional: true,
+                        data: { idMov: idMov, nseqitmov: 0, idprd: 0 },
+                        contentType: 'json',
+
+                        success: function (response) {
+
+                            let ftm_dt_necessidade = "";
+                            let ftm_dt_emissao = "";
+                            let ftm_dt_prazo = "";
+                            let ftm_dt_prazo_entrega = "";
+                            let house = "";
+                            let processo = "";
+
+                            if (response.LstDados[0].NEC_EMISSAO != null) {
+                                let dt_necessidade = new Date(parseInt(response.LstDados[0].NEC_EMISSAO.substr(6)));
+                                ftm_dt_necessidade = ("0" + dt_necessidade.getDate()).slice(-2) + '/' +
+                                     ("0" + (dt_necessidade.getMonth() + 1)).slice(-2) + "/" +
+                                    dt_necessidade.getFullYear()
+                                $('#dt_necessidade').html(ftm_dt_necessidade);
+                            }
+
+                            if (response.LstDados[0].PDC_EMISSAO != null) {
+                                let dt_emissao = new Date(parseInt(response.LstDados[0].PDC_EMISSAO.substr(6)));
+                                ftm_dt_emissao = ("0" + dt_emissao.getDate()).slice(-2) + '/' +
+                                     ("0" + (dt_emissao.getMonth() + 1)).slice(-2) + "/" +
+                                    dt_emissao.getFullYear()
+                                $('#dt_emissao').html(ftm_dt_emissao);
+                            }
+
+                            //if (response[0].Prazo_Entrega != null) {
+                            //    let dt_prazo = new Date(parseInt(response[0].Prazo_Entrega.substr(6)));
+                            //    ftm_dt_prazo = ("0" + dt_prazo.getDate()).slice(-2) + '/' +
+                            //         ("0" + (dt_prazo.getMonth() + 1)).slice(-2) + "/" +
+                            //        dt_prazo.getFullYear()
+                            //    $('#dt_prazo').html(ftm_dt_prazo);
+                            //}
+
+                            let aplicacao = response.LstDados[0].Aplicacao;
+                            $('#aplicacao_modal').html(aplicacao);
+                            $('#dt_prazo').html(response.LstDados[0].Prazo_Entrega);
+                            $('#pedido_modal').html(response.LstDados[0].PDC_NUMERO);
+                            $('#item').html(response.LstDados[0].PDC_ITEM);
+                            $('#pn_modal').html(response.LstDados[0].PDC_CODIGO);
+                            $('#descricao_modal').html(response.LstDados[0].Descricao);
+                            $('#idmov_modal').html(response.LstDados[0].Idmov);
+                            $('#nseqitmmov_modal').html(response.LstDados[0].NSEQITMMOV);
+                            $('#idprd_modal').html(response.LstDados[0].Idprd);
+
+                            //if (response.LstDados[0].CONHECIMENTO != null & response.LstDados[0].CONHECIMENTO != "") {
+                            //    $('#houseModal').val(response.LstDados[0].CONHECIMENTO);
+                            //}
+                            //$('#processoModal').val(response.LstDados[0].PROCESSO);
+
+                            if (response.LstDados[0].OBSERVACAO != null & response.LstDados[0].OBSERVACAO != "") {
+                                $('#txtJustificativa').html(response.LstDados[0].OBSERVACAO);
+                            }
+                            else {
+                                $('#txtJustificativa').val('');
+                            }
+                            //if (response.LstDados[0].Prazo_Entrega != null) {
+                            //    $('#prazoEntrega').val(response.LstDados[0].Prazo_Entrega);
+                            //    $('#ckData').prop('checked', true);
+                            //    $('#prazoEntrega').prop('disabled', false);
+                            //}
+                            //else {
+                            //    $('#ckData').prop('checked', false);
+                            //    $('#prazoEntrega').prop('disabled', true);
+                            //    $('#prazoEntrega').val('');
+                            //}
+                            $('#ckData').prop('checked', false);
+
+                            //$('#Status_CompraModal').val(response.LstDados[0].Status_Compra);
+                            //$('#Status_CompraModal').trigger('chosen:updated');
+
+                            var today = new Date();
+                            var dd = String(today.getDate()).padStart(2, '0');
+                            var mm = String(today.getMonth() + 1).padStart(2, '0');
+                            var yyyy = today.getFullYear();
+                            today = dd + '/' + mm + '/' + yyyy;
+
+                            $(".tblPedidos").find("tr:gt(0)").remove();
+                            var table = $('.tblPedidos');
+                            for (var x = 0; x < response.LstDados.length; x++) {
+                                if (response.LstDados[x].Prazo_Entrega != null)
+                                {
+                                    var dtprazo = response.LstDados[x].Prazo_Entrega;
+                                }
+                                else
+                                {
+                                    var dtprazo = '';
+                                }
+
+                                if (response.LstDados[x].Status_Compra != null) {
+                                    var statusCompra = response.LstDados[x].Status_Compra;
+                                }
+                                else {
+                                    var statusCompra = '';
+                                }
+                                let ftm_nfeEmissao = ''
+                                if (response.LstDados[x].NFE_EMISSAO != null) {
+                                    let nfeEmissao = new Date(parseInt(response.LstDados[x].NFE_EMISSAO.substr(6)));
+                                    ftm_nfeEmissao = ("0" + nfeEmissao.getDate()).slice(-2) + '/' +
+                                         ("0" + (nfeEmissao.getMonth() + 1)).slice(-2) + "/" +
+                                        nfeEmissao.getFullYear()
+                                }
+                                else {
+                                    ftm_nfeEmissao = '';
+                                }
+                                if (response.LstDados[x].NFE_NUMERO != null) {
+                                    var nfeNumero = response.LstDados[x].NFE_NUMERO;
+                                }
+                                else {
+                                    var nfeNumero = '';
+                                }
+
+
+                                row = $('<tr></tr>');
+                                for (var j = 0; j < response.LstDados.length; j++) {
+                                    $('#tbodyPedidos tbody').append('<tr style="padding-left:15px">');
+                                    var rowData = $('<td></td>').addClass('bar').text('result ' + j);
+
+                                    var rowData1 = $('<td hidden>' + response.LstDados[x].Idmov + "," + response.LstDados[x].NSEQITMMOV + "," + response.LstDados[x].Idprd + '</td>');
+                                    var rowData2 = $('<td style="text-align:center">' +
+                                                 '<input class="checkBoxClass" type="checkbox" name="idsSelecionados" value="' + response.LstDados[0].Idmov + ',' + response.LstDados[0].NSEQITMMOV + ',' + response.LstDados[0].Idprd + '" />' +
+                                                   ftm_dt_emissao + '</td>');
+                                    var rowData3 = $('<td style="text-align:left">' + response.LstDados[x].PDC_STATUS + '</td>');
+                                    var rowData4 = $('<td style="text-align:center">' + response.LstDados[x].PDC_NUMERO + '</td>');
+                                    var rowData5 = $('<td style="text-align:center">' + response.LstDados[x].PDC_ITEM + '</td>');
+                                    var rowData6 = $('<td style="text-align:center">' + response.LstDados[x].PDC_CODIGO + '</td>');
+                                    var rowData8 = $('<td style="text-align:left">' + response.LstDados[x].Aplicacao + '</td>');
+                                    var rowData9 = $('<td style="text-align:left">' + response.LstDados[x].TIPO_IMPORTACAO + '</td>');
+
+                                    var rowData10 = $('<td style="text-align:center">' + statusCompra + '</td>');
+                                    if (dtprazo != '') {
+                                        var rowData12 = $('<td style="text-align:center">' + dtprazo + '</td>');
+                                    }
+                                    else {
+                                        var rowData12 = $('<td style="text-align:center"></td>');
+                                    }
+                                    var rowData13 = $('<td style="text-align:center">' + ftm_nfeEmissao + '</td>');
+                                    var rowData14 = $('<td style="text-align:center">' + nfeNumero + '</td>');
+
+
+
+
+                                }
+                                row.append(rowData1);
+                                row.append(rowData2);
+                                row.append(rowData3);
+                                row.append(rowData4);
+                                row.append(rowData5);
+                                row.append(rowData6);
+                                row.append(rowData8);
+                                row.append(rowData9);
+                                row.append(rowData10);
+                                row.append(rowData12);
+                                row.append(rowData13);
+                                row.append(rowData14);
+
+
+                                table.append(row);
+                            }
+
+                            $('.tblPedidos').append(table);
+                            if (response.LstDados.length > 10)
+                            {
+                                $(".tblPedidos").css('display', 'block');
+                            }
+                            else
+                            {
+                                $(".tblPedidos").css('display', 'table');
+                            }
+
+
+                            if (permitir_editar != "SIM" & permitir_editar != "S") {
+                                $('#modalEditarEstatico').modal({
+                                    show: true,
+                                    closeOnEscape: true,
+                                    backdrop: 'static',
+                                    keyboard: false
+                                })
+                            }
+                            else {
+                                $('#modalEditar').modal({
+                                    show: true,
+                                    closeOnEscape: true,
+                                    backdrop: 'static',
+                                    keyboard: false
+                                })
+                            }
+
+
+
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //alert(exceptionThrown);
+                        },
+                    });
+                };
+
+                function salvarPedido() {
+                    let status = "";
+                    let idmov = $('#idmov_modal').html();
+                    let nseqitmmov = $('#nseqitmmov_modal').html();
+                    let idprd = $('#idprd_modal').html();
+                    let e = document.getElementById("Status_CompraModal");
+                    let houseModal = $('#houseModal').val();
+                    let processoModal = $('#processoModal').val();
+
+                    if ($('#Status_CompraModal').val() != null) {
+                        status = e.options[e.selectedIndex].text;
+                    }
+
+                    let prazoEntrega = $('#prazoEntrega').val();
+                    if (!$('#ckData').is(':checked')) {
+                        prazoEntrega = "";
+                    }
+
+                    let observacao = $('#txtJustificativa').val();
+
+                    var linhas = "";
+                    var dado = '';
+                    var data2 = [];
+
+                    var stringArray = new Array();
+
+
+                    $('#tblPedidos tr input[type="checkbox"]:checked').each(function () {
+                        var $row = $(this).closest('tr');
+                        var dado = '';
+                        //used :not(:first-child) to skip first element (the checkbox td)
+                        $('td:first-child', $row).each(function (i) {
+                            linhas = $(this).text().trim();
+                            //alert(linhas.indexOf('id'));
+                            dado += linhas + ",";
+                            data2.push(dado);
+
+                        })
+                    });
+
+
+                    if (data2.length > 0)
+                    {
+                        $.ajax({
+                            url: '@Url.Action("Salvar", "CompraFollowUp")',
+                            type: 'post',
+                            content: "application/json",
+                            traditional: true,
+                            //data: { idMov: idmov, nseqitmmov: nseqitmmov, idprd: idprd, status: status, prazo: prazoEntrega, observacao: observacao, house: houseModal, processo: processoModal, dados: data2 },
+                            data: { idMov: idmov, nseqitmmov: nseqitmmov, idprd: idprd, status: status, prazo: prazoEntrega, observacao: observacao, house: houseModal, processo: processoModal, dados: data2 },
+                            async: false,
+                            dataType: "json",
+                            //success: function (data) { $('#exampleModal').toggle(); }
+                            success: function (data) {
+                                var dtIni2 = $("<input>")
+                                 .attr("type", "hidden")
+                                 .attr("name", "dtIni2").val($('#strDataInicio').val());
+
+                                var dtFim2 = $("<input>")
+                                 .attr("type", "hidden")
+                                 .attr("name", "dtFim2").val($('#strDataFim').val());
+
+                                $('#myForm').append($(dtIni2));
+                                $('#myForm').append($(dtFim2));
+
+                                $('#myForm').submit();
+                            },
+                            error: function (xhr, textStatus, exceptionThrown) {
+                                //$('#btnagendar').attr("disabled", true);
+                                alert(exceptionThrown);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        alert('Selecione ao menos um item.')
+
+                    }
+
+                }
+
+                function exportaExcel() {
+                    let pedido = $('#pedido').val();
+                    let aplicacao = $('#aplicacao').val();
+                    let pn = $('#pn').val();
+                    let invoice = $('#invoice').val();
+                    let conhecimento = $('#conhecimento').val();
+                    let processo = $('#processo').val();
+
+                    window.location = "/CompraFollowUp/DownloadExcel?pedido=" + pedido + "&aplicacao=" + aplicacao + "&pn=" + pn + "&invoice=" + invoice + "&conhecimento=" + conhecimento + "&processo=" + processo;
+                }
+
+                function Informativo(idmov, nseqitmmov, idprd) {
+                    $.ajax({
+                        url: '@Url.Action("Informativo", "CompraFollowUp")',
+                        //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                        //dataType: "json",
+                        traditional: true,
+                        //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                        data: { idmov: idmov, nseqitmmov: nseqitmmov, idprd: idprd },
+                        contentType: 'json',
+
+                        success: function (response) {
+                            let ftm_dt_necessidade = "";
+                            let ftm_dt_emissao = "";
+                            let ftm_dt_prazo = "";
+
+                            if (response[0].NEC_EMISSAO != null) {
+                                let dt_necessidade = new Date(parseInt(response[0].NEC_EMISSAO.substr(6)));
+                                ftm_dt_necessidade = ("0" + dt_necessidade.getDate()).slice(-2) + '/' +
+                                     ("0" + (dt_necessidade.getMonth() + 1)).slice(-2) + "/" +
+                                    dt_necessidade.getFullYear()
+                                $('#dt_necessidade_info').html(ftm_dt_necessidade);
+                            }
+
+                            if (response[0].PDC_EMISSAO != null) {
+                                let dt_emissao = new Date(parseInt(response[0].PDC_EMISSAO.substr(6)));
+                                ftm_dt_emissao = ("0" + dt_emissao.getDate()).slice(-2) + '/' +
+                                     ("0" + (dt_emissao.getMonth() + 1)).slice(-2) + "/" +
+                                    dt_emissao.getFullYear()
+                                $('#dt_emissao_info').html(ftm_dt_emissao);
+                            }
+
+                            if (response[0].NFE_EMISSAO != null) {
+                                let nfe_emissao = new Date(parseInt(response[0].NFE_EMISSAO.substr(6)));
+                                ftm_dt_emissao = ("0" + nfe_emissao.getDate()).slice(-2) + '/' +
+                                     ("0" + (nfe_emissao.getMonth() + 1)).slice(-2) + "/" +
+                                    nfe_emissao.getFullYear()
+                                $('#nfe_emissao_info').html(ftm_dt_emissao);
+                            }
+
+                            //if (response[0].Prazo_Entrega != null) {
+                            //    let dt_prazo = new Date(parseInt(response[0].Prazo_Entrega.substr(6)));
+                            //    ftm_dt_prazo = ("0" + dt_prazo.getDate()).slice(-2) + '/' +
+                            //         ("0" + (dt_prazo.getMonth() + 1)).slice(-2) + "/" +
+                            //        dt_prazo.getFullYear()
+                            //    $('#dt_prazo_info').html(ftm_dt_prazo);
+                            //}
+                            $('#dt_prazo_info').html(response[0].Prazo_Entrega);
+
+
+                            let aplicacao = response[0].Aplicacao;
+                            $('#aplicacao_info').html(aplicacao);
+                            //$('#dt_prazo_info').html(ftm_dt_prazo);
+                            $('#pedido_info').html(response[0].PDC_NUMERO);
+                            $('#item_info').html(response[0].PDC_ITEM);
+                            $('#pn_info').html(response[0].PDC_CODIGO);
+                            $('#descricao_info').html(response[0].Descricao);
+                            $('#qtd_pedido_info').html(response[0].PDC_QUANTIDADE);
+                            $('#qtd_pendente_info').html(response[0].PDC_QTD_PENDENTE);
+                            $('#status_pedido_info').html(response[0].PDC_STATUS);
+                            $('#status_compra_info').html(response[0].Status_Compra);
+                            $('#processo_info').html(response[0].PROCESSO);
+                            $('#invoice_info').html(response[0].INVOICE);
+                            $('#conhecimento_info').html(response[0].CONHECIMENTO);
+                            $('#fornecedor_info').html(response[0].FORNECEDOR);
+                            $('#requisitante_info').html(response[0].REQUISITANTE);
+                            $('#comprador_info').html(response[0].COMPRADOR);
+
+                            $('#nfe_numero_info').html(response[0].NFE_NUMERO);
+
+                            if (response[0].OBSERVACAO != null) {
+                                $('#observacao_info').html(response[0].OBSERVACAO);
+                                $('#txtJustificativa').val(response[0].OBSERVACAO);
+                            }
+                            else
+                            {
+                                $('#txtJustificativa').val('');
+                            }
+
+
+                            var id_int = response[0].Id_integracao;
+                            id_int = id_int > 0 ? id_int : '';
+                            var situacao = response[0].Situacao;
+                            situacao = situacao == null ? '' : situacao;
+                            var fatura = response[0].Fatura;
+                            var data = response[0].Data;
+                            data = data != '01/01/0001' ? data : '';
+                            var tipo = response[0].Tipo;
+                            var handling = response[0].HANDLING;
+                            var forma_pag = response[0].CondPgto;
+                            var moeda = response[0].Moeda;
+                            var valor = response[0].Valor;
+                            valor = valor != 0 ? parseFloat(valor).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+                            var cotacao = response[0].COTACAO;
+                            cotacao = cotacao > 0 ? parseFloat(cotacao).toFixed(4) : '';
+                            //cotacao = cotacao > 0 ? parseFloat(cotacao).toLocaleString() : '';
+                            var valor_total = response[0].VALOR_TOTAL;
+                            valor_total = valor_total != 0 ? parseFloat(valor_total).toLocaleString() : '';
+                            var valor_total_reais = response[0].VALOR_TOTAL_REAIS;
+                            valor_total_reais = valor_total_reais != 0 ? parseFloat(valor_total_reais).toLocaleString() : '';
+                            var fornecedor = response[0].FornecedorNome;
+                            var consideracoes = response[0].Consideracoes;
+                            var di = response[0].DI;
+                            var processo = response[0].Processo;
+                            var exportador = response[0].Exportador;
+                            var numFatura = response[0].NumFatura;
+                            var tipoFatura = response[0].TipoFatura;
+                            var dataFatura = response[0].DataFatura;
+                            var codProcesso = response[0].CodProcesso;
+                            var embarque = response[0].Embarque;
+                            var numConhecimento = response[0].NumConhecimento;
+                            var username = response[0].Username;
+                            var dataVencimento = response[0].DataVenc;
+                            var conhecimentoProcesso = response[0].TipoProcesso;
+                            var id = response[0].Id;
+                            var complemento = response[0].Complemento;
+                            var idInt = response[0].IdInt;
+                            var codTMVInt = response[0].CodTMV;
+                            var chaveOrigem = response[0].ChaveOrigem;
+                            var identificador = response[0].Identificador;
+                            var movimento = response[0].Movimento;
+                            var documento = response[0].Documento;
+                            var cor = response[0].Cor;
+                            if (cor == 'B') {
+                                $("#corConsideracoes").css("background-color", "white");
+                            }
+                            else if (cor == 'A') {
+                                $("#corConsideracoes").css("background-color", "lightgoldenrodyellow");
+                            }
+                            else {
+                                $("#corConsideracoes").css("background-color", "orangered");
+                            }
+
+                            $('#id_integracao_Modal').html(id_int);
+                            $('#situacao_Modal').html(situacao);
+                            $('#data_Modal').html(data);
+                            $('#tipo_Modal').html(tipo);
+                            if (handling != '') {
+                                //$('#handling_Modal').html(handling);
+                                //$('#id_fatura').html(fatura + ' / Handling ' + handling);
+                                $('#id_fatura').html(fatura);
+                            }
+                            else {
+                                $('#id_fatura').html(fatura);
+                            }
+
+                            $('#forma_pagamento_Modal').html(forma_pag);
+                            $('#moeda_Modal').html(moeda);
+                            $('#valor_Modal').html(valor);
+                            $('#cotacao_Modal').html(cotacao);
+                            $('#valor_total_Modal').html(valor_total);
+                            $('#valor_total_reais_Modal').html(valor_total_reais);
+                            $('#fornecedor_Modal').html(fornecedor);
+                            $('#consideracoes_Modal').html(consideracoes);
+                            $('#di_Modal').html(di);
+                            $('#processo_Modal').html(processo);
+                            $('#exportador_Modal').html(exportador);
+                            $('#numFatura_Modal').html(numFatura);
+                            $('#tipoFatura_Modal').html(tipoFatura);
+                            $('#dataFatura_Modal').html(dataFatura);
+                            $('#codProcesso_Modal').html(codProcesso);
+                            $('#embarque_Modal').html(embarque);
+                            $('#numConhecimento_Modal').html(numConhecimento);
+                            $('#username_Modal').html(username);
+                            $('#dataVencimento_Modal').html(dataVencimento);
+                            $('#conhecimentoProcesso_Modal').html(conhecimentoProcesso);
+                            $('#id_Modal').html(id);
+                            $('#complemento_Modal').html(complemento);
+                            $('#idint_Modal').html(idInt);
+                            $('#codtmvint_Modal').html(codTMVInt);
+                            $('#chave_origem_int_Modal').html(chaveOrigem);
+                            $('#identificador_Modal').html(identificador);
+                            $('#documento_Modal').html(documento);
+                            $('#movimento_Modal').html(movimento);
+
+
+
+
+                            $('#modalInformativo').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+
+
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //alert(exceptionThrown);
+                        },
+                    });
+                }
+
+                $(".datepickerInput").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+                //var textarea = document.getElementById("txtJustificativa");
+                //var limit = 120; //height limit
+
+                //textarea.oninput = function() {
+                //    textarea.style.height = "";
+                //    textarea.style.height = Math.min(textarea.scrollHeight, limit) + "px";
+                //};
+
+                $('#modalInformativo').on('shown.bs.modal', function () {
+                    $(this).find('.modal-dialog').css({
+                        width: '100%',
+                        height: 'auto',
+                        'max-height': '100%',
+                        'padding-right': 0
+                    });
+
+                    $(this).css({
+                        'padding-right': 0
+                    });
+                });
+
+                $('#modalEditar').on('shown.bs.modal', function () {
+                    $(this).find('.modal-dialog').css({
+                        //width: '100%',
+                        //height: '100%',
+                        //'max-height': '100%',
+                        'padding-right': 0,
+                        'top': 0
+                    });
+
+                    $(this).css({
+                        'padding-right': 0,
+                        'top': 0
+                    });
+                });
+
+                $('#modalEditarEstatico').on('shown.bs.modal', function () {
+                    $(this).find('.modal-dialog').css({
+                        //width: '100%',
+                        //height: '100%',
+                        //'max-height': '100%',
+                        'padding-right': 0,
+                        'top': 0
+                    });
+
+                    $(this).css({
+                        'padding-right': 0,
+                        'top': 0
+                    });
+                });
+
+                function Importar() {
+                    $('#modalImportar').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                }
+
+                $('#btnImportar').click(function () {
+                    let pedido = $('#pedido').val();
+                    let aplicacao = $('#aplicacao').val();
+                    let pn = $('#pn').val();
+                    let invoice = $('#invoice').val();
+                    let conhecimento = $('#conhecimento').val();
+                    let statusCompra = $('#status_compra').val();
+                    let statusPedido = $('#statusPedido').val();
+                    let processo = $('#processo').val();
+
+                    $('#excelNome').val('');
+                    $('#btnEnviar').html('Enviar');
+                    $('.file-upload').val('')
+
+                })
+
+                $('.menuCompras .sidebar-submenu').addClass("active");
+                $('.menuCompras .sidebar-submenu').toggle();
+
+
+                function initializeFileUploads() {
+                    $('.file-upload').change(function () {
+                        var file = $(this).val();
+                        file = file.substring(file.lastIndexOf("\\") + 1, file.length);
+                        $(this).closest('.input-group').find('.file-upload-text').val(file);
+                    });
+                    $('.file-upload-btn').click(function () {
+                        $(this).find('.file-upload').trigger('click');
+                    });
+                    $('.file-upload').click(function (e) {
+                        e.stopPropagation();
+                    });
+                }
+
+
+                // On document load:
+                $(function () {
+                    initializeFileUploads();
+                });
+
+                $(function () {
+
+                    var form;
+                    $('#upload').change(function (event) {
+                        form = new FormData();
+                        form.append('upload', event.target.files[0]); // para apenas 1 arquivo
+                        //var name = event.target.files[0].content.name; // para capturar o nome do arquivo com sua extenção
+                    });
+
+                    $('#btnEnviar').click(function () {
+                        if (($('.file-upload').val()) != "" & ($('.file-upload').val()) != null)
+                        {
+                            $('#btnEnviar').html('Aguarde...');
+                            $.ajax({
+                                url: '@Url.Action("Importar", "CompraFollowUp")',
+                                data: form,
+                                processData: false,
+                                contentType: false,
+                                type: 'POST',
+                                success: function (data) {
+                                    if (data.erro != null)
+                                    {
+                                        $('#btnEnviar').html('Enviar');
+                                        alert(data.erro);
+                                    }
+                                    else {
+                                        alert('Arquivo importado com sucesso.');
+                                        $("#modalImportar").modal("hide");
+                                    }
+                                },
+                                error: function (data) {
+                                    alert(data.responseText);
+                                }
+                            });
+                        }
+                        else
+                            alert("Selecione um arquivo.")
+
+                    });
+                })
+            </script>
+
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </body>
+}
+</html>

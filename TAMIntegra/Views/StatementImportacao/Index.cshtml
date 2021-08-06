@@ -1,0 +1,1216 @@
+﻿@model Entities.StatementImportacao
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var importacao_Conciliacao = (List<Entities.ImportacaoConciliacao>)ViewData["Importacao_Concilicacao"];
+    var importacao_RMFluxus = (List<Entities.ImportacaoRMFluxus>)ViewData["Importacao_RMFluxus"];
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+       
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    @if (TempData["Mensagem"] != null)
+    {
+        <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+        </script>
+    }
+
+    <style>
+        #tableMenu{table-layout:auto;width:100%;border-collapse:collapse;text-align:center;}
+        .childA{
+  float:left;
+  width:33.3%;
+  background-color:#f5f5f5;
+  height:50px;
+}
+.childB {
+  float:left;
+  width:33.3%;
+  background-color:gray;
+  height:50px;
+}
+.childC {
+  float:left;
+  width:33.3%;
+  background-color:gray;
+  height:50px;
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+.modal-dialog{
+    position: relative;
+    display: table; /* This is important */ 
+    /*overflow-y: auto;*/    
+    /*overflow-x: auto;*/
+    /*width: auto;
+    min-width: 400px;*/   
+}
+   .panel-heading{
+     background-color:lightgray
+}
+   ::-webkit-scrollbar { 
+  width: 0px!important;
+} 
+    </style>
+</head>
+@*@using (Html.BeginForm("Index", "StatementImportacao", FormMethod.Post, new { id = "myForm", enctype = "multipart/form-data" }))*@
+@using (Html.BeginForm("Index", "StatementImportacao", FormMethod.Post, new { id = "myForm"}))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+   
+
+
+    <body>
+      
+        <input hidden id="fornecedorSelected" name="fornecedorSelected" />
+        <input hidden id="documentoSelected" name="documentoSelected" />
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;z-index:100">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:10px;left:20px;position:fixed">
+                    <div class="stepwizard">
+                        <fieldset>
+                            <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Importação / Conciliação</legend>
+                        </fieldset>
+                    </div>
+                </div>
+
+                </main>
+
+
+
+            <main class="page-content" style="padding-top:0">
+                <div class="container-fluid" style="padding-top:0;padding-left:27px">
+               
+
+                    <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ style="position:absolute;top:60px;width:97%;padding-left:0px">
+
+                        <!--Conciliacao-->
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Filtro para conciliação, statement e RM fluxus
+                            </div>
+                            <div class="panel-body" style="padding-bottom:0">
+                                <div class="tab-content">
+                                    <div class="row">
+                                        <div class="col-md-5 col-sm-4 col-lg-4">
+                                            <div class="form-group">
+                                                <div class="col-md-4 col-sm-9 col-lg-4">
+                                                    <label class="form-negrito">Ano</label>
+                                                    @Html.Editor("ano", new { htmlAttributes = new { @class = "form-control", @min = 2010 } })
+                                                    @*<div class="input-group date" data-provide="datepicker">
+                                                <input type="text" class="form-control datepickerInput" >
+                                            </div>*@
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 col-sm-3 col-lg-4">
+                                            <div class="form-group">
+                                                <div class="col-md-4 col-sm-3 col-lg-4">
+                                                    @Html.Label("Mês", new { @class = "form-negrito" })
+                                                    @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("mes", new { htmlAttributes = new { @class = "form-control"} })
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2 col-lg-1 col-sm-2 col-lg-4">
+                                            <div class="form-group">
+                                                <div class="col-md-12 col-sm-12 col-lg-6 col-lg-4">
+
+                                                    <div style="margin-top:20px">
+                                                        <button class="btn btn-primary btn-md pull-right" id="btnFiltro" type="button" name="Filtrar">Exibir</button>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+
+                                        </div>
+
+                                        @*<div class="col-md-4 col-sm-4">
+                                            <div class="form-group">
+                                                <div class="col-md-11 col-sm-2">
+                                                    <div class="col-md-1 col-md-offset-1" style="top:20px;right:0;position:absolute">
+                                                        <button class="btn btn-primary btn-md pull-right" id="btnFiltro" type="submit" name="Filtrar">Filtrar</button>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>*@
+
+                                        @*<div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="col-md-9">
+                                            @Html.Label("Descrição", new { @class = "form-negrito" })
+                                            @Html.Editor("nomeFantasiaFiltro", new { htmlAttributes = new { @class = "form-control", style = "width:60%" } })
+                                        </div>
+                                        <div class="col-md-1 col-md-offset-1" style="top:20px;right:0;position:absolute">
+                                            <button class="btn btn-primary nextBtn btn-md pull-right" id="btnFiltro" type="submit" name="Filtrar">Filtrar</button>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>*@
+
+
+
+
+                                    </div>
+                                </div>
+                                @*<div class="btn-toolbar">
+                            <button class="btn btn-primary nextBtn btn-md pull-right" type="submit" name="Filtrar">Filtrar</button>
+                            <button class="btn btn-primary nextBtn btn-md pull-right" type="submit" name="Exportar">Exportar</button>
+                        </div>*@
+                            </div>
+
+                        </div>
+
+                        <div class="stepwizard">
+
+                            @*<label for="opcaoConciliacao">Conciliação</label>
+            <input type="radio" name="opcao" id="opcaoConciliacao" />
+
+            <label for="opcaoStatement">Statement</label>
+            <input type="radio" name="opcao" id="opcaoStatement" />
+
+            <label for="opcaoRMFluxus">Dados RM Fluxus</label>
+            <input type="radio" name="opcao" id="opcaoRMFluxus" />*@
+
+                            @*<div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <a href="#" type="button" id="opcaoConciliacao" class="btn btn-info btn-circle">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </a>
+                        Conciliação
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <a href="#" type="button" id="opcaoStatement" class="btn btn-info btn-circle">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </a>
+                        Statement.csv
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <a href="#" type="button" id="opcaoRMFluxus" class="btn btn-info btn-circle">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </a>
+                        Dados RM Fluxus
+                    </div>
+                </div>
+            </div>*@
+
+                            @*<div class="navbar navbar-default" stle="position:relative">
+               <table id="tableMenu" style="position:absolute;top:20%">
+                   <tr>
+                       <td><a class="btn"><span name="opcao" id="opcaoConciliacao" />Conciliação</a></td>
+                       <td><a class="btn"><span name="opcao" id="opcaoStatement" />Statement.csv</a></td>
+                       <td><a class="btn"><span name="opcao" id="opcaoRMFluxus" />Dados RM Fluxus</a></td>
+                   </tr>
+               </table>
+            </div>*@
+
+
+                            @*<div class="parent">
+                <div class="childA btn btn-primary" id="opcaoConciliacao">
+                    <a class="btn"><span name="opcao"  style="color:white"/>Conciliação</a>
+                </div>
+                <div class="childB btn btn-primary" id="opcaoStatement">
+                    <a class="btn"><span name="opcao" style="color:white" />Statement.csv</a>
+                </div>
+                <div class="childC btn btn-primary" id="opcaoRMFluxus">
+                    <a class="btn"><span name="opcao" style="color:white" />Dados RM Fluxus</a>
+                </div>
+            </div>*@
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 btn btn-primary" id="opcaoConciliacao" style="display:block">
+                                    <a class="btn"><span name="opcao" style="color:white" />Conciliação</a>
+                                </div>
+                                <div class="col col-lg-4 col-md-4 btn btn-primary" id="opcaoStatement" style="display:block">
+                                    <a class="btn"><span name="opcao" style="color:white" />Statement.csv</a>
+                                </div>
+                                <div class="col col-lg-4 col-md-4 btn btn-primary" id="opcaoRMFluxus" style="display:block">
+                                    <a class="btn"><span name="opcao" style="color:white" />Dados RM Fluxus</a>
+                                </div>
+                            </div>
+                      
+
+
+                            </div>
+
+                        <div>
+                          
+                           
+                         </div>
+                            <br />
+                        <div id="conciliacao" hidden>
+                            <div class="btn-toolbar">
+                                @*<button class="btn btn-primary btn-md pull-right" id="btnExecutarConciliacao" type="submit" name="btnExecutarConciliacao" enabled="enabled">Executar conciliação</button>*@
+                                <a href="@Url.Action("ExecutarConciliacao", "StatementImportacao")" class="btn btn-primary btn-md pull-right" id="btnExecutarConciliacao" onclick="return confirm('Este procedimento irá produzir a conciliação entre os statements e imagens RM Fluxus cujo processamento está em agendamento. Deseja prosseguir com esta ação?');">Executar conciliação</a>
+                                <a class="btn btn-primary btn-md pull-right modalBTN">Agendar conciliação</a>
+                            </div>
+                            <br />
+                            <div class="panel with-nav-tabs panel-default" >
+                                <div class="panel-heading" style="background-color:lightgray">
+                                    Conciliação
+                                </div>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-striped" id="lstProdutos"cellspacing="10">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:10%;text-align:center" >Conta</th>
+                                                    <th style="width:10%;text-align:center" >Statement</th>
+                                                    <th style="width:10%;" >Registros</th>
+                                                    <th style="width:10%;" >Amount</th>
+                                                    <th style="width:10%;text-align:center" >RM Fluxus</th>
+                                                    <th style="width:10%;text-align:center" >Conciliação</th>
+                                                    <th style="width:10%;text-align:center" >Tipo</th>
+                                                    <th style="width:10%;text-align:center" >Processamento</th>
+                                                    <th style="width:10%;text-align:center" >Situação</th>
+                                                    <th style="width:10%;text-align:center"  colspan="2">Opções</th>
+                                                </tr>
+                                            </thead>
+                                            @if (importacao_Conciliacao != null)
+                                            {
+                                                if (importacao_Conciliacao != null)
+                                                {
+                                                    foreach (Entities.ImportacaoConciliacao wk in importacao_Conciliacao)
+                                                    {
+
+                                                        <tbody>
+                                                            <tr>
+                                                                @*<td><input type="checkbox" id="idMov" name="idMovArr" value="@wk.idMov" /> <a style="padding-left:0px" class="btn modalBTN">@wk.NumNoFabric</a></td>*@
+                                                                <td style="padding: 10px !important;text-align:center">@wk.Conta</td>
+                                                                <td style="padding: 10px !important;text-align:center">@wk.Data_Base.ToString("dd/MM/yyyy")</td>
+                                                                <td style="padding: 10px !important;text-align:right;padding-right: 70px !important">@string.Format("{0:#,##}", @wk.Qtd_Registro)</td>
+                                                                <td style="padding: 10px !important;text-align: right;padding-right: 70px !important">@string.Format("{0:#,##0.00#}", @wk.Amount) </td>
+                                                                <td style="padding: 10px !important;text-align:center">@wk.Imagem_RM.ToString("dd/MM/yyyy")</td>
+                                                                <td style="padding: 10px !important;text-align:center">@wk.Data_Conciliacao.ToString("dd/MM/yyyy")</td>
+                                                                <td style="padding: 10px !important;text-align:center">@wk.Tipo</td>
+                                                                <td style="padding: 10px !important;text-align:center">@wk.Processamento</td>
+                                                                <td style="padding: 10px !important;text-align:center">@wk.Situacao</td>
+                                                                @*<td><a href="#" title="Excluir"><i class="fa fa-remove" style="font-size:19px;color:red"></i></a></td>*@
+                                                                @if (@wk.Processamento == "Processado")
+                                                                {
+                                                                    <td style="padding: 10px !important;"></td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td style="padding: 0px !important;;text-align:center"><a class="btn" style="padding:0px" title="Excluir"><i class="fa fa-remove" style="font-size:19px;color:red" onclick="excluirConciliacao(@wk.Id_Conciliacao, '@wk.Conta', '@wk.Data_Base');"></i></a></td>
+                                                                }
+                                                            </tr>
+                                                        </tbody>
+                                                    }
+                                                }
+                                            }
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="conciliacaoModal" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered" style="">
+                            <div class="modal-content" style="height:100%;width:100%;">
+                                @*<div class="modal-header text-center" style="padding:5px">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                        </div>*@
+                                <div class="modal-body" style="padding:20px 15px 0 15px;height:100%">
+
+                                    <div class="panel with-nav-tabs panel-default" style="padding-bottom:0px !important;height:95%">
+                                        <div class="panel-heading" style="background-color:lightgray">
+                                            Agendamento para Conciliação
+                                        </div>
+                                        <div class="panel-body" style="padding-bottom:0px !important;">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <label class="form-negrito">Statement</label>
+                                                            @if (ViewBag.StatementFiltro != null)
+                                                            {
+                                                                @Html.DropDownList("statementFiltro", (SelectList)ViewBag.StatementFiltro, "-- Selecione --", new { @class = "chosen-select" })
+                                                            }
+                                                            else
+                                                            {
+                                                                <select class="chosen-select">
+                                                                    <option>
+                                                                        -- Selecione --
+                                                                    </option>
+                                                                </select>
+                                                            }
+
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="col-md-10">
+                                                            @Html.Label("RM Fluxus", new { @class = "form-negrito" })
+                                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                            @*@Html.DropDownList("rmFluxusFiltro", (SelectList)ViewBag.RMFluxusFiltro, "-- Selecione --", new { @class = "chosen-select" })*@
+                                                            @if (ViewBag.RMFluxusFiltro != null)
+                                                            {
+                                                                @Html.DropDownList("rmFluxusFiltro", (SelectList)ViewBag.RMFluxusFiltro, "-- Selecione --", new { @class = "chosen-select" })
+                                                            }
+                                                            else
+                                                            {
+                                                                <select class="chosen-select">
+                                                                    <option disabled>
+                                                                        -- Selecione --
+                                                                    </option>
+                                                                </select>
+                                                            }
+                                                         </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                     <input hidden id="idStatementModalconciliacao" />
+                                                     <input hidden id="idRMFluxusModalconciliacao" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="btn-toolbar">
+                                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualiza()">Fechar</button>
+                                            <button type="button" class="btn btn-primary pull-right" id="btnAgendarConciliacao">Agendar</button>
+                                        </div>
+                                        <br />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div>
+                    <!--Conciliacao-->
+                    <!--Statement.csv-->
+                    <div class="panel with-nav-tabs panel-default" id="statement" hidden style="padding-top:260px;width:100%;border:none">
+                        <div class="btn-toolbar">
+                            <a class="btn inserirContaModal btn-success modalNovoStatement" role="button">Novo Statement</a>
+                        </div>
+                        <br />
+                        <div class="panel-heading">
+                            Statement.csv
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped" id="lstProdutos">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:center;width:20%">Conta</th>
+                                            <th style="text-align:center;width:10%">Data de importação</th>
+                                            <th style="text-align:center;width:10%">Data da base</th>
+                                            <th style="width:10%;">Registros</th>
+                                            <th style="width:10%;">Amount</th>
+                                            <th style="width:10%;">Pendência</th>
+                                            <th style="text-align:center;width:10%">Situação</th>
+                                            <th style="text-align:center;width:20%" colspan="2">Opções</th>
+                                        </tr>
+                                    </thead>
+                                    @if (Model != null)
+                                    {
+                                        if (Model.lstConciliacao != null)
+                                        {
+                                            foreach (Entities.StatementImportacao wk in Model.lstConciliacao)
+                                            {
+
+                                                <tbody>
+                                                    <tr>
+                                                        @*<td><input type="checkbox" id="idMov" name="idMovArr" value="@wk.idMov" /> <a style="padding-left:0px" class="btn modalBTN">@wk.NumNoFabric</a></td>*@
+                                                        @*<td><a class="btn modalStatement" onclick="populaModal('@wk.DocumentoNo')">@wk.Conta</a></td>*@
+                                                        <td style="text-align:center">@wk.Conta</td>
+                                                        <td style="text-align:center">@wk.Data_Importacao.Value.ToString("dd/MM/yyyy")</td>
+                                                        <td style="text-align:center">@wk.Data_Base.Value.ToString("dd/MM/yyyy")</td>
+                                                        <td style="text-align: right;padding-right: 60px !important;">@string.Format("{0:#,##}", @wk.Qtd_Registro)</td>
+                                                        <td style="text-align: right;padding-right: 60px !important;">@string.Format("{0:#,##0.00#}", @wk.Amount) </td>
+                                                        <td style="text-align: right;padding-right: 60px !important;">@string.Format("{0:#,##}", @wk.Qtd_Pendencia)</td>
+                                                        <td style="text-align:center">@wk.Situacao</td>
+                                                        <td hidden><input  id="id_conta" name="id_conta" value="@wk.Id_Conta" /></td>
+                                                        <td hidden><input id="id_statement" name="id_statement" value="@wk.Id_Statement" /></td>
+                    
+                                                   
+                                                        <td style="text-align:center"> 
+                                                            <div style="text-align:center">
+                                                                @if (!wk.Situacao.Equals("Conciliado"))
+                                                                {
+                                                                    <div style="">
+                                                                        <a class="btn modalExcel" style="padding:5px" title="Importar .csv"><span class="fa fa-file-excel-o" style="font-size:16px;color:green" onclick="preencherModalExcel(@wk.Id_Statement, '@wk.Conta', '@wk.Data_Base')"></span></a>
+                                                                        <a class="btn" style="padding:5px" title="Exportar"><i class="glyphicon glyphicon-export" style="font-size:16px;color:green" id="btnExportarStatement" onclick="location.href='@Url.Action("Download2", "StatementImportacao", new { id_Statement = @wk.Id_Statement })'"></i></a>
+                                                                        <a class="btn" style="padding:5px" title="Excluir"><i class="fa fa-remove" style="font-size:19px;color:red" id="btnExcluirStatement" onclick="excluirStatement(@wk.Id_Statement, '@wk.Conta', '@wk.Data_Base');"></i></a>
+                                                                    </div>
+                                                                    @*<div style="float:left">
+                                                                        <a class="btn" style="padding:5px" title="Exportar"><i class="glyphicon glyphicon-export" style="font-size:16px;color:green" id="btnExportarStatement" onclick="location.href='@Url.Action("Download2", "StatementImportacao", new { id_Statement = @wk.Id_Statement })'"></i></a>
+                                                                    </div>
+                                                                    <div style="float:left">
+                                                                        <a class="btn" style="padding:5px" title="Excluir"><i class="fa fa-remove" style="font-size:19px;color:red" id="btnExcluirStatement" onclick="excluirStatement(@wk.Id_Statement, '@wk.Conta', '@wk.Data_Base');"></i></a>
+                                                                    </div>*@
+                                                                }
+                                                            </div>
+                                                         </td>
+
+                                                    </tr>
+                                                </tbody>
+                                            }
+                                        }
+                                    }
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="statementModal" role="dialog" aria-labelledby="statementModal-label" aria-hidden="true">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered" style="height:40%">
+                            <div class="modal-content" style="height:100%">
+                                @*<div class="modal-header text-center" style="padding:5px">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                        </div>*@
+                                <div class="modal-body" style="padding:20px 15px 0 15px">
+
+                                    <div class="panel with-nav-tabs panel-default">
+                                        <div class="panel-heading" style="background-color:lightgray">
+                                            Detalhamento do statement
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="tab-content">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-striped" id="lstProdutos">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>DocumentoNo</th>
+                                                                <th>SO/Ref</th>
+                                                                <th>Invoice</th>
+                                                                <th>Text</th>
+                                                                <th>Doc Date</th>
+                                                                <th>Net due dt</th>
+                                                                <th>Amount</th>
+                                                                <th>Arrear</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                @*<td><input type="checkbox" id="idMov" name="idMovArr" value="@wk.idMov" /> <a style="padding-left:0px" class="btn modalBTN">@wk.NumNoFabric</a></td>*@
+                                                                <td id="documentoNoModal"></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="btn-toolbar">
+                                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualiza()">Fechar</button>
+                                        </div>
+                                        <br />
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+
+                    <!-- Modal Excel -->
+                    <div class="modal fade" id="modalExcel" role="dialog" aria-labelledby="modalExcel-label" aria-hidden="true">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered" style="">
+                            <div class="modal-content" style="height:100%">
+                                @*<div class="modal-header text-center" style="padding:5px">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                    </div>*@
+                                <div class="modal-body" style="padding:20px 15px 0 15px">
+
+
+                                    <div class="panel with-nav-tabs panel-default">
+                                        <div class="panel-heading" style="background-color:lightgray">
+                                            Importação Excel para <span id="contaModalExcel"></span> em <span id="dataBaseModalExcel"></span>
+                                        </div>
+                                        <div class="panel-body">
+                                            @*<div class="input-group">
+                                                <div class="input-group-btn">
+                                                    <div class="fileUpload btn btn-success">
+                                                        <span><i class="glyphicon glyphicon-upload"></i> Upload</span>
+                                                        <input id="uploadBtn" type="file" />
+                                                    </div>
+                                                </div>
+                                            </div>*@
+
+                                            <div class="panel-body">
+                                                <div class="input-group">
+                                                    <div>
+                                                        <input id="uploadFile" class="form-control" placeholder="" disabled="disabled" size="40" style="height:30px">
+                                                    </div>
+                                                    <div class="input-group-btn">
+                                                        <div class="fileUpload btn btn-success">
+                                                            <span><i class="glyphicon glyphicon-upload"></i> Selecionar arquivo</span>
+                                                            <input id="uploadBtn" type="file" class="upload" name="upload"/>
+                                                            <input hidden id="uploadInput" name="uploadInput" value="" />
+                                                            <input hidden id="idStatementModal" name="idStatementModal"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <br />
+                                                <div class="btn-toolbar">
+                                                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualiza()">Fechar</button>
+                                                    <button type="button" id="salvarExcel" class="btn btn-primary pull-right" onclick="">Salvar</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                       
+                                        <br />
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div><!-- Modal Excel -->
+
+                    <div class="modal fade" id="novoStatementModal" role="dialog" aria-labelledby="novoStatementModal-label" aria-hidden="true">
+
+                    <div class="modal-dialog modal-lg modal-dialog-centered" style="">
+                        <div class="modal-content" style="height:100%">
+                            @*<div class="modal-header text-center" style="padding:5px">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4>Enviar <span class="descricaoTMVModal"></span></h4>
+                    </div>*@
+                            <div class="modal-body" style="padding:20px 15px 0 15px">
+
+                                <div class="panel with-nav-tabs panel-default">
+                                    <div class="panel-heading">
+                                        Statement
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Conta</label>
+                                                    @*@Html.Editor("contaFiltro", new { htmlAttributes = new { @class = "form-control", @id= "contaFiltro"} })*@
+                                                    @Html.DropDownList("contaFiltro", (SelectList)ViewBag.Contas, "-- Selecione --", new { @class = "chosen-select", @style = "width:60%" })
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="col-md-10">
+                                                    <label class="form-negrito">Data Base</label>
+                                                    @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @*@Html.Editor("dataBaseFiltro", new { htmlAttributes = new { @class = "form-control", style = "width:100%", @id= "dataBaseFiltro" } })*@
+                                                    @*<input id="dataBaseFiltro" class="form-control" />*@
+                                                   
+                                                    @if (ViewBag.Data_Base != null)
+                                                    {
+                                                        @Html.DropDownList("dataBaseFiltro", (SelectList)ViewBag.Data_Base, "-- Selecione --", new { @class = "chosen-select", @style = "width:60%" })
+                                                    }
+                                                    else
+                                                    {
+                                                        <select class="chosen-select">
+                                                            <option disabled>
+                                                                -- Selecione --
+                                                            </option>
+                                                        </select>
+                                                    }
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="btn-toolbar">
+                                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal" onclick="Atualiza()">Fechar</button>
+                                        <button type="button" class="btn btn-primary pull-right" onclick="salvarNovoStatement()">Salvar</button>
+                                    </div>
+                                    <br />
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+                    <!--Statement.csv-->
+
+                    <!--Dados RM Fluxus-->
+                    <div class="panel with-nav-tabs panel-default" id="rmFluxus" hidden style="padding-top:260px;width:100%;border:none">
+                        <div class="btn-toolbar">
+                            <a href="@Url.Action("GerarImagem", "StatementImportacao")" class="btn btn-primary btn-md pull-right" id="btnGerarImagem" onclick="return confirm('Este procedimento ira gerar uma nova imagem de dados do RM Fluxus para conciliação com os statements. Deseja prosseguir com esta ação?');">Gerar imagem RM Fluxus</a>
+                        </div>
+                        <br />
+                        <div class="panel-heading">
+                            Dados RM Fluxus
+                        </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped" id="lstProdutos">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Tipo</th>
+                                        <th style="text-align:center">Data</th>
+                                        <th style="text-align:center">Situação</th>
+                                        <th style="text-align:center">Opções</th>
+  
+                                    </tr>
+                                </thead>
+                                @if (importacao_RMFluxus != null)
+                                                    {
+                                                        if (importacao_RMFluxus != null)
+                                                        {
+                                                            foreach (Entities.ImportacaoRMFluxus wk in importacao_RMFluxus)
+                                                            {
+
+                                            <tbody>
+                                                <tr>
+                                                    @*<td><input type="checkbox" id="idMov" name="idMovArr" value="@wk.idMov" /> <a style="padding-left:0px" class="btn modalBTN">@wk.NumNoFabric</a></td>*@
+                                                    <td style="text-align:center">@wk.Origem</td>
+                                                    <td style="text-align:center">@wk.Data_Importacao.ToString("dd/MM/yyyy")</td>
+                                                    <td style="text-align:center">@wk.Situacao</td>
+                                                    @*<td><a href="#" title="Excluir"><i class="fa fa-remove" style="font-size:19px;color:red"></i></a></td>*@
+                                                    <td style="text-align:center" q>
+                                                        @if (!wk.Situacao.Equals("Conciliado"))
+                                                        {
+                                                            <div style="">
+                                                                <a class="btn" style="padding:5px" title="Excluir"><i class="fa fa-remove" style="font-size:19px;color:red" id="btnExcluirRMFluxus" onclick="excluirRMFluxus(@wk.Id_RM_Fluxus, '@wk.Data_Importacao');"></i></a>
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                    @*<td><a title="Desbloquear pedido" href="javascript:;"><i class="fa fa-unlock btn" aria-hidden="true" style="font-size:16px" onclick="if(confirm('Este procedimento libera o pedido @wk.NumNoFabric para o fornecedor. Deseja continuar?')) desbloquearPedido(@wk.Id_Integracao, @wk.idMov);"></i></a></td>
+                                            <td hidden name="idPrd">@wk.IdPrd</td>*@
+                                                </tr>
+                                            </tbody>
+                                        }
+                                    }
+                                }
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+               <!--Dados RM Fluxus-->
+
+                </div>
+
+
+            </main>
+        </div>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        @*<script src="~/scripts/importacaoproduto2.js"></script>*@
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        <link href="~/content/indexCompras.css" rel="stylesheet" />
+        <link href="~/content/indexImportacaoProduto.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+        <!-- bootstrap Validator JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+
+        <script>
+            $(function () {
+                $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+
+
+            });
+
+            $(function () {
+                var menuAtivo = $('#menuAtivo').val();
+
+                $('.menuStatement .sidebar-submenu').toggle();
+
+                //$(".menuStatement").click(function () {
+                //});
+
+                Windows.scroll(0);
+
+            });
+
+            $("#btnFiltro").click(function () {
+                if ( $('#statement').css('display') == 'block'){
+                    var input = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "filtro").val("statement");
+                    $('#myForm').append($(input));
+                    $('#myForm').submit();
+                }
+                else if ( $('#rmFluxus').css('display') == 'block'){
+                    var input = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "filtro").val("rmFluxus");
+                    $('#myForm').append($(input));
+                    $('#myForm').submit();
+                }
+                else {
+                    var input = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "filtro").val("conciliacao");
+                    $('#myForm').append($(input));
+                    $('#myForm').submit();
+                }
+
+                $('#myForm').bootstrapValidator({
+                    message: 'No es valido',
+                    framework: 'bootstrap',
+                    feedbackIcons: {
+                        //valid: 'glyphicon glyphicon-ok',
+                        //invalid: 'glyphicon glyphicon-remove',
+                        //validating: 'glyphicon glyphicon-refresh'
+                    },
+                    submitButtons: 'button[name="Filtrar"]',
+                    fields: {
+                        mes: {
+                            validators: {
+                                notEmpt:{
+                                    message: "Digite o mês."
+                                },
+                                stringLength: {
+                                    max: 2,
+                                    message: 'Mês inválido.'
+                                },
+                                integer: {
+                                    message: 'Mês inválido.'
+                                },
+                                between:
+                                    {
+                                        min: 1,
+                                        max: 12,
+                                        message: 'Mês inválido'
+                                    }
+                            }
+                        },
+
+                        ano: {
+                            validators: {
+                                notEmpt:{
+                                    message: "Digite o ano."
+                                },
+                                stringLength: {
+                                    max: 4,
+                                    message: 'Ano inválido.'
+                                },
+                                greaterThan: {
+                                    message: 'Ano deve ser superior ou igual a 2010.',
+                                    min: 2010,
+                                },
+                                integer: {
+                                    message: 'Ano inválido.'
+                                }
+
+                            }
+
+                        }
+                    }
+                })
+
+            });
+
+
+            $('a.modalBTN').click(function () {
+                $('#conciliacaoModal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+            $('a.modalStatement').click(function () {
+                $('#statementModal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+            $('a.modalNovoStatement').click(function () {
+                $('#novoStatementModal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+            $('a.modalExcel').click(function () {
+                $('#modalExcel').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false,
+                    width: 'auto', //probably not needed
+                    height: 'auto', //probably not needed
+                    'max-height': '100%'
+                })
+            });
+
+            function desbloquearPedido(idIntegracao, idMov) {
+                $.ajax({
+                    url: '@Url.Action("DesbloquearPedido", "ImportacaoProduto")',
+                    type: 'get',
+                    data: { idIntegracao: idIntegracao, idMov: idMov },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); }
+                });
+            }
+
+            @*function uploadExcel() {
+                //var arquivo = document.getElementById("uploadBtn").value;
+
+                $.ajax({
+                    url: '@Url.Action("Admin", "StatementImportacao")',
+                    type: 'get',
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); }
+                });*@
+            //}
+
+            $(function () {
+                document.getElementById("uploadBtn").onchange = function () {
+                    document.getElementById("uploadFile").value = this.value.substring(12);
+                    $('#uploadInput').val("statement");
+                };
+
+                document.getElementById("salvarExcel").onclick = function () {
+                    var formdata = new FormData($('#myForm').get(0));
+                    //formData.append('conta', '123');
+                    //formData.append('conta', '123');
+
+                    CallService(formdata);
+                };
+            });
+
+
+
+            function CallService(file) {
+                $.ajax({
+                    url: '@Url.Action("Admin", "StatementImportacao")',
+                    type: 'POST',
+                    data: file,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        alert('Arquivo importado com sucesso!');
+                        $('#myForm').submit();
+                    },
+                    error: function () {
+                        alert('Erro na importação.');
+                    }
+                });
+            }
+
+
+            var divShow = "#" + @Html.Raw(Json.Encode(ViewBag.DivShow));
+
+            $(document).ready(function () {
+                $("#statement").hide();
+                $("#rmFluxus").hide();
+                $("#conciliacao").hide();
+                $(divShow).show();
+                if(divShow == "#conciliacao"){
+                    $('#opcaoConciliacao').css('background', '#205989');
+                }
+                if(divShow == "#rmFluxus"){
+                    $('#opcaoRMFluxus').css('background', '#205989');
+                }
+                if(divShow == "#statement"){
+                    $('#opcaoStatement').css('background', '#205989');
+                }
+
+
+                $("#opcaoStatement").click(function () {
+                    $('#statement').show();
+                    $('#conciliacao').hide();
+                    $('#rmFluxus').hide();
+                });
+
+                $("#opcaoConciliacao").click(function () {
+                    $('#statement').hide();
+                    $('#conciliacao').show();
+                    $('#rmFluxus').hide();
+                });
+
+                $("#opcaoRMFluxus").click(function () {
+                    $('#statement').hide();
+                    $('#conciliacao').hide();
+                    $('#rmFluxus').show();
+                });
+            });
+
+            function populaModal(documentoNo) {
+                $('#documentoNoModal').html(documentoNo);
+            }
+
+            function initializeFileUploads() {
+                $('.file-upload').change(function () {
+                    var file = $(this).val();
+                    $(this).closest('.input-group').find('.file-upload-text').val(file);
+                });
+                $('.file-upload-btn').click(function () {
+                    $(this).find('.file-upload').trigger('click');
+                });
+                $('.file-upload').click(function (e) {
+                    e.stopPropagation();
+                });
+            }
+
+            function salvarNovoStatement(){
+                var conta = $('#contaFiltro').val();
+                var dataBase = $('#dataBaseFiltro').val();
+                //alert(conta);
+                //alert(dataBase);
+                $.ajax({
+                    url: '@Url.Action("SalvarStatement", "StatementImportacao")',
+                    data: {conta : conta, DataBase : dataBase},
+                    cache: false,
+                    contentType: false,
+                    success: function (data) {
+                        alert('Statement salvo com sucesso!');
+                        $('#myForm').submit();
+                    },
+                    error: function () {
+                        alert('Erro na importação.');
+                    }
+                });
+            }
+
+            @*function excluirStatement(id_Statement) {
+                $.ajax({
+                    url: '@Url.Action("excluirStatement", "StatementImportacao")',
+                    type: 'get',
+                    data: { id_Statement: id_Statement },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        alert("Statement excluído com sucesso!");
+                        $('#uploadInput').val("statement");
+                        $('#myForm').submit();
+                    }
+                });
+            }*@
+
+            function preencherModalExcel(idStatement, conta, data_base)
+            {
+                $('#idStatementModal').val(idStatement);
+                $('#contaModalExcel').html(conta);
+                $('#dataBaseModalExcel').html(data_base);
+            }
+
+            @*document.getElementById("btnGerarImagem").onclick = function () {
+                $.ajax({
+                    url: '@Url.Action("GerarImagem", "StatementImportacao")',
+                    type: 'get',
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        alert("Imagem gerada com sucesso!");
+                        $('#uploadInput').val("rmFluxus");
+                        $('#myForm').submit();
+                    }
+                });
+            };*@
+
+            document.getElementById("btnAgendarConciliacao").onclick = function () {
+                var id_statement = $('#statementFiltro').val();
+                var id_RMFluxus = $('#rmFluxusFiltro').val();
+
+                $.ajax({
+                    url: '@Url.Action("AgendarConciliacao", "StatementImportacao")',
+                    data: {idStatement : id_statement, idRMFluxus: id_RMFluxus},
+                    type: 'get',
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        $('#uploadInput').val("conciliacao");
+                        $('#myForm').submit();
+                        return alert(data);
+                    }
+                });
+            };
+
+
+            @*document.getElementById("btnExecutarConciliacao").onclick = function () {
+
+                $.ajax({
+                    url: '@Url.Action("ExecutarConciliacao", "StatementImportacao")',
+                    type: 'get',
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        $('#uploadInput').val("conciliacao");
+                        $('#myForm').submit();
+                        return alert(data);
+                    }
+                });
+            };*@
+
+            @*function excluirStatement(id_Statement) {
+                $.ajax({
+                    url: '@Url.Action("excluirStatement", "StatementImportacao")',
+                    type: 'get',
+                    data: { id_Statement: id_Statement },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        alert("Statement excluído com sucesso!");
+                        $('#uploadInput').val("statement");
+                        $('#myForm').submit();
+                    }
+                });
+            }*@
+
+
+            function excluirStatement(id_Statement, conta, data_base) {
+                if ( confirm("Deseja excluir o statement " + conta + " de " + data_base + "?"))
+                {
+                    $.ajax({
+                        url: '@Url.Action("excluirStatement", "StatementImportacao")',
+                        type: 'get',
+                        data: { id_Statement: id_Statement },
+                        //success: function (data) { $('#exampleModal').toggle(); }
+                        success: function (data) {
+                            alert(data)
+                            $('#uploadInput').val("statement");
+                            $('#myForm').submit();
+                        }
+                    });
+                }
+            }
+
+            function download(id_Statement) {
+
+                    $.ajax({
+                        url: '@Url.Action("download2", "StatementImportacao")',
+                        type: 'get',
+                        data: { id_Statement: id_Statement },
+                        //success: function (data) { $('#exampleModal').toggle(); }
+                        success: function (data) {
+
+                            $('#uploadInput').val("statement");
+                            $('#myForm').submit();
+                        }
+                    });
+               
+            }
+
+            function excluirConciliacao(id_conciliacao, conta, data_base) {
+                if ( confirm("Deseja excluir a conciliação " + conta + " de " + data_base + "?"))
+                {
+                    $.ajax({
+                        url: '@Url.Action("excluirConciliacao", "StatementImportacao")',
+                        type: 'get',
+                        data: { id_conciliacao: id_conciliacao },
+                        //success: function (data) { $('#exampleModal').toggle(); }
+                        success: function (data) {
+                            alert(data)
+                            $('#uploadInput').val("conciliacao");
+                            $('#myForm').submit();
+                        }
+                    });
+                }
+            }
+
+            function excluirRMFluxus(id_RM_Fluxus, data) {
+                if ( confirm("Deseja excluir a imagem " + " de " + data + "?"))
+                {
+                    $.ajax({
+                        url: '@Url.Action("excluirRMFluxus", "StatementImportacao")',
+                        type: 'get',
+                        data: { id_RM_Fluxus: id_RM_Fluxus },
+                        //success: function (data) { $('#exampleModal').toggle(); }
+                        success: function (data) {
+                            alert(data);
+                            $('#uploadInput').val("rmFluxus");
+                            $('#myForm').submit();
+                        }
+                    });
+                }
+            }
+            $('#opcaoConciliacao').click(function(){
+                $('#opcaoConciliacao').css('background', '#205989');
+                $('#opcaoStatement').css('background', '#337ab7');
+                $('#opcaoRMFluxus').css('background', '#337ab7');
+            });
+            $('#opcaoStatement').click(function(){
+                $('#opcaoConciliacao').css('background', '#337ab7');
+                $('#opcaoStatement').css('background', '#205989');
+                $('#opcaoRMFluxus').css('background', '#337ab7');
+            });
+            $('#opcaoRMFluxus').click(function(){
+                $('#opcaoConciliacao').css('background', '#337ab7');
+                $('#opcaoStatement').css('background', '#337ab7');
+                $('#opcaoRMFluxus').css('background', '#205989');
+            });
+          
+        </script>
+
+
+    </body>
+}
+</html>

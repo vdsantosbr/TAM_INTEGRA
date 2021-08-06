@@ -1,0 +1,1215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D9BE4273-5DF7-4791-BC8D-8CEE263D76E1}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TAMINTEGRA</RootNamespace>
+    <AssemblyName>TAMINTEGRA</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>2</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.94.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.94.2\lib\net40\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClosedXML.Extensions.Mvc, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.Extensions.Mvc.0.2.0\lib\net45\ClosedXML.Extensions.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.2.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.2.0\lib\net45\ExcelDataReader.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.2.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.DataSet.3.2.0\lib\net45\ExcelDataReader.DataSet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FastMember, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.3.0\lib\net45\FastMember.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FastMember.Signed, Version=1.3.0.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net45\FastMember.Signed.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.0.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.0.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.0.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.0.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.0.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.0.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MvvmDialogs, Version=5.2.0.0, Culture=neutral, PublicKeyToken=3d3b9708589bc73e, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmDialogs.5.2.0\lib\net45\MvvmDialogs.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.DirectoryServices.Protocols" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\assets\css\style.css" />
+    <Content Include="Content\assets\img\about.jpg" />
+    <Content Include="Content\assets\img\apple-touch-icon.png" />
+    <Content Include="Content\assets\img\departments-1.jpg" />
+    <Content Include="Content\assets\img\departments-2.jpg" />
+    <Content Include="Content\assets\img\departments-3.jpg" />
+    <Content Include="Content\assets\img\departments-4.jpg" />
+    <Content Include="Content\assets\img\departments-5.jpg" />
+    <Content Include="Content\assets\img\doctors\doctors-1.jpg" />
+    <Content Include="Content\assets\img\doctors\doctors-2.jpg" />
+    <Content Include="Content\assets\img\doctors\doctors-3.jpg" />
+    <Content Include="Content\assets\img\doctors\doctors-4.jpg" />
+    <Content Include="Content\assets\img\favicon.png" />
+    <Content Include="Content\assets\img\gallery\gallery-1.jpg" />
+    <Content Include="Content\assets\img\gallery\gallery-2.jpg" />
+    <Content Include="Content\assets\img\gallery\gallery-3.jpg" />
+    <Content Include="Content\assets\img\gallery\gallery-4.jpg" />
+    <Content Include="Content\assets\img\gallery\gallery-5.jpg" />
+    <Content Include="Content\assets\img\gallery\gallery-6.jpg" />
+    <Content Include="Content\assets\img\gallery\gallery-7.jpg" />
+    <Content Include="Content\assets\img\gallery\gallery-8.jpg" />
+    <Content Include="Content\assets\img\hero-bg.jpg" />
+    <Content Include="Content\assets\img\testimonials\testimonials-1.jpg" />
+    <Content Include="Content\assets\img\testimonials\testimonials-2.jpg" />
+    <Content Include="Content\assets\img\testimonials\testimonials-3.jpg" />
+    <Content Include="Content\assets\img\testimonials\testimonials-4.jpg" />
+    <Content Include="Content\assets\img\testimonials\testimonials-5.jpg" />
+    <Content Include="Content\assets\js\main.js" />
+    <Content Include="Content\assets\vendor\animate.css\animate.compat.css" />
+    <Content Include="Content\assets\vendor\animate.css\animate.css" />
+    <Content Include="Content\assets\vendor\animate.css\animate.min.css" />
+    <Content Include="Content\assets\vendor\bootstrap-icons\bootstrap-icons.css" />
+    <Content Include="Content\assets\vendor\bootstrap-icons\index.html" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-grid.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-grid.min.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-grid.rtl.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-grid.rtl.min.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-reboot.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-reboot.min.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-reboot.rtl.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-reboot.rtl.min.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-utilities.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-utilities.min.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-utilities.rtl.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-utilities.rtl.min.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap.rtl.css" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap.rtl.min.css" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.bundle.js" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.bundle.min.js" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.esm.js" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.esm.min.js" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.js" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\assets\vendor\boxicons\css\animations.css" />
+    <Content Include="Content\assets\vendor\boxicons\css\boxicons.css" />
+    <Content Include="Content\assets\vendor\boxicons\css\boxicons.min.css" />
+    <Content Include="Content\assets\vendor\boxicons\css\transformations.css" />
+    <Content Include="Content\assets\vendor\boxicons\fonts\boxicons.svg" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\all.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\all.min.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\brands.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\brands.min.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\fontawesome.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\fontawesome.min.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\regular.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\regular.min.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\solid.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\solid.min.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\svg-with-js.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\svg-with-js.min.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\v4-shims.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\css\v4-shims.min.css" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-brands-400.svg" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-regular-400.svg" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-solid-900.svg" />
+    <Content Include="Content\assets\vendor\glightbox\css\glightbox.css" />
+    <Content Include="Content\assets\vendor\glightbox\css\glightbox.min.css" />
+    <Content Include="Content\assets\vendor\glightbox\js\glightbox.js" />
+    <Content Include="Content\assets\vendor\glightbox\js\glightbox.min.js" />
+    <Content Include="Content\assets\vendor\php-email-form\validate.js" />
+    <Content Include="Content\assets\vendor\purecounter\purecounter.js" />
+    <Content Include="Content\assets\vendor\remixicon\remixicon.css" />
+    <Content Include="Content\assets\vendor\remixicon\remixicon.svg" />
+    <Content Include="Content\assets\vendor\remixicon\remixicon.symbol.svg" />
+    <Content Include="Content\assets\vendor\swiper\swiper-bundle.min.css" />
+    <Content Include="Content\assets\vendor\swiper\swiper-bundle.min.js" />
+    <Content Include="Content\bootstrap-select.css" />
+    <Content Include="Content\bootstrap-sweetalert\sweetalert.css" />
+    <Content Include="Content\bootstrap-sweetalert\sweetalert.min.css" />
+    <Content Include="Content\bootstrap-sweetalert\sweetalert2.js" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrapQueryBuilder.min.css" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\chosen.css" />
+    <Content Include="Content\dataTables.bootstrap4.min.css" />
+    <Content Include="Content\ImportacaoSolPgto.css" />
+    <Content Include="Content\ImportacaoFatura.css" />
+    <Content Include="Content\Estoque.css" />
+    <Content Include="Content\FinanceiroProcesso.css" />
+    <Content Include="Content\geral.css" />
+    <Content Include="Content\indexCompras.css" />
+    <Content Include="Content\indexImportacaoDocumento.css" />
+    <Content Include="Content\indexImportacaoProduto.css" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\query-builder.default.min.css" />
+    <Content Include="Content\Recebimentos\assets\chart-master\Chart.js" />
+    <Content Include="Content\Recebimentos\assets\chart-master\Chart.min.js" />
+    <Content Include="Content\Recebimentos\assets\chart-master\docs\Chart.js" />
+    <Content Include="Content\Recebimentos\assets\chart-master\docs\index.html" />
+    <Content Include="Content\Recebimentos\assets\chart-master\docs\prettify.css" />
+    <Content Include="Content\Recebimentos\assets\chart-master\docs\prettify.js" />
+    <Content Include="Content\Recebimentos\assets\chart-master\docs\styles.css" />
+    <Content Include="Content\Recebimentos\assets\chart-master\samples\bar.html" />
+    <Content Include="Content\Recebimentos\assets\chart-master\samples\doughnut.html" />
+    <Content Include="Content\Recebimentos\assets\chart-master\samples\line.html" />
+    <Content Include="Content\Recebimentos\assets\chart-master\samples\pie.html" />
+    <Content Include="Content\Recebimentos\assets\chart-master\samples\polarArea.html" />
+    <Content Include="Content\Recebimentos\assets\chart-master\samples\radar.html" />
+    <Content Include="Content\Recebimentos\assets\chart-master\samples\sixup.html" />
+    <Content Include="Content\Recebimentos\assets\chart-master\site\assets\6charts.png" />
+    <Content Include="Content\Recebimentos\assets\chart-master\site\assets\Chart.js" />
+    <Content Include="Content\Recebimentos\assets\chart-master\site\assets\effects.js" />
+    <Content Include="Content\Recebimentos\assets\chart-master\site\assets\excanvas.js" />
+    <Content Include="Content\Recebimentos\assets\chart-master\site\assets\html.png" />
+    <Content Include="Content\Recebimentos\assets\chart-master\site\assets\simple.png" />
+    <Content Include="Content\Recebimentos\assets\chart-master\site\index.html" />
+    <Content Include="Content\Recebimentos\assets\chart-master\site\styles.css" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\build-config.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\ckeditor.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\config.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\contents.css" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\af.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ar.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\bg.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\bn.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\bs.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ca.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\cs.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\cy.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\da.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\de.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\el.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\en-au.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\en-ca.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\en-gb.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\en.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\eo.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\es.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\et.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\eu.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\fa.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\fi.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\fo.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\fr-ca.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\fr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\gl.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\gu.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\he.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\hi.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\hr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\hu.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\is.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\it.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ja.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ka.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\km.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ko.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ku.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\lt.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\lv.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\mk.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\mn.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ms.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\nb.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\nl.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\no.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\pl.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\pt-br.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\pt.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ro.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ru.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\sk.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\sl.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\sr-latn.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\sr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\sv.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\th.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\tr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\ug.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\uk.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\vi.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\zh-cn.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\lang\zh.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ar.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\bg.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ca.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\cs.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\cy.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\da.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\de.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\el.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\en.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\eo.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\es.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\et.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\fa.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\fi.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\fr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\gu.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\he.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\hi.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\hr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\hu.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\it.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ja.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ku.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\lt.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\lv.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\mk.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\mn.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\nb.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\nl.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\no.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\pl.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\pt-br.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\pt.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ro.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ru.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\sk.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\sl.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\sv.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\tr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\ug.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\uk.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\vi.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\zh-cn.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\a11yhelp\dialogs\lang\_translationstatus.txt" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\about\dialogs\about.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\about\dialogs\logo_ckeditor.png" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\dialog\dialogDefinition.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\fakeobjects\images\spacer.gif" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\icons.png" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\image\dialogs\image.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\image\images\noimage.png" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\link\dialogs\anchor.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\link\dialogs\link.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\link\images\anchor.png" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\magicline\images\icon.png" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\pastefromword\filter\default.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\scayt\dialogs\options.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\scayt\dialogs\toolbar.css" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\ca.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\cs.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\cy.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\de.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\el.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\en.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\eo.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\et.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\fa.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\fi.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\fr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\he.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\hr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\it.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\ku.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\lv.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\nb.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\nl.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\no.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\pt-br.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\sk.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\sv.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\tr.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\ug.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\zh-cn.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\lang\_translationstatus.txt" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\specialchar\dialogs\specialchar.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\tabletools\dialogs\tableCell.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\table\dialogs\table.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\wsc\dialogs\ciframe.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\wsc\dialogs\tmpFrameset.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\wsc\dialogs\wsc.css" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\wsc\dialogs\wsc.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\ajax.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\api.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\appendto.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\assets\inlineall\logo.png" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\assets\outputxhtml\outputxhtml.css" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\assets\sample.css" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\assets\sample.jpg" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\assets\uilanguages\languages.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\divreplace.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\index.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\inlineall.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\inlinebycode.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\dialog\assets\my_dialog.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\dialog\dialog.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\enterkey\enterkey.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\outputforflash.swf" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\swfobject.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\htmlwriter\outputforflash.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\htmlwriter\outputhtml.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\magicline\magicline.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\toolbar\toolbar.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\wysiwygarea\fullpage.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\readonly.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\replacebyclass.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\replacebycode.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\sample.css" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\sample.js" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\tabindex.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\uicolor.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\uilanguages.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\xhtmlstyle.html" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\styles.js" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\changelog.txt" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\agenda-views.html" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\basic-views.html" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-bg_flat_15_cd0a0a_40x100.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-bg_glass_100_e4f1fb_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-bg_glass_50_3baae3_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-bg_glass_80_d7ebf9_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-bg_highlight-hard_100_f2f5f7_1x100.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-bg_highlight-hard_70_000000_1x100.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-bg_highlight-soft_100_deedf7_1x100.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-bg_highlight-soft_25_ffef8f_1x100.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-icons_2694e8_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-icons_3d80b3_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-icons_72a7cf_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\cupertino\theme.css" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\default.html" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\external-dragging.html" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\gcal.html" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\json.html" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\selectable.html" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\theme.html" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\fullcalendar\bootstrap-fullcalendar.css" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\fullcalendar\fullcalendar.css" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\fullcalendar\fullcalendar.js" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\fullcalendar\fullcalendar.min.js" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\fullcalendar\fullcalendar.print.css" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\fullcalendar\gcal.js" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\GPL-LICENSE.txt" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\jquery\jquery-1.8.1.min.js" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\jquery\jquery-ui-1.8.23.custom.min.js" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\MIT-LICENSE.txt" />
+    <Content Include="Content\Recebimentos\assets\jquery-easy-pie-chart\examples\excanvas.js" />
+    <Content Include="Content\Recebimentos\assets\jquery-easy-pie-chart\examples\index.html" />
+    <Content Include="Content\Recebimentos\assets\jquery-easy-pie-chart\examples\style.css" />
+    <Content Include="Content\Recebimentos\assets\jquery-easy-pie-chart\img\easy-pie-chart.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-easy-pie-chart\jquery.easy-pie-chart.css" />
+    <Content Include="Content\Recebimentos\assets\jquery-easy-pie-chart\jquery.easy-pie-chart.js" />
+    <Content Include="Content\Recebimentos\assets\jquery-knob\index.html" />
+    <Content Include="Content\Recebimentos\assets\jquery-knob\js\jquery.knob.js" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\animated-overlay.gif" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\jquery-ui-1.10.1.custom.css" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\jquery-ui-1.10.1.custom.min.css" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\jquery-ui-1.10.1.custom.min.js" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\jquery-ui-1.10.2.custom.min.js" />
+    <Content Include="Content\Recebimentos\assets\jquery-ui\jquery-ui-1.9.2.custom.min.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\area-as-line.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\area.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\bar-colors.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\bar-no-axes.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\bar.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\days.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\decimal-custom-hover.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\diagonal-xlabels-bar.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\diagonal-xlabels.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\donut-colors.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\donut-formatter.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\donut.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\dst.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\events.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\goals.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\lib\example.css" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\lib\example.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\lib\prettify.css" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\lib\prettify.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\months-no-smooth.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\negative.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\no-grid.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\non-continuous.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\non-date.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\quarters.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\stacked_bars.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\timestamps.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\updating.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\weeks.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\years.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\examples\_template.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\grunt.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\morris.css" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\morris.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\morris.min.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\raphael-min.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\specs.html" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\vendor\chai-1.3.0.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\vendor\chai-jquery-1.1.0.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\vendor\jquery-1.8.2.min.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\vendor\mocha-1.6.0.css" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\vendor\mocha-1.6.0.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\vendor\raphael-2.1.0.min.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\vendor\sinon-1.5.0.js" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\vendor\sinon-chai-2.1.2.js" />
+    <Content Include="Content\Recebimentos\css\bootstrap-colorpicker.css" />
+    <Content Include="Content\Recebimentos\css\bootstrap-datepicker.css" />
+    <Content Include="Content\Recebimentos\css\bootstrap-theme.css" />
+    <Content Include="Content\Recebimentos\css\bootstrap.min.css" />
+    <Content Include="Content\Recebimentos\css\daterangepicker.css" />
+    <Content Include="Content\Recebimentos\css\elegant-icons-style.css" />
+    <Content Include="Content\Recebimentos\css\font-awesome.css" />
+    <Content Include="Content\Recebimentos\css\font-awesome.min.css" />
+    <Content Include="Content\Recebimentos\css\fullcalendar.css" />
+    <Content Include="Content\Recebimentos\css\jquery-jvectormap-1.2.2.css" />
+    <Content Include="Content\Recebimentos\css\jquery-ui-1.10.4.min.css" />
+    <Content Include="Content\Recebimentos\css\line-icons.css" />
+    <Content Include="Content\Recebimentos\css\owl.carousel.css" />
+    <Content Include="Content\Recebimentos\css\style-responsive.css" />
+    <Content Include="Content\Recebimentos\css\style.css" />
+    <Content Include="Content\Recebimentos\css\widgets.css" />
+    <Content Include="Content\Recebimentos\css\xcharts.min.css" />
+    <Content Include="Content\Recebimentos\fonts\ElegantIcons.svg" />
+    <Content Include="Content\Recebimentos\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\Recebimentos\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Recebimentos\img\arrow-up.png" />
+    <Content Include="Content\Recebimentos\img\avatar-mini.jpg" />
+    <Content Include="Content\Recebimentos\img\avatar-mini2.jpg" />
+    <Content Include="Content\Recebimentos\img\avatar-mini3.jpg" />
+    <Content Include="Content\Recebimentos\img\avatar-mini4.jpg" />
+    <Content Include="Content\Recebimentos\img\avatar1.jpg" />
+    <Content Include="Content\Recebimentos\img\avatar1_small.jpg" />
+    <Content Include="Content\Recebimentos\img\bg-1.jpg" />
+    <Content Include="Content\Recebimentos\img\chart-texture.jpg" />
+    <Content Include="Content\Recebimentos\img\chat-avatar.jpg" />
+    <Content Include="Content\Recebimentos\img\chat-avatar2.jpg" />
+    <Content Include="Content\Recebimentos\img\customSelect-arrow.gif" />
+    <Content Include="Content\Recebimentos\img\geekslabs.png" />
+    <Content Include="Content\Recebimentos\img\Germany.png" />
+    <Content Include="Content\Recebimentos\img\icons\line-icon-c.png" />
+    <Content Include="Content\Recebimentos\img\icons\line-icon-hover.png" />
+    <Content Include="Content\Recebimentos\img\icons\line-icon.png" />
+    <Content Include="Content\Recebimentos\img\icons\search-line-icon.png" />
+    <Content Include="Content\Recebimentos\img\icons\social.png" />
+    <Content Include="Content\Recebimentos\img\icons\weather-hover.png" />
+    <Content Include="Content\Recebimentos\img\icons\weather.png" />
+    <Content Include="Content\Recebimentos\img\India.png" />
+    <Content Include="Content\Recebimentos\img\left-arrow.png" />
+    <Content Include="Content\Recebimentos\img\logo-big.png" />
+    <Content Include="Content\Recebimentos\img\mail-avatar.jpg" />
+    <Content Include="Content\Recebimentos\img\profile-avatar.jpg" />
+    <Content Include="Content\Recebimentos\img\profile-widget-avatar.jpg" />
+    <Content Include="Content\Recebimentos\img\right-arrow.png" />
+    <Content Include="Content\Recebimentos\img\Russia.png" />
+    <Content Include="Content\Recebimentos\img\sample-img-1.jpg" />
+    <Content Include="Content\Recebimentos\img\sample-img-2.png" />
+    <Content Include="Content\Recebimentos\img\sample-img-3.png" />
+    <Content Include="Content\Recebimentos\img\search-icon.jpg" />
+    <Content Include="Content\Recebimentos\img\Spain.png" />
+    <Content Include="Content\Recebimentos\img\user.jpg" />
+    <Content Include="Content\Recebimentos\img\user22.png" />
+    <Content Include="Content\Recebimentos\js\additional-methods.min.js" />
+    <Content Include="Content\Recebimentos\js\bootstrap-colorpicker.js" />
+    <Content Include="Content\Recebimentos\js\bootstrap-datepicker.js" />
+    <Content Include="Content\Recebimentos\js\bootstrap-switch.js" />
+    <Content Include="Content\Recebimentos\js\bootstrap-wysiwyg-custom.js" />
+    <Content Include="Content\Recebimentos\js\bootstrap-wysiwyg.js" />
+    <Content Include="Content\Recebimentos\js\bootstrap.js" />
+    <Content Include="Content\Recebimentos\js\bootstrap.min.js" />
+    <Content Include="Content\Recebimentos\js\calendar-custom.js" />
+    <Content Include="Content\Recebimentos\js\chartjs-custom.js" />
+    <Content Include="Content\Recebimentos\js\charts-flot.js" />
+    <Content Include="Content\Recebimentos\js\charts-other.js" />
+    <Content Include="Content\Recebimentos\js\charts-xcharts.js" />
+    <Content Include="Content\Recebimentos\js\charts.js" />
+    <Content Include="Content\Recebimentos\js\daterangepicker.js" />
+    <Content Include="Content\Recebimentos\js\dynamic-table.js" />
+    <Content Include="Content\Recebimentos\js\easy-pie-chart.js" />
+    <Content Include="Content\Recebimentos\js\excanvas.min.js" />
+    <Content Include="Content\Recebimentos\js\form-component.js" />
+    <Content Include="Content\Recebimentos\js\form-validation-script.js" />
+    <Content Include="Content\Recebimentos\js\fullcalendar.js" />
+    <Content Include="Content\Recebimentos\js\fullcalendar.min.js" />
+    <Content Include="Content\Recebimentos\js\ga.js" />
+    <Content Include="Content\Recebimentos\js\gdp-data.js" />
+    <Content Include="Content\Recebimentos\js\gritter.js" />
+    <Content Include="Content\Recebimentos\js\html5shiv.js" />
+    <Content Include="Content\Recebimentos\js\index.js" />
+    <Content Include="Content\Recebimentos\js\jquery-1.8.3.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery-jvectormap-1.2.2.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery-jvectormap-world-mill-en.js" />
+    <Content Include="Content\Recebimentos\js\jquery-ui-1.10.4.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery-ui-1.9.2.custom.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery.autosize.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery.customSelect.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery.flot.pie.js" />
+    <Content Include="Content\Recebimentos\js\jquery.hotkeys.js" />
+    <Content Include="Content\Recebimentos\js\jquery.js" />
+    <Content Include="Content\Recebimentos\js\jquery.localscroll.js" />
+    <Content Include="Content\Recebimentos\js\jquery.nicescroll.js" />
+    <Content Include="Content\Recebimentos\js\jquery.placeholder.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery.rateit.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery.scrollTo.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery.slimscroll.min.js" />
+    <Content Include="Content\Recebimentos\js\jquery.smartWizard.js" />
+    <Content Include="Content\Recebimentos\js\jquery.sparkline-11.js" />
+    <Content Include="Content\Recebimentos\js\jquery.sparkline.js" />
+    <Content Include="Content\Recebimentos\js\jquery.stepy.js" />
+    <Content Include="Content\Recebimentos\js\jquery.tagsinput.js" />
+    <Content Include="Content\Recebimentos\js\jquery.validate.min.js" />
+    <Content Include="Content\Recebimentos\js\lte-ie7.js" />
+    <Content Include="Content\Recebimentos\js\moment.js" />
+    <Content Include="Content\Recebimentos\js\morris-script.js" />
+    <Content Include="Content\Recebimentos\js\morris.min.js" />
+    <Content Include="Content\Recebimentos\js\owl.carousel.js" />
+    <Content Include="Content\Recebimentos\js\scripts.js" />
+    <Content Include="Content\Recebimentos\js\sliders.js" />
+    <Content Include="Content\Recebimentos\js\sparkline-chart.js" />
+    <Content Include="Content\Recebimentos\js\sparklines.js" />
+    <Content Include="Content\Recebimentos\js\xcharts.min.js" />
+    <Content Include="Content\Recebimentos\script\Recebimento.js" />
+    <Content Include="Content\spectrum.css" />
+    <Content Include="Images\Actions-dialog-ok-apply-icon.png" />
+    <Content Include="Images\Actions-user-group-new-icon.png" />
+    <Content Include="Images\Actions-view-conversation-balloon-icon.png" />
+    <Content Include="Images\airplane24.png" />
+    <Content Include="Images\Apps-system-users-icon.png" />
+    <Content Include="Images\Categories-applications-education-university-icon.png" />
+    <Content Include="Images\chat-icon24_2.png" />
+    <Content Include="Images\jquery-ui.css" />
+    <Content Include="Content\jquery.dataTables.min.css" />
+    <Content Include="Content\login.css" />
+    <Content Include="Content\menu.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Images\Actions-arrow-left-double-icon.png" />
+    <Content Include="Images\Actions-arrow-left-icon.png" />
+    <Content Include="Images\Actions-arrow-right-double-icon.png" />
+    <Content Include="Images\Actions-arrow-right-icon.png" />
+    <Content Include="Images\Actions-document-edit-icon.png" />
+    <Content Include="Images\Actions-document-preview-icon.png" />
+    <Content Include="Images\Actions-document-save-icon.png" />
+    <Content Include="Images\Actions-edit-delete-icon.png" />
+    <Content Include="Images\Actions-go-next-icon.png" />
+    <Content Include="Images\Actions-go-previous-icon.png" />
+    <Content Include="Images\Actions-help-about-icon.png" />
+    <Content Include="Images\Actions-im-user-icon.png" />
+    <Content Include="Images\Actions-list-add-icon.png" />
+    <Content Include="Images\Actions-page-zoom-icon.png" />
+    <Content Include="Images\Actions-rating-icon.png" />
+    <Content Include="Images\Actions-view-filter-icon.png" />
+    <Content Include="Images\Actions-view-refresh-icon.png" />
+    <Content Include="Images\Apps-preferences-desktop-printer-icon.png" />
+    <Content Include="Images\Categories-applications-internet-icon.png" />
+    <Content Include="Images\Categories-preferences-system-icon.png" />
+    <Content Include="Images\loading_spinner.gif" />
+    <Content Include="Images\Places-mail-message-icon.png" />
+    <Content Include="Images\Relationship-icon.png" />
+    <Content Include="Images\Status-dialog-warning-icon.png" />
+    <Content Include="Images\TAMBordo.jpg" />
+    <Content Include="Images\TAMBordoHorizontal.jpg" />
+    <Content Include="Images\TAMBordo_small.jpg" />
+    <Content Include="Images\TAMBranco.jpg" />
+    <Content Include="Images\ui-icons_444444_256x240.png" />
+    <Content Include="Images\ui-icons_555555_256x240.png" />
+    <Content Include="Images\ui-icons_777620_256x240.png" />
+    <Content Include="Images\ui-icons_777777_256x240.png" />
+    <Content Include="Images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Images\Users-Group-icon24.png" />
+    <Content Include="scripts\ai.0.22.9-build00167.js" />
+    <Content Include="scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="scripts\bootstrap-select.js" />
+    <Content Include="scripts\bootstrap.bundle.js" />
+    <Content Include="scripts\bootstrap.bundle.min.js" />
+    <Content Include="scripts\bootstrap.js" />
+    <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="scripts\chosen.jquery.js" />
+    <Content Include="scripts\ImportacaoFatura.js" />
+    <Content Include="scripts\Estoque.js" />
+    <Content Include="scripts\FinanceiroProcesso.js" />
+    <Content Include="scripts\geral.js" />
+    <Content Include="scripts\googleChartLoader.js" />
+    <Content Include="scripts\importacaoProduto2.js" />
+    <Content Include="scripts\jquery-1.12.4.js" />
+    <Content Include="scripts\jquery-3.2.1.min.js" />
+    <Content Include="scripts\jquery-ui.js" />
+    <Content Include="Content\simple-donut.css" />
+    <Content Include="scripts\jquery.dataTables.min.js" />
+    <Content Include="scripts\jquery.mask.js" />
+    <Content Include="scripts\query-builder.min.js" />
+    <Content Include="scripts\query-builder.pt-BR.js" />
+    <Content Include="scripts\query-builder.standalone.min.js" />
+    <Content Include="scripts\simple-donut-jquery.js" />
+    <Content Include="scripts\spectrum.js" />
+    <Content Include="Content\assets\vendor\bootstrap-icons\bootstrap-icons.json" />
+    <Content Include="Content\assets\vendor\bootstrap-icons\fonts\bootstrap-icons.woff" />
+    <Content Include="Content\assets\vendor\bootstrap-icons\fonts\bootstrap-icons.woff2" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-grid.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-grid.min.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-grid.rtl.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-grid.rtl.min.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-reboot.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-reboot.rtl.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-reboot.rtl.min.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-utilities.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-utilities.min.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-utilities.rtl.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap-utilities.rtl.min.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap.rtl.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\css\bootstrap.rtl.min.css.map" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.bundle.js.map" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.bundle.min.js.map" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.esm.js.map" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.esm.min.js.map" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.js.map" />
+    <Content Include="Content\assets\vendor\bootstrap\js\bootstrap.min.js.map" />
+    <Content Include="Content\assets\vendor\boxicons\fonts\boxicons.eot" />
+    <Content Include="Content\assets\vendor\boxicons\fonts\boxicons.ttf" />
+    <Content Include="Content\assets\vendor\boxicons\fonts\boxicons.woff" />
+    <Content Include="Content\assets\vendor\boxicons\fonts\boxicons.woff2" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-brands-400.eot" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-brands-400.ttf" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-brands-400.woff" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-brands-400.woff2" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-regular-400.eot" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-regular-400.ttf" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-regular-400.woff" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-regular-400.woff2" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-solid-900.eot" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-solid-900.ttf" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-solid-900.woff" />
+    <Content Include="Content\assets\vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
+    <Content Include="Content\assets\vendor\remixicon\remixicon.eot" />
+    <Content Include="Content\assets\vendor\remixicon\remixicon.less" />
+    <Content Include="Content\assets\vendor\remixicon\remixicon.ttf" />
+    <Content Include="Content\assets\vendor\remixicon\remixicon.woff" />
+    <Content Include="Content\assets\vendor\remixicon\remixicon.woff2" />
+    <Content Include="Content\Recebimentos\assets\chart-master\component.json" />
+    <Content Include="Content\Recebimentos\assets\chart-master\docs\prettify.less" />
+    <Content Include="Content\Recebimentos\assets\chart-master\docs\styles.less" />
+    <Content Include="Content\Recebimentos\assets\chart-master\LICENSE.md" />
+    <Content Include="Content\Recebimentos\assets\chart-master\readme.md" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\CHANGES.md" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\LICENSE.md" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\scayt\LICENSE.md" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\scayt\README.md" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\wsc\LICENSE.md" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\plugins\wsc\README.md" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\README.md" />
+    <Content Include="Content\Recebimentos\fonts\ElegantIcons.eot" />
+    <Content Include="Content\Recebimentos\fonts\ElegantIcons.ttf" />
+    <Content Include="Content\Recebimentos\fonts\ElegantIcons.woff" />
+    <Content Include="Content\Recebimentos\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\Recebimentos\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\Recebimentos\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\Recebimentos\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\Recebimentos\fonts\FontAwesome.otf" />
+    <Content Include="Content\Recebimentos\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Recebimentos\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Recebimentos\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Recebimentos\assets\fullcalendar\demos\json-events.php" />
+    <Content Include="Content\Recebimentos\assets\jquery-easy-pie-chart\jquery.easy-pie-chart.coffee" />
+    <Content Include="Content\Recebimentos\assets\jquery-easy-pie-chart\Makefile" />
+    <Content Include="Content\Recebimentos\assets\jquery-easy-pie-chart\Readme.md" />
+    <Content Include="Content\Recebimentos\assets\jquery-knob\README.md" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\.gitignore" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\.travis.yml" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\component.json" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\less\morris.core.less" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\lib\morris.area.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\lib\morris.bar.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\lib\morris.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\lib\morris.donut.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\lib\morris.grid.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\lib\morris.hover.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\lib\morris.line.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\package.json" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\README.md" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\area\area_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\bar\bar_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\bar\colours.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\commas_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\donut\donut_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\grid\auto_grid_lines_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\grid\set_data_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\grid\y_label_format_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\hover_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\label_series_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\line\line_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\pad_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\lib\parse_time_spec.coffee" />
+    <Content Include="Content\Recebimentos\assets\morris.js-0.4.3\spec\support\placeholder.coffee" />
+    <Content Include="Content\Recebimentos\assets\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\outputforflash.fla" />
+    <Content Include="Content\bootstrap-sweetalert\sweetalert.min.css.map" />
+    <None Include="Service References\WS_Avalara_Connect\ConsumoWS.disco" />
+    <None Include="Service References\WS_Avalara_Connect\configuration91.svcinfo" />
+    <None Include="Service References\WS_Avalara_Connect\configuration.svcinfo" />
+    <None Include="Service References\WS_Avalara_Connect\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\CustomAuthorize.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AtualiaAvalaraController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CasosExcecaoController.cs" />
+    <Compile Include="Controllers\CavokController.cs" />
+    <Compile Include="Controllers\ComposicaoVariacaoController.cs" />
+    <Compile Include="Controllers\CompraFollowUpController.cs" />
+    <Compile Include="Controllers\CompraAprovacaoController.cs" />
+    <Compile Include="Controllers\ConfiguracaoController.cs" />
+    <Compile Include="Controllers\ContabilizacaoController.cs" />
+    <Compile Include="Controllers\ContabilizacaoVariacaoCambialController.cs" />
+    <Compile Include="Controllers\Conta_ContabilController.cs" />
+    <Compile Include="Controllers\ErroController.cs" />
+    <Compile Include="Controllers\FechamentoContabilController.cs" />
+    <Compile Include="Controllers\ImportacaoReceiptController.cs" />
+    <Compile Include="Controllers\ImportacaoSolPgtoDespesasController.cs" />
+    <Compile Include="Controllers\FinanceiroProFormaController.cs" />
+    <Compile Include="Controllers\ImportacaoFaturaController.cs" />
+    <Compile Include="Controllers\ImportacaoSolPgtoController.cs" />
+    <Compile Include="Controllers\EstoqueController.cs" />
+    <Compile Include="Controllers\FinanceiroCambioSYSController.cs" />
+    <Compile Include="Controllers\FinanceiroFaturasController.cs" />
+    <Compile Include="Controllers\FinanceiroDespesasController.cs" />
+    <Compile Include="Controllers\FinanceiroProcessoController.cs" />
+    <Compile Include="Controllers\IntegracaoCambioSysController.cs" />
+    <Compile Include="Controllers\Integracoes.cs" />
+    <Compile Include="Controllers\FinanceiroServicosController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImportacaoDocumentoController.cs" />
+    <Compile Include="Controllers\ImportacaoFornecedorController.cs" />
+    <Compile Include="Controllers\ImportacaoProdutoController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PainelController.cs" />
+    <Compile Include="Controllers\CompraController.cs" />
+    <Compile Include="Controllers\PedidoCompraModalController.cs" />
+    <Compile Include="Controllers\PedidoVendaController.cs" />
+    <Compile Include="Controllers\PerfilController.cs" />
+    <Compile Include="Controllers\PerfilParametroController.cs" />
+    <Compile Include="Controllers\PopulaHistoricoController.cs" />
+    <Compile Include="Controllers\RecebeInformacoesTela_2Controller.cs" />
+    <Compile Include="Controllers\RecebimentoAvalaraController.cs" />
+    <Compile Include="Controllers\RecebimentoAvalaraDetalheController.cs" />
+    <Compile Include="Controllers\RecebimentoAvalaraParte_3Controller.cs" />
+    <Compile Include="Controllers\RecebimentoAvalaraPedidosController.cs" />
+    <Compile Include="Controllers\StatementRelatoriosController.cs" />
+    <Compile Include="Controllers\StatementClassificacaoController.cs" />
+    <Compile Include="Controllers\StatementConciliacaoController.cs" />
+    <Compile Include="Controllers\StatementContasController.cs" />
+    <Compile Include="Controllers\StatementGestaoCreditoController.cs" />
+    <Compile Include="Controllers\StatementImportacaoController.cs" />
+    <Compile Include="Controllers\TesteController.cs" />
+    <Compile Include="Controllers\UsuarioAreaController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Controllers\-UsuarioModuloController.cs" />
+    <Compile Include="Controllers\UsuarioModuloSituacaoController.cs" />
+    <Compile Include="Controllers\UsuarioPerfilController.cs" />
+    <Compile Include="Controllers\UsuarioPerfilSituacaoController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="MessageHandlers\APIKeyHandler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\WS_Avalara_Connect\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Services\UsuarioController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="scripts\bootstrap.bundle.js.map" />
+    <Content Include="scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="scripts\bootstrap.js.map" />
+    <Content Include="scripts\bootstrap.min.js.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Views\Home\Index_old.cshtml" />
+    <Content Include="Views\UsuarioModuloSituacao\Index.cshtml" />
+    <Content Include="Views\Erro\Erro404.cshtml" />
+    <Content Include="Views\UsuarioModuloSituacao\Admin.cshtml" />
+    <Content Include="Views\UsuarioModulo\Index.cshtml" />
+    <Content Include="Views\UsuarioModulo\Admin.cshtml" />
+    <Content Include="Views\UsuarioPerfilSituacao\Index.cshtml" />
+    <Content Include="Views\UsuarioPerfilSituacao\Admin.cshtml" />
+    <Content Include="Views\UsuarioPerfil\Index.cshtml" />
+    <Content Include="Views\UsuarioPerfil\Admin.cshtml" />
+    <Content Include="Views\Usuario\Index.cshtml" />
+    <Content Include="Views\Usuario\Admin.cshtml" />
+    <Content Include="Views\Erro\AcessoNegado.cshtml" />
+    <Content Include="ClassDiagram1.cd" />
+    <None Include="Properties\PublishProfiles\TAMINTEGRA.pubxml" />
+    <Content Include="Views\Home\Detalhe.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\UsuarioArea\Index.cshtml" />
+    <Content Include="Views\UsuarioArea\Admin.cshtml" />
+    <Content Include="Views\Teste\Index.cshtml" />
+    <Content Include="scripts\datatable-pt-br.json" />
+    <Content Include="Views\Shared\FecharJanela.cshtml" />
+    <Content Include="Views\Teste.cshtml" />
+    <Content Include="Views\Compra\PedidoCompra.cshtml" />
+    <Content Include="Views\Compra\Index.cshtml" />
+    <Content Include="Views\PedidoCompraModal\Index.cshtml" />
+    <Content Include="Views\PedidoCompraModal\FiltroPedido.cshtml" />
+    <Content Include="Views\ImportacaoDocumento\Index.cshtml" />
+    <Content Include="Views\ImportacaoProduto\Index.cshtml" />
+    <Content Include="Views\StatementContas\Index.cshtml" />
+    <Content Include="Views\StatementClassificacao\Index.cshtml" />
+    <Content Include="Views\StatementImportacao\Index.cshtml" />
+    <Content Include="Views\StatementConciliacao\Index.cshtml" />
+    <Content Include="Views\StatementConciliacao\PopulaHistorico.cshtml" />
+    <Content Include="Views\StatementGestaoCredito\Index.cshtml" />
+    <Content Include="Views\StatementRelatorios\Index.cshtml" />
+    <Content Include="Views\ImportacaoFornecedor\Index.cshtml" />
+    <Content Include="Views\Cavok\Index.cshtml" />
+    <Content Include="Views\FinanceiroServicos\Index.cshtml" />
+    <Content Include="Views\FinanceiroFaturas\Index.cshtml" />
+    <Content Include="Views\FinanceiroContabilizacoes\Index.cshtml" />
+    <Content Include="Views\Estoque\Index.cshtml" />
+    <Content Include="Views\FinanceiroDespesas\Index.cshtml" />
+    <Content Include="Views\Integracoes\Index.cshtml" />
+    <Content Include="Views\Configuracao\Index.cshtml" />
+    <Content Include="Views\FinanceiroProcesso\Index.cshtml" />
+    <Content Include="Views\FinanceiroCambioSYS\Index.cshtml" />
+    <Content Include="Views\Teste\Modal.cshtml" />
+    <Content Include="Views\Teste\ModalPartial.cshtml" />
+    <Content Include="Views\ImportacaoSolPgto\Index.cshtml" />
+    <Content Include="Views\ImportacaoFatura\Index.cshtml" />
+    <Content Include="Views\ContabilizacaoVariacaoCambial\Index.cshtml" />
+    <Content Include="Views\CompraFollowUp\Index.cshtml" />
+    <Content Include="Views\CompraAprovacao\Index.cshtml" />
+    <Content Include="Views\FinanceiroProForma\Index.cshtml" />
+    <Content Include="Views\ImportacaoSolPgtoDespesas\Index.cshtml" />
+    <Content Include="Views\FechamentoContabil\Index.cshtml" />
+    <Content Include="Views\IntegracaoCambioSys\Index.cshtml" />
+    <Content Include="Views\Casosxcecao\Index.cshtml" />
+    <Content Include="Views\CasosExcecao\Index.cshtml" />
+    <Content Include="Views\ComposicaoVariacao\Index.cshtml" />
+    <Content Include="Views\Contabilizacao\Index.cshtml" />
+    <Content Include="Views\ContaContabil\Index.cshtml" />
+    <Content Include="Views\Conta_Contabil\Index.cshtml" />
+    <Content Include="Views\Contabilizacao2\Index.cshtml" />
+    <Content Include="Views\Perfil\Index.cshtml" />
+    <Content Include="Views\PerfilParametro\Index.cshtml" />
+    <Content Include="Views\ImportacaoReceipt\Index.cshtml" />
+    <Content Include="Views\PedidoVenda\Index.cshtml" />
+    <None Include="Service References\WS_Avalara_Connect\ConsumoWS.wsdl" />
+    <None Include="Service References\WS_Avalara_Connect\ConsumoWS.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WS_Avalara_Connect\ConsumoWS1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WS_Avalara_Connect\ConsumoWS2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Service References\WS_Avalara_Connect\TAMINTEGRA.WS_Avalara_Connect.EventoCTeRespDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\WS_Avalara_Connect\TAMINTEGRA.WS_Avalara_Connect.EventoRespDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Views\AtualiaAvalara\Index.cshtml" />
+    <Content Include="Views\RecebimentoAvalara\Index.cshtml" />
+    <Content Include="Views\RecebimentoAvalaraParte_3\Index.cshtml" />
+    <Content Include="Views\RecebeInformacoesTela_2\Index.cshtml" />
+    <Content Include="Views\RecebimentoAvalaraPedidos\Index.cshtml" />
+    <Content Include="Views\RecebimentoAvalaraPedidos\PedidoRecebido.cshtml" />
+    <Content Include="Views\RecebimentoAvalaraDetalhe\Index.cshtml" />
+    <Content Include="Views\RecebimentoAvalaraPedidos\ShowForm.cshtml" />
+    <Content Include="Views\RecebimentoAvalaraPedidos\PedidoAnalisado.cshtml" />
+    <Content Include="Views\RecebimentoAvalaraPedidos\PedidoAnalisadoSessao.cshtml" />
+    <Content Include="Views\RecebimentoAvalaraDetalhe\DetalhePedido.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Start\App_Data\" />
+    <Folder Include="Models\" />
+    <Folder Include="ViewModel\" />
+    <Folder Include="Views\Base\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Business\Business.csproj">
+      <Project>{28dfe738-f567-44e0-8932-59f4a069c90a}</Project>
+      <Name>Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{5e6bc14e-f579-4734-8b46-5a2350eee8fa}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <Project>{998c2ca2-0fc0-46c4-8eae-fc57ad526431}</Project>
+      <Name>Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QueryBuilder\QueryBuilder.csproj">
+      <Project>{598209e0-a6c8-4cbc-9697-ffc8e0c89ebe}</Project>
+      <Name>QueryBuilder</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\WS_Avalara_Connect\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>51987</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8080/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:8080/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

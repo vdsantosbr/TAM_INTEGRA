@@ -1,0 +1,54 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "TAM AE - TAM Integra";
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+@if (TempData["Mensagem2"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("O seu usuário não possui perfil para acesso a esse sistema." + "\n" + "Por favor, solicitar acesso ao administrador do sistema." + "\n" + "Tecnologia da Informação.");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <script type="text/javascript" src="~/scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="~/scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/login.css" />
+</head>
+<body>
+    
+    <div class="div-login">
+        <div class="form-login-centralizado">
+            <div class="div-form-login">
+
+                <img class="img-logo-tam" src="~/Images/TAMBranco.jpg" />
+
+                @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-signin" }))
+                {
+                    <span id="reauth-email" class="reauth-email"></span>
+                    <input type="text" id="login" name="login" class="form-control" placeholder="Login"  autofocus>
+                    <input type="password" id="senha" name="senha" class="form-control" placeholder="Senha" >
+                    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Entrar</button>
+                }<!-- /form -->
+            </div><!-- /card-container -->
+        </div>
+    </div>
+    
+
+</body>
+</html>

@@ -1,0 +1,399 @@
+﻿@model Entities.RecebimentoViewModel
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var cont = 1;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   
+   
+    <!-- Bootstrap CSS -->
+    <link href="~/content/recebimentos/css/bootstrap.min.css" rel="stylesheet">
+    <!-- bootstrap theme -->
+    <link href="~/content/recebimentos/bootstrap-theme.css" rel="stylesheet">
+    <!--external css-->
+    <!-- font icon -->
+    <link href="~/content/recebimentos/css/elegant-icons-style.css" rel="stylesheet" />
+    <link href="~/content/recebimentos/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- full calendar css-->
+    <link href="~/content/recebimentos/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet" />
+    <link href="~/content/recebimentos/assets/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" />
+    <!-- easy pie chart-->
+    <link href="~/content/recebimentos/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen" />
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="~/content/recebimento/css/owl.carousel.css" type="text/css">
+    <link href="~/content/recebimentos/css/jquery-jvectormap-1.2.2.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="~/content/recebimento/css/fullcalendar.css">
+    <link href="~/content/recebimentos/css/widgets.css" rel="stylesheet">
+    <link href="~/content/recebimentos/css/style.css" rel="stylesheet">    
+    <link href="~/content/recebimentos/css/style-responsive.css" rel="stylesheet" />
+    <link href="~/content/recebimentos/css/xcharts.min.css" rel=" stylesheet">
+    <link href="~/content/recebimentos/css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+    
+
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <script src=" ~/Content/Recebimentos/script/Recebimento.js"></script>
+
+</head>
+<body>
+    <div class="page-wrapper chiller-theme">
+        @*<main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                <div class="stepwizard">
+                    <fieldset>
+                        <legend style="margin-bottom:0;top:0;font-size:18px;">Painel</legend>
+                    </fieldset>
+                </div>
+            </div>
+        </main>*@
+
+        <main class="page-content" style="padding-top:20px">
+            <div class="container-fluid" style="padding-top:0">
+                    
+                <section id="container" class="">
+
+                    <!--sidebar end-->
+                    <!--main content start-->
+                    <section>
+                        <section class="wrapper">
+                            <!--overview start-->
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h3 class="page-header"><i class="fa fa-laptop"></i> Recebimento</h3>
+                                    <ol class="breadcrumb">
+                                        <li><i class="fa fa-home"></i><a href="index.html">TaxDocs</a></li>
+                                        <li><i class="fa fa-laptop"></i>Recebimento</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div style="cursor:pointer; align-content:center; text-align:center">
+
+                                <div class="col-lg-3 col-md-2 col-sm-10 col-xs-10" onclick="window.location='/RecebeInformacoesTela_2/index'" style="align-content:center">
+                                    <div class="info-box blue-bg">
+                                        <i class="fa fa-file-archive-o"></i>
+                                        <div class="count">@Model.Contadores[0].SemPedidoAssociado</div>
+                                        <div class="title">NF SEM VINCULO DE RECEBIMENTO</div>
+                                    </div>
+                                    <!--/.info-box-->
+                                </div>
+                                <!--/.col-->
+
+                                <div class="col-lg-3 col-md-2 col-sm-10 col-xs-10">
+                                    <div class="info-box brown-bg">
+                                        <i class="fa fa-thumbs-down"></i>
+                                        <div class="count">@Model.Contadores[1].SemPedidoAssociado</div>
+                                        <div class="title">NF COM INCONSISTENCIA NO RECEBIMENTO</div>
+                                    </div>
+                                    <!--/.info-box-->
+                                </div>
+                                <!--/.col-->
+
+                                <div class="col-lg-3 col-md-2 col-sm-10 col-xs-10">
+                                    <div class="info-box green-bg ">
+                                        <i class="fa fa-thumbs-o-up"></i>
+                                        <div class="count">0</div>
+                                        <div class="title">NF AGURDANDO INTEGRACAO</div>
+                                    </div>
+                                    <!--/.info-box-->
+                                </div>
+                                <!--/.col-->
+                                @*<div class="col-lg-3 col-md-2 col-sm-10 col-xs-10">
+                <div class="info-box dark-bg_yellow">
+                    <i class="fa fa-bar-chart "></i>
+                    <div class="count">0</div>
+                    <div class="title">NF Integrada</div>
+                </div>
+                <!--/.info-box-->
+            </div>
+            <!--/.col-->*@
+
+                                <div class="col-lg-3 col-md-2 col-sm-10 col-xs-10">
+                                    <div class="info-box dark-bg">
+                                        <i class="fa fa-download"></i>
+                                        <div class="count">0</div>
+                                        <div class="title">NF INTEGRADA</div>
+                                    </div>
+                                    <!--/.info-box-->
+                                </div>
+                                <!--/.col-->
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                  
+                                    <ol class="breadcrumb">
+                                        <h3 class="page-header"><i class="fa fa-search"></i> Filtros para notas em análise</h3>
+                                        <input type="text" id="inputPassword5" class="form-control" placeholder=" Consulte por ( CPNJ / Cliente / NF )" aria-describedby="passwordHelpBlock">                                        
+                                    </ol>
+                                </div>
+                            </div>
+
+
+                           
+
+                           
+                                
+                            <!--inicio Model-->
+                            <div class="modal fade" id="modaldetalhepedido" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg" role="document">
+                                    <div class="modal-content  ">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="TituloModalCentralizado"><strong>DETALHE</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <iframe src="" id="iframecompleteNota" frameborder="0" scrolling="auto" width="900px" height="300px"></iframe>
+                                            <p></p>
+                                            <iframe src="" id="iframecompleteNotaCima" frameborder="0" scrolling="auto" width="900px" height="300px"></iframe>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--inicio Model-->
+
+
+
+                            <div class="row">
+
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h2><i class="fa fa-pencil-square-o"></i><strong>Notas Fiscais</strong></h2>
+                                            @*<div class="panel-actions">
+                                                <a href="index.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
+                                                <a href="index.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+                                                <a href="index.html#" class="btn-close"><i class="fa fa-times"></i></a>
+                                            </div>*@
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table bootstrap-datatable countries">
+                                                <thead>
+                                                    <tr>
+                                                        @*<th></th>*@
+                                                        <th>NF NÚMERO</th>
+                                                        <th>CLIENTE</th>
+                                                        <th>VALOR</th>
+                                                        <th>TIPO DA NOTA</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.recebimentoNota)
+                                                    {
+                                                        <tr>
+                                                            @*<td><img src="img/Germany.png" style="height:18px; margin-top:-2px;"></td>*@
+                                                            <td>@item.NF_NUMERO</td>
+                                                            <td>@item.NOME</td>
+                                                            <td> R$ @string.Format("{0:0,0.00}", Math.Round(Convert.ToDouble(item.NF_VALOR.Replace(".", ","))))</td>
+                                                            <td>
+                                                                @if (item.TIPONFE == "1")
+                                                                {
+                                                                    <span class="badge bg-success">ENTRADA</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="badge badge-pill badge-danger">REMESSA</span>
+                                                                }
+                                                                
+                                                            </td>
+                                                            <td>
+                                                                
+                                                                <a class="btn btn-warning btn-sm" href="#" title="Bootstrap 3 themes generator" onclick="EnviarPedidoAnalisado('@item.ID_AVALARA')">RECEBER</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    @if (Model.recebimentoNota.Count() == 0)
+                                                    {
+                                                        <tr>
+                                                            <td colspan="12" align="left">
+                                                                <div class="alert alert-block alert-danger fade in" style="font-size:larger">
+
+                                                                    <strong>Não há pedidos em ANÁLISE disponíveis.</strong>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                     
+                                                    
+                                                                                  
+                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <!--/col-->
+                             
+                                @*<div class="col-md-3">
+
+                                    <div class="social-box google-plus">
+                                        <i class="fa fa-pie-chart"></i>
+                                        <ul>
+                                            <li >
+                                                <strong>0</strong>
+                                                <span>Pendentes</span>
+                                            </li>     
+                                            <li>
+                                                <strong>0</strong>
+                                                <span>Resolvido</span>
+                                            </li>                                          
+                                        </ul>
+                                    </div>
+                                    /social-box
+
+                                </div>*@
+                               
+
+                            </div>
+
+
+
+                            <!-- statics end -->
+                            <!-- project team & activity start -->
+                            <br><br>
+
+                            
+                            <!-- project team & activity end -->
+
+                        </section>
+                        
+                    </section>
+                    <!--main content end-->
+                </section>
+
+
+
+
+
+
+            </div>
+        </main>
+    </div>
+
+    <!-- javascripts -->
+    <script src="~/Content/Recebimentos/js/jquery.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery-ui-1.10.4.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="~/Content/Recebimentos/js/jquery-ui-1.9.2.custom.min.js"></script>
+    <!-- bootstrap -->
+    <script src="~/Content/Recebimentos/js/bootstrap.min.js"></script>
+    <!-- nice scroll -->
+    <script src="~/Content/Recebimentos/js/jquery.scrollTo.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.nicescroll.js" type="text/javascript"></script>
+    <!-- charts scripts -->
+    <script src="~/Content/Recebimentos/assets/jquery-knob/js/jquery.knob.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.sparkline.js" type="text/javascript"></script>
+    <script src="~/Content/Recebimentos/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+    <script src="~/Content/Recebimentos/js/owl.carousel.js"></script>
+    <!-- jQuery full calendar -->
+    <
+    <script src="~/Content/Recebimentos/js/fullcalendar.min.js"></script>
+    <!-- Full Google Calendar - Calendar -->
+    <script src="~/Content/Recebimentos/assets/fullcalendar/fullcalendar/fullcalendar.js"></script>
+    <!--script for this page only-->
+    <script src="~/Content/Recebimentos/js/calendar-custom.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.rateit.min.js"></script>
+    <!-- custom select -->
+    <script src="~/Content/Recebimentos/js/jquery.customSelect.min.js"></script>
+    <script src="~/Content/Recebimentos/assets/chart-master/Chart.js"></script>
+
+    <!--custome script for all page-->
+    <script src="~/Content/Recebimentos/js/scripts.js"></script>
+    <!-- custom script for this page-->
+    <script src="~/Content/Recebimentos/js/sparkline-chart.js"></script>
+    <script src="~/Content/Recebimentos/js/easy-pie-chart.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="~/Content/Recebimentos/js/xcharts.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.autosize.min.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.placeholder.min.js"></script>
+    <script src="~/Content/Recebimentos/js/gdp-data.js"></script>
+    <script src="~/Content/Recebimentos/js/morris.min.js"></script>
+    <script src="~/Content/Recebimentos/js/sparklines.js"></script>
+    <script src="~/Content/Recebimentos/js/charts.js"></script>
+    <script src="~/Content/Recebimentos/js/jquery.slimscroll.min.js"></script>
+    <script>
+      //knob
+      $(function() {
+        $(".knob").knob({
+          'draw': function() {
+            $(this.i).val(this.cv + '%')
+          }
+        })
+      });
+
+      //carousel
+      $(document).ready(function() {
+        $("#owl-slider").owlCarousel({
+          navigation: true,
+          slideSpeed: 300,
+          paginationSpeed: 400,
+          singleItem: true
+
+        });
+      });
+
+      //custom select box
+
+      $(function() {
+        $('select.styled').customSelect();
+      });
+
+      /* ---------- Map ---------- */
+      $(function() {
+        $('#map').vectorMap({
+          map: 'world_mill_en',
+          series: {
+            regions: [{
+              values: gdpData,
+              scale: ['#000', '#000'],
+              normalizeFunction: 'polynomial'
+            }]
+          },
+          backgroundColor: '#eef3f7',
+          onLabelShow: function(e, el, code) {
+            el.html(el.html() + ' (GDP - ' + gdpData[code] + ')');
+          }
+        });
+      });
+
+        function EnviaCliente(cliente){
+
+        		//alert(cliente);
+
+        $(document).ready(function () {
+
+                var val = cliente;
+                var url = "/RecebimentoAvalaraParte_3/RecebeInformacoesTela_3";
+                alert(val);
+                $.post(url, { cnpj: val }, function (data) {
+                   location='/Recebimento/'
+                });
+
+        });
+
+
+        }
+
+    </script>
+
+    
+
+</body>
+
+</html>

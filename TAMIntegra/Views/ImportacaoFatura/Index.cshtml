@@ -1,0 +1,1054 @@
+﻿@model Entities.ImportacaoFatura
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pedidoModal = (IEnumerable<Entities.Compra>)ViewData["pedidoModal"];
+    var cont = 1;
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+ <style>
+       .icon-stack {
+        position: relative;
+    }
+    .fa {
+        position: relative;
+    }
+    .icon-stack .glyphicon {
+        position: absolute; 
+    }
+    .fa .glyphicon {
+        position: absolute; 
+    }
+ </style>
+</head>
+
+@using (Html.BeginForm("Index", "ImportacaoFatura", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+
+    <body style="overflow:hidden">
+        <input hidden id="itens" value="@Model.lstItens" />
+        <input hidden id="modal" />
+        <input hidden id="dtInicioRep" />
+        <input hidden id="dtFimRep" />
+        <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;width:97%;z-index:100">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:14px;position:relative;">
+                <fieldset>
+                    <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Integração de Fatura (ImportSys) para RM Fluxus</legend>
+                </fieldset>
+            </div>
+        </main>
+
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="height:100vh">
+                <div class="container-fluid" style="padding-top:25px;padding-left: 21px;">
+                    <div class="col-xs-12" style="padding-left:0">
+                        <div class="col-md-12">
+                            <div class="form-horizontal">
+                                <form role="form">
+
+                                    <fieldset>
+
+                                        @*<legend>Integração com fornecedor</legend>*@
+                                        <br />
+                                        <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ stle="position:absolute;top:70px;width:97%">
+
+                                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Filtro - Fatura
+                                                </div>
+                                                <div class="panel-body" style="padding-bottom:0;">
+                                                    <div style="display:flex;justify-content:space-between;padding-bottom:10px">
+                                                        <div style="position:relative;z-index:99">
+                                                            <label class="form-negrito">Data início</label>
+                                                            @Html.Editor("strDataInicio", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", id = "strDataInicio", @onchange = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })
+                                                            <div style="color: red" id="dtIniciDivErro">
+                                                            </div>
+                                                        </div>
+                                                        <div style="position:relative;z-index:99">
+                                                            @Html.Label("Data fim", new { @class = "form-negrito" })
+                                                            @Html.Editor("strDataFim", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                            <div style="color: red" id="dtFimDivErro">
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            @Html.Label("Tipo de Fatura", new { @class = "form-negrito" })
+                                                            @Html.DropDownList("tipoFatura", (SelectList)ViewBag.TipoFatura, "-- Selecione -- ", new { @style = "width:60%;height:26px", @class = "chosen-select" })
+                                                            @*<select class="chosen-select" id="tipoFatura" name="tipoFatura">
+                                                                <option selected>-- Selecione --</option>
+                                                                <option value="0">Pró-Forma</option>
+                                                                <option value="1">Comercial</option>
+                                                                <option value="2">Cancelada</option>
+                                                                <option value="3">Comercial X Pró-Forma</option>
+                                                            </select>*@
+                                                        </div>
+                                                        <div>
+                                                            <label>Processo</label>
+                                                            @Html.Editor("processo", new { htmlAttributes = new { @style = "width:150px;height:26px", @class = "form-control", @autocomplete = "off" } })
+                                                        </div>
+                                                        <div>
+                                                            <label>D.I.</label>
+                                                            @Html.Editor("numDI", new { htmlAttributes = new { @style = "width:120px;height:26px", @class = "form-control", @autocomplete = "off" } })
+                                                        </div>
+                                                        <div>
+                                                            <label>Invoice</label>
+                                                            @Html.Editor("numInvoice", new { htmlAttributes = new { @style = "width:125px;height:26px", @class = "form-control", @autocomplete = "off" } })
+                                                        </div>
+                                                        <div>
+                                                            @Html.Label("Situação", new { @class = "form-negrito" })
+                                                            <select name="situacao" class="chosen-select">
+                                                                <option disabled selected>-- Selecione --</option>
+                                                                <option>Não Integrado</option>
+                                                                <option>Integrado</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div style="padding-top:16px">
+                                                            <button class="btn btn-primary btn-sm" id="btnFiltrar" name="exibir" type="button">Exibir</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            @*<legend>Selecionar pedidos de compra</legend>*@
+                                            <br />
+                                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Fatura
+                                                </div>
+                                                <div class="panel-body" style="padding-bottom: 0;margin-bottom:0">
+                                                    @if (Model != null)
+                                                    {
+                                                        @*<div class="outer" style="height:100%">
+                                                            <div class="middle" style="width:1250px;height:100%">
+                                                                <div class="inner" style="width:2500px;height:100%">
+                                                                    <div class="tableFixHead">
+                                                                        <table class="table table-striped" id="tblItens">
+                                                                            <thead>
+                                                                                <tr>
+
+                                                                                    <th style="text-align:center;min-width: 90px;">IntegrarRM</th>
+                                                                                    <th class="sticky-col second-col"style="text-align:center;min-width: 100px;">Processo</th>
+                                                                                    <th class="sticky-col third-col" style="text-align:center;min-width:50px">ID</th>
+                                                                                    <th class="sticky-col fourth-col" style="text-align:center">NúmNF</th>
+                                                                                    <th class="sticky-col quinta-col" style="text-align:center">Situação</th>
+                                                                                    <th style="text-align:center;min-width:125px">Emissão</th>
+                                                                                    <th style="text-align:center;min-width:125px">Rec. Físico</th>
+                                                                                    <th style="text-align:center;min-width: 70px">Vl. Fatura</th>
+                                                                                    <th style="text-align:center;;min-width: 60px">Taxa DI</th>
+                                                                                    <th style="text-align:center">II</th>
+                                                                                    <th style="text-align:center">COFINS</th>
+                                                                                    <th style="text-align:center">IPI</th>
+                                                                                    <th style="text-align:center">PIS</th>
+                                                                                    <th style="text-align:center;min-width:125px">Frete Internacional</th>
+                                                                                    <th style="text-align:center">Seguro</th>
+                                                                                    <th style="text-align:center;min-width: 80px">Vl. Produto</th>
+                                                                                    <th style="text-align:center">ICMS</th>
+                                                                                    <th style="text-align:center;min-width: 70px">Vl. Nota</th>
+                                                                                    <th style="text-align:center;min-width:155px">Desp. Complementares</th>
+                                                                                    <th style="text-align:center;min-width:100px">Vl. Rec. Físico</th>
+                                                                            </thead>
+                                                                            <tbody>*@
+                                                        @*a nota nr numid sera integrada no rm.
+                                                            Deseja continuar?*@
+                                                        @*@if (Model.lstItens != null)
+                                                                        {
+                                                                            foreach (Entities.Estoque item in Model.lstItens)
+                                                                            {
+                                                                                cont += 1;
+
+                                                                                if (cont % 2 == 0)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td hidden style="text-ali gn:center">@item.Id_Integracao</td>
+                                                                                        <td class="sticky-col first-col border" style="vertical-align:top;text-align:center;background-color:#f9f9f9;background-clip: padding-box">
+                                                                                            <a class="btn modalExcel" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Este procedimento gera uma nova integração para a fatura @item.Id_Integracao. Deseja continuar?'))  Reprocessar(@item.Id_Integracao, @item.NUMNF_BrokerSys, @item.ID_BrokerSys)"></span></a>
+                                                                                        </td>
+                                                                                        <td class="sticky-col second-col" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.NF_COD_PROCESSO</td>
+                                                                                        <td class="sticky-col third-col" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.ID_BrokerSys</td>
+                                                                                        <td class="sticky-col fourth-col" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.NUMNF_BrokerSys</td>
+                                                                                        <td  class="sticky-col quinta-col sitTblItens" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.iNTEGRACAO</td>
+                                                                                        <td style="text-align:center">@item.EMISSAO</td>
+                                                                                        <td style="text-align:center">@item.RECFISICO</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.TAXA_DI)</td>
+                                                                                        <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.II)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.COFINS)</td>
+                                                                                        <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.IPI)</td>
+                                                                                        <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.PIS)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.FreteInter)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.Seguro)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.ICMS)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Nota)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>
+                                                                                    </tr>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                    <tr>
+                                                                                        <td hidden style="text-align:center">@item.Id_Integracao</td>
+                                                                                        <td class="sticky-col first-col" style="vertical-align:top;text-align:center;background-clip: padding-box">
+
+                                                                                            <a class="btn modalExcel" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Este procedimento gera uma nova integração para a fatura @item.Id_Integracao. Deseja continuar?'))  Reprocessar(@item.Id_Integracao, '@item.NUMNF_BrokerSys', '@item.ID_BrokerSys')"></span></a>
+
+                                                                                        </td>
+                                                                                        <td class="sticky-col second-col" style="vertical-align:top;text-align:center;background-clip: padding-box">@item.NF_COD_PROCESSO</td>
+                                                                                        <td class="sticky-col third-col" style="text-align:center;background-clip: padding-box">@item.ID_BrokerSys</td>
+
+                                                                                        <td class="sticky-col fourth-col" style="text-align:center;background-clip: padding-box">@item.NUMNF_BrokerSys</td>
+                                                                                        <td class="sticky-col quinta-col" style="text-align:center;background-color:white;background-clip: padding-box">@item.iNTEGRACAO</td>
+                                                                                        <td style="text-align:center">@item.EMISSAO</td>
+                                                                                        <td style="text-align:center">@item.RECFISICO</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.TAXA_DI)</td>
+                                                                                        <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.II)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.COFINS)</td>
+                                                                                        <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.IPI)</td>
+                                                                                        <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.PIS)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.FreteInter)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.Seguro)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.ICMS)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Nota)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                        <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>
+                                                                                    </tr>
+                                                                                    }
+
+                                                                            }
+                                                                        }
+
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>*@
+
+                                                        //teste
+                                                        <div class="tableFixHead" style="overflow:auto;height:1%;max-height:384px">
+                                                            <table class="table table-striped" id="tblItens">
+                                                                <thead>
+                                                                    <tr>
+
+                                                                        <th style="text-align:center;min-width: 90px;">Integração</th>
+                                                                        <th class="sticky-col second-col" style="text-align:center;min-width: 90px;">CancelarRM</th>
+                                                                        <th class="sticky-col third-col" style="text-align:center;min-width: 100px;">Processo</th>
+                                                                        <th class="sticky-col fourth-col" style="text-align:center;min-width:100px">ID(fatura)</th>
+                                                                        <th class="sticky-col quinta-col" style="text-align:center;min-width:120px">Invoice</th>
+                                                                        <th class="sticky-col sexta-col" style="text-align:center">Situação</th>
+                                                                        <th style="text-align:center;min-width:125px">Emissão</th>
+                                                                        <th style="text-align:center;min-width:125px">Rec. Fin</th>
+                                                                        <th style="text-align:center;min-width:125px">Ref. Fin</th>
+                                                                        <th style="text-align:center;min-width:125px">Status Fin</th>
+                                                                        <th style="text-align:center;min-width: 280px">Exportador</th>
+                                                                        <th style="text-align:center;min-width: 145px">Tipo</th>
+                                                                        <th style="text-align:center;;min-width: 180px">Cond. Pgto.</th>
+                                                                        <th style="text-align:center">Moeda</th>
+                                                                        <th style="text-align:right">Valor</th>
+
+                                                                </thead>
+                                                                <tbody>
+                                                                    @*a nota nr numid sera integrada no rm.
+                                                                        Deseja continuar?*@
+                                                                    @if (Model.lstItens != null)
+                                                                    {
+                                                                        foreach (Entities.ImportacaoFatura item in Model.lstItens)
+                                                                        {
+                                                                            cont += 1;
+                                                                            //for (int i = 0; i < Model.lstItens.Count; i++)
+                                                                            //{
+                                                                            if (cont % 2 == 0)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td hidden style="text-align:center">@item.Id_Integracao</td>
+                                                                                    <td hidden style="text-align:center">@item.FAT_FATURA_ID</td>
+                                                                                    @if (item.Exibir_Check == "S")
+                                                                                    {
+                                                                                        <td class="sticky-col first-col border" style="vertical-align:top;text-align:center;background-color:#f9f9f9;background-clip: padding-box">
+                                                                                            <a class="btn" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('A nota @item.FAT_FATURA_ID será integrada no RM. Deseja continuar?'))  Reprocessar(@item.Id_Integracao, @item.FAT_FATURA_ID)"></span></a>
+                                                                                            @*<a class="btn" style="padding:0" title="Reprocessar"><span class="fa fa-trash" style="font-size:16px;" onclick="if(confirm('A nota @item.FAT_FATURA_ID será cancelada no RM. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.FAT_FATURA_ID')"></span></a>*@
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="sticky-col first-col border" style="vertical-align:top;text-align:center;background-color:#f9f9f9;background-clip: padding-box"></td>
+                                                                                    }
+                                                                                    @if (item.Exibir_Check == "S")
+                                                                                    {
+                                                                                        <td class="sticky-col second-col border" style="vertical-align:top;text-align:center;background-color:#f9f9f9;background-clip: padding-box">
+                                                                                            @*<a class="btn" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('A nota @item.FAT_FATURA_ID será integrada no RM. Deseja continuar?'))  Reprocessar(@item.Id_Integracao, @item.FAT_FATURA_ID)"></span></a>*@
+                                                                                            @*<a class="btn" style="padding:0" title="Cancelar"><span class="fa fa-trash" style="font-size:16px;" onclick="if(confirm('A nota @item.FAT_FATURA_ID será cancelada no RM. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.FAT_FATURA_ID')"></span></a>*@
+                                                                                            <a>
+                                                                                                <span class="icon-stack" style="left:5px" onclick="if(confirm('A nota @item.FAT_FATURA_ID será cancelada no RM. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.FAT_FATURA_ID')">
+                                                                                                    @*<i class="fa fa-file-alt" style="font-size:12px;color:white;text-shadow: -2px 0 #337ab7, 0 2px #337ab7, 2px 0 #337ab7, 0 -2px #337ab7"></i>*@
+                                                                                                    <i class="fa fa-file-alt" style="font-size:16px;"></i>
+                                                                                                    <i class="fa fa-times" style="font-size:10px;color:red;top:4px;left:-8px"></i>
+                                                                                                </span>
+                                                                                            </a>
+                                                                                         </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="sticky-col second-col border" style="vertical-align:top;text-align:center;background-color:#f9f9f9;background-clip: padding-box"></td>
+                                                                                    }
+
+
+                                                                                    <td class="sticky-col third-col" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.FAT_COD_PROCESSO</td>
+                                                                                    <td class="sticky-col fourth-col" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.FAT_FATURA_ID</td>
+                                                                                    <td class="sticky-col quinta-col" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.FAT_NUM_FATURA</td>
+                                                                                    <td class="sticky-col sexta-col sitTblItens" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.iNTEGRACAO</td>
+                                                                                    <td style="text-align:center">@item.FAT_DATA_FATURA.ToString("dd/MM/yyyy")</td>
+                                                                                    <td style="text-align:center">@item.REC_FIN</td>
+                                                                                    <td style="text-align:center">@item.REF_FIN</td>
+                                                                                    <td style="text-align:center">@item.STATUS_FIN</td>
+                                                                                    <td style="text-align:center">@item.FAT_COD_EXPORTADOR</td>
+                                                                                    <td style="text-align:center">@item.FAT_TIPO_FATURA</td>
+                                                                                    <td style="text-align:center">@item.FAT_COND_PAGTO</td>
+                                                                                    <td style="text-align:center">@item.FAT_COD_MOEDA</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.FAT_VMCV_TOTAL)</td>
+                                                                                </tr>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <tr>
+                                                                                    <td hidden style="text-align:center">@item.Id_Integracao</td>
+                                                                                   @if (item.Exibir_Check == "S")
+                                                                                   {
+                                                                                        <td class="sticky-col first-col" style="vertical-align:top;text-align:center;background-clip: padding-box">
+                                                                                            <a class="btn modalExcel" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('A nota @item.FAT_FATURA_ID será integrada no RM. Deseja continuar?'))  Reprocessar(@item.Id_Integracao, '@item.NUMNF_BrokerSys', '@item.ID_BrokerSys')"></span></a>
+                                                                                            @*<a class="btn modalExcel" style="padding:0" title="Reprocessar"><span class="fa fa-trash" style="font-size:16px;" onclick="if(confirm('A nota @item.FAT_FATURA_ID será cancelada no RM. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.FAT_FATURA_ID')"></span></a>*@
+                                                                                         </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="sticky-col first-col" style="vertical-align:top;text-align:center;background-clip: padding-box"></td>
+                                                                                    }
+                                                                                   @if (item.Exibir_Check == "S")
+                                                                                   {
+                                                                                        <td class="sticky-col second-col border" style="vertical-align:top;text-align:center;background-clip: padding-box">
+                                                                                            @*<a class="btn" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('A nota @item.FAT_FATURA_ID será integrada no RM. Deseja continuar?'))  Reprocessar(@item.Id_Integracao, @item.FAT_FATURA_ID)"></span></a>*@
+                                                                                            @*<a class="btn" style="padding:0" title="Cancelar"><span class="fa fa-trash" style="font-size:16px;" onclick="if(confirm('A nota @item.FAT_FATURA_ID será cancelada no RM. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.FAT_FATURA_ID')"></span></a>*@
+                                                                                            <a>
+                                                                                                <span class="icon-stack" style="left:5px" onclick="if(confirm('A nota @item.FAT_FATURA_ID será cancelada no RM. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.FAT_FATURA_ID')">
+                                                                                                    @*<i class="fa fa-file-alt" style="font-size:12px;color:white;text-shadow: -2px 0 #337ab7, 0 2px #337ab7, 2px 0 #337ab7, 0 -2px #337ab7"></i>*@
+                                                                                                    <i class="fa fa-file-alt" style="font-size:16px;"></i>
+                                                                                                    <i class="fa fa-times" style="font-size:10px;color:red;top:4px;left:-8px"></i>
+                                                                                                </span>
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="sticky-col second-col border" style="vertical-align:top;text-align:center;background-clip: padding-box"></td>
+                                                                                    }
+                                                                                    <td class="sticky-col third-col" style="vertical-align:top;text-align:center;background-clip: padding-box">@item.FAT_COD_PROCESSO</td>
+                                                                                    <td class="sticky-col fourth-col" style="text-align:center;background-clip: padding-box">@item.FAT_FATURA_ID</td>
+                                                                                    @*<td style="text-align:center">@item.VENCIMENTO.AsDateTime().ToString("dd/MM/yyyy")</td>*@
+                                                                                    <td class="sticky-col quinta-col" style="text-align:center;background-clip: padding-box">@item.FAT_NUM_FATURA</td>
+                                                                                    <td class="sticky-col sexta-col" style="text-align:center;background-color:white;background-clip: padding-box">@item.iNTEGRACAO</td>
+                                                                                    <td style="text-align:center">@item.FAT_DATA_FATURA.ToString("dd/MM/yyyy")</td>
+                                                                                    <td style="text-align:center">@item.REC_FIN</td>
+                                                                                    <td style="text-align:center">@item.REF_FIN</td>
+                                                                                    <td style="text-align:center">@item.STATUS_FIN</td>
+                                                                                    <td style="text-align:center">@item.FAT_COD_EXPORTADOR</td>
+                                                                                    <td style="text-align:center">@item.FAT_TIPO_FATURA</td>
+                                                                                    <td style="text-align:center">@item.FAT_COND_PAGTO</td>
+                                                                                    <td style="text-align:center">@item.FAT_COD_MOEDA</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.FAT_VMCV_TOTAL)</td>
+                                                                                </tr>
+                                                                            }
+                                                                            //}
+
+
+
+                                                                            @*<td><a class="modalBTN" style="padding:0;font-size:12px;text-decoration:none;color:black;font-size:14px;pointer-events:none">@item.NUMEROMOV</a></td>*@
+
+                                                                        }
+                                                                    }
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    }
+                                                    @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Continuar</button>*@
+                                                </div>
+
+
+                                            </div>
+                                            @*teste*@
+
+
+
+
+                                        </div>
+
+                                    </fieldset>
+                                </form>
+                            </div><!-- /.modal-dialog -->
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+
+        <!-- Modal -->
+        @*@if (Model != null)
+            {
+                if (Model.lstInforme != null)
+                {*@
+        <div class="modal fade" id="modalInformativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel"><span id="credor_Modal"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Documento: <span id="documento_Modal"></span>
+                            </div>
+                            <table class="table table-hover  table-bordered">
+                                <tr>
+                                    <td>Processo: <span id="processo_Modal"> </span></td>
+                                    <td>Cadastro: <span id="cadastro_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Liberação: <span id="liberação_Modal"> </span></td>
+                                    <td>Vencimento: <span id="vencimento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Despesa: <span id="despesa_Modal"> </span></td>
+                                    <td>Documento: <span id="documento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Série: <span id="serie_Modal"> </span></td>
+                                    <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Código Credor Despesa: <span id="cod_Credor_Modal"> </span></td>
+                                    <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Valor Previsto Despesa: <span id="vr_previsto_despesa_Modal"> </span></td>
+                                    <td>Valor Adiantado Despesa: <span id="vr_adiantado_despesa_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Valor Real Despesa: <span id="valor_real_Modal"> </span></td>
+                                    <td>Valor a Pagar Despesa: <span id="valor_pagar_despesa_Modal"> </span></td>
+                                </tr>
+                            </table>
+
+                        </div>
+                        <br />
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Processo: <span id="processo_integracao_Modal"></span>
+                            </div>
+                            <table class="table table-hover  table-bordered" width="100%">
+                                <tr>
+                                    <td colspan="3">Integração: <span id="integracao_Modal"> </span></td>
+                                    <td colspan="3">ID: <span id="id_Modal"> </span></td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Data: <span id="data_Modal"> </span></td>
+                                    <td colspan="3"> Situação: <span id="situacao_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Tipo: <span id="tipo_Modal"> </span></td>
+                                    <td colspan="3">Complemento: <span id="complemento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" width="33%">ID INT: <span id="idint_Modal"> </span></td>
+                                    <td colspan="2" width="33%">COD TMV INT: <span id="codtmvint_Modal"> </span></td>
+                                    <td colspan="2" width="33%">Chave Origem Int: <span id="chave_origem_int_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" width="33%">Identificador: <span id="identificador_Modal"> </span></td>
+                                    <td colspan="2" width="33%">Movimento: <span id="movimento_Modal"> </span></td>
+                                    <td colspan="2" width="33%">Núm. Movimento: <span id="numMovimento_Modal"> </span></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <br />
+
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Considerações
+                            </div>
+                            <table class="table table-hover  table-bordered" width="100%">
+                                <tr id="corConsideracoes" width="100%">
+                                    <td colspan="6"><div class="pre-scrollable" id="consideracoes"></div></td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                        <div class="modal-footer" style="padding:5px;">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="modalReprocessarItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel">Reprocessamento para fatura  <span id="id_fatura"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span id="comentario_Modal"></span>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalReprocessarItens" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel">Reprocessamento para fatura  <span id="id_fatura_rep"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="tblReprocessar">
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalAguardar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel"> <span id="id_fatura"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Aguarde
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalOK" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel"> <span id="id_fatura"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ok
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        @*<script>
+                $(document).ready(function () {
+
+                    var navListItems = $('div.setup-panel div a'),
+                            allWells = $('.setup-content'),
+                            allNextBtn = $('.nextBtn');
+
+                    allWells.hide();
+
+                    navListItems.click(function (e) {
+                        e.preventDefault();
+                        var $target = $($(this).attr('href')),
+                            $item = $(this);
+                        if (!$item.hasClass('disabled')) {
+                            //navListItems.removeClass('btn-primary').addClass('btn-default');
+                            if ($item.attr('id') != $(navListItems[1]).attr('id')) {
+                                $(navListItems[1]).removeClass('btn-primary').addClass('btn-success');
+                            }
+                            //$('#item3').addClass('btn-success');
+                            $item.addClass('btn-primary');
+                            allWells.hide();
+                            $target.show();
+                            $target.find('input:eq(0)').focus();
+                        }
+                    });
+
+                    allNextBtn.click(function () {
+                        var curStep = $(this).closest(".setup-content"),
+                            curStepBtn = curStep.attr("id"),
+                            nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                            curInputs = curStep.find("input[type='text'],input[type='url'], input[type='password'], input[type='email']"),
+                            isValid = true;
+
+                        $(".form-group").removeClass("has-error");
+                        for (var i = 0; i < curInputs.length; i++) {
+                            if (!curInputs[i].validity.valid) {
+                                isValid = false;
+                                $(curInputs[i]).closest(".form-group").addClass("has-error");
+                            }
+                        }
+
+                        if (isValid)
+                            nextStepWizard.removeAttr('disabled').trigger('click');
+                    });
+
+                    $('div.setup-panel div a.btn-primary').trigger('click');
+                });
+            </script>*@
+
+        <script>
+
+                $(document).ready(function () {
+                    @*var height = screen.height;
+                    var lstItens = @Html.Raw(Json.Encode(Model.lstItens));
+                    if (lstItens.length > 0)
+                    {
+
+                        $('.inner').css('height', height/2 + 'px');
+                    }*@
+                    //else
+                    //{
+                    //    alert('2')
+                    //    $('.inner').css('height', '50px');
+                    //}
+
+
+
+                    allWells = $('#Security-Setup-step'),
+                    allWells2 = $('#VerifyEmail-step')
+                    //,allNextBtn = $('.nextBtn');
+
+                    allWells.hide();
+                    allWells2.hide();
+
+                    var menuAtivo = $('#menuAtivo').val();
+                    $('.menuEstoque .sidebar-submenu').toggle();
+                });
+
+
+                $('.consultaPedido').click(function () {
+                    $(".divConsultaPedido").toggle();
+                    $(".divParametrosPedido").toggle();
+                });
+
+                $('a.modalBTN').click(function () {
+                    $('#my-modal').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                });
+
+
+
+
+                $('#opcoesImportacaoRegular *').attr("disabled", true);
+
+                $('#importacaoRegularInput').click(function () {
+                    //$('#opcoesImportacaoRegular').show();
+                    $('#opcoesImportacaoRegular *').attr("disabled", false);
+                });
+                $('#depositoEspecialInput').click(function () {
+                    //$('#opcoesImportacaoRegular').hide();
+                    $('#opcoesImportacaoRegular *').attr("disabled", true);
+                });
+        </script>
+
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        <link href="~/content/indexcompras.css" rel="stylesheet" />
+        <link href="~/content/ImportacaoFatura.css" rel="stylesheet" />
+        <script type="text/javascript" src="~/scripts/ImportacaoFatura.js"></script>
+        <script>
+                $(window).load(function () {
+                    $(".chosen-select").chosen()
+                });
+        </script>
+
+        <script>
+                $(function () {
+                    //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' }).val();
+                    //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' });
+                    $(".datepickerInput").datepicker({
+                        dateFormat: 'dd/mm/yy',
+                        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        nextText: 'Próximo',
+                        prevText: 'Anterior'
+                    });
+
+                });
+                function isValidDate(date, campo) {
+
+                    var regEx = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+
+                    if (regEx.test(date) == true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+
+                $('#btnFiltrar').click(function () {
+                    var dtInicio = $('#strDataInicio').val();
+                    var dtFim = $('#strDataFim').val();
+                    var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "exibir").val("exibir");
+                    $('#myForm').append($(input));
+
+
+                    if ((dtInicio == "" || dtInicio == null) || (dtFim == "" || dtFim == null)) {
+                        if ((dtInicio == "" || dtInicio == null)) {
+                            $('#dtIniciDivErro').text('Selecione a data início.');
+                        }
+                        if ((dtFim == "" || dtFim == null)) {
+                            $('#dtFimDivErro').text('Selecione a data fim.');
+                        }
+                        $("#btnFiltrar").attr("disabled", true)
+                    }
+                    else {
+
+                        var validaDTInicio = isValidDate(dtInicio, 'strDataInicio');
+
+                        var validaDTFim = isValidDate(dtFim, 'strDataFim');
+
+                        if (validaDTInicio == true & validaDTFim == true) {
+                            $("#btnFiltrar").attr("disabled", false)
+                            document.getElementById("myForm").submit();
+                        }
+                        else {
+                            if (validaDTInicio == false) {
+                                $('#dtIniciDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                            if (validaDTFim === false) {
+                                $('#dtFimDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                        }
+
+                    }
+                })
+
+                $("#strDataInicio").keyup(function () {
+                    $('#dtIniciDivErro').text('');
+                    $("#btnFiltrar").attr("disabled", false)
+                });
+
+                $("#strDataFim").keyup(function () {
+                    $('#dtFimDivErro').text('');
+                    $("#btnFiltrar").attr("disabled", false);
+                });
+
+
+                function Informativo(id_integracao, sp_id, sp_id_despesa_processo) {
+                    $.ajax({
+                        url: '@Url.Action("Informativo", "FinanceiroDespesas")',
+                        //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                        //dataType: "json",
+                        traditional: true,
+                        //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                        data: { id_integracao, sp_id, sp_id_despesa_processo},
+                        contentType: 'json',
+
+                        success: function (response) {
+                            var credor = response[0].Credor;
+                            var processo = response[0].Processo;
+                            var cadastro = response[0].Cadastro;
+                            var liberacao = response[0].Liberacao;
+                            var vencimento = response[0].Vencimento;
+                            var despesa = response[0].Despesa;
+                            var documento = response[0].Documento;
+                            var serie = response[0].Serie;
+                            var moeda = response[0].Moeda;
+                            var codDespesa = response[0].CodCredorDespesa;
+                            var vrDespesa = response[0].VrPrevistoDespesa;
+                            vrDespesa = vrDespesa != 0 ? parseFloat(vrDespesa).toLocaleString() : '';
+                            var vrAdiantado = response[0].VrAdiantadoDespesa;
+                            vrAdiantado = vrAdiantado != 0 ? parseFloat(vrAdiantado).toLocaleString() : '';
+                            var vrRealDespesa = response[0].VrRealDespesa;
+                            vrRealDespesa = vrRealDespesa != 0 ? parseFloat(vrRealDespesa).toLocaleString() : '';
+                            var vrPagarDespesa = response[0].VrPagarDespesa;
+                            vrPagarDespesa = vrPagarDespesa != 0 ? parseFloat(vrPagarDespesa).toLocaleString() : '';
+                            var processoIntegracao = response[0].ProcessoIntegracao;
+                            var id_int = response[0].Id_Integracao;
+                            var id = response[0].Id;
+                            var data = '';
+                            data = response[0].Data;
+                            var situacao = response[0].Situacao;
+                            var tipo = response[0].Tipo;
+                            var complemento = response[0].Complemento;
+                            var idIntegracao = response[0].Id_Integracao;
+                            var idInt = response[0].IdInt;
+                            var codTMVInt = response[0].CodTMVInt;
+                            var chaveOrigem = response[0].ChaveOrigem;
+                            var identificador = response[0].Identificador;
+                            var movimento = response[0].Movimento;
+                            var numMovimento = response[0].NumMovimento;
+                            var cor = response[0].Cor;
+                            var consideracoes = response[0].Consideracoes;
+                            var cor = response[0].Cor;
+                            if (cor == 'B') {
+                                $("#corConsideracoes").css("background-color", "white");
+                            }
+                            else if (cor == 'A') {
+                                $("#corConsideracoes").css("background-color", "lightgoldenrodyellow");
+                            }
+                            else {
+                                $("#corConsideracoes").css("background-color", "orangered");
+                            }
+
+                            $('#credor_Modal').html(credor);
+                            $('#processo_Modal').html(processo);
+                            $('#cadastro_Modal').html(cadastro);
+                            $('#liberacao_Modal').html(liberacao);
+                            $('#vencimento_Modal').html(vencimento);
+                            $('#despesa_Modal').html(despesa);
+                            $('#documento_Modal').html(documento);
+                            $('#serie_Modal').html(serie);
+                            $('#moeda_Modal').html(moeda);
+                            $('#cod_Credor_Modal').html(codDespesa);
+                            $('#vrDespesa_Modal').html(vrDespesa);
+                            $('#vr_adiantado_despesa_Modal').html(vrAdiantado);
+                            $('#valor_real_Modal').html(vrRealDespesa);
+                            $('#valor_pagar_despesa_Modal').html(vrPagarDespesa);
+                            $('#processo_integracao_Modal').html(processoIntegracao);
+                            $('#integracao_Modal').html(id_int);
+                            $('#id_Modal').html(id);
+                            $('#data_Modal').html(data);
+                            $('#situacao_Modal').html(situacao);
+                            $('#tipo_Modal').html(tipo);
+                            $('#complemento_Modal').html(complemento);
+                            $('#idint_Modal').html(idInt);
+                            $('#codtmvint_Modal').html(codTMVInt);
+                            $('#chave_origem_int_Modal').html(chaveOrigem);
+                            $('#identificador_Modal').html(identificador);
+                            $('#numMovimento_Modal').html(numMovimento);
+                            $('#movimento_Modal').html(movimento);
+                            $('#consideracoes').html(consideracoes);
+
+
+                            //$('#situacao_Modal').html(situacao);
+                            //$('#data_Modal').html(data);
+                            //$('#tipo_Modal').html(tipo);
+                            //$('#forma_pagamento_Modal').html(forma_pag);
+                            //$('#moeda_Modal').html(moeda);
+                            //$('#valor_Modal').html(valor);
+                            //$('#cotacao_Modal').html(cotacao);
+                            //$('#valor_total_Modal').html(valor_total);
+                            //$('#valor_total_reais_Modal').html(valor_total_reais);
+                            //$('#cliente_Modal').html(cliente);
+                            //$('#consideracoes_Modal').html(consideracoes);
+
+                            $('#modalInformativo').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+
+
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //alert(exceptionThrown);
+                        },
+                    });
+                }
+
+                function Reprocessar(id_integracao, fat_fatura_id) {
+                    //$('#modalAguardar').modal({
+                    //    show: true,
+                    //    closeOnEscape: true,
+                    //    backdrop: 'static',
+                    //    keyboard: false,
+                    //    type: 'info',
+
+                    //})
+                    //waitingDialog.show('Aguarde...');
+                    let dtInicio = $('#strDtInicio').val();
+                    let dtFim = $('#strDtFim').val();
+                    let declaracao = $('#declaracao').val();
+                    let processo = $('#processo').val();
+                    let nota = $('#nota').val();
+                    let situacao = $('#situacao').val();
+
+                    $.ajax({
+                        url: '@Url.Action("Reprocessar", "Estoque")',
+                        //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                        //dataType: "json",
+                        traditional: true,
+                        //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                        data: { id_integracao: id_integracao, id_fatura : fat_fatura_id },
+                        contentType: 'json',
+
+                        success: function (response) {
+                            //$('#modalAguardar').modal('hide');
+                            //$('#modalOK').modal('show');
+                            //waitingDialog.hide();
+
+                            //$('#tblItens tr').filter(function(){
+                            //    return $.trim($('td', this).eq(0).text())==response[0].id_integracao;
+                            //}).children(':nth-child(6)').css("font-weight", "bold");
+
+                            if(response[0].Observacao != null & response[0].Observacao != '')
+                            {
+                                alert(response[0]);
+                            }
+                            else
+                            {
+                                $('#id_integracao').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "id_integracao").val(response[0].Id_Integracao);
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+
+                                $('#myForm').submit();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            alert(exceptionThrown);
+                        },
+                    });
+                }
+
+            function Cancelar(id_integracao, fat_fatura_id) {
+                //$('#modalAguardar').modal({
+                //    show: true,
+                //    closeOnEscape: true,
+                //    backdrop: 'static',
+                //    keyboard: false,
+                //    type: 'info',
+
+                //})
+                //waitingDialog.show('Aguarde...');
+                let dtInicio = $('#strDtInicio').val();
+                let dtFim = $('#strDtFim').val();
+                let declaracao = $('#declaracao').val();
+                let processo = $('#processo').val();
+                let nota = $('#nota').val();
+                let situacao = $('#situacao').val();
+
+                $.ajax({
+                    url: '@Url.Action("Cancelar", "ImportacaoFatura")',
+                    //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                    //dataType: "json",
+                    traditional: true,
+                    //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                    data: { id_integracao: id_integracao, fat_fatura_id: fat_fatura_id },
+                    contentType: 'json',
+
+                    success: function (response) {
+
+                        if (response[0].Observacao != null & response[0].Observacao != '') {
+                            alert(response[0]);
+                        }
+                        else {
+
+                            $('#id_integracao').remove();
+                            var input = $("<input>")
+                            .attr("type", "hidden")
+                            .attr("name", "id_integracao").val(response[0].Id_Integracao);
+                            $('#myForm').append($(input));
+
+                            $('#myForm').submit();
+                        }
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        alert(exceptionThrown);
+                    },
+                });
+            }
+
+
+            $('.menuImportacao .sidebar-submenu').addClass("active");
+            $('.menuImportacao .sidebar-submenu').toggle();
+        </script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </body>
+}
+</html>

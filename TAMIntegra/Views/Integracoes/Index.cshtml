@@ -1,0 +1,1069 @@
+﻿@model Entities.FinanceiroServicos
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pedidoModal = (IEnumerable<Entities.Compra>)ViewData["pedidoModal"];
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        /*#my-modal{
+         width: 1500px;
+         height:1150px;
+          margin: auto;
+          padding-top: 17%;
+         vertical-align: middle;
+        }*/
+        /*.modal-body{
+            overflow-y: auto;
+        }*/
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            border-width: 5px;
+            border-color: #3A2303;
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        @@media (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                  /*grid-template-columns: 120px 120px 290px 120px 150px auto;
+                grid-gap: 35px;
+                padding: 5px;*/
+                   grid-template-columns: 130px 130px 330px 150px auto auto;
+               justify-content: space-between;
+               padding-bottom: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .grid-item {
+                padding-bottom: 0PX;
+            }
+        }
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+       
+
+body {
+overflow: hidden;
+}
+    </style>
+
+</head>
+@using (Html.BeginForm("Index", "Integracoes", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+    <body>
+      
+        <input hidden id="modal" />
+
+        <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;width:97%;z-index:100;">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative;">
+                <fieldset>
+                    <legend style="background-color:white">Integrações</legend>
+                </fieldset>
+                @*<div class="stepwizard">
+
+                        <div class="stepwizard-row setup-panel">
+                            <div class="stepwizard-step">
+                                <a href="#VerifyEmail-step" type="button" class="btn btn-info btn-circle" disabled="disabled">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </a>
+                                <p>Consultar</p>
+                            </div>
+                            <div class="stepwizard-step">
+                                <a href="#ProfileSetup-step" type="button" class="btn btn-primary btn-circle" id="ProfileSetup-step-2">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                </a>
+                                <p>Parametrizar pedidos</p>
+                            </div>
+                            <div class="stepwizard-step">
+                                <a href="#Security-Setup-step" type="button" class="btn btn-success btn-circle" disabled="disabled" id="Security-Setup-step-3">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                </a>
+                                <p>Conclusão</p>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+        </main>
+
+
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="height: 100vh;">
+                @*<div class="stepwizard" style="padding-bottom:0">
+                        <div class="stepwizard-row setup-panel">
+                            <div class="stepwizard-step">
+                                <a href="#VerifyEmail-step" type="button" class="btn btn-info btn-circle" disabled="disabled">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </a>
+                                <p>Consultar</p>
+                            </div>
+                            <div class="stepwizard-step">
+                                <a href="#ProfileSetup-step" type="button" class="btn btn-primary btn-circle" id="ProfileSetup-step-2">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                </a>
+                                <p>Parametrizar pedidos</p>
+                            </div>
+                            <div class="stepwizard-step">
+                                <a href="#Security-Setup-step" type="button" class="btn btn-success btn-circle" disabled="disabled" id="Security-Setup-step-3">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                </a>
+                                <p>Conclusão</p>
+                            </div>
+                        </div>
+                    </div>*@
+                @*</main>*@
+                <br />
+                @*<main class="page-content">*@
+                <div class="container-fluid">
+                    @*<div class="stepwizard">
+                            <div class="stepwizard-row setup-panel">
+                                <div class="stepwizard-step">
+                                    <a href="#VerifyEmail-step" type="button" class="btn btn-info btn-circle" disabled="disabled">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </a>
+                                    <p>Consultar</p>
+                                </div>
+                                <div class="stepwizard-step">
+                                    <a href="#ProfileSetup-step" type="button" class="btn btn-primary btn-circle" id="ProfileSetup-step-2">
+                                        <span class="glyphicon glyphicon-user"></span>
+                                    </a>
+                                    <p>Parametrizar pedidos</p>
+                                </div>
+                                <div class="stepwizard-step">
+                                    <a href="#Security-Setup-step" type="button" class="btn btn-success btn-circle" disabled="disabled" id="Security-Setup-step-3">
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                    </a>
+                                    <p>Conclusão</p>
+                                </div>
+                            </div>
+                        </div>*@
+                    @*<form role="form">
+                        <div class="row setup-content" id="VerifyEmail-step">
+                            <div class="col-xs-12">
+                                <div class="col-md-12">
+                                    <br />
+                                    <div class="form-horizontal" style="left:5px;position:absolute;">
+                                        <form role="form">
+                                            <fieldset>
+                                                <legend>Consultar pedidos de compra</legend>
+                                                <br />
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label" for="card-holder-name">Your Email</label>
+                                                    <div class="col-sm-9">
+                                                        <input maxlength="100" type="email" required="required" class="form-control" placeholder="Enter Email" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label" for="card-number">Password</label>
+                                                    <div class="col-sm-9">
+                                                        <input maxlength="100" type="password" required="required" class="form-control" placeholder="Enter Password" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label" for="card-number">Re-enter Password</label>
+                                                    <div class="col-sm-9">
+                                                        <input maxlength="100" type="password" required="required" class="form-control" placeholder="Enter Password" />
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                    <button class="btn btn-primary nextBtn btn-lg pull-right" type="button">Setup Profile</button>
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="row setup-content">
+                        <div class="col-xs-12">
+                            <div class="col-md-12">
+                                <div class="form-horizontal">
+                                    <form role="form">
+
+                                        <fieldset>
+
+                                            @*<legend>Integração com fornecedor</legend>*@
+
+                                            <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ style="position:absolute;top:10px;width:97%">
+
+                                                <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;">
+                                                    <div class="panel-heading">
+                                                        Integração
+                                                    </div>
+                                                    <div class="panel-body" style="padding-bottom:0;">
+                                                        <div class="grid-container">
+                                                            <div class="grid-item">
+                                                                <label class="form-negrito">Data início</label>
+                                                                @Html.Editor("strDataInicio", new { htmlAttributes = new { @class = "form-control datepickerInput", id = "strDataInicio", @onchange = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })
+                                                                <div style="color: red" id="dtIniciDivErro">
+                                                                </div>
+                                                            </div>
+                                                            <div class="grid-item">
+                                                                @Html.Label("Data fim", new { @class = "form-negrito" })
+                                                                @Html.Editor("strDataFim", new { htmlAttributes = new { @class = "form-control datepickerInput", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                                <div style="color: red" id="dtFimDivErro">
+                                                                </div>
+                                                            </div>
+                                                            <div class="grid-item">
+                                                                @Html.Label("Tipos de Faturamento", new { @class = "form-negrito" })
+                                                                @Html.DropDownList("faturamento", (SelectList)ViewBag.TipoFaturamento, "-- Selecione -- ", new { @class = "chosen-select" })
+                                                                <div style="color: red" id="fatDivErro">
+                                                                </div>
+                                                            </div>
+                                                            <div class="grid-item">
+                                                                @Html.Label("Número", new { @class = "form-negrito" })
+                                                                @Html.Editor("numeroMov", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off" } })
+                                                            </div>
+                                                            <div class="grid-item">
+                                                                @Html.Label("Status", new { @class = "form-negrito" })
+                                                                @Html.DropDownList("situacao", (SelectList)ViewBag.Situacao, "-- Selecione -- ", new { @class = "chosen-select" })
+                                                            </div>
+                                                            <div class="grid-item pull-right" style="text-align:right">
+                                                                <button class="btn btn-primary btn-md" id="btnFiltrar" name="exibir" value="exibir" type="submit">Exibir</button>
+                                                            </div>
+
+
+                                                        </div>
+                                                        @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Filtrar</button>*@
+
+                                                    </div>
+
+                                                </div>
+                                                @*<legend>Selecionar pedidos de compra</legend>*@
+                                                <br />
+                                                <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:20px">
+                                                    <div class="panel-heading">
+                                                        Integração(s)
+                                                    </div>
+                                                    <div class="panel-body" style="padding-bottom: 0;margin-bottom:10px">
+                                                        <div class="table-responsive">
+
+                                                            <table id="tblDados" class="table table-hover table-striped table-responsive">
+                                                                <thead>
+                                                                    <tr>
+                                                                        @*<th style="text-align:center">ID LAN</th>*@
+                                                                        <th style="text-align:center">
+                                                                       <div class="btn-toolbar">
+                                                                           <input type="checkbox" id="ckRegistros" />
+                                                                           Documento
+                                                                       </div>
+                                                                        </th>
+                                                                        <th hidden style="text-align:center">Filial</th>
+                                                                        <th style="text-align:center">Invoice</th>
+                                                                        <th hidden style="text-align:center">Título</th>
+                                                                        <th hidden style="text-align:center">Emissao</th>
+                                                                        <th style="text-align:center">Vencimento</th>
+                                                                        <th style="text-align:left">Fornecedor</th>
+                                                                        <th style="text-align:center">Moeda</th>
+                                                                        <th style="text-align:center">Valor</th>
+                                                                        <th style="text-align:center">Situação</th>
+                                                                        <th style="text-align:center">Opções</th>
+                                                                    </tr>
+                                                                </thead>
+                                                        @if (Model != null)
+                                                        {
+                                                            if (Model.lstItens != null)
+                                                            {
+                                                                foreach (Entities.FinanceiroServicos item in Model.lstItens)
+                                                                {
+
+                                                                <tbody>
+                                                                    
+                                                                                <tr>
+                                                                                    @if (@item.Id_Integracao == 0)
+                                                                                    {
+                                                                                        <td id="documento" style="text-align:center"><input type="checkbox" id="idMovArr" name="idMovArr" value="@item.IDMOV,@item.IDLAN" />@item.Documento</td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td id="documento" style="text-align:center">@item.Documento</td>
+                                                                                    }
+
+                                                                                    <td id="nome_fantasia" hidden style="text-align:center">@item.NOMEFANTASIA</td>
+                                                                                    <td id="invoice" style="text-align:center">@item.INVOICE</td>
+                                                                                    <td id="titulo" hidden style="text-align:center">@item.TITULO</td>
+                                                                                    <td id="data_emissao" hidden style="text-align:center">@item.DATAEMISSAO.ToString("dd/MM/yyyy")</td>
+                                                                                    <td id="data_venc" style="text-align:center">@item.DATAVENCIMENTO.ToString("dd/MM/yyyy")</td>
+                                                                                    <td id="fornecedor" style="text-align:left">@item.FORNECEDOR</td>
+                                                                                    <td id="moeda" style="text-align:center">@item.MOEDA</td>
+                                                                                    <td id="valor_original" style="text-align:center">@string.Format("{0:#,##0.00#}", item.VALORORIGINAL)</td>
+                                                                                    <td id="situacao" style="text-align:center">@item.Situacao</td>
+                                                                                    <td id="idMov" class="idMov" hidden style="text-align:center">@item.IDMOV</td>
+                                                                                    <td id="idLan" class="idLan" hidden style="text-align:center">@item.IDLAN</td>
+
+
+                                                                                    <td style="vertical-align:top;text-align:center">
+                                                                                        <a class="btn" style="padding:0px" title="Informativo"><span class="fa fa-info-circle" style="font-size:17px;" value="@item.Id_Integracao" onclick="Informativo('@item.Documento', '@item.NOMEFANTASIA', '@item.TITULO', '@item.DATAEMISSAO.ToString("dd/MM/yyyy")', '@item.INVOICE', '@item.DATAVENCIMENTO.ToString("dd/MM/yyyy")', '@item.FORNECEDOR', '@item.MOEDA', '@string.Format("{0:#,##0.00#}", item.VALORORIGINAL)', '@item.Situacao')"></span></a>
+                                                                                        @if (@item.Id_Integracao > 0)
+                                                                                        {
+                                                                                            <a class="btn" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Este procedimento gera uma nova integração para a fatura @item.Id_Integracao. Deseja continuar?'))  Reprocessar(@item.Id_Integracao)"></span></a>
+                                                                                            <a class="btn" title="Excluir" style="padding:0"><span class="fa fa-trash" style="font-size:16px;" onclick="if(confirm('Este procedimento exclui a fatura @item.Id_Integracao. Deseja continuar?'))  Reprocessar(@item.Id_Integracao)"></span></a>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <span class="" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;color:silver"></span></span>
+                                                                                            <a class="" title="Excluir" style="padding:0"><span class="fa fa-trash" style="font-size:16px;color:silver"></span></a>
+                                                                                        }
+                                                                                     </td>
+                                                                                    @*}
+                                                                                        else
+                                                                                        {
+                                                                                         <td style="vertical-align:top;text-align:center">
+                                                                                             <a class="btn modalExcel" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;"></span></a>
+                                                                                         </td>
+                                                                                        }*@
+
+
+                                                                                </tr>
+
+
+                                                                                @*<td><a class="modalBTN" style="padding:0;font-size:12px;text-decoration:none;color:black;font-size:14px;pointer-events:none">@item.NUMEROMOV</a></td>*@
+                                                                </tbody>
+
+                                                                    }
+
+                                                                    }
+                                                                }
+                                                             </table>
+                                                            <button class="btn btn-primary btn-md pull-right" id="btnAgendar" type="button" name="btnAgendar" enabled="enabled" onclick="salvarPedidoCompra()">Agendar</button>
+                                                      
+                                                          </div>
+                                                        @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Continuar</button>*@
+                                                    </div>
+                                                </div>
+                                                @*teste*@
+
+
+
+
+                                            </div>
+
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.modal-dialog -->
+                            </div>
+                        </div>
+                    </div><!-- /.modal -->
+                </div>
+            </main>
+        </div>
+
+        <!-- Modal -->
+        @*@if (Model != null)
+            {
+                if (Model.lstInforme != null)
+                {*@
+        <div class="modal fade" id="modalInformativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 10px 5px 5px 10px;">
+                        <h5 style="padding-top:0" class="modal-title" id="exampleModalLabel">Fatura <span id="id_fatura"></span>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </h5>
+                        
+                    </div>
+                    <div class="modal-body" style="padding-bottom:0;padding-top:5px">
+                        <table class="table table-hover  table-bordered">
+                            <tr>
+                                <td>Documento: <span id="documento_Modal"> </span></td>
+                                @*<td id="id_integracao_Modal"></td>*@
+                                <td>Filial: <span id="filial_Modal"> </span></td>
+                                @*<td id="situacao_Modal"></td>*@
+                            </tr>
+                            @*<tr>
+                                    <td>Situação</td>
+                                    <td id="situacao_Modal"></td>
+                                </tr>*@
+                            <tr>
+                                <td>Invoice: <span id="invoice_Modal"> </span></td>
+                                @*<td id="data_Modal"></td>*@
+                                <td>Emissão: <span id="emissao_Modal"> </span></td>
+                                @*<td id="tipo_Modal"></td>*@
+                            </tr>
+                            @*<tr>
+                                    <td>Tipo</td>
+                                    <td id="tipo_Modal"></td>
+                                </tr>*@
+                            @*<tr>
+                                    <td>Handling</td>
+                                    <td id="handling_Modal"></td>
+                                </tr>*@
+                            <tr>
+                                <td>Vencimento: <span id="vencimento_Modal"> </span></td>
+                                @*<td id="cliente_Modal"></td>*@
+                                <td>Fornecedor: <span id="fornecedor_Modal"> </span></td>
+                                @*<td id="descricao_Modal"></td>*@
+                            </tr>
+                            @*<tr>
+                                    <td>Descrição</td>
+                                    <td id="descricao_Modal"></td>
+                                </tr>*@
+                            <tr>
+                                <td>Título: <span id="titulo_Modal"> </span></td>
+                                @*<td id="forma_pagamento_Modal"></td>*@
+                                <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                @*<td id="moeda_Modal"></td>*@
+                            </tr>
+                            @*<tr>
+                                    <td>Moeda</td>
+                                    <td id="moeda_Modal"></td>
+                                </tr>*@
+                            <tr>
+                                <td>Valor: <span id="valor_Modal"> </span></td>
+                                @*<td id="valor_Modal"></td>*@
+                                <td>Situação: <span id="situacao_Modal"> </span></td>
+                                @*<td id="cotacao_Modal"></td>*@
+                            </tr>
+
+                            <tr width="100%" style="background-color:lightgoldenrodyellow;height:50px">
+                                <td colspan="2"><div class="pre-scrollable" id="consideracoes_Modal" style="max-height:70px"></div></td>
+                                @*<td colspan="3" id="consideracoes_Modal"></td>*@
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer" style="padding:5px;">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+
+        <div class="modal fade" id="modalReprocessarItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel">Reprocessamento para fatura  <span id="id_fatura"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span id="comentario_Modal"></span>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalReprocessarItens" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel">Reprocessamento para fatura  <span id="id_fatura_rep"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="tblReprocessar">
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row setup-content divParametrosPedido" id="Security-Setup-step">
+            <div class="col-xs-12">
+                <div class="col-md-12">
+                    teste
+
+                    <div class="form-row">
+                        <div class="col-sm-12 text-right">
+                            <button id="btnSearch" class="btn btn-primary nextBtn btn-md center-block consultaPedido" Style="width: 100px;display:inline-block">Voltar</button>
+                            <button id="btnClear" class="btn btn-primary nextBtn btn-md center-block" Style="width: 100px;display:inline-block">Continuar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        @*<script>
+                $(document).ready(function () {
+
+                    var navListItems = $('div.setup-panel div a'),
+                            allWells = $('.setup-content'),
+                            allNextBtn = $('.nextBtn');
+
+                    allWells.hide();
+
+                    navListItems.click(function (e) {
+                        e.preventDefault();
+                        var $target = $($(this).attr('href')),
+                            $item = $(this);
+                        if (!$item.hasClass('disabled')) {
+                            //navListItems.removeClass('btn-primary').addClass('btn-default');
+                            if ($item.attr('id') != $(navListItems[1]).attr('id')) {
+                                $(navListItems[1]).removeClass('btn-primary').addClass('btn-success');
+                            }
+                            //$('#item3').addClass('btn-success');
+                            $item.addClass('btn-primary');
+                            allWells.hide();
+                            $target.show();
+                            $target.find('input:eq(0)').focus();
+                        }
+                    });
+
+                    allNextBtn.click(function () {
+                        var curStep = $(this).closest(".setup-content"),
+                            curStepBtn = curStep.attr("id"),
+                            nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                            curInputs = curStep.find("input[type='text'],input[type='url'], input[type='password'], input[type='email']"),
+                            isValid = true;
+
+                        $(".form-group").removeClass("has-error");
+                        for (var i = 0; i < curInputs.length; i++) {
+                            if (!curInputs[i].validity.valid) {
+                                isValid = false;
+                                $(curInputs[i]).closest(".form-group").addClass("has-error");
+                            }
+                        }
+
+                        if (isValid)
+                            nextStepWizard.removeAttr('disabled').trigger('click');
+                    });
+
+                    $('div.setup-panel div a.btn-primary').trigger('click');
+                });
+            </script>*@
+
+        <script>
+            $(document).ready(function () {
+                allWells = $('#Security-Setup-step'),
+                allWells2 = $('#VerifyEmail-step')
+                //,allNextBtn = $('.nextBtn');
+
+                allWells.hide();
+                allWells2.hide();
+
+                var menuAtivo = $('#menuAtivo').val();
+                $('.menuFinanceiro .sidebar-submenu').toggle();
+            });
+
+
+            $('.consultaPedido').click(function () {
+                $(".divConsultaPedido").toggle();
+                $(".divParametrosPedido").toggle();
+            });
+
+            $('a.modalBTN').click(function () {
+                $('#my-modal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+
+
+
+            $('#opcoesImportacaoRegular *').attr("disabled", true);
+
+            $('#importacaoRegularInput').click(function () {
+                //$('#opcoesImportacaoRegular').show();
+                $('#opcoesImportacaoRegular *').attr("disabled", false);
+            });
+            $('#depositoEspecialInput').click(function () {
+                //$('#opcoesImportacaoRegular').hide();
+                $('#opcoesImportacaoRegular *').attr("disabled", true);
+            });
+        </script>
+
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        <link href="~/content/indexcompras.css" rel="stylesheet" />
+        <script>
+            $(window).load(function () {
+                $(".chosen-select").chosen()
+            });
+        </script>
+
+        <script>
+            function populaModal(idIntegracao, numeroMov, situacao, aprovacao, status, data, valor, fornecedor, idMov, comprador) {
+                $('#idIntegracao').html(idIntegracao);
+                $('#numeroMovModal').html(numeroMov);
+                $('#situacaoModal').html(situacao);
+                $('#aprovacao').html(aprovacao);
+                $('#status').html(status);
+                $('#data').html(data);
+                $('#valor').html(valor);
+                $('#fornecedor').html(fornecedor);
+                $('#comprador').text(comprador);
+                $('#idMov').text(idMov);
+                $('.fornecedor').html(fornecedor);
+            }
+
+            function salvarPedidoCompra() {
+
+                var table = $('#tblDados tr td :checkbox:checked');
+             
+                var data2 = [];
+
+                //table.find('tr').each(function (i, el) {
+                //    // no thead
+                //    if (i != 0) {
+                //        var $tds = $(this).find('td');
+                //        var row = [];
+                //        $tds.each(function (i, el) {
+                //            if (this.className == "idLan" || this.className == "idMov") {
+                               
+                //                    row.push($(this).text());
+                                
+                //            }
+                //        });
+                //        data2.push(row);
+                     
+                //    }
+                //});
+                
+                var values = new Array();
+                $.each($("input[name='idMovArr']:checked"), function () {
+                    values.push($(this).val());
+                });
+              
+
+               
+                    $.ajax({
+                        url: '@Url.Action("AgendarIntegracao", "FinanceiroServicos")',
+                        contentType: 'json',
+                        traditional: true,
+                        //data: { nroPedidoModal: numeroPedido, strDataInicio: dataInicio, strDataFim: dataFim, idMov: idMov, statusModal: status, situacaoModal: situacao}
+                        data: { dados: values },
+                        success: function (data) {
+                            //$("#myForm").submit();
+                            if(data[0] == "Erro")
+                            {
+                                alert(data[1]);
+                                $("#myForm").submit();
+                            }
+                            else
+                            {
+                                alert("Integração " + data + "\nAgendamento realizado com sucesso.");
+                                $("#myForm").submit();
+                            }
+                            
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //$('#btnagendar').attr("disabled", true);
+                            alert(exceptionThrown);
+                        },
+                    });       
+            }
+
+            function Atualiza() {
+                $('#myForm').submit();
+            }
+        </script>
+
+        <script>
+            $(function () {
+                //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' }).val();
+                //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' });
+                $(".datepickerInput").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+                $('#importacaoRegularInput').attr("disabled", true);
+            });
+
+            function isValidDate(date, campo) {
+                var temp = date.split('/');
+                var d = new Date(temp[1] + '/' + temp[0] + '/' + temp[2]);
+                var result = (d && (d.getMonth() + 1) == temp[1] && d.getDate() == Number(temp[0]) && d.getFullYear() == Number(temp[2]));
+                if (result == false) {
+                    $(campo).text("Data inválida.");
+                    $("#btnFiltrar").attr("disabled", true)
+                }
+                else {
+                    $("#btnFiltrar").attr("disabled", false)
+                    $(campo).text('');
+                }
+            }
+
+            function desbloquearPedido(idIntegracao, idMov) {
+                $.ajax({
+                    url: '@Url.Action("DesbloquearPedido", "Compra")',
+                    type: 'get',
+                    data: { idIntegracao: idIntegracao, idMov: idMov },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+            }
+
+            @*$("a.modalInformativo").click(function(evt){
+
+                $.ajax({
+                    url: '@Url.Action("Index", "Cavok")',
+                    type: 'get',
+                    data: {},
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "modalInformativo").val("#modalInformativo")
+                        .attr("id", "modalInformativo").val("#modalInformativo");
+                        $('#myForm').append($(input));
+
+                        $("#myForm").submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+
+
+            });*@
+
+            //$(document).ready(function () {
+            //    $('#modalInformativo').modal('show');
+            //});
+
+            @*function informativo(id_integracao)
+            {
+                $.ajax({
+                    url: '@Url.Action("Informativo", "Cavok")',
+                    type: 'get',
+                    data: { id_integracao: id_integracao },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "modalInformativo").val("#modalInformativo")
+                        .attr("id", "modalInformativo").val("#modalInformativo");
+                        $('#myForm').append($(input));
+                        $('#modal').val("#modalInformativo");
+                        $("#myForm").submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+            }*@
+
+            function Informativo(documento, filial, titulo, emissao, invoice, vencimento, fornecedor, moeda, valor, situacao)
+            {
+                $.ajax({
+                    url: '@Url.Action("Informativo", "FinanceiroServicos")',
+                    //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                    //dataType: "json",
+                    traditional: true,
+                    //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                    data: { },
+                    contentType: 'json',
+
+                    success: function (response) {
+                        //var id_int = response[0].Id_Integracao;
+                        //id_int = id_int > 0 ? id_int : '';
+                        //var situacao = response[0].Situacao;
+                        //situacao = situacao == null ? '' : situacao;
+                        //var fatura = response[0].Fatura;
+                        //var data = response[0].Data;
+                        //data = data != '01/01/0001' ? data : '';
+                        //var tipo = response[0].Tipo;
+                        //var handling = response[0].HANDLING;
+                        //var forma_pag = response[0].FORMA_PAGAMENTO;
+                        //var moeda = response[0].MOEDA;
+                        //var valor = response[0].VALOR;
+                        //valor = valor != 0 ? parseFloat(valor).toLocaleString() : '';
+                        //var cotacao = response[0].COTACAO;
+                        //cotacao = cotacao > 0 ? parseFloat(cotacao).toFixed(4) : '';
+                        ////cotacao = cotacao > 0 ? parseFloat(cotacao).toLocaleString() : '';
+                        //var valor_total = response[0].VALOR_TOTAL;
+                        //valor_total = valor_total != 0 ? parseFloat(valor_total).toLocaleString() : '';
+                        //var valor_total_reais = response[0].VALOR_TOTAL_REAIS;
+                        //valor_total_reais = valor_total_reais != 0 ? parseFloat(valor_total_reais).toLocaleString() : '';
+                        //var cliente = response[0].Cliente;
+                        //var consideracoes = response[0].Consideracoes;
+
+                        //$('#id_integracao_Modal').html(id_int);
+                        //$('#situacao_Modal').html(situacao);
+                        //$('#data_Modal').html(data);
+                        //$('#tipo_Modal').html(tipo);
+                        //if (handling != '')
+                        //{
+                        //    //$('#handling_Modal').html(handling);
+                        //    $('#id_fatura').html(fatura + ' / Handling ' + handling);
+                        //}
+                        //else
+                        //{
+                        //    $('#id_fatura').html(fatura);
+                        //}
+
+                        //$('#forma_pagamento_Modal').html(forma_pag);
+                        //$('#moeda_Modal').html(moeda);
+                        //$('#valor_Modal').html(valor);
+                        //$('#cotacao_Modal').html(cotacao);
+                        //$('#valor_total_Modal').html(valor_total);
+                        //$('#valor_total_reais_Modal').html(valor_total_reais);
+                        //$('#cliente_Modal').html(cliente);
+                        //$('#consideracoes_Modal').html(consideracoes);
+
+                        $('#documento_Modal').html(documento);
+                        $('#filial_Modal').html(filial);
+                        $('#titulo_Modal').html(titulo);
+                        $('#emissao_Modal').html(emissao);
+                        $('#invoice_Modal').html(invoice);
+                        $('#vencimento_Modal').html(vencimento);
+                        $('#fornecedor_Modal').html(fornecedor);
+                        $('#moeda_Modal').html(moeda);
+                        $('#valor_Modal').html(valor);
+                        $('#situacao_Modal').html(situacao);
+
+                        $('#modalInformativo').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+
+
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //alert(exceptionThrown);
+                    },
+                });
+            }
+
+            function Reprocessar(id_integracao, id_fatura)
+            {
+                $.ajax({
+                    url: '@Url.Action("Reprocessar", "FinanceiroServicos")',
+                    //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                    //dataType: "json",
+                    traditional: true,
+                    //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                    data: { id_integracao, id_fatura},
+                    contentType: 'json',
+
+                    success: function (response) {
+
+                        var comentario = response[0].Comentario;
+                        var item = response[0].Item;
+
+                        var event_data = '';
+                        var dataArray = response;
+
+                        if(dataArray.length == 1)
+                        {
+                            for (var i = 0; i < dataArray.length; i++){
+                                var item = dataArray[i].Item;
+                                var arrivalTime = dataArray[i].Comentario;
+
+                                event_data += '<tr>';
+                                event_data += '<td>'+dataArray[i].Comentario+'</td>';
+                                event_data += '</tr>';
+                            }
+                        }
+                        else
+                        {
+                            for (var i = 0; i < dataArray.length; i++){
+                                var item = dataArray[i].Item;
+                                var arrivalTime = dataArray[i].Comentario;
+
+                                event_data += '<tr>';
+                                event_data += '<td>'+dataArray[i].Item+'. '+'</td>';
+                                event_data += '<td>'+dataArray[i].Comentario+'</td>';
+                                event_data += '</tr>';
+                            };
+                        }
+
+
+
+                        $('#id_fatura_rep').html(id_fatura);
+                        //$("#tblReprocessar").append(event_data);
+
+                        $("#tblReprocessar tr>td").remove();
+                        $('#tblReprocessar').find('tbody').append(event_data);
+
+
+                        $('#modalReprocessarItens').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        alert(exceptionThrown);
+                    },
+                });
+            }
+
+            //$('#btnFiltrar').click(function () {
+            //    var dtInicio = $('#strDataInicio').val();
+            //    var dtFim = $('#strDataFim').val();
+            //    var faturamento = $('#faturamento').val();
+
+            //    if (dtInicio != '' & dtFim)
+            //    {
+            //        var input = $("<input>")
+            //        .attr("name", "exibir").val("exibir");
+
+            //        $('#myForm').append(input);
+            //        $('#myForm').submit();
+            //    }
+            //    else
+            //    {
+            //        $('#fatDivErro').html('Selecione Faturamento');
+            //        $("#btnFiltrar").attr("disabled", true)
+            //    }
+            //})
+
+            //$('#faturamento').change(function () {
+            //    $('#fatDivErro').html('');
+            //    $("#btnFiltrar").attr("disabled", false)
+            //})
+
+            //$('#strDataInicio').change(function () {
+            //    var dtInicio = $('#strDataInicio').val();
+
+            //    if (dtInicio != '')
+            //    {
+            //        $('#dtIniciDivErro').html('');
+            //    }
+            //})
+
+            //$('#strDataFim').change(function () {
+            //    var dtFim = $('#strDataFim').val();
+
+            //    if (dtFim = '')
+            //    {
+            //        $('#dtFimDivErro').html('');
+            //    }
+            //})
+
+            $('#ckRegistros').click(function () {
+                $('input:checkbox').not(this).prop('checked', this.checked);
+            })
+        </script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </body>
+}
+</html>

@@ -1,0 +1,624 @@
+﻿@model Entities.Perfil
+
+@{
+    //ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>*@
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+    @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>*@
+
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>*@
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    @*<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
+
+
+
+    <style>
+        .tableFixHead {
+            /*overflow: auto;*/
+            height: 100px;
+            width: 100%;
+        }
+
+            .tableFixHead table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            .tableFixHead th,
+            .tableFixHead td {
+                padding: 8px 16px;
+            }
+
+
+            /*td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            /*td:nth-child(2), th:nth-child(2) {
+            position: sticky;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+            .tableFixHead th {
+                position: sticky;
+                top: 0;
+                background: #f9f9f9;
+                z-index: 2;
+            }
+
+        th:first-child, th:nth-child(2) {
+            z-index: 3;
+        }
+
+        .sticky-col {
+            position: sticky;
+            position: -webkit-sticky;
+            background-color: white;
+        }
+
+        .first-col {
+            width: 120px;
+            min-width: 100px;
+            max-width: 340px;
+            left: 0px;
+        }
+
+        .second-col {
+            width: 150px;
+            min-width: 20px;
+            max-width: 340px;
+            left: 100px;
+        }
+
+        .third-col {
+            width: 50px;
+            min-width: 110px;
+            max-width: 340px;
+            left: 190px;
+        }
+
+        .fourth-col {
+            width: 100px;
+            min-width: 80px;
+            max-width: 340px;
+            left: 280px;
+        }
+
+        input[type=checkbox], input[type=radio] {
+            /* margin: 4px 0 0; */
+            margin-top: 1px\9;
+            line-height: normal;
+        }
+
+        @@media screen and (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: 80px 60px 150px auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-container2 {
+                display: grid;
+                grid-template-columns: auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .page-wrapper {
+                height: 100vh;
+            }
+        }
+
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            /*border-width: 5px;
+            border-color: #3A2303 !important;*/
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        /*.modal-dialog {
+            display: flex;
+            align-items: center;
+        }*/
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+        /*.page-content {
+            height: 100vh;
+        }*/
+        body {
+            overflow: hidden;
+        }
+
+        .erroInput {
+            border: 1px solid orangered !important;
+        }
+
+        .erroDiv {
+            color: red !important;
+        }
+
+        .no-border {
+            box-shadow: none !important;
+            background: white !important;
+            border: none !important;
+            padding: 0 !important;
+            height: 20px !important;
+        }
+    </style>
+</head>
+@*@using (Html.BeginForm("Index", "Usuario", FormMethod.Post, new { id = "myForm" }))
+    {*@
+@*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+@*@Html.AntiForgeryToken()*@
+<body>
+    <input hidden id="divPeriodo" name="divPeriodo" value="@ViewBag.DivPeriodo" />
+    <input hidden id="mes" name="mes" value="@Session["mes"]" />
+    <input hidden id="mesAtual" name="mesAtual" value="@Session["mesAtual"]" />
+    <input hidden id="ano" name="ano" value="@Session["ano"]" />
+
+    <br />
+    <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:16px;z-index:100;">
+        <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:14px;position:relative;">
+            <fieldset>
+                <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Perfil</legend>
+            </fieldset>
+        </div>
+    </main>
+
+    <div class="page-wrapper chiller-theme">
+        <main class="page-content">
+            <div class="container-fluid" style="padding-top:30px;padding-left:30px">
+                <div id="div1">
+                    <div class="panel with-nav-tabs panel-default" style="margin:0">
+                        <div class="panel-heading" style="padding:0">
+                            <table width="100%" id="tblPainel" style="margin-bottom:0 !important">
+                                <tr>
+                                    <td style="text-align:right">
+                                        <button id="novoUsuario" onclick="AlterarPerfil('C')" class="btn btn-success btn-sm" style="padding: 2px 6px;">Novo Perfil</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="panel-body" style="padding:0;">
+                            <div class="tableFixHead" style="overflow:auto;height:auto;">
+                                <form method="POST" action="../PerfilParametro/Index" id="formPerfilParametro">
+                                    <table class="table table-hover table-striped table-responsive" style="white-space: nowrap;margin-bottom:0;width:100%" id="tblPrincipal">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:33%">NOME</th>
+                                                <th style="width:33%;text-align:center">SITUAÇÃO</th>
+                                                <th style="width:33%;text-align:center">PARÂMETROS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model != null)
+                                            {
+                                                if (Model.lstPerfil != null)
+                                                {
+                                                    foreach (var item in Model.lstPerfil)
+                                                    {
+                                                        <tr>
+
+                                                                <td style="text-align:left" name="nome"><a style="cursor:pointer" onclick="AlterarPerfil('E', @item.Id_Perfil, '@item.Nome', '@item.Situacao', '@item.Form_Principal')">@item.Nome</a></td>
+                                                                <td style="text-align:center">@item.Situacao</td>
+                                                                <td style="text-align:center" id="parametro" onclick="formParametroPerfil(@item.Id_Perfil, '@item.Nome', '@item.Situacao')"><a style="cursor:pointer"><span class="glyphicon glyphicon-cog"></span></a></td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                    </form>
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal fade" id="modalPerfil" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center" style="padding:5px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    @*<h4 style="text-align:left">Alterar Perfil: <span id="titulo"></span></h4>*@
+                    <h4 style="text-align:left">Perfil</h4>
+                </div>
+                <div class="modal-body" style="padding-top:0">
+                    <br />
+                    <form id="formAlterarPerfil">
+                        <input type="hidden" id="id_pessoa" />
+                        <input type="hidden" id="id_departamento_h" />
+                        <input type="hidden" id="id_perfil_h" />
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <label for="n_nome">NOME</label>
+                                <input type="text" class="form-control" id="nome" maxlength="50">
+                                <div hidden id="erroNome">Preencha este campo</div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="id_perfil">MENU DE INICIALIZAÇÃO</label>
+                                @Html.DropDownListFor(x => x.Formulario, ViewBag.Menu as SelectList, null, new { @class = "form-control", @id = "menu" })
+                                <div hidden id="erroMenu">Selecione este campo</div>
+                            </div>
+                        </div>
+                            <div class="form-group col-md-3">
+                                <label for="situacao">SITUAÇÃO</label>
+                                <select id="situacao" class="form-control">
+                                    <option value="A">Ativo</option>
+                                    <option value="I">Inativo </option>
+                                </select>
+                            </div>
+                    </form>
+                    <div class="main">
+                        <div class="right" style="width:50%;float:right;text-align:right;padding-right: 15px;">
+                            <div class="btn-toolbar">
+                                <button type="button" class="btn btn-primary btn-sm pull-right" style="margin-bottom: 10px;" data-dismiss="modal">Fechar</button>
+                                <button class="btn btn-sm btn-primary pull-right" id="salvarPerfil" onclick="salvarPerfil()">Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div style="text-align:right">
+                            <button class="btn btn-sm btn-primary" id="salvarPerfil" onclick="salvarPerfil()">Salvar</button>
+                        </div>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+    <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if (performance.navigation.type == 2) {
+                location.reload(true);
+            }
+
+            let mesCorrente = $('#mes').val();
+            let anoCorrente = $('#ano').val();
+
+            //$('#divHide').val('#graficos');
+            $('#datepickerTEXT').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                onClose: function (dateText, inst) {
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    $('#datepickerTEXT').datepicker('setDate', new Date(year, month, 1));
+                    $('#mes').val(parseInt(month) + 1);
+                    $('#ano').val(parseInt(year));
+                    $('#myForm').append($(ano));
+
+                    //$.ajax({
+                    //    //url: '/TAMTBIP/Home/GraficoGerencial',
+                    //    url: '/HomeTeste/Index',
+                    //    data: { mes: parseInt(month) + 1 },
+                    //    //cache: false,
+                    //    //type: 'POST',
+                    //    success: function (response) {
+                    //        $('#myForm').submit();
+
+                    //    },
+
+                    //    error: function (xhr, status, error) {
+                    //    alert(error)
+                    //    }
+                    //});
+
+
+
+                },
+                beforeShow: function (input, inst) {
+                    var tmp = $('#datepickerTEXT').val().split('/');
+                    $('#datepickerTEXT').datepicker('option', 'defaultDate', new Date(tmp[1], tmp[0] - 1, 1));
+                    $('#datepickerTEXT').datepicker('setDate', new Date(tmp[1], tmp[0] - 1, 1));
+                },
+                onSelect: function (dateText, inst) {
+                    return $(this).trigger('change');
+                }
+
+            });
+
+            if ($('#datepickerTEXT').val() == '') {
+                var d = new Date();
+                var n = d.getMonth() + 1;
+                if (n <= 9) {
+                    n = '0' + n;
+                }
+                var y = d.getFullYear();
+
+                if (mesCorrente == 0) {
+                    $('#datepickerTEXT').val(n + '/' + y);
+                }
+                else {
+                    if (mesCorrente <= 9) {
+                        mesCorrente = '0' + mesCorrente.replace(0, '');
+                    }
+
+                    $('#datepickerTEXT').val(mesCorrente + '/' + anoCorrente);
+                }
+
+            }
+
+
+            var periodo = $('#divPeriodo').val();
+
+            //$("#" + periodo).prop("checked", true);
+
+        });
+
+        //google.charts.load("current", { packages: ['corechart'] });
+        //google.load("visualization", "1", { packages: ["corechart"] });
+        $('#show-sidebar').click(function () {
+            $('#menuIcone').val('click');
+        })
+        $('#close-sidebar').click(function () {
+            $('#menuIcone').val('unclick');
+        })
+
+
+        function AlterarPerfil(origem, id_perfil, nome, situacao, menu) {
+            $('#id_perfil_h').val('');
+            $('#nome').val('');
+            $('#email').val('');
+
+            if (origem == "E") {
+                $('#id_perfil_h').val(id_perfil);
+                $('#nome').val(nome);
+                $('#situacao option:contains(' + situacao + ')').prop({ selected: true });
+                //$('#menu option:contains(' + menu + ')').prop({ selected: true });
+                $("#menu option[value=" + menu + "]").prop("selected", true);
+            }
+            else {
+                $('#id_perfil_h').val('0');
+                $('#menu option:contains(' + 'Painel' + ')').prop({ selected: true });
+            }
+            $('#modalPerfil').modal({
+                show: true,
+                closeOnEscape: true,
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+
+        function salvarPerfil() {
+            let id_perfil = $('#id_perfil_h').val();
+            let menu = $('#menu').val();
+            let nome = $('#nome').val();
+            let situacao = $('#situacao').val();
+
+            if (nome != "")
+            {
+                $.ajax({
+                    url: '@Url.Action("salvarPerfil", "Perfil")',
+                    traditional: true,
+                    data: { id_perfil: id_perfil, nome: nome, menu : menu, situacao: situacao },
+                    contentType: 'json',
+
+                    success: function (response) {
+                        if(response != null & response != ""){
+                            let mensagem = response[0].Mensagem;
+                            if (mensagem != "") {
+                                alert(mensagem);
+                            }
+                    }
+                        else {
+                            location.reload();
+                        }
+
+                    }
+                });
+            }
+            else {
+                if (login == "") {
+                    $('#login').addClass("erroInput");
+                    $('#erroLoginUpdate').addClass("erroDiv");
+                    $('#erroLoginUpdate').show();
+                }
+                if (email == "") {
+                    $('#email').addClass("erroInput");
+                    $('#erroEmailUpdate').addClass("erroDiv");
+                    $('#erroEmailUpdate').show();
+                }
+                if (nome == "") {
+                    $('#nome').addClass("erroInput");
+                    $('#erroNomeUpdate').addClass("erroDiv");
+                    $('#erroNomeUpdate').show();
+                }
+                if (perfil == "") {
+                    $('#id_perfil').addClass("erroInput");
+                    $('#erroPerfilUpdate').addClass("erroDiv");
+                    $('#erroPerfilUpdate').show();
+                }
+                if (departamento == "") {
+                    $('#id_departamento').addClass("erroInput");
+                    $('#erroDepartamentoUpdate').addClass("erroDiv");
+                    $('#erroDepartamentoUpdate').show();
+                }
+
+            }
+        }
+
+
+
+        $('#login').keyup(function () {
+            $('#login').removeClass("erroInput");
+            $('#erroLoginUpdate').removeClass("erroDiv");
+            $('#erroLoginUpdate').hide();
+        })
+        $('#nome').keyup(function () {
+            $('#nome').removeClass("erroInput");
+            $('#erroNomeUpdate').removeClass("erroDiv");
+            $('#erroNomeUpdate').hide();
+        })
+        $('#email').keyup(function () {
+            $('#email').removeClass("erroInput");
+            $('#erroEmailUpdate').removeClass("erroDiv");
+            $('#erroEmailUpdate').hide();
+        })
+        $('#id_perfil').change(function () {
+            $('#id_perfil').removeClass("erroInput");
+            $('#erroPerfilUpdate').removeClass("erroDiv");
+            document.getElementById("erroPerfilUpdate").style.display = "none";
+        })
+        $('#id_departamento').change(function () {
+            $('#id_departamento').removeClass("erroInput");
+            $('#erroDepartamentoUpdate').removeClass("erroDiv");
+            $('#erroDepartamentoUpdate').hide();
+        })
+        $('#modalPerfil').on('shown.bs.modal', function () {
+            $(this).find('.modal-dialog').css({
+                width: '80%',
+                height: 'auto',
+                'max-height': '100%',
+                'padding-right': 0
+            });
+
+            $(this).css({
+                'padding-right': 0
+            });
+
+        });
+
+        function formParametroPerfil(id_perfil2, nome2, situacao2){
+            let id_perfil = $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "id_perfil").val(id_perfil2);
+            $('#formPerfilParametro').append($(id_perfil));
+
+            let nome = $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "nome").val(nome2);
+            $('#formPerfilParametro').append($(nome));
+
+            let situacao = $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "situacao").val(situacao2);
+            $('#formPerfilParametro').append($(situacao));
+
+            document.getElementById("formPerfilParametro").submit();
+        }
+        $('.menuSeguranca .sidebar-submenu').addClass("active");
+        $('.menuSeguranca .sidebar-submenu').toggle();
+
+    </script>
+
+</body>
+
+@*}*@
+</html>

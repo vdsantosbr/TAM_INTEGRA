@@ -1,0 +1,1749 @@
+﻿@model Entities.Estoque
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pedidoModal = (IEnumerable<Entities.Compra>)ViewData["pedidoModal"];
+    var cont = 0;
+    var contProcesso = 0;
+    var contProcessoMax = 6;
+    var contProcessoMin = 0;
+    var contLinha = 0;
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        tr.noBorder td {
+  border: 0;
+}
+        tr.border_bottom td {
+  border-bottom:1pt solid white; 
+  }
+    .panel-heading{
+        padding:5px 5px;
+    }
+    .panel-body {
+        padding: 5px 5px 0px 5px !important;
+    }
+            .icon-stack {
+        position: relative;
+    }
+    .fa {
+        position: relative;
+    }
+    .icon-stack .glyphicon {
+        position: absolute; 
+    }
+    .fa .glyphicon {
+        position: absolute; 
+    }
+
+
+    /*.table-fixed {
+  width: 100%;
+  table-layout: fixed;
+}
+
+
+.table-fixed thead {
+  position: sticky;
+  position: -webkit-sticky;
+  top:50px;
+  z-index: 100;
+  background-color: #f9f9f9;
+  color: black;
+}
+
+.table-fixed thead th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 50px;
+    z-index: 100;
+    background-color: #f9f9f9;
+    color: black;
+}*/
+    </style>
+</head>
+@using (Html.BeginForm("Index", "Estoque", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+
+    <body style="overflow:hidden">
+        <input hidden id="itens" value="@Model.lstItens"/>
+        <input hidden id="modal" />
+        <input hidden id="dtInicioRep"/>
+        <input hidden id="dtFimRep"/>
+        <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;width:100%;z-index:101">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:14px;position:relative;">
+                <fieldset>
+                    <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Integração de Nota de Entrada</legend>
+                </fieldset>
+            </div>
+        </main>
+
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="height:100vh">
+                <div class="container-fluid" style="padding-top:25px;padding-left: 21px;">
+                    <div class="col-xs-12" style="padding-left:0">
+                        <div class="col-md-12">
+                            <div class="form-horizontal">
+                                <form role="form">
+
+                                    <fieldset>
+
+                                        @*<legend>Integração com fornecedor</legend>*@
+                                        <br />
+                                        <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@ stle="position:absolute;top:70px;width:97%">
+
+                                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;">
+                                                <div class="panel-heading" style="background-color:lightgray;border: 1px solid #264b79">
+                                                    Filtro - Nota
+                                                </div>
+                                                <div class="panel-body" style="padding-bottom:0;">
+                                                    <div style="display:flex;justify-content:space-between;padding-bottom:10px">
+                                                        <div style="position:relative;z-index:99">
+                                                            <label class="form-negrito">Data início</label>
+                                                            @Html.Editor("strDataInicio", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", id = "strDataInicio", @onchange = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off" } })
+                                                            <div style="color: red" id="dtIniciDivErro">
+                                                            </div>
+                                                        </div>
+                                                        <div style="position:relative;z-index:99">
+                                                            @Html.Label("Data fim", new { @class = "form-negrito" })
+                                                            @Html.Editor("strDataFim", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control datepickerInput", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off" } })
+                                                            <div style="color: red" id="dtFimDivErro">
+                                                            </div>
+                                                        </div>
+                                                        @*<div>
+                                                            @Html.Label("Tipo de Declaração", new { @class = "form-negrito" })
+                                                            @Html.DropDownList("declaracao", (SelectList)ViewBag.Declaracao, "-- Selecione -- ", new { @style = "width:60%;height:26px", @class = "chosen-select" })
+                                                        </div>*@
+                                                        <div>
+                                                            <label>Processo</label>
+                                                            @Html.Editor("processo", new { htmlAttributes = new { @style = "width:150px;height:26px", @class = "form-control", @autocomplete = "off" } })
+                                                        </div>
+                                                        <div>
+                                                            <label>Nota (NúmNF)</label>
+                                                            @Html.Editor("nota", new { htmlAttributes = new { @style = "width:100px;height:26px", @class = "form-control", @autocomplete = "off" } })
+                                                        </div>
+                                                        <div>
+                                                            @Html.Label("Situação", new { @class = "form-negrito" })
+                                                            @*<select name="situacao" class="chosen-select">
+                                                                <option disabled selected>-- Selecione --</option>
+                                                                <option>Não Integrado</option>
+                                                                <option>Integrado</option>
+                                                            </select>*@
+                                                            @Html.DropDownList("situacao", (SelectList)ViewBag.Situacao, "-- Selecione -- ",  new { @class = "chosen-select", @id = "situacao" })
+                                                        </div>
+
+                                                        <div style="padding-top:16px">
+                                                            <button class="btn btn-primary btn-sm" id="btnFiltrar" name="exibir" type="button">Exibir</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            @*<legend>Selecionar pedidos de compra</legend>*@
+                                            <br />
+                                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0;min-height:90px;border: none">
+                                                <div class="panel-heading" style="background-color:lightgray  !important;border: 1px solid #264b79">
+                                                    Nota(s) de Entrada no Estoque
+                                                </div>
+                                                <div class="panel-body" style="padding-bottom: 0;margin-bottom:0">
+                                                @if (Model != null)
+                                                {
+                                                    @*<div class="outer" style="height:100%">
+                                                        <div class="middle" style="width:1250px;height:100%">
+                                                            <div class="inner" style="width:2500px;height:100%">
+                                                                <div class="tableFixHead">
+                                                                    <table class="table table-striped" id="tblItens">
+                                                                        <thead>
+                                                                            <tr>
+
+                                                                                <th style="text-align:center;min-width: 90px;">IntegrarRM</th>
+                                                                                <th class="sticky-col second-col"style="text-align:center;min-width: 100px;">Processo</th>
+                                                                                <th class="sticky-col third-col" style="text-align:center;min-width:50px">ID</th>
+                                                                                <th class="sticky-col fourth-col" style="text-align:center">NúmNF</th>
+                                                                                <th class="sticky-col quinta-col" style="text-align:center">Situação</th>
+                                                                                <th style="text-align:center;min-width:125px">Emissão</th>
+                                                                                <th style="text-align:center;min-width:125px">Rec. Físico</th>
+                                                                                <th style="text-align:center;min-width: 70px">Vl. Fatura</th>
+                                                                                <th style="text-align:center;;min-width: 60px">Taxa DI</th>
+                                                                                <th style="text-align:center">II</th>
+                                                                                <th style="text-align:center">COFINS</th>
+                                                                                <th style="text-align:center">IPI</th>
+                                                                                <th style="text-align:center">PIS</th>
+                                                                                <th style="text-align:center;min-width:125px">Frete Internacional</th>
+                                                                                <th style="text-align:center">Seguro</th>
+                                                                                <th style="text-align:center;min-width: 80px">Vl. Produto</th>
+                                                                                <th style="text-align:center">ICMS</th>
+                                                                                <th style="text-align:center;min-width: 70px">Vl. Nota</th>
+                                                                                <th style="text-align:center;min-width:155px">Desp. Complementares</th>
+                                                                                <th style="text-align:center;min-width:100px">Vl. Rec. Físico</th>
+                                                                        </thead>
+                                                                        <tbody>*@
+                                                           @*a nota nr numid sera integrada no rm. 
+                                                                            Deseja continuar?*@
+                                                                @*@if (Model.lstItens != null)
+                                                                {
+                                                                    foreach (Entities.Estoque item in Model.lstItens)
+                                                                    {
+                                                                        cont += 1;
+                                        
+                                                                        if (cont % 2 == 0)
+                                                                        {
+                                                                            <tr>
+                                                                                <td hidden style="text-ali gn:center">@item.Id_Integracao</td>
+                                                                                <td class="sticky-col first-col border" style="vertical-align:top;text-align:center;background-color:#f9f9f9;background-clip: padding-box">
+                                                                                    <a class="btn modalExcel" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Este procedimento gera uma nova integração para a fatura @item.Id_Integracao. Deseja continuar?'))  Reprocessar(@item.Id_Integracao, @item.NUMNF_BrokerSys, @item.ID_BrokerSys)"></span></a>
+                                                                                </td>
+                                                                                <td class="sticky-col second-col" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.NF_COD_PROCESSO</td>
+                                                                                <td class="sticky-col third-col" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.ID_BrokerSys</td>
+                                                                                <td class="sticky-col fourth-col" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.NUMNF_BrokerSys</td>
+                                                                                <td  class="sticky-col quinta-col sitTblItens" style="text-align:center;background-color:#f9f9f9;background-clip:padding-box">@item.iNTEGRACAO</td>
+                                                                                <td style="text-align:center">@item.EMISSAO</td>
+                                                                                <td style="text-align:center">@item.RECFISICO</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.TAXA_DI)</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.II)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.COFINS)</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.IPI)</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.PIS)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.FreteInter)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.Seguro)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.ICMS)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Nota)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>
+                                                                            </tr>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                            <tr>
+                                                                                <td hidden style="text-align:center">@item.Id_Integracao</td>
+                                                                                <td class="sticky-col first-col" style="vertical-align:top;text-align:center;background-clip: padding-box">
+                                                                                  
+                                                                                    <a class="btn modalExcel" style="padding:0" title="Reprocessar"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Este procedimento gera uma nova integração para a fatura @item.Id_Integracao. Deseja continuar?'))  Reprocessar(@item.Id_Integracao, '@item.NUMNF_BrokerSys', '@item.ID_BrokerSys')"></span></a>
+                                                                                    
+                                                                                </td>
+                                                                                <td class="sticky-col second-col" style="vertical-align:top;text-align:center;background-clip: padding-box">@item.NF_COD_PROCESSO</td>
+                                                                                <td class="sticky-col third-col" style="text-align:center;background-clip: padding-box">@item.ID_BrokerSys</td>
+                                                                               
+                                                                                <td class="sticky-col fourth-col" style="text-align:center;background-clip: padding-box">@item.NUMNF_BrokerSys</td>
+                                                                                <td class="sticky-col quinta-col" style="text-align:center;background-color:white;background-clip: padding-box">@item.iNTEGRACAO</td>                          
+                                                                                <td style="text-align:center">@item.EMISSAO</td>
+                                                                                <td style="text-align:center">@item.RECFISICO</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.TAXA_DI)</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.II)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.COFINS)</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.IPI)</td>
+                                                                                <td style="text-align:center">@string.Format("{0:#,##0.0#}", @item.PIS)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.FreteInter)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.Seguro)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.ICMS)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Nota)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>
+                                                                            </tr>
+                                                                            }
+                                                                           
+                                                                    }
+                                                                }
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+
+                                                    //teste
+                                                    <div class="tableFixHead"  id="th"style="overflow:auto;height:1%;">
+                                                        <table class="table table-striped table-fixed" id="tblItens">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width: 80px;">Processo</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width:61px">Emitir NFE</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width:63px">Rec. Físico</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;">Cancelar</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width:30%">Situação</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;">ID Integração</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center">Núm(NE)</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center">Núm(ND)</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width:82px">Emissão</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width:100px">Físico</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width: 90px">Vl. Fatura</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width: 80px">Vl. Produto</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width:80px">Vl. Despesas</th>
+                                                                    <th style="color:#fdf5f1;background-color:#264b79;text-align:center;min-width:100px">Vl. Físico</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.lstItens != null)
+                                                                {
+                                                                    foreach (Entities.Estoque item in Model.lstItens)
+                                                                    {
+                                                                        if (item.RKPROCESSO == 1)
+                                                                        {
+                                                                            cont += 1;
+                                                                        }
+
+                                                                        contProcesso += 1;
+                                                                        contProcessoMax = item.TOTAL_PROCESSO + 1;
+                                                                        contLinha += 1;
+
+
+                                                                        if (contProcesso >= item.TOTAL_PROCESSO)
+                                                                        {
+                                                                            contProcesso = 1;
+                                                                        }
+
+
+
+                                                                        contProcessoMin = 0;
+                                                                        //if (cont % 2 == 0)
+                                                                        if (cont % 2 != 0)
+                                                                        {
+
+                                                                            contProcessoMax -= 1;
+                                                                            <tr class="border_bottom">
+                                                                             @if (item.QtdLinhasProcesso == 1)
+                                                                             {
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#ccc3be;border-right:1px solid white">@item.NF_COD_PROCESSO</td>
+                                                                             }
+                                                                             else
+                                                                             {
+                                                                                if (item.RKPROCESSO == 1)
+                                                                                {
+                                                                                    <td rowspan=@item.QtdLinhasProcesso style="vertical-align:top;text-align:center;background-color:#ccc3be;border-right:1px solid white">@item.NF_COD_PROCESSO</td>
+                                                                                }
+                                                                             }
+                                                                             @if (item.NF_TPNOTA == "ND")
+                                                                              {
+                                                                                 contProcessoMin += 1;
+                                                                                 if (item.RK_TPNF == 1)
+                                                                                 {
+                                                                                    //<td rowspan=@item.RK_TPNF_ND style="background-color:#e8e3e0"></td>
+                                                                                    <td rowspan=@item.RK_TPNF_ND colspan="2" style="background-color:#e8e3e0;text-align:center">NF Complementar de Despesa</td>
+                                                                                     if (item.Exibir_Cancelar == "S")
+                                                                                     {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#e8e3e0;background-clip: padding-box;border-right:1px solid white;border-left: 1px solid white;">
+                                                                                            <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação cancela as NF(s) Complementares de Despesa do processo @item.NF_COD_PROCESSO.ToString().Trim() na integração para o RM. Deseja continuar?'))  Cancelar('@item.NF_COD_PROCESSO', '@item.TIPO_NF')"></span></a>
+                                                                                        </td>
+                                                                                     }
+                                                                                     else
+                                                                                     {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#e8e3e0;background-clip: padding-box;border-right:1px solid white;border-left: 1px solid white;">
+                                                                                            <span class="fa fa-refresh" style="font-size:16px;color:#b5b1b1"></span>
+                                                                                        </td>
+                                                                                     }
+                                                                                     //<td rowspan=@item.RK_TPNF_ND style="background-color:#e8e3e0"></td>
+                                                                                 }
+                                                                                <td style="text-align:right;background-color:#e8e3e0"></td>
+
+                                                                                    @*if (item.Exibir_Cancelar == "S")
+                                                                                    {
+                                                                                    <td class="border" style="vertical-align:top;text-align:center;background-color:#e8e3e0;background-clip: padding-box;border-left:1pt solid white">
+                                                                                        <a>
+                                                                                            <span class="icon-stack" style="left:5px" onclick="if(confirm('Esta ação remove a NF de Despesas da integração. Os custos desta nota não serão considerados no estoque. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.ID_NE', '@item.NUMNF_NE', '@item.ID_ND', '@item.NUMNF_ND',  @item.ID_TR_BS_OUT_NF)">
+                                                                                                <i class="fa fa-file-alt" style="font-size:16px;"></i>
+                                                                                                <i class="fa fa-times" style="font-size:10px;color:red;top:4px;left:-8px"></i>
+                                                                                            </span>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                   }
+                                                                                     else
+                                                                                     {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-color:#e8e3e0;background-clip: padding-box;border-left:1pt solid white">
+                                                                                                <span class="icon-stack" style="left:5px">
+                                                                                                    <i class="fa fa-file-alt" style="font-size:16px;color:#b5b1b1"></i>
+                                                                                                    <i class="fa fa-times" style="font-size:10px;color:#b5b1b1;top:4px;left:-8px"></i>
+                                                                                                </span>
+                                                                                        </td>
+                                                                                 }*@
+
+
+                                                                                <td class="" style="text-align:center;background-color:#e8e3e0;background-clip:padding-box">@item.Id_Integracao</td>
+
+
+                                                                                @*<td style="vertical-align:top;text-align:center;background-color:#F9F6F4">@item.ID_NE</td>*@
+                                                                             //if (item.NF_TPNOTA != "NE")
+                                                                             //{
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#e8e3e0">@item.NUMNF_NE</td>
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#e8e3e0">@item.NUMNF_ND</td>
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#e8e3e0">@item.EMISSAO</td>
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#e8e3e0">@item.RECFISICO</td>
+                                                                                <td style="text-align:right;background-color:#e8e3e0"></td>
+                                                                                <td style="text-align:right;background-color:#e8e3e0"></td>
+                                                                                <td style="text-align:right;background-color:#e8e3e0">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                <td style="text-align:right;background-color:#e8e3e0"></td>
+                                                                                 //}
+                                                                                 //else
+                                                                                 //{
+                                                                                @*<td style="vertical-align:top;text-align:center;background-color:#e8e3e0">@item.NUMNF_NE</td>
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#e8e3e0">@item.NUMNF_ND</td>
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#e8e3e0">@item.EMISSAO</td>
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#e8e3e0">@item.RECFISICO</td>
+                                                                                <td style="text-align:right;background-color:#e8e3e0">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                <td style="text-align:right;background-color:#e8e3e0">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                <td style="text-align:right;background-color:#e8e3e0">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                <td style="text-align:right;background-color:#e8e3e0">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>*@
+                                                                             //}
+                                                                                @*<td style="vertical-align:top;text-align:center;background-color:#F9F6F4">@item.ID_ND</td>*@
+
+
+
+                                                                             }
+                                                                             else
+                                                                             {
+                                                                                 if (item.RK_TPNF == 1)
+                                                                                 {
+                                                                                     if (item.Exibir_Emissao == "S")
+                                                                                     {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#ccc3be;background-clip:padding-box;border-right: 1px solid white">
+                                                                                            <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação disponibiliza as notas do processo @item.NF_COD_PROCESSO.ToString().Trim() para emissão no RM. Deseja continuar?'))  Emitir_NFE('@item.NF_COD_PROCESSO')"></span></a>
+                                                                                        </td>
+                                                                                     }
+                                                                                     else
+                                                                                     {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#ccc3be;background-clip:padding-box;border-right: 1px solid white">
+                                                                                            <span class="fa fa-refresh" style="font-size:16px;color:#b5b1b1"></span>
+                                                                                        </td>
+                                                                                     }
+                                                                                     if (item.Exibir_Fisico == "S")
+                                                                                     {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#ccc3be;background-clip: padding-box;border-right: 1px solid white">
+                                                                                            <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação permite recebimento físico das notas do processo @item.NF_COD_PROCESSO.ToString().Trim() no RM. Deseja continuar?')) RecFisico('@item.NF_COD_PROCESSO', '@item.TIPO_NF')"></span></a>
+                                                                                        </td>
+                                                                                     }
+                                                                                     else
+                                                                                     {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#ccc3be;background-clip: padding-box;border-right: 1px solid white">
+                                                                                            <span class="fa fa-refresh" style="font-size:16px;color:#b5b1b1    "></span>
+                                                                                        </td>
+                                                                                     }
+                                                                                     if (item.Exibir_Cancelar == "S")
+                                                                                     {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#ccc3be;background-clip: padding-box;border-right: 1px solid white">
+                                                                                            <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação cancela as notas do processo @item.NF_COD_PROCESSO.ToString().Trim() na integração para o RM. Deseja continuar?'))  Cancelar('@item.NF_COD_PROCESSO', '@item.TIPO_NF')"></span></a>
+                                                                                        </td>
+                                                                                     }
+                                                                                     else
+                                                                                     {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#ccc3be;background-clip: padding-box;border-right: 1px solid white">
+                                                                                            <span class="fa fa-refresh" style="font-size:16px;color:#b5b1b1"></span>
+                                                                                        </td>
+                                                                                     }
+
+
+
+                                                                                 }
+                                                                                 @*if (item.Exibir_Cancelar == "S")
+                                                                                 {
+                                                                                    <td class="border" style="vertical-align:top;text-align:center;background-color:#ccc3be;background-clip: padding-box;">
+                                                                                        <a>
+                                                                                            <span class="icon-stack" style="left:5px" onclick="if(confirm('Esta ação bloqueia a integração da Nota de Entrada para o RM. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.ID_NE', '@item.NUMNF_NE', '@item.ID_ND', '@item.NUMNF_ND', @item.ID_TR_BS_OUT_NF)">
+                                                                                                <i class="fa fa-file-alt" style="font-size:16px;"></i>
+                                                                                                <i class="fa fa-times" style="font-size:10px;color:red;top:4px;left:-8px"></i>
+                                                                                            </span>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                   }
+                                                                                 else
+                                                                                 {
+                                                                                    <td class="border" style="vertical-align:top;text-align:center;background-color:#ccc3be;background-clip: padding-box;border-left:1pt solid white">
+                                                                                        <a>
+                                                                                            <span class="icon-stack" style="left:5px">
+                                                                                                <i class="fa fa-file-alt" style="font-size:16px;color:#b5b1b1"></i>
+                                                                                                <i class="fa fa-times" style="font-size:10px;color:#b5b1b1;top:4px;left:-8px"></i>
+                                                                                            </span>
+                                                                                        </a>
+                                                                                    </td>
+                                                                                 }*@
+                                                                             if (item.Id_Integracao > 0)
+                                                                             {
+                                                                                    <td class="" style="text-align:center;background-color:#ccc3be;background-clip:padding-box">@item.iNTEGRACAO</td>
+                                                                                 }
+                                                                                 else
+                                                                                 {
+                                                                                    <td class="" style="text-align:center;background-color:#ccc3be;background-clip:padding-box">@item.iNTEGRACAO</td>
+                                                                                 }
+
+                                                                                <td class="" style="text-align:center;background-color:#ccc3be;background-clip:padding-box">@item.Id_Integracao</td>
+
+
+                                                                                @*<td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.ID_NE</td>*@
+
+                                                                             @*if (item.NF_TPNOTA != "NE")
+                                                                             {
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.NUMNF_NE</td>
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.NUMNF_ND</td>
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.EMISSAO</td>
+                                                                                <td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.RECFISICO</td>
+                                                                                <td style="text-align:right;background-color:#ccc3be"></td>
+                                                                                <td style="text-align:right;background-color:#ccc3be"></td>
+                                                                                <td style="text-align:right;background-color:#e8e3e0"></td>
+                                                                                <td style="text-align:right;background-color:#ccc3be">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                <td style="text-align:right;background-color:#ccc3be"></td>
+                                                                             }
+                                                                             else
+                                                                             {*@
+                                                                                    <td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.NUMNF_NE</td>
+                                                                                    <td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.NUMNF_ND</td>
+                                                                                    <td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.EMISSAO</td>
+                                                                                    <td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.RECFISICO</td>
+                                                                                    <td style="text-align:right;background-color:#ccc3be">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                    <td style="text-align:right;background-color:#ccc3be">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                    <td style="text-align:right;background-color:#ccc3be">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                    <td style="text-align:right;background-color:#ccc3be">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>
+                                                                             //}
+                                                                                @*<td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.ID_ND</td>*@
+                                                                                @*<td style="vertical-align:top;text-align:center;background-color:#ccc3be">@item.NUMNF_ND</td>*@
+                                                                                
+                                                                                @*<td style="text-align:right;background-color:#78909C">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>*@
+                                                                             }
+
+                                                                                
+                                                                                
+
+
+                                                                            </tr>
+                                                                            if (contLinha == item.QtdLinhasProcesso)
+                                                                            {
+                                                                                <tr style="height: 15px;">
+                                                                                    @*<td></td>*@
+                                                                                </tr>
+                                                                                contLinha = 0;
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            contProcessoMax -= 1;
+
+                                                                            <tr class="border_bottom">
+                                                                                @if (item.QtdLinhasProcesso == 1)
+                                                                                {
+                                                                                    <td style="vertical-align:top;text-align:center;background-color:#AAC4D1;border-right:1px solid white">@item.NF_COD_PROCESSO</td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (item.RKPROCESSO == 1)
+                                                                                    {
+                                                                                        <td rowspan=@item.QtdLinhasProcesso style="vertical-align:top;text-align:center;background-color:#AAC4D1;border-right:1px solid white">@item.NF_COD_PROCESSO</td>
+                                                                                    }
+                                                                                }
+                                                                                @if (item.NF_TPNOTA == "ND")
+                                                                                {
+                                                                                    contProcessoMin += 1;
+                                                                                    if (item.RK_TPNF == 1)
+                                                                                    {
+                                                                                        //<td rowspan=@item.RK_TPNF_ND style="background-color:#d8e0e5;"></td>
+                                                                                        <td rowspan=@item.RK_TPNF_ND colspan="2" style="background-color:#d8e0e5;text-align:center">NF Complementar de Despesa</td>
+                                                                                        if (item.Exibir_Cancelar == "S")
+                                                                                        {
+                                                                                            <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#d8e0e5;background-clip: padding-box;border-right:1px solid white;border-left: 1px solid white;">
+                                                                                                <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação cancela as NF(s) Complementares de Despesa do processo @item.NF_COD_PROCESSO.ToString().Trim() na integração para o RM. Deseja continuar?'))  Cancelar('@item.NF_COD_PROCESSO', '@item.TIPO_NF')"></span></a>
+                                                                                            </td>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#d8e0e5;background-clip: padding-box;border-right:1px solid white;border-left: 1px solid white;">
+                                                                                                <span class="fa fa-refresh" style="font-size:16px;color:#b5b1b1"></span>
+                                                                                            </td>
+                                                                                        }
+
+                                                                                        //<td rowspan=@item.RK_TPNF_ND style="background-color:#d8e0e5"></td>
+                                                                                    }
+                                                                                    <td style="text-align:right;background-color:#d8e0e5"></td>
+
+                                                                                    @*if (item.Exibir_Cancelar == "S")
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-color:#d8e0e5;background-clip: padding-box;border-left:1pt solid white">
+                                                                                            <a>
+                                                                                                <span class="icon-stack" style="left:5px" onclick="if(confirm('Esta ação remove a NF de Despesas da integração. Os custos desta nota não serão considerados no estoque. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.ID_NE', '@item.NUMNF_NE', '@item.ID_ND', '@item.NUMNF_ND', @item.ID_TR_BS_OUT_NF)">
+                                                                                                    <i class="fa fa-file-alt" style="font-size:16px;"></i>
+                                                                                                    <i class="fa fa-times" style="font-size:10px;color:red;top:4px;left:-8px"></i>
+                                                                                                </span>
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-color:#d8e0e5;background-clip: padding-box;border-left:1pt solid white">
+                                                                                            <a>
+                                                                                                <span class="icon-stack" style="left:5px" onclick="if(confirm('A nota @item.ID_BrokerSys será excluida no RM. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.ID_NE', '@item.NUMNF_NE', '@item.ID_ND', '@item.NUMNF_ND', @item.ID_TR_BS_OUT_NF)">
+                                                                                                    <i class="fa fa-file-alt" style="font-size:16px;color:#b5b1b1"></i>
+                                                                                                    <i class="fa fa-times" style="font-size:10px;color:#b5b1b1;top:4px;left:-8px"></i>
+                                                                                                </span>
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    }*@
+
+                                                                                @*if (item.Exibir_Cancelar == "S")
+                                                                                {
+                                                                                    <td class="border" style="vertical-align:top;text-align:center;background-color:#d8e0e5;background-clip: padding-box;border-right:1px solid white">
+                                                                                        <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação remove a NF de Despesas da integração. Os custos desta nota não serão considerados no estoque. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.ID_NE', '@item.NUMNF_NE', '@item.ID_ND', '@item.NUMNF_ND',  @item.ID_TR_BS_OUT_NF)"></span></a>
+                                                                                    </td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td class="border" style="vertical-align:top;text-align:center;background-color:#d8e0e5;background-clip: padding-box;border-right:1px solid white">
+                                                                                        <span class="fa fa-refresh" style="font-size:16px;color:#b5b1b1"></span>
+                                                                                    </td>
+                                                                                }*@
+
+                                                                                    <td class="" style="text-align:center;background-color:#d8e0e5;background-clip:padding-box">@item.Id_Integracao</td>
+
+
+                                                                                    @*<td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.ID_NE</td>*@
+
+                                                                                    //if (item.NF_TPNOTA != "NE")
+                                                                                    //{
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.NUMNF_NE</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.NUMNF_ND</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.EMISSAO</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.RECFISICO</td>
+                                                                                        <td style="text-align:right;background-color:#d8e0e5"></td>
+                                                                                        <td style="text-align:right;background-color:#d8e0e5"></td>
+                                                                                        <td style="text-align:right;background-color:#d8e0e5">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                        <td style="text-align:right;background-color:#d8e0e5"></td>
+                                                                                @*}
+                                                                                else
+                                                                                {
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.NUMNF_NE</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.NUMNF_ND</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.EMISSAO</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.RECFISICO</td>
+                                                                                        <td style="text-align:right;background-color:#d8e0e5">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                        <td style="text-align:right;background-color:#d8e0e5">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                        <td style="text-align:right;background-color:#d8e0e5">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                        <td style="text-align:right;background-color:#d8e0e5">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>
+                                                                                }*@
+                                                                                    @*<td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.ID_ND</td>*@
+                                                                                    @*<td style="vertical-align:top;text-align:center;background-color:#d8e0e5">@item.NUMNF_ND</td>*@
+
+
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (item.RK_TPNF == 1)
+                                                                                    {
+                                                                                        if (item.Exibir_Emissao == "S")
+                                                                                        {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#AAC4D1;background-clip: padding-box;border-right: 1px solid white">
+                                                                                            @*<a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação disponibiliza as notas do processo @item.NF_COD_PROCESSO.ToString().Trim() para emissão no RM. Deseja continuar?'))  Emitir_NFE(@item.Id_Integracao, '@item.ID_NE', '@item.NUMNF_NE', '@item.ID_ND', '@item.NUMNF_ND', @item.ID_TR_BS_OUT_NF)"></span></a>*@
+                                                                                            <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação disponibiliza as notas do processo @item.NF_COD_PROCESSO.ToString().Trim() para emissão no RM. Deseja continuar?'))  Emitir_NFE('@item.NF_COD_PROCESSO')"></span></a>
+                                                                                         </td>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                        <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#AAC4D1;background-clip: padding-box;border-right: 1px solid white">
+                                                                                            <span class="fa fa-refresh" style="font-size:16px;color:#b5b1b1" ></span>
+                                                                                        </td>
+                                                                                        }
+                                                                                        if (item.Exibir_Fisico == "S")
+                                                                                        {
+                                                                                            <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#AAC4D1;background-clip: padding-box;border-right: 1px solid white">
+                                                                                                <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação permite recebimento físico das notas do processo @item.NF_COD_PROCESSO.ToString().Trim() no RM. Deseja continuar?')) RecFisico('@item.NF_COD_PROCESSO', '@item.TIPO_NF')"></span></a>
+                                                                                            </td>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#AAC4D1;background-clip: padding-box;border-right: 1px solid white">
+                                                                                                <span class="fa fa-refresh" style="font-size:16px;color:#b5b1b1"></span>
+                                                                                            </td>
+                                                                                        }
+                                                                                        if (item.Exibir_Cancelar == "S")
+                                                                                        {
+                                                                                            <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#AAC4D1;background-clip: padding-box;border-right: 1px solid white">
+                                                                                                <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('Esta ação cancela as notas do processo @item.NF_COD_PROCESSO.ToString().Trim() na integração para o RM. Deseja continuar?'))  Cancelar('@item.NF_COD_PROCESSO', '@item.TIPO_NF')"></span></a>
+                                                                                            </td>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <td rowspan=@item.RK_TPNF_ND class="border" style="vertical-align:top;text-align:center;background-color:#AAC4D1;background-clip: padding-box;border-right: 1px solid white">
+                                                                                                <span class="fa fa-refresh" style="font-size:16px;color:#b5b1b1"></span>
+                                                                                            </td>
+                                                                                        }
+                                                                                    }
+
+                                                                                    @*if (item.Exibir_Cancelar == "S")
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-color:#AAC4D1;background-clip: padding-box">
+                                                                                            <a>
+                                                                                                <span class="icon-stack" style="left:5px" onclick="if(confirm('Esta ação bloqueia a integração da Nota de Entrada para o RM. Deseja continuar?'))  Cancelar(@item.Id_Integracao, '@item.ID_NE', '@item.NUMNF_NE', '@item.ID_ND', '@item.NUMNF_ND', @item.ID_TR_BS_OUT_NF)">
+                                                                                                    <i class="fa fa-file-alt" style="font-size:16px;"></i>
+                                                                                                    <i class="fa fa-times" style="font-size:10px;color:red;top:4px;left:-8px"></i>
+                                                                                                </span>
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-color:#AAC4D1;background-clip: padding-box;border-left:1pt solid white">
+                                                                                            <a>
+                                                                                                <span class="icon-stack" style="left:5px">
+                                                                                                    <i class="fa fa-file-alt" style="font-size:16px;color:#b5b1b1"></i>
+                                                                                                    <i class="fa fa-times" style="font-size:10px;color:#b5b1b1;top:4px;left:-8px"></i>
+                                                                                                </span>
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    }*@
+
+                                                                                if (item.Id_Integracao > 0)
+                                                                                {
+                                                                                        <td class="" style="text-align:center;background-color:#AAC4D1;background-clip:padding-box">@item.iNTEGRACAO</td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="" style="text-align:center;background-color:#AAC4D1;background-clip:padding-box">@item.iNTEGRACAO</td>
+                                                                                    }
+
+                                                                                    <td class="" style="text-align:center;background-color:#AAC4D1;background-clip:padding-box">@item.Id_Integracao</td>
+
+
+                                                                                    @*<td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.ID_NE</td>*@
+                                                                                    @*<td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.NUMNF_NE</td>*@
+                                                                                    @*<td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.ID_ND</td>*@
+
+                                                                                    @*<td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.NUMNF_ND</td>*@
+
+                                                                                    @*//if (item.NF_TPNOTA != "NE")
+                                                                                    //{
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.NUMNF_NE</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.NUMNF_ND</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.EMISSAO</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.RECFISICO</td>
+                                                                                        <td style="text-align:right;background-color:#AAC4D1"></td>
+                                                                                        <td style="text-align:right;background-color:#AAC4D1"></td>
+                                                                                        <td style="text-align:right;background-color:#AAC4D1">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                        <td style="text-align:right;background-color:#AAC4D1"></td>
+                                                                                @*}*@
+                                                                                //else
+                                                                                //{
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.NUMNF_NE</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.NUMNF_ND</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.EMISSAO</td>
+                                                                                        <td style="vertical-align:top;text-align:center;background-color:#AAC4D1">@item.RECFISICO</td>
+                                                                                        <td style="text-align:right;background-color:#AAC4D1">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                        <td style="text-align:right;background-color:#AAC4D1">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                        <td style="text-align:right;background-color:#AAC4D1">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                        <td style="text-align:right;background-color:#AAC4D1">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>
+                                                                                    //}
+
+                                                                                }
+                                                                            </tr>
+                                                                            if (contLinha == item.QtdLinhasProcesso)
+                                                                            {
+                                                                                <tr  style="height: 15px;">
+                                                                                    <td></td>
+                                                                                </tr>
+                                                                                contLinha = 0;
+                                                                            }
+                                                                        }
+                                                                        @*else
+                                                                        {
+                                                                     
+                                                                            contProcessoMax -= 1;
+                                                                            <tr>
+
+                                                                                @if (item.RKPROCESSO == 1)
+                                                                                {
+                                                                                    <td rowspan=@item.TOTAL_PROCESSO style="vertical-align:top;text-align:center;background-color:#78909C">@item.NF_COD_PROCESSO</td>
+                                                                                }
+                                                                                @if (item.TIPO_NF == "D")
+                                                                                {
+                                                                                    if (item.RKPROCESSO == 1)
+                                                                                    {
+                                                                                        <td rowspan=@item.TOTAL_PROCESSO style="background-color:#d8e0e5"></td>
+                                                                                        <td rowspan=@item.TOTAL_PROCESSO style="background-color:#d8e0e5"></td>
+                                                                                        <td rowspan=@item.TOTAL_PROCESSO style="background-color:#d8e0e5"></td>
+                                                                                    }
+                                                                                    if (item.Exibir_Cancelar == "S")
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-clip: padding-box;background-color:#78909C">
+                                                                                            <a>
+                                                                                                <span class="icon-stack" style="left:5px" onclick="if(confirm('A nota @item.ID_BrokerSys será excluida no RM. Deseja continuar?'))  Excluir(@item.Id_Integracao, @item.NUMNF_BrokerSys, @item.ID_BrokerSys)">
+                                                                                                    <i class="fa fa-file-alt" style="font-size:16px;"></i>
+                                                                                                    <i class="fa fa-times" style="font-size:10px;color:red;top:4px;left:-8px"></i>
+                                                                                                </span>
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-clip: padding-box;background-color:#78909C"></td>
+                                                                                    }
+                                                                                    <td style="text-align:center;background-clip:padding-box">@item.Id_Integracao</td>
+
+
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.ID_NE</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.NUMNF_NE</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.ID_ND</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.NUMNF_ND</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.EMISSAO</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.RECFISICO</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (item.Id_Integracao > 0)
+                                                                                    {
+                                                                                        <td class="" style="text-align:center;background-clip:padding-box">@item.iNTEGRACAO</td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="" style="text-align:center;background-clip:padding-box">@item.iNTEGRACAO</td>
+                                                                                    }
+
+                                                                                    if (item.Exibir_Emissao == "S")
+                                                                                    {
+                                                                                        <td class="" style="vertical-align:top;text-align:center;background-clip: padding-box">
+                                                                                            <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('A nota @item.ID_BrokerSys será integrada no RM. Deseja continuar?'))  Emitir_NFE(@item.Id_Integracao, '@item.ID_NE', '@item.NUMNF_NE', '@item.ID_ND', '@item.NUMNF_ND')"></span></a>
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-clip: padding-box"></td>
+                                                                                    }
+
+                                                                                    if (item.Exibir_Fisico == "S")
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-clip: padding-box">
+                                                                                            <a class="btn" style="padding:0"><span class="fa fa-refresh" style="font-size:16px;" onclick="if(confirm('O recebimento físico da nota @item.ID_BrokerSys será liberado no RM. Deseja continuar?')) RecFisico(@item.Id_Integracao, '@item.ID_NE', '@item.NUMNF_NE', '@item.ID_ND', '@item.NUMNF_ND')"></span></a>
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-clip: padding-box"></td>
+                                                                                    }
+                                                                                    if (item.Exibir_Cancelar == "S")
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-clip: padding-box;background-color:#78909C">
+                                                                                            <a>
+                                                                                                <span class="icon-stack" style="left:5px" onclick="if(confirm('A nota @item.ID_BrokerSys será excluida no RM. Deseja continuar?'))  Excluir(@item.Id_Integracao, @item.NUMNF_BrokerSys, @item.ID_BrokerSys)">
+                                                                                                    <i class="fa fa-file-alt" style="font-size:16px;"></i>
+                                                                                                    <i class="fa fa-times" style="font-size:10px;color:red;top:4px;left:-8px"></i>
+                                                                                                </span>
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td class="border" style="vertical-align:top;text-align:center;background-clip: padding-box;background-color:#78909C"></td>
+                                                                                    }
+                                                                                    <td style="text-align:center;background-clip:padding-box">@item.Id_Integracao</td>
+
+
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.ID_NE</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.NUMNF_NE</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.ID_ND</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.NUMNF_ND</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.EMISSAO</td>
+                                                                                    <td style="vertical-align:top;text-align:center;">@item.RECFISICO</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", item.VR_FATURA)</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_Produto)</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.DespesasCompl)</td>
+                                                                                    <td style="text-align:right">@string.Format("{0:#,##0.0#}", @item.VR_RecFisico)</td>
+                                                                                }*@
+
+
+
+                                                                        // </tr>
+                                                                    }
+                                                                }
+
+                                                                //}
+
+
+
+                                                                        @*<td><a class="modalBTN" style="padding:0;font-size:12px;text-decoration:none;color:black;font-size:14px;pointer-events:none">@item.NUMEROMOV</a></td>*@
+
+                                                                    @*}
+                                                                }*@
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                }
+ @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Continuar</button>*@
+                                                            </div>
+
+
+                                                        </div>
+                                                    @*teste*@
+
+
+
+
+                                                </div>
+
+                                    </fieldset>
+                                </form>
+                            </div><!-- /.modal-dialog -->
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+
+        <!-- Modal -->
+        @*@if (Model != null)
+            {
+                if (Model.lstInforme != null)
+                {*@
+        <div class="modal fade" id="modalInformativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel"><span id="credor_Modal"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Documento: <span id="documento_Modal"></span>
+                            </div>
+                            <table class="table table-hover  table-bordered">
+                                <tr>
+                                    <td>Processo: <span id="processo_Modal"> </span></td>
+                                    <td>Cadastro: <span id="cadastro_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Liberação: <span id="liberação_Modal"> </span></td>
+                                    <td>Vencimento: <span id="vencimento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Despesa: <span id="despesa_Modal"> </span></td>
+                                    <td>Documento: <span id="documento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Série: <span id="serie_Modal"> </span></td>
+                                    <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Código Credor Despesa: <span id="cod_Credor_Modal"> </span></td>
+                                    <td>Moeda: <span id="moeda_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Valor Previsto Despesa: <span id="vr_previsto_despesa_Modal"> </span></td>
+                                    <td>Valor Adiantado Despesa: <span id="vr_adiantado_despesa_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td>Valor Real Despesa: <span id="valor_real_Modal"> </span></td>
+                                    <td>Valor a Pagar Despesa: <span id="valor_pagar_despesa_Modal"> </span></td>
+                                </tr>
+                            </table>
+
+                        </div>
+                        <br />
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Processo: <span id="processo_integracao_Modal"></span>
+                            </div>
+                            <table class="table table-hover  table-bordered" width="100%">
+                                <tr>
+                                    <td colspan="3">Integração: <span id="integracao_Modal"> </span></td>
+                                    <td colspan="3">ID: <span id="id_Modal"> </span></td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Data: <span id="data_Modal"> </span></td>
+                                    <td colspan="3"> Situação: <span id="situacao_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Tipo: <span id="tipo_Modal"> </span></td>
+                                    <td colspan="3">Complemento: <span id="complemento_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" width="33%">ID INT: <span id="idint_Modal"> </span></td>
+                                    <td colspan="2" width="33%">COD TMV INT: <span id="codtmvint_Modal"> </span></td>
+                                    <td colspan="2" width="33%">Chave Origem Int: <span id="chave_origem_int_Modal"> </span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" width="33%">Identificador: <span id="identificador_Modal"> </span></td>
+                                    <td colspan="2" width="33%">Movimento: <span id="movimento_Modal"> </span></td>
+                                    <td colspan="2" width="33%">Núm. Movimento: <span id="numMovimento_Modal"> </span></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <br />
+
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Considerações
+                            </div>
+                            <table class="table table-hover  table-bordered" width="100%">
+                                <tr id="corConsideracoes" width="100%">
+                                    <td colspan="6"><div class="pre-scrollable" id="consideracoes"></div></td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                        <div class="modal-footer" style="padding:5px;">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
+            <div class="modal fade" id="modalReprocessarItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 style="font-weight" class="modal-title" id="exampleModalLabel">Reprocessamento para fatura  <span id="id_fatura"></span></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span id="comentario_Modal"></span>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                            @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modalReprocessarItens" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 style="font-weight" class="modal-title" id="exampleModalLabel">Reprocessamento para fatura  <span id="id_fatura_rep"></span></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table id="tblReprocessar">
+                                <tbody></tbody>
+                            </table>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                            @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <div class="modal fade" id="modalAguardar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel"> <span id="id_fatura"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    Aguarde
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    </div>
+                </div>
+            </div>
+         </div>
+
+        <div class="modal fade" id="modalOK" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 style="font-weight" class="modal-title" id="exampleModalLabel"> <span id="id_fatura"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ok
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+            @*<script>
+                    $(document).ready(function () {
+
+                        var navListItems = $('div.setup-panel div a'),
+                                allWells = $('.setup-content'),
+                                allNextBtn = $('.nextBtn');
+
+                        allWells.hide();
+
+                        navListItems.click(function (e) {
+                            e.preventDefault();
+                            var $target = $($(this).attr('href')),
+                                $item = $(this);
+                            if (!$item.hasClass('disabled')) {
+                                //navListItems.removeClass('btn-primary').addClass('btn-default');
+                                if ($item.attr('id') != $(navListItems[1]).attr('id')) {
+                                    $(navListItems[1]).removeClass('btn-primary').addClass('btn-success');
+                                }
+                                //$('#item3').addClass('btn-success');
+                                $item.addClass('btn-primary');
+                                allWells.hide();
+                                $target.show();
+                                $target.find('input:eq(0)').focus();
+                            }
+                        });
+
+                        allNextBtn.click(function () {
+                            var curStep = $(this).closest(".setup-content"),
+                                curStepBtn = curStep.attr("id"),
+                                nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                                curInputs = curStep.find("input[type='text'],input[type='url'], input[type='password'], input[type='email']"),
+                                isValid = true;
+
+                            $(".form-group").removeClass("has-error");
+                            for (var i = 0; i < curInputs.length; i++) {
+                                if (!curInputs[i].validity.valid) {
+                                    isValid = false;
+                                    $(curInputs[i]).closest(".form-group").addClass("has-error");
+                                }
+                            }
+
+                            if (isValid)
+                                nextStepWizard.removeAttr('disabled').trigger('click');
+                        });
+
+                        $('div.setup-panel div a.btn-primary').trigger('click');
+                    });
+                </script>*@
+
+            <script>
+
+                $(document).ready(function () {
+                    var height = screen.height;
+                    var lstItens = @Html.Raw(Json.Encode(Model.lstItens));
+                    if (lstItens.length > 0)
+                    {
+                       
+                        $('.inner').css('height', height/2 + 'px');
+                    }
+                    //else
+                    //{
+                    //    alert('2')
+                    //    $('.inner').css('height', '50px');
+                    //}
+
+
+
+                    allWells = $('#Security-Setup-step'),
+                    allWells2 = $('#VerifyEmail-step')
+                    //,allNextBtn = $('.nextBtn');
+
+                    allWells.hide();
+                    allWells2.hide();
+
+                    var menuAtivo = $('#menuAtivo').val();
+                    $('.menuEstoque .sidebar-submenu').toggle();
+                });
+                
+
+                $('.consultaPedido').click(function () {
+                    $(".divConsultaPedido").toggle();
+                    $(".divParametrosPedido").toggle();
+                });
+
+                $('a.modalBTN').click(function () {
+                    $('#my-modal').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                });
+
+
+
+
+                $('#opcoesImportacaoRegular *').attr("disabled", true);
+
+                $('#importacaoRegularInput').click(function () {
+                    //$('#opcoesImportacaoRegular').show();
+                    $('#opcoesImportacaoRegular *').attr("disabled", false);
+                });
+                $('#depositoEspecialInput').click(function () {
+                    //$('#opcoesImportacaoRegular').hide();
+                    $('#opcoesImportacaoRegular *').attr("disabled", true);
+                });
+            </script>
+
+
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+            <!-- jQuery library -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+            <!-- Latest compiled JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+            <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+            <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+            <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+            <link href="~/content/indexcompras.css" rel="stylesheet" />
+            <link href="~/content/Estoque.css" rel="stylesheet" />
+            <script type="text/javascript" src="~/scripts/Estoque.js"></script>
+            <script>
+                $(window).load(function () {
+                    $(".chosen-select").chosen()
+                });
+            </script>
+
+            <script>
+                $(function () {
+                    //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' }).val();
+                    //$(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy', language: "pt-BR", locale: 'pt-br' });
+                    $(".datepickerInput").datepicker({
+                        dateFormat: 'dd/mm/yy',
+                        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        nextText: 'Próximo',
+                        prevText: 'Anterior'
+                    });
+
+                });
+                function isValidDate(date, campo) {
+
+                    var regEx = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+
+                    if (regEx.test(date) == true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+
+                $('#processo').on('keypress',function(e) {
+                    if(e.which == 13) {
+                        let processo = $('#processo').val();
+                        //if(processo != null & processo != ""){
+                            var dtInicio = $('#strDataInicio').val();
+                            var dtFim = $('#strDataFim').val();
+                            var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                            $('#myForm').append($(input));
+
+
+                            if ((dtInicio == "" || dtInicio == null) || (dtFim == "" || dtFim == null)) {
+                                if ((dtInicio == "" || dtInicio == null)) {
+                                    $('#dtIniciDivErro').text('Selecione a data início.');
+                                }
+                                if ((dtFim == "" || dtFim == null)) {
+                                    $('#dtFimDivErro').text('Selecione a data fim.');
+                                }
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                            else {
+
+                                var validaDTInicio = isValidDate(dtInicio, 'strDataInicio');
+
+                                var validaDTFim = isValidDate(dtFim, 'strDataFim');
+
+                                if (validaDTInicio == true & validaDTFim == true) {
+                                    $("#btnFiltrar").attr("disabled", false)
+                                    document.getElementById("myForm").submit();
+                                }
+                                else {
+                                    if (validaDTInicio == false) {
+                                        $('#dtIniciDivErro').text('Data inválida.');
+                                        $("#btnFiltrar").attr("disabled", true)
+                                    }
+                                    if (validaDTFim === false) {
+                                        $('#dtFimDivErro').text('Data inválida.');
+                                        $("#btnFiltrar").attr("disabled", true)
+                                    }
+                                }
+
+                            }
+                       // }
+                    }
+                });
+
+                $('#btnFiltrar').click(function () {
+                    var dtInicio = $('#strDataInicio').val();
+                    var dtFim = $('#strDataFim').val();
+                    var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "exibir").val("exibir");
+                    $('#myForm').append($(input));
+
+
+                    if ((dtInicio == "" || dtInicio == null) || (dtFim == "" || dtFim == null)) {
+                        if ((dtInicio == "" || dtInicio == null)) {
+                            $('#dtIniciDivErro').text('Selecione a data início.');
+                        }
+                        if ((dtFim == "" || dtFim == null)) {
+                            $('#dtFimDivErro').text('Selecione a data fim.');
+                        }
+                        $("#btnFiltrar").attr("disabled", true)
+                    }
+                    else {
+
+                        var validaDTInicio = isValidDate(dtInicio, 'strDataInicio');
+
+                        var validaDTFim = isValidDate(dtFim, 'strDataFim');
+
+                        if (validaDTInicio == true & validaDTFim == true) {
+                            $("#btnFiltrar").attr("disabled", false)
+                            document.getElementById("myForm").submit();
+                        }
+                        else {
+                            if (validaDTInicio == false) {
+                                $('#dtIniciDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                            if (validaDTFim === false) {
+                                $('#dtFimDivErro').text('Data inválida.');
+                                $("#btnFiltrar").attr("disabled", true)
+                            }
+                        }
+
+                    }
+                })
+
+                $("#strDataInicio").keyup(function () {
+                    $('#dtIniciDivErro').text('');
+                    $("#btnFiltrar").attr("disabled", false)
+                });
+
+                $("#strDataFim").keyup(function () {
+                    $('#dtFimDivErro').text('');
+                    $("#btnFiltrar").attr("disabled", false);
+                });
+
+
+                function Informativo(id_integracao, sp_id, sp_id_despesa_processo) {
+                    $.ajax({
+                        url: '@Url.Action("Informativo", "FinanceiroDespesas")',
+                        //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                        //dataType: "json",
+                        traditional: true,
+                        //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                        data: { id_integracao, sp_id, sp_id_despesa_processo},
+                        contentType: 'json',
+
+                        success: function (response) {
+                            var credor = response[0].Credor;
+                            var processo = response[0].Processo;
+                            var cadastro = response[0].Cadastro;
+                            var liberacao = response[0].Liberacao;
+                            var vencimento = response[0].Vencimento;
+                            var despesa = response[0].Despesa;
+                            var documento = response[0].Documento;
+                            var serie = response[0].Serie;
+                            var moeda = response[0].Moeda;
+                            var codDespesa = response[0].CodCredorDespesa;
+                            var vrDespesa = response[0].VrPrevistoDespesa;
+                            vrDespesa = vrDespesa != 0 ? parseFloat(vrDespesa).toLocaleString() : '';
+                            var vrAdiantado = response[0].VrAdiantadoDespesa;
+                            vrAdiantado = vrAdiantado != 0 ? parseFloat(vrAdiantado).toLocaleString() : '';
+                            var vrRealDespesa = response[0].VrRealDespesa;
+                            vrRealDespesa = vrRealDespesa != 0 ? parseFloat(vrRealDespesa).toLocaleString() : '';
+                            var vrPagarDespesa = response[0].VrPagarDespesa;
+                            vrPagarDespesa = vrPagarDespesa != 0 ? parseFloat(vrPagarDespesa).toLocaleString() : '';
+                            var processoIntegracao = response[0].ProcessoIntegracao;
+                            var id_int = response[0].Id_Integracao;
+                            var id = response[0].Id;
+                            var data = '';
+                            data = response[0].Data;
+                            var situacao = response[0].Situacao;
+                            var tipo = response[0].Tipo;
+                            var complemento = response[0].Complemento;
+                            var idIntegracao = response[0].Id_Integracao;
+                            var idInt = response[0].IdInt;
+                            var codTMVInt = response[0].CodTMVInt;
+                            var chaveOrigem = response[0].ChaveOrigem;
+                            var identificador = response[0].Identificador;
+                            var movimento = response[0].Movimento;
+                            var numMovimento = response[0].NumMovimento;
+                            var cor = response[0].Cor;
+                            var consideracoes = response[0].Consideracoes;
+                            var cor = response[0].Cor;
+                            if (cor == 'B') {
+                                $("#corConsideracoes").css("background-color", "white");
+                            }
+                            else if (cor == 'A') {
+                                $("#corConsideracoes").css("background-color", "lightgoldenrodyellow");
+                            }
+                            else {
+                                $("#corConsideracoes").css("background-color", "orangered");
+                            }
+
+                            $('#credor_Modal').html(credor);
+                            $('#processo_Modal').html(processo);
+                            $('#cadastro_Modal').html(cadastro);
+                            $('#liberacao_Modal').html(liberacao);
+                            $('#vencimento_Modal').html(vencimento);
+                            $('#despesa_Modal').html(despesa);
+                            $('#documento_Modal').html(documento);
+                            $('#serie_Modal').html(serie);
+                            $('#moeda_Modal').html(moeda);
+                            $('#cod_Credor_Modal').html(codDespesa);
+                            $('#vrDespesa_Modal').html(vrDespesa);
+                            $('#vr_adiantado_despesa_Modal').html(vrAdiantado);
+                            $('#valor_real_Modal').html(vrRealDespesa);
+                            $('#valor_pagar_despesa_Modal').html(vrPagarDespesa);
+                            $('#processo_integracao_Modal').html(processoIntegracao);
+                            $('#integracao_Modal').html(id_int);
+                            $('#id_Modal').html(id);
+                            $('#data_Modal').html(data);
+                            $('#situacao_Modal').html(situacao);
+                            $('#tipo_Modal').html(tipo);
+                            $('#complemento_Modal').html(complemento);
+                            $('#idint_Modal').html(idInt);
+                            $('#codtmvint_Modal').html(codTMVInt);
+                            $('#chave_origem_int_Modal').html(chaveOrigem);
+                            $('#identificador_Modal').html(identificador);
+                            $('#numMovimento_Modal').html(numMovimento);
+                            $('#movimento_Modal').html(movimento);
+                            $('#consideracoes').html(consideracoes);
+
+
+                            //$('#situacao_Modal').html(situacao);
+                            //$('#data_Modal').html(data);
+                            //$('#tipo_Modal').html(tipo);
+                            //$('#forma_pagamento_Modal').html(forma_pag);
+                            //$('#moeda_Modal').html(moeda);
+                            //$('#valor_Modal').html(valor);
+                            //$('#cotacao_Modal').html(cotacao);
+                            //$('#valor_total_Modal').html(valor_total);
+                            //$('#valor_total_reais_Modal').html(valor_total_reais);
+                            //$('#cliente_Modal').html(cliente);
+                            //$('#consideracoes_Modal').html(consideracoes);
+
+                            $('#modalInformativo').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+
+
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            //alert(exceptionThrown);
+                        },
+                    });
+                }
+
+                function Reprocessar(id_integracao, id_brokersys, numnf_brokersys) {
+                    let dtInicio = $('#strDtInicio').val();
+                    let dtFim = $('#strDtFim').val();
+                    let declaracao = $('#declaracao').val();
+                    let processo = $('#processo').val();
+                    let nota = $('#nota').val();
+                    let situacao = $('#situacao').val();
+
+                    $.ajax({
+                        url: '@Url.Action("Reprocessar", "Estoque")',
+                        //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                        //dataType: "json",
+                        traditional: true,
+                        //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                        data: { id_integracao, id_brokersys: id_brokersys, numnf_brokersys: numnf_brokersys },
+                        contentType: 'json',
+
+                        success: function (response) {
+                            if(response[0].Observacao != null & response[0].Observacao != '')
+                            {
+                                alert(response[0]);
+                            }
+                            else
+                            {
+
+                                $('#strDtInicio').val(dtInicio);
+                                $('#strDtFim').val(dtFim);
+                                $('#declaracao').val(declaracao);
+                                $('#processo').val(processo);
+                                $('#nota').val(nota);
+                                $('#situacao').val(situacao);
+
+
+                                $('#exibir').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            alert(exceptionThrown);
+                        },
+                    });
+                }
+                //function Emitir_NFE(Id_Integracao, ID_NE, NUMNF_NE, ID_ND, NUMNF_ND,ID_TR_BS_OUT_NF) {
+                function Emitir_NFE(nf_cod_processo) {
+                    $.ajax({
+                        url: '@Url.Action("Emitir_NFE", "Estoque")',
+                        traditional: true,
+                        data: { nf_cod_processo : nf_cod_processo},
+                        contentType: 'json',
+                        success: function (response) {
+                            if(response[0].Observacao != null & response[0].Observacao != '')
+                            {
+                                var obs = response[0].Observacao;
+                                alert(obs);
+                                $('#exibir').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+                            }
+                            else
+                            {
+
+                                //$('#strDtInicio').val(dtInicio);
+                                //$('#strDtFim').val(dtFim);
+                                //$('#declaracao').val(declaracao);
+                                //$('#processo').val(processo);
+                                //$('#nota').val(nota);
+                                //$('#situacao').val(situacao);
+
+
+                                $('#exibir').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            alert(exceptionThrown);
+                        },
+                    });
+                }
+function RecFisico(nf_cod_processo, tp_nf) {
+                    $.ajax({
+                        url: '@Url.Action("RecFisico", "Estoque")',
+                        traditional: true,
+                        data: { nf_cod_processo: nf_cod_processo, tp_nf: tp_nf },
+                        contentType: 'json',
+
+                        success: function (response) {
+                            if(response[0].Observacao != null & response[0].Observacao != '')
+                            {
+                                var obs = response[0].Observacao;
+                                alert(obs);
+                                $('#exibir').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+                            }
+                            else
+                            {
+
+                                //$('#strDtInicio').val(dtInicio);
+                                //$('#strDtFim').val(dtFim);
+                                //$('#declaracao').val(declaracao);
+                                //$('#processo').val(processo);
+                                //$('#nota').val(nota);
+                                //$('#situacao').val(situacao);
+
+
+                                $('#exibir').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            alert(exceptionThrown);
+                        },
+                    });
+                }
+
+                function Cancelar(nf_cod_processo, tp_nf) {
+                    tp_nf = 'N' + tp_nf;
+                    $.ajax({
+                        url: '@Url.Action("Cancelar", "Estoque")',
+                        traditional: true,
+                        data: { nf_cod_processo : nf_cod_processo, tp_nf:tp_nf },
+                        contentType: 'json',
+
+                        success: function (response) {
+                            if(response[0].Observacao != null & response[0].Observacao != '')
+                            {
+                                var obs = response[0].Observacao;
+                                alert(obs);
+                            }
+                            else
+                            {
+
+                                //$('#strDtInicio').val(dtInicio);
+                                //$('#strDtFim').val(dtFim);
+                                //$('#declaracao').val(declaracao);
+                                //$('#processo').val(processo);
+                                //$('#nota').val(nota);
+                                //$('#situacao').val(situacao);
+
+
+                                $('#exibir').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            alert(exceptionThrown);
+                        },
+                    });
+                }
+
+                function Excluir(id_integracao, id_brokersys, numnf_brokersys) {
+                    let dtInicio = $('#strDtInicio').val();
+                    let dtFim = $('#strDtFim').val();
+                    let declaracao = $('#declaracao').val();
+                    let processo = $('#processo').val();
+                    let nota = $('#nota').val();
+                    let situacao = $('#situacao').val();
+
+                    $.ajax({
+                        url: '@Url.Action("Excluir", "Estoque")',
+                        //url: 'ImportacaoDocumento/agendarIntegracao?idMov=' + idMov,
+                        //dataType: "json",
+                        traditional: true,
+                        //data: { idMov: idMov, campos: data2, id_fornecedor: fornecedor, movimento: movimento },
+                        data: { id_integracao, id_brokersys: id_brokersys, numnf_brokersys: numnf_brokersys },
+                        contentType: 'json',
+
+                        success: function (response) {
+                            //$('#modalAguardar').modal('hide');
+                            //$('#modalOK').modal('show');
+                            //waitingDialog.hide();
+
+                            //$('#tblItens tr').filter(function(){
+                            //    return $.trim($('td', this).eq(0).text())==response[0].id_integracao;
+                            //}).children(':nth-child(6)').css("font-weight", "bold");
+
+                            if(response[0].Observacao != null & response[0].Observacao != '')
+                            {
+                                alert(response[0]);
+                            }
+                            else
+                            {
+
+                                $('#strDtInicio').val(dtInicio);
+                                $('#strDtFim').val(dtFim);
+                                $('#declaracao').val(declaracao);
+                                $('#processo').val(processo);
+                                $('#nota').val(nota);
+                                $('#situacao').val(situacao);
+
+
+                                $('#exibir').remove();
+                                var input = $("<input>")
+                                .attr("type", "hidden")
+                                .attr("name", "exibir").val("exibir");
+                                $('#myForm').append($(input));
+
+                                $('#myForm').submit();
+                            }
+                        },
+                        error: function (xhr, textStatus, exceptionThrown) {
+                            alert(exceptionThrown);
+                        },
+                    });
+                }
+
+
+                $('.menuImportacao .sidebar-submenu').addClass("active");
+                $('.menuImportacao .sidebar-submenu').toggle();
+                //$('.menuImportacao .sidebar-submenu > ul > li > a').css('color', 'grey');
+                //$('.menuImportacao .sidebar-submenu .Estoque ').css('color', 'white');
+
+                var height = $('#th').height();
+                var resHeight = window.screen.height;
+                //if(height > 400)
+                //{
+                //    height = height * (22 / 100);
+                //    alert(height);
+                //    //height = height / 2;
+                //    $('#th').height(height +  'px');
+                //}
+                if(height > 300)
+                {
+                    if(resHeight > 700 & resHeight < 800)
+                    {
+                        $('#th').height('400px');
+                    }
+                    else if(resHeight > 1000 & resHeight < 1100)
+                    {
+                        $('#th').height('650px');
+                    }
+                }
+               
+
+            </script>
+
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </body>
+}
+</html>

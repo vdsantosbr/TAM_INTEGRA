@@ -1,0 +1,1085 @@
+﻿@model Entities.Compra
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pedidoModal = (IEnumerable<Entities.Compra>)ViewData["pedidoModal"];
+}
+
+@if (TempData["Mensagem"] != null)
+{
+    <script type="text/javascript" charset="utf-8">
+        alert("@Html.Raw(@TempData["Mensagem"].ToString())");
+    </script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+
+/*#my-modal{
+ width: 1500px;
+ height:1150px;
+  margin: auto;
+  padding-top: 17%;
+ vertical-align: middle;
+}*/
+/*.modal-body{
+    overflow-y: auto;
+}*/
+        .page-wrapper {
+  height: 100vh;
+}
+
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            border-width: 5px;
+            border-color: #3A2303;
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-content {
+            margin: 0 auto;
+        }
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 5px;
+}
+.grid-container2 {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  padding: 5px;
+}
+.grid-item {
+  padding: 5px;
+  text-align: left;
+}
+}
+        body {
+overflow: auto;
+}
+        .page-wrapper .page-content {
+    overflow-x: initial;
+}
+.row{
+    margin-left:0 !important;
+    margin-right:0!important;
+}
+    </style>
+
+</head>
+@using (Html.BeginForm("Index", "Compra", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+   
+
+<body style="">
+    @*<div class="page-wrapper chiller-theme">*@
+        <div class="page-wrapper chiller-theme">
+        <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative">
+                <div class="stepwizard">
+                    <fieldset>
+                        <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Compras - Integração com fornecedor </legend>
+                    </fieldset>
+                </div>
+            </div>
+        </main>
+        <br />
+
+        <main class="page-content" style="height:100vh">
+            <div class="container-fluid" style="padding-top:25px;padding-left: 21px;">
+                <div class="col-xs-12" style="padding-left:0">
+                    <div class="col-md-12">
+                        <div class="form-horizontal">
+                            <form role="form">
+
+                                <fieldset>
+
+                                    @*<legend>Integração com fornecedor</legend>*@
+
+                                    <div id="divPedidosSelecionados" @*style="margin-left:120px;"*@>
+
+                                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                                            <div class="panel-heading" style="background-color:lightgray">
+                                                Filtro - Ordem de Compra
+                                            </div>
+                                            <div class="panel-body" style="padding-bottom:0;">
+                                                <div class="tab-content">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group" style="margin-bottom:0">
+                                                                <div class="col-md-4" style="padding-bottom:5px;">
+                                                                    @Html.Label("Fornecedor", new { @class = "form-negrito" })
+                                                                    @Html.ListBox("fornecedorNome", (SelectList)ViewBag.Fornecedores, new { @class = "chosen-select", @style = "width:100px;height:26px" })
+                                                                </div>
+                                                                <div class="col-md-5">
+                                                                    @Html.Label("Tipo movimento", new { @class = "form-negrito" })
+                                                                    @Html.ListBox("tipoMovimento", (SelectList)ViewBag.TipoMovimento, new { @class = "chosen-select", @style = "width:100px;height:26px" })
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    @Html.Label("Comprador", new { @class = "form-negrito" })
+                                                                    @Html.ListBox("Descricao", (SelectList)ViewBag.Comprador, new { @class = "chosen-select", @style = "width:100px;height:26px" })
+                                                                </div>
+
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    @*<div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <div class="col-md-12">
+                                                                        @Html.Label("Comprador", new { @class = "form-negrito" })
+                                                                        @Html.ListBox("descricao", (SelectList)ViewBag.Comprador, new { @class = "chosen-select" })
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>*@
+
+                                                    @*<div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <div class="col-md-12">
+                                                                        @Html.Label("Tipo movimento", new { @class = "form-negrito" })
+                                                                        <select id="tipoMovimento" class="chosen-select">
+                                                                            <option selected>-- Selecione --</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>*@
+
+                                                    <div class="row">
+                                                        <div class="col-md-3 col-lg-2">
+                                                            <div class="form-group" style="margin-bottom:0">
+                                                                <div class="col-md-9">
+                                                                    <label class="form-negrito">Data início</label>
+                                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                                    @Html.Editor("strDataInicio", new { htmlAttributes = new { @class = "form-control datepickerInput", id = "strDataInicio", @onblur = "isValidDate(this.value, '#dtIniciDivErro')", @autocomplete = "off", @style = "width:100px;height:26px" } })
+                                                                    <div style="color: red" id="dtIniciDivErro">
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3 col-lg-2">
+                                                            <div class="form-group" style="margin-bottom:0">
+                                                                <div class="col-md-9">
+                                                                    @Html.Label("Data fim", new { @class = "form-negrito" })
+                                                                    @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                                    @Html.Editor("strDataFim", new { htmlAttributes = new { @class = "form-control datepickerInput", id = "strDataFim", @onchange = "isValidDate(this.value, '#dtFimDivErro')", @autocomplete = "off", @style = "width:100px;height:26px" } })
+                                                                    <div style="color: red" id="dtFimDivErro">
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+
+                                                        </div>
+
+                                                        <div class="col-md-2 col-lg-2">
+                                                            <div class="form-group" style="margin-bottom:0">
+                                                                <div class="col-md-12" style="margin-right:0">
+                                                                    @Html.Label("Nro pedido", new { @class = "form-negrito" })
+                                                                    @Html.Editor("numeroMov", new { htmlAttributes = new { @class = "form-control", @maxlengh = 35, @autocomplete = "off", @style = "width:100px;height:26px" } })
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3 col-lg-3">
+                                                            <div class="form-group" style="margin-bottom:0;position:center">
+                                                                <div class="col-md-11">
+                                                                    @Html.Label("Situação", new { @class = "form-negrito" })
+                                                                    @Html.DropDownList("situacao", (SelectList)ViewBag.Situacao, "-- Selecione -- ", new { @class = "chosen-select" })
+                                                                </div>
+                                                                @*<div class="col-md-3">
+                                                                        <button class="btn btn-primary nextBtn btn-md pull-right" style="margin-top:20px" type="submit">Filtrar</button>
+                                                                    </div>*@
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        @*<div class="col-md-2 col-lg-3">
+                                                                <div class="form-group" >
+                                                                    <div class="col-md-10 col-lg-10" style="top:20px">
+                                                                        <button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Filtrar</button>
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                                </div>
+                                                            </div>*@
+                                                        <div style="padding-top:20px;padding-right:20px">
+                                                            <button style="height:27px" class="btn btn-primary btn-sm pull-right" id="btnFiltrar" value="exibir" name="exibir" type="button">Exibir</button>
+                                                        </div>
+
+                                                    </div>
+                                                    @*<div class="row col-lg-1" style="margin-bottom:15px;">
+                                                          <button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Filtrar</button>
+                                                        </div>*@
+                                                </div>
+                                            </div>
+                                            @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Filtrar</button>*@
+
+                                        </div>
+
+                                    </div>
+                                    @*<legend>Selecionar pedidos de compra</legend>*@
+                                    <br />
+                                    <div class="panel with-nav-tabs panel-default">
+                                        <div class="panel-heading" style="background-color:lightgray">
+                                            Ordem de Compra
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-striped" id="tblGrid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="text-align:center">Pedido</th>
+                                                            <th style="text-align:center">Integração</th>
+                                                            <th style="text-align:center">Data</th>
+                                                            <th style="text-align:center">Status</th>
+                                                            <th style="text-align:center">Valor</th>
+                                                            <th style="text-align:center">Aprovação</th>
+                                                            <th style="text-align:left">Fornecedor</th>
+                                                            <th style="text-align:left">Comprador</th>
+                                                            <th style="text-align:center">Opções</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model != null)
+                                                        {
+                                                            if (Model.ListaComprador != null & Model.ListaComprador.Count() > 0)
+                                                            {
+                                                                foreach (Entities.Compra item in Model.ListaComprador)
+                                                                {
+                                                                    <tr>
+
+                                                                        @if (item.Situacao.Equals("NãoIntegrado"))
+                                                                        {
+                                                                            <td style="text-align:center"><a style="padding:0px;font-size:12px" class="btn modalBTN linkPedido" href="#" onclick="populaModal(@item.Id_Integracao,'@item.NUMEROMOV', '@item.Situacao','@item.Aprovacao', '@item.Status_Pedido_RM','@item.dataEmissaoStr', '@item.ValorLiquido', '@item.Fornecedor', @item.idMov, '@item.Comprador')">@item.NUMEROMOV</a></td>
+                                                                        }
+                                                                        else if (item.Id_Integracao.Equals(0))
+                                                                        {
+                                                                            <td style="text-align:center"><a class="btn modalBTN linkPedido" style="padding:0;font-size:12px;text-decoration:none;color:black;pointer-events:none">@item.NUMEROMOV</a></td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td style="text-align:center"><a class="btn modalBTN linkPedido" style="padding:0px;font-size:12px;text-decoration:none;color:black;pointer-events:none">@item.NUMEROMOV</a></td>
+                                                                        }
+
+                                                                        @if (item.Id_Integracao.Equals(0))
+                                                                        {
+                                                                            if (ViewBag.IdMov_Desbloqueio != null)
+                                                                            {
+                                                                                <td style="text-align:center;font-weight:bold">@item.Situacao</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center">@item.Situacao</td>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (ViewBag.Id_Integracao_Agendamento != null || ViewBag.IdMov_Desbloqueio != null)
+                                                                            {
+                                                                                <td style="text-align:center;font-weight:bold">@item.Situacao - @item.Id_Integracao</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td style="text-align:center">@item.Situacao - @item.Id_Integracao</td>
+                                                                            }
+
+                                                                        }
+
+                                                                        <td style="text-align:center">@item.dataEmissaoStr</td>
+                                                                        <td style="text-align:center">@item.Status_Pedido_RM</td>
+                                                                        <td style="text-align:center">@string.Format("{0:#,##0.00#}", @item.ValorLiquido) </td>
+                                                                        <td style="text-align:center">@item.Aprovacao</td>
+                                                                        <td style="text-align:left">@item.Fornecedor</td>
+                                                                        <td style="text-align:left">@item.Comprador</td>
+
+
+                                                                        <td style="vertical-align:top;text-align:center;padding:0">
+                                                                            @if (item.Situacao.Equals("Integrado") || item.Situacao.Equals("NãoSeAplica"))
+                                                                            {
+                                                                                if (item.Situacao.Equals("Integrado"))
+                                                                                {
+                                                                                    <a title="Desbloquear pedido" href="javascript:;"><i class="fa fa-unlock btn" aria-hidden="true" style="font-size:17px" onclick="if(confirm('Deseja desbloquear o pedido @item.NUMEROMOV para reenviar ao fornecedor?')) desbloquearPedido(@item.Id_Integracao, @item.idMov);"></i></a>
+                                                                                    @*<a class="" title="Informativo"><span class="fa fa-info-circle" style="font-size:17px;color:silver"></span></a>*@
+                                                                                }
+                                                                                else/* (item.Situacao.Equals("NãoSeAplica"))*/
+                                                                                {
+                                                                                    <a title="Desbloquear pedido" href="javascript:;"><i class="fa fa-unlock" aria-hidden="true" style="font-size:17px;color:silver"></i></a>
+                                                                                    @*<a class="btn" title="Informativo"><span class="fa fa-info-circle" style="font-size:17px;" value="@item.Id_Integracao" onclick="Informativo(@item.idMov, '@item.Comentario')"></span></a>*@
+                                                                                }
+                                                                            }
+
+                                                                            else
+                                                                            {
+
+                                                                            }
+                                                                        </td>
+                                                                        <td hidden id="idMov">@item.idMov</td>
+                                                                        <td hidden id="idMov">@item.Comentario</td>
+                                                                    </tr>
+                                                                    @*<tr>
+                                                                            <td><input type="checkbox" /></td>
+                                                                            <td><a class="btn modalBTN" href="#">55655</a></td>
+                                                                            <td>Integrado</td>
+                                                                            <td>NÃO APROVADO</td>
+                                                                            <td>item.strDataInicio</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><input type="checkbox" /></td>
+                                                                            <td><a class="btn modalBTN" href="#">55655</a></td>
+                                                                            <td>Integrado</td>
+                                                                            <td>NÃO APROVADO</td>
+                                                                            <td>item.strDataInicio</td>
+                                                                        </tr>*@
+                                                                }
+                                                            }
+                                                        }
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            @*<button class="btn btn-primary nextBtn btn-md pull-right" type="submit">Continuar</button>*@
+                                        </div>
+                                    </div>
+                                    @*teste*@
+
+
+
+                                    <div class="modal fade" id="my-modal" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                                        <div class="modal-dialog modal-lg modal-dialog-centered" style="height:91%">
+                                            <div class="modal-content" style="height:100%">
+                                                <div class="modal-header text-center" style="padding:5px">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4>Pedido para <span class="fornecedor"></span></h4>
+                                                </div>
+                                                <div class="modal-body" style="padding:0 15px 0 15px">
+
+                                                    <div class="panel with-nav-tabs panel-default">
+                                                        <div class="panel-heading" style="background-color:lightgray">
+                                                            Pedido de Compra
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="tab-content">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-hover table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Pedido</th>
+                                                                                <th>Situação</th>
+                                                                                <th>Aprovação</th>
+                                                                                <th>Status</th>
+                                                                                <th>Data</th>
+                                                                                <th>Valor</th>
+                                                                                <th>Comprador</th>
+                                                                                <th hidden>idmov</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                @*<td><a class="btn modalBTN" href="#">@item.NUMEROMOV</a></td>*@
+                                                                                @*<td><a href="#" data-toggle="modal" data-target="#my-modal">@ViewBag.NumeroMov</a></td>*@
+                                                                                <td id="numeroMovModal" name="nroPedidoModal"></td>
+                                                                                <td id="situacaoModal"></td>
+                                                                                <td id="aprovacao"></td>
+                                                                                <td id="status"></td>
+                                                                                <td id="data"></td>
+                                                                                <td id="valor"></td>
+                                                                                <td id="comprador"></td>
+                                                                                <td hidden id="idMov" name="idMov2"></td>
+                                                                                <td hidden id="idIntegracao" name="idIntegracao"></td>
+
+                                                                                @*<td>@item.Situacao</td>
+                                                                                    <td>@item.Aprovacao</td>
+                                                                                    <td>@item.dataEmissao</td>
+                                                                                    <td>@item.ValorLiquido</td>
+                                                                                    <td>@item.Fornecedor</td>
+                                                                                    <td>@item.Comprador2</td>*@
+
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <input checked id="depositoEspecialInput" class="form-check-input" type="radio" name="inlineRadioOptions" value="DE">
+                                                    <label id="depositoEspecial" class="form-check-label" for="depositoEspecialInput">Depósito especial</label>
+
+                                                    <input id="importacaoRegularInput" class="form-check-input" type="radio" name="inlineRadioOptions" value="IR">
+                                                    <label id="importacaoRegular" class="form-check-label" for="importacaoRegularInput">Importação regular</label>
+
+                                                    <div id="opcoesImportacaoRegular">
+                                                        @*teste*@
+                                                        <div class="panel with-nav-tabs panel-default">
+                                                            <div class="panel-heading" style="background-color:lightgray">
+                                                                <ul class="nav nav-tabs">
+                                                                    <li class="active"><a href="#tab1default" data-toggle="tab">Shipping adress</a></li>
+                                                                    <li><a href="#tab2default" data-toggle="tab">Payment method</a></li>
+                                                                    <li><a href="#tab3default" data-toggle="tab">Shiping preferences</a></li>
+                                                                    <li><a href="#tab4default" data-toggle="tab">Contact information</a></li>
+                                                                    <li><a href="#tab5default" data-toggle="tab">Geral</a></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="panel-body" style="padding:0 15px 0 15px">
+                                                                <div class="tab-content">
+                                                                    <div class="tab-pane fade in active" id="tab1default">
+                                                                        <h4> Step 1 - Choose a shipping adress</h4>
+                                                                        <br>
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-6 sm-6">
+                                                                                <label for="fornecedor">Freight forwarder</label>
+                                                                                <select class="form-control" id="tpMovimento" required></select>
+                                                                            </div>
+                                                                            <div class="col-md-6 sm-6">
+                                                                                <label for="tpMovimento">Final destination</label>
+                                                                                <select class="form-control" id="tpMovimento" required></select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="tab2default">
+                                                                        <h4> Step 2 - Choose a payment method</h4>
+                                                                        <br>
+                                                                        <div class="col-md-12 sm-12">
+                                                                            <label for="fornecedor">Payment method</label>
+                                                                            <select class="form-control" id="tpMovimento" required>
+                                                                                <option>-- Selecione --</option>
+                                                                                <option>On Account</option>
+                                                                                <option>Credit Card</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="tab3default">
+                                                                        <h4> Step 3 - Select a shipping preference</h4>
+                                                                        <br>
+                                                                        <div class="col-md-12 sm-12">
+                                                                            <label for="fornecedor">Carrier</label>
+                                                                            <select class="form-control" id="tpMovimento" required>
+                                                                                <option>-- Selecione --</option>
+                                                                                <option>Fed Ex</option>
+                                                                                <option>UPS</option>
+                                                                                <option>Fed Ex Ground Freight-Oversize</option>
+                                                                            </select>
+                                                                            <br />
+                                                                            <label class="radio-inline">
+                                                                                <input id="dayHT1" type="radio" />
+                                                                                1 Day - HT
+                                                                            </label>
+                                                                            <label class="radio-inline">
+                                                                                <input id="dayHT2" type="radio" />
+                                                                                2 Day - HT
+                                                                            </label>
+                                                                            <label class="radio-inline">
+                                                                                <input id="dayHT3" type="radio" />
+                                                                                3 Day - CS
+                                                                            </label>
+                                                                            <label class="radio-inline">
+                                                                                <input id="dayHT4" type="radio" />
+                                                                                FREE 4 Day - CS
+                                                                            </label>
+                                                                            <label class="radio-inline">
+                                                                                <input id="dayHT5" type="radio" />
+                                                                                FREE Stock - ST
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="tab4default">
+                                                                        <h4> Step 4 - Edit contact information</h4>
+                                                                        <br>
+                                                                        <div class="col-md-4 sm-4">
+                                                                            <label for="fornecedor">Contact name</label>
+                                                                            <input id="nomeContato" name="nomeContato" class="form-control" />
+                                                                        </div>
+                                                                        <div class="col-md-4 sm-4">
+                                                                            <label for="fornecedor">Contact e-mail</label>
+                                                                            <input id="emailContato" name="emailContato" class="form-control" />
+                                                                        </div>
+                                                                        <div class="col-md-4 sm-4">
+                                                                            <label for="fornecedor">Contact phone</label>
+                                                                            <input id="foneContato" name="foneContato" class="form-control" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="tab5default">
+                                                                        <h4> Export information</h4>
+                                                                        <br>
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-6 sm-6">
+                                                                                <label>Do you intend to export or re-expport any portion of this order? </label>
+                                                                                <label class="radio-inline">
+                                                                                    <input type="radio" name="optradio">Yes
+                                                                                </label>
+                                                                                <label class="radio-inline">
+                                                                                    <input type="radio" name="optradio">No
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="col-md-6 sm-6">
+                                                                                <label for="destCountry">Destination country</label>
+                                                                                <select class="form-control" id="destCountry" required>
+                                                                                    <option>-- Selecione --</option>
+                                                                                    <option>Brazil</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-6 sm-6">
+                                                                                <label for="destCountry">Order notes</label>
+                                                                                <textarea class="form-control" rows="4" id="comment"></textarea>
+                                                                            </div>
+                                                                            <div class="col-md-6 sm-6">
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" disabled>
+                                                                                    <label class="form-check-label" for="disabledFieldsetCheck">
+
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="btn-toolbar">
+                                                        <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">Fechar</button>
+                                                        <button type="button" id="btnPedidoCompra" class="btn btn-primary pull-right" onclick="salvarPedidoCompra()">Agendar integração</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div>
+
+
+                                </fieldset>
+                            </form>
+                        </div><!-- /.modal-dialog -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        @*<div class="row setup-content divParametrosPedido" id="Security-Setup-step">
+            <div class="col-xs-12">
+                <div class="col-md-12">
+                    teste
+
+                    <div class="form-row">
+                        <div class="col-sm-12 text-right">
+                            <button id="btnSearch" class="btn btn-primary nextBtn btn-md center-block consultaPedido" Style="width: 100px;display:inline-block">Voltar</button>
+                            <button id="btnClear" class="btn btn-primary nextBtn btn-md center-block" Style="width: 100px;display:inline-block">Continuar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    <div class="modal fade" id="modalInformativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height:99%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 style="font-weight" class="modal-title" id="exampleModalLabel"><span id="documentoModal">Pedido de Compra - </span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover  table-bordered">
+                        <tr>
+                            <td>Filial: <span id="filial_Modal"> </span></td>
+                            @*<td id="id_integracao_Modal"></td>*@
+                            <td>Data Emissão: <span id="dtEmissao_Modal"> </span></td>
+                            @*<td id="situacao_Modal"></td>*@
+                        </tr>
+                        @*<tr>
+                                <td>Situação</td>
+                                <td id="situacao_Modal"></td>
+                            </tr>*@
+                        <tr>
+                            <td>Status: <span id="status_Modal"> </span></td>
+                            @*<td id="data_Modal"></td>*@
+                            <td>Moeda: <span id="moeda_Modal"> </span></td>
+                            @*<td id="tipo_Modal"></td>*@
+                        </tr>
+                        @*<tr>
+                                <td>Tipo</td>
+                                <td id="tipo_Modal"></td>
+                            </tr>*@
+                        @*<tr>
+                                <td>Handling</td>
+                                <td id="handling_Modal"></td>
+                            </tr>*@
+                        <tr>
+                            <td>Valor: <span id="valor_Modal"> </span></td>
+                            @*<td id="cliente_Modal"></td>*@
+                            <td>Condição de Pagamento: <span id="condPagamento_Modal"> </span></td>
+                            @*<td id="descricao_Modal"></td>*@
+                        </tr>
+                        @*<tr>
+                                <td>Descrição</td>
+                                <td id="descricao_Modal"></td>
+                            </tr>*@
+                        <tr>
+                            <td>Fornecedor: <span id="fornecedor_Modal"> </span></td>
+                            @*<td id="forma_pagamento_Modal"></td>*@
+                            <td>Comprador: <span id="comprador_Modal"> </span></td>
+                            @*<td id="moeda_Modal"></td>*@
+                        </tr>
+
+                        <tr width="100%" style="background-color:lightgoldenrodyellow">
+                            <td colspan="2"><div class="pre-scrollable" id="consideracoes_Modal"></div></td>
+                            @*<td colspan="3" id="consideracoes_Modal"></td>*@
+                        </tr>
+                    </table>
+                </div>
+                @*<div class="modal-footer" style="padding:5px;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                </div>*@
+            </div>
+        </div>
+    </div>
+
+        @*<script>
+                $(document).ready(function () {
+
+                    var navListItems = $('div.setup-panel div a'),
+                            allWells = $('.setup-content'),
+                            allNextBtn = $('.nextBtn');
+
+                    allWells.hide();
+
+                    navListItems.click(function (e) {
+                        e.preventDefault();
+                        var $target = $($(this).attr('href')),
+                            $item = $(this);
+                        if (!$item.hasClass('disabled')) {
+                            //navListItems.removeClass('btn-primary').addClass('btn-default');
+                            if ($item.attr('id') != $(navListItems[1]).attr('id')) {
+                                $(navListItems[1]).removeClass('btn-primary').addClass('btn-success');
+                            }
+                            //$('#item3').addClass('btn-success');
+                            $item.addClass('btn-primary');
+                            allWells.hide();
+                            $target.show();
+                            $target.find('input:eq(0)').focus();
+                        }
+                    });
+
+                    allNextBtn.click(function () {
+                        var curStep = $(this).closest(".setup-content"),
+                            curStepBtn = curStep.attr("id"),
+                            nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                            curInputs = curStep.find("input[type='text'],input[type='url'], input[type='password'], input[type='email']"),
+                            isValid = true;
+
+                        $(".form-group").removeClass("has-error");
+                        for (var i = 0; i < curInputs.length; i++) {
+                            if (!curInputs[i].validity.valid) {
+                                isValid = false;
+                                $(curInputs[i]).closest(".form-group").addClass("has-error");
+                            }
+                        }
+
+                        if (isValid)
+                            nextStepWizard.removeAttr('disabled').trigger('click');
+                    });
+
+                    $('div.setup-panel div a.btn-primary').trigger('click');
+                });
+            </script>*@
+
+        <script>
+            $(document).ready(function () {
+                let permitir_editar = "@Html.Raw(ViewBag.PermitirEditar.ToString())";
+                //alert(permitir_editar);
+                 if (permitir_editar != "SIM") {
+                     $('.linkPedido').contents().unwrap();
+
+                     $('#tblGrid tr > *:nth-child(9)').hide();
+                }
+
+                //allWells = $('#Security-Setup-step'),
+                //allWells2 = $('#VerifyEmail-step')
+
+                //allWells.hide();
+                //allWells2.hide();
+            });
+
+
+            $('.consultaPedido').click(function () {
+                $(".divConsultaPedido").toggle();
+                $(".divParametrosPedido").toggle();
+            });
+
+            $('a.modalBTN').click(function () {
+                $('#my-modal').modal({
+                    show: true,
+                    closeOnEscape: true,
+                    backdrop: 'static',
+                    keyboard: false
+                })
+            });
+
+
+
+
+            $('#opcoesImportacaoRegular *').attr("disabled", true);
+
+            $('#importacaoRegularInput').click(function () {
+                //$('#opcoesImportacaoRegular').show();
+                $('#opcoesImportacaoRegular *').attr("disabled", false);
+            });
+            $('#depositoEspecialInput').click(function () {
+                //$('#opcoesImportacaoRegular').hide();
+                $('#opcoesImportacaoRegular *').attr("disabled", true);
+            });
+        </script>
+
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        <link href="~/content/indexcompras.css" rel="stylesheet" />
+        <script>
+            $(window).load(function () {
+                $(".chosen-select").chosen()
+            });
+        </script>
+
+        <script>
+            function populaModal(idIntegracao, numeroMov, situacao, aprovacao, status, data, valor, fornecedor, idMov, comprador) {
+                $('#idIntegracao').html(idIntegracao);
+                $('#numeroMovModal').html(numeroMov);
+                $('#situacaoModal').html(situacao);
+                $('#aprovacao').html(aprovacao);
+                $('#status').html(status);
+                $('#data').html(data);
+                $('#valor').html(valor);
+                $('#fornecedor').html(fornecedor);
+                $('#comprador').text(comprador);
+                $('#idMov').text(idMov);
+                $('.fornecedor').html(fornecedor);
+            }
+
+            function salvarPedidoCompra() {
+                $('#btnPedidoCompra').attr('disabled', true);
+                var numeroPedido = $('#numeroMovModal').html();
+                var dataInicio = $('#strDataInicio').val();
+                var dataFim = $('#strDataFim').val();
+                var idMov = $('#idMov').html();
+                var status = $('#status').html();
+                var situacao = $('#situacaoModal').html();
+                var id_integracao = $('#idIntegracao').html();
+                var origem = '';
+    
+                var de = document.getElementById('depositoEspecialInput');
+                if (de.checked) {
+                    origem = 'DE';
+                }
+
+                var ir = document.getElementById('importacaoRegularInput');
+                if (ir.checked) {
+                    origem = 'IR';
+                }
+          
+                $.ajax({
+                    url: '@Url.Action("AgendarIntegracao", "Compra")',
+                    type: 'get',
+                    //data: { nroPedidoModal: numeroPedido, strDataInicio: dataInicio, strDataFim: dataFim, idMov: idMov, statusModal: status, situacaoModal: situacao}
+                    data: { idMov: idMov, id_integracao: id_integracao, origem: origem },
+                    success: function (data) {
+                        var input = $("<input>")
+                        .attr("name", "salvarPedidoCompra").val("exibir");
+
+                        $('#id_integracao').remove();
+                        var input = $("<input>")
+                          .attr("type", "hidden")
+                          .attr("name", "id_integracao").val(data);
+
+                        $('#myForm').append(input);
+                        $("#myForm").submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    },
+                })
+            }
+
+            function Atualiza() {
+                $('#myForm').submit();
+            }
+        </script>
+
+    <script>
+            $(function () {
+                $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+                $('#importacaoRegularInput').attr("disabled", true);
+            });
+
+            function isValidDate(date, campo) {
+                var temp = date.split('/');
+                var d = new Date(temp[1] + '/' + temp[0] + '/' + temp[2]);
+                var result = (d && (d.getMonth() + 1) == temp[1] && d.getDate() == Number(temp[0]) && d.getFullYear() == Number(temp[2]));
+                if (result == false) {
+                    $(campo).text("Data inválida.");
+                    $("#btnFiltrar").attr("disabled", true)
+                }
+                else {
+                    $("#btnFiltrar").attr("disabled", false)
+                    $(campo).text('');
+                }
+            }
+            $('#strDataInicio').blur(function () {
+                var dtInicio = $('#strDataInicio').val();
+
+                if (dtInicio.length == 0) {
+                    $('#dtIniciDivErro').html('');
+                    $("#btnFiltrar").attr("disabled", false)
+                }
+            })
+
+            $('#strDataFim').blur(function () {
+                var dtFim = $('#strDataFim').val();
+
+                if (dtFim.length == 0) {
+                    $('#dtFimDivErro').html('');
+                    $("#btnFiltrar").attr("disabled", false)
+                }
+            })
+
+
+            $('#btnFiltrar').click(function () {
+                var dtInicio = $('#strDataInicio').val();
+                var dtFim = $('#strDataFim').val();
+
+
+                if (dtInicio.length > 0 & dtFim.length > 0) {
+                    var input = $("<input>")
+                    .attr("name", "exibir").val("exibir");
+
+                    $('#myForm').append(input);
+                    $('#myForm').submit();
+                }
+                else {
+                    if (dtInicio.length == 0) {
+                        $('#dtIniciDivErro').html('Selecione a data.');
+                    }
+
+                    if (dtFim.length == 0) {
+                        $('#dtFimDivErro').html('Selecione a data.');
+                    }
+
+                    //$('#fatDivErro').html('Selecione Faturamento');
+                    $("#btnFiltrar").attr("disabled", true)
+                }
+            })
+
+
+            function desbloquearPedido(idIntegracao, idMov) {
+                $.ajax({
+                    url: '@Url.Action("DesbloquearPedido", "Compra")',
+                    type: 'get',
+                    data: { idIntegracao: idIntegracao, idMov: idMov },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) {
+                        $('#idMov').remove();
+                        var input = $("<input>")
+                          .attr("type", "hidden")
+                          .attr("name", "idMov").val(idMov);
+                        $('#myForm').append($(input));
+                        $('#myForm').submit();
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //$('#btnagendar').attr("disabled", true);
+                        alert(exceptionThrown);
+                    }
+                });
+            }
+
+            function Informativo(idMov, comentario) {
+                $.ajax({
+                    url: '@Url.Action("Informativo", "ImportacaoDocumento")',
+                    traditional: true,
+                    data: { idMov, comentario},
+                    contentType: 'json',
+
+                    success: function (response) {
+                        var documento = response[0].Documento;
+                        $('#documentoModal').html($("#documento option:selected").text() + ' - ' + documento);
+
+                        var filial = response[0].Filial;
+                        $('#filial_Modal').html(filial);
+
+                        var dtEmissao = response[0].DataEmissao;
+                        $('#dtEmissao_Modal').html(dtEmissao);
+
+                        var status = response[0].Status;
+                        $('#status_Modal').html(status);
+
+                        var moeda = response[0].Moeda;
+                        $('#moeda_Modal').html(moeda);
+
+                        var valor = response[0].Valor;
+                        valor = valor != 0 ? parseFloat(valor).toLocaleString() : '';
+                        $('#valor_Modal').html(valor);
+
+                        var condicao_Pagamento = response[0].Condicao_Pagamento;
+                        $('#condPagamento_Modal').html(condicao_Pagamento);
+
+                        var fornecedor = response[0].Fornecedor;
+                        $('#fornecedor_Modal').html(fornecedor);
+
+                        var comprador = response[0].Comprador;
+                        $('#comprador_Modal').html(comprador);
+
+                        $('#consideracoes_Modal').html(comentario);
+
+
+
+                        $('#modalInformativo').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+
+
+                    },
+                    error: function (xhr, textStatus, exceptionThrown) {
+                        //alert(exceptionThrown);
+                    },
+                });
+            };
+
+            $(".datepickerInput").datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior'
+            });
+
+
+            $('.menuCompras .sidebar-submenu').addClass("active");
+            $('.menuCompras .sidebar-submenu').toggle();
+        </script>
+
+      
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</body>
+}
+</html>

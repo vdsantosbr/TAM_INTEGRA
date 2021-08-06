@@ -1,0 +1,1290 @@
+﻿@model Entities.FechamentoContabil
+
+@{
+        ViewBag.Title = "Painel de metas";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        var cont = 1;
+        var lstCambio = (IEnumerable<Entities.IntegracaoCambioSys>)Session["GridCambio"];
+
+    }
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+    <style>
+        .tableFixHead {
+            /*overflow: auto;*/
+            height: 100px;
+            width: 100%;
+        }
+
+            .tableFixHead table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            .tableFixHead th,
+            .tableFixHead td {
+                padding: 8px 16px;
+            }
+
+
+        /*td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+        /*td:nth-child(2), th:nth-child(2) {
+            position: sticky;
+            z-index: 1;
+            background-color: white;
+        }*/
+
+        .tableFixHead th {
+            position: sticky;
+            top: 0;
+            background: #f9f9f9;
+            z-index: 2;
+        }
+
+        th:first-child, th:nth-child(2) {
+            z-index: 3;
+        }
+
+        .sticky-col {
+            position: sticky;
+            position: -webkit-sticky;
+            background-color: white;
+        }
+
+        .first-col {
+            width: 120px;
+            min-width: 100px;
+            max-width: 340px;
+            left: 0px;
+        }
+
+        .second-col {
+            width: 150px;
+            min-width: 20px;
+            max-width: 340px;
+            left: 100px;
+        }
+
+        .third-col {
+            width: 50px;
+            min-width: 110px;
+            max-width: 340px;
+            left: 190px;
+        }
+
+        .fourth-col {
+            width: 100px;
+            min-width: 80px;
+            max-width: 340px;
+            left: 280px;
+        }
+
+        input[type=checkbox], input[type=radio] {
+            /* margin: 4px 0 0; */
+            margin-top: 1px\9;
+            line-height: normal;
+        }
+
+        @@media screen and (min-width: 992px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: 80px 60px 150px auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-container2 {
+                display: grid;
+                grid-template-columns: auto auto auto auto auto;
+                padding: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .page-wrapper {
+                height: 100vh;
+            }
+        }
+
+        .modalDialog {
+            /*Insira o código debaixo de tudo*/
+            overflow: scroll;
+        }
+
+        .modal-body {
+            max-height: calc(110vh - 210px);
+            overflow-y: auto;
+        }
+
+        .clearfix {
+            clear: both;
+            padding: 0;
+            margin: 0;
+            height: 5px;
+            display: block;
+        }
+
+        .panel-body {
+            padding-bottom: 0;
+        }
+
+        .panel {
+            /*border: 0;*/
+            /*border-width: 5px;
+            border-color: #3A2303 !important;*/
+            padding-bottom: 0em;
+            height: 100%;
+        }
+
+        .form-group {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            padding-bottom: 5px;
+        }
+
+        .btnSemLink {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+        }
+
+        /*.modal-dialog {
+            display: flex;
+            align-items: center;
+        }*/
+
+        .modal-content {
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            padding-bottom: 10PX;
+        }
+
+        /*.page-content {
+            height: 100vh;
+        }*/
+        body {
+            overflow: auto;
+        }
+        .erroInput{
+            border: 1px solid orangered !important;
+        }
+        .erroDiv{
+            color:red !important;
+        }
+        .no-border{
+            box-shadow: none !important;
+            background: white !important;
+            border: none !important;
+            padding: 0 !important;
+            height: 20px !important;
+        }
+        .page-wrapper .page-content {
+    overflow: hidden;
+}
+    </style>
+</head>
+@using (Html.BeginForm("Index", "FechamentoContabil", FormMethod.Post, new { id = "myForm" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+    <body>
+        <main class="page-content" style="margin-top:0;padding-top:0;position:fixed;top:4px;left:21px;width:97%;z-index:100;">
+            <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:14px;position:relative;">
+                <fieldset>
+                    <legend style="margin-bottom:0;top:0;font-size:18px;background-color:white">Variação Cambial - Fechamento Contábil</legend>
+                </fieldset>
+            </div>
+        </main>
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content">
+                <div class="container-fluid" style="padding-top:50px;padding-left:30px">
+                    <div id="divPedidosSelecionados">
+                        <div class="panel with-nav-tabs panel-default" style="margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray;font-weight:bold">
+                                Período
+                            </div>
+                            <div class="panel-body" style="padding-bottom:0;">
+                                <div class="tab-content">
+                                    <div class="grid-container" style="display:flex;justify-content:flex-start">
+                                        <div class="grid-item">
+                                            <label class="form-negrito">Ano</label>
+                                            @Html.DropDownList("ano", (SelectList)ViewBag.Ano, new { @style = "width:80px;height:26px", @class = "chosen-select", @autocomplete = "off", maxlengh = "4" })
+                                            <div id="divErroAno" class="fontErro"></div>
+                                        </div>
+                                        <div class="grid-item" style="padding-top: 25px;padding-left: 30px;">
+                                            <button class="btn btn-primary btn-sm" id="btnExibir" type="button" name="Filtrar" style="padding: 2px 5px;">Exibir</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br />
+                        <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                            <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                <div style="display:flex;justify-content:space-between">
+                                    <div style="vertical-align:middle;padding:5px 10px"><span>Variação Contábil</span></div>
+                                    @if (Session["Situação"].ToString() != "N")
+                                    {
+                                        <div><button type="button" class="btn btn-sm btn-primary" style="padding: 3px 3px;" onclick="updateModal('', '', '')">Novo Fechamento Contábil</button></div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 0;margin-bottom:0">
+        <table class="table table-striped" id="tblItens" style="margin-bottom:0">
+            <thead>
+                <tr>
+                    <th class="" style="text-align:left;min-width: 70px;padding-left: 20px !important;">ANO</th>
+                    <th class="" style="text-align:center;min-width: 110px">MÊS</th>
+                    <th class="" style="text-align:center;min-width:125px">FECHAMENTO</th>
+                    <th class="" style="text-align:center;min-width:70px">DT. CONTABILIZAÇÃO</th>
+                    <th style="text-align:center;min-width:120px">SITUAÇÃO</th>
+                    <th style="text-align:center;min-width:125px">RESPONSÁVEL</th>
+                    <th style="text-align:center;min-width:125px">DATA</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model != null)
+            {
+                if(Model.lstGrid != null)
+                {
+                    foreach(Entities.FechamentoContabil item in Model.lstGrid)
+                    {
+                        <tr>
+                            <td style="padding-left: 20px !important;">@item.Ano</td>
+                            <td style="text-align:center;">@item.Mes</td>
+                            @if (item.Situacao == "Fechado")
+                            {
+                                <td style="text-align:center"><a href="#" onclick="updateModalSitFechado('@item.Fechamento', @item.Id_Fechamento, @item.Id_Integracao, '@item.Data_contabilizacao.ToString("dd/MM/yyyy")', '@item.Situacao', '@item.Observacao', @item.Ano, @item.Mes)">@item.Fechamento</a></td>
+                            }
+                            else{
+                                <td style="text-align:center"><a href="#" onclick="updateModal('@item.Fechamento', @item.Id_Fechamento, @item.Id_Integracao, '@item.Data_contabilizacao.ToString("dd/MM/yyyy")', '@item.Situacao', '@item.Observacao', @item.Ano, @item.Mes)">@item.Fechamento</a></td>
+                            }
+                            <td style="text-align:center">@item.Data_contabilizacao.ToString("dd/MM/yyyy")</td>
+                            <td style="text-align:center">@item.Situacao</td>
+                            <td style="text-align:center">@item.Responsavel</td>
+                            @if (item.Data.ToString() != "01/01/1900 00:00:00")
+                            {
+                                <td style="text-align:center">@item.Data.ToString("dd/MM/yyyy")</td>
+                            }
+                            else
+                            {
+                                <td style="text-align:center"></td>
+                            }
+                        </tr>
+                    }
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+   </div>
+
+  </div>
+  </div>
+</main>
+</div>
+        <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px;padding-left: 0px !important;overflow-y: hidden">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center" style="padding:5px">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        @*<h4 style="text-align:left">Alterar Perfil: <span id="titulo"></span></h4>*@
+                        <h4 style="text-align:left">Registro de Fechamento Contábil</h4>
+                    </div>
+                    <div class="modal-body" style="padding-top:8px; max-height: 100%;">
+                        <form>
+                            <div class="panel with-nav-tabs panel-default" style="margin-bottom:10px">
+                                <div class="panel-heading" style="background-color:lightgray;font-weight:bold">
+                                    Fechamento Contábil
+                                </div>
+                                <div class="panel-body" style="padding-bottom:0;">
+                                    <form id="formAlterarPerfil">
+                                        <input hidden id="modal_id_fechamento" />
+                                        <input hidden id="modal_id_integracao" />
+                                        @if (Session["Situação_Modal"].ToString() != "Fechado")
+                                        {
+                                            <div style="display: flex; justify-content:space-between; padding: 10px 10px 0 10px;column-gap:30px">
+                                                <div style="width: 125px;">
+                                                    <label for="m_fechamento">Fechamento</label>
+                                                    <input type="text" class="form-control" id="m_fechamento" autocomplete="off">
+                                                    <div hidden id="erroFechamento">Preencha este campo</div>
+                                                </div>
+                                                <div style="width: 210px;">
+                                                    <label for="n_nome">Dt. Contabilização para o RM Saldus</label>
+                                                    <input type="text" class="form-control datepickerInput" id="modal_dt_contabil" autocomplete="off">
+                                                    <div hidden id="erroDtContabil">Preencha este campo</div>
+                                                </div>
+                                                <div>
+                                                    <label for="m_situacao">Status Contábil</label>
+                                                    <select id="m_situacao" class="form-control">
+                                                        <option value="A">Aberto</option>
+                                                        <option value="F">Fechado </option>
+                                                    </select>
+                                                    <div hidden id="erroStatus">Preencha este campo</div>
+                                                </div>
+                                                <div style="padding-top: 23px;">
+                                                    <button class="btn btn-sm btn-primary" id="btnSalvar" onclick="Salvar()" type="button">Salvar</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12" style="padding: 10px 10px 0 10px;margin-bottom:0">
+                                                <label for="observacao">Observação</label><br />
+                                                <textarea id="observacao" style="width:100%" maxlength="1000"></textarea>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div style="display: flex; justify-content:space-between; padding: 10px 10px 0 10px;column-gap:30px">
+                                                <div style="width: 125px;">
+                                                    <label for="m_fechamento">Fechamento</label>
+                                                    <input type="text" class="form-control no-border" id="m_fechamento" autocomplete="off" readonly>
+                                                    <div hidden id="erroFechamento">Preencha este campo</div>
+                                                </div>
+                                                <div style="width: 210px;">
+                                                    <label for="n_nome">Dt. Contabilização para o RM Saldus</label>
+                                                    <input type="text" class="form-control no-border" id="modal_dt_contabil_disabled" autocomplete="off" readonly>
+                                                    <div hidden id="erroDtContabil">Preencha este campo</div>
+                                                </div>
+                                                <div>
+                                                    <label for="m_situacao">Status Contábil</label>
+                                                    @*<select id="m_situacao" class="form-control no-border" disabled>
+                                                        <option value="A">Aberto</option>
+                                                        <option value="F">Fechado </option>
+                                                    </select>*@
+                                                    <input type="text" class="form-control no-border" id="m_situacao_disabled" autocomplete="off" readonly>
+                                                    <div hidden id="erroStatus">Preencha este campo</div>
+                                                </div>
+                                                <div style="padding-top: 23px;">
+                                                    <button class="btn btn-sm btn-primary" id="btnSalvar" onclick="Salvar()" type="button">Salvar</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12" style="padding: 10px 10px 0 10px;margin-bottom:0">
+                                                <label for="observacao">Observação</label><br />
+                                                <textarea id="observacao" style="width:100%" maxlength="1000" readonly class="no-border"></textarea>
+                                            </div>
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                        </form>
+<form>
+    <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+        <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+            <div style="display:flex;justify-content:space-between">
+                <div style="vertical-align:middle;padding:5px 10px"><span>Referência de Contabilização do Fechamento Contábil do Câmbio Importação [ Câmbio.Sys ]</span></div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding-bottom: 0;margin-bottom:0">
+            <table id="gridCambio" class="table table-striped table-bordered" id="tblItens" style="margin-bottom:0; border: 1px solid #aaa6a6;">
+                <thead style="background-color: lightgray;">
+                    <tr>
+                        <th rowspan="2" style="border: 1px solid #aaa6a6;width: 20px;"></th>
+                        <th rowspan="2" class="" style="border: 1px solid #aaa6a6;text-align:center;min-width: 70px;;">ID INTEGRAÇÃO</th>
+                        <th rowspan="2" class="" style="border: 1px solid #aaa6a6;text-align:center;min-width: 110px">DATA</th>
+                        <th rowspan="2" class="" style="border: 1px solid #aaa6a6;text-align:left;min-width:100px;width: 270px;">NOME</th>
+                        <th rowspan="2" class="" style="border: 1px solid #aaa6a6;text-align:center;min-width:70px">DT. TRANSAÇÃO</th>
+                        <th rowspan="2" style="border: 1px solid #aaa6a6;text-align:center;min-width:120px">QTD. REGISTROS</th>
+                        <th colspan="2" style="border: 1px solid #aaa6a6;text-align:center;min-width:120px">VC EFETIVA</th>
+                        <th colspan="2" style="border: 1px solid #aaa6a6;text-align:center;min-width:120px">VC NÃO EFETIVA</th>
+                        @*<th rowspan="2" style="text-align:center;min-width:120px">
+                            <table width="100%">
+                                <tr>
+                                    <td colspan="2">VC EFETIVA</td>
+                                </tr>
+                                <tr style="background-color: #fcf4f4;">
+                                    <td>GANHO</td>
+                                    <td>PERDA</td>
+                                </tr>
+                            </table>
+                        </th>
+                        <th rowspan="2" style="text-align:center;min-width:120px">
+                            <table width="100%">
+                                <tr>
+                                    <td colspan="2">VC NÃO EFETIVA</td>
+                                </tr>
+                                <tr style="background-color: #fcf4f4;">
+                                    <td>GANHO</td>
+                                    <td>PERDA</td>
+                                </tr>
+                            </table>
+                        </th>*@
+                    </tr>
+                    <tr>
+                        <th style="text-align:center;background: #eceaea;">GANHO</th>
+                        <th style="text-align:center;background: #eceaea;">PERDA</th>
+                        <th style="text-align:center;background: #eceaea;">GANHO</th>
+                        <th style="text-align:center;background: #eceaea;">PERDA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @*@if (lstCambio != null)
+                        {
+                            foreach (Entities.IntegracaoCambioSys item in lstCambio)
+                            {
+                                <tr>
+                                    <td><input type="radio" id="radio" name="radio" /></td>
+                                    <td style="text-align:center">@item.Id_integracao</td>
+                                    <td style="text-align:center;">@item.Data.Value.ToString("dd/MM/yyyy")</td>
+                                    <td style="text-align:left">@item.Nome</td>
+                                    <td style="text-align:center">@item.Dt_transacao.Value.ToString("dd/MM/yyyy")</td>
+                                    <td style="text-align:center">@item.Qtd_registros</td>
+                                    <td style="text-align:center">@item.Vc_Efetiva_Ganho</td>
+                                    <td style="text-align:center">@item.Vc_Efetiva_Perda</td>
+                                    <td style="text-align:center">@item.Vc_Nao_Efetiva_Ganho</td>
+                                    <td style="text-align:center">@item.Vc_Nao_Efetiva_Perda</td>
+                                </tr>
+                            }
+                        }*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+<form>
+    <div class="form-group col-md-12" style="padding: 10px 10px 0 10px;padding-left:0; padding-right:0">
+        <div class="panel with-nav-tabs panel-default" style="margin-bottom:0">
+            <div class="panel-heading" style="background-color:lightgray;font-weight:bold">
+                Histórico de Ações
+            </div>
+            <div class="panel-body" style="padding-bottom:0;">
+                <div id="historico" style="height: 100px;border: 1px solid #8d8282;width: 100%;">
+                    <table>
+                        <tr>
+                            <td style="padding: 5px 40px 0px 10px;">Dt. Abertura</td>
+                            <td style="padding: 5px 40px 0px 10px;">Responsável</td>
+                        </tr>
+                        <tr>
+                            <td id="modal_dt_abertura" style="padding: 0px 40px 20px 10px;"></td>
+                            <td id="modal_responsavel_abertura" style="padding: 0px 40px 20px 10px;">Responsável</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px 40px 0px 10px;">Dt. Fechamento</td>
+                            <td style="padding: 5px 40px 0px 10px;">Responsável</td>
+                        </tr>
+                        <tr>
+                            <td id="modal_dt_fechamento" style="padding: 0px 40px 20px 10px;"></td>
+                            <td id="modal_responsavel_fechamento" style="padding: 0px 40px 20px 10px;"></td>
+                        </tr>
+
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+</form>
+                        <button type="button" class="btn btn-primary btn-sm pull-right" style="margin-bottom: 10px;" data-dismiss="modal">Fechar</button>
+
+                </div>
+                        </div>
+                    </div>
+        </div>
+        <div class="modal fade" id="modalUpdateSitFechado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-right: 0px;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center" style="padding:5px">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        @*<h4 style="text-align:left">Alterar Perfil: <span id="titulo"></span></h4>*@
+                        <h4 style="text-align:left">Registro de Fechamento Contábil</h4>
+                    </div>
+                    <div class="modal-body" style="padding-top:8px">
+                        <form>
+                            <div class="panel with-nav-tabs panel-default" style="margin-bottom:10px">
+                                <div class="panel-heading" style="background-color:lightgray;font-weight:bold">
+                                    Fechamento Contábil
+                                </div>
+                                <div class="panel-body" style="padding-bottom:0;">
+                                    <form id="formAlterarPerfil">
+                                        <input hidden id="modal_id_fechamento" />
+                                        <input hidden id="modal_id_integracao" />
+                                            <div style="display: flex; justify-content:space-between; padding: 10px 10px 0 10px;column-gap:30px">
+                                                <div style="width: 125px;">
+                                                    <label for="m_fechamento">Fechamento</label>
+                                                    <input type="text" class="form-control no-border" id="m2_fechamento" autocomplete="off" readonly>
+                                                    <div hidden id="erroFechamento">Preencha este campo</div>
+                                                </div>
+                                                <div style="width: 210px;">
+                                                    <label for="n_nome">Dt. Contabilização para o RM Saldus</label>
+                                                    <input type="text" class="form-control no-border" id="modal_dt_contabil_disabled" autocomplete="off" readonly>
+                                                    <div hidden id="erroDtContabil">Preencha este campo</div>
+                                                </div>
+                                                <div>
+                                                    <label for="m_situacao">Status Contábil</label>
+                                                    @*<select id="m_situacao" class="form-control no-border" disabled>
+                                                        <option value="A">Aberto</option>
+                                                        <option value="F">Fechado </option>
+                                                    </select>*@
+                                                    <input type="text" class="form-control no-border" id="m_situacao_disabled" autocomplete="off" readonly>
+                                                    <div hidden id="erroStatus">Preencha este campo</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12" style="padding: 10px 10px 0 10px;margin-bottom:0">
+                                                <label for="modal2_observacao">Observação</label><br />
+                                                <textarea id="modal2_observacao" style="width:100%" maxlength="1000" readonly class="no-border"></textarea>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </form>
+                        <form>
+                            <div class="panel with-nav-tabs panel-default" style="padding-bottom: 0;margin-bottom:0">
+                                <div class="panel-heading" style="background-color:lightgray;font-weight:bold;padding: 0 !important">
+                                    <div style="display:flex;justify-content:space-between">
+                                        <div style="vertical-align:middle;padding:5px 10px"><span>Referência de Contabilização do Fechamento Contábil do Câmbio Importação [ Câmbio.Sys ]</span></div>
+                                    </div>
+                                </div>
+                                <div class="panel-body" style="padding-bottom: 0;margin-bottom:0">
+                                    <table id="gridCambio" class="table table-striped table-bordered" id="tblItens" style="margin-bottom:0; border: 1px solid #aaa6a6;">
+                                        <thead style="background-color: lightgray;">
+                                            <tr>
+                                                <th rowspan="2" style="border: 1px solid #aaa6a6;width: 20px;"></th>
+                                                <th rowspan="2" class="" style="border: 1px solid #aaa6a6;text-align:center;min-width: 70px;;">ID INTEGRAÇÃO</th>
+                                                <th rowspan="2" class="" style="border: 1px solid #aaa6a6;text-align:center;min-width: 110px">DATA</th>
+                                                <th rowspan="2" class="" style="border: 1px solid #aaa6a6;text-align:left;min-width:100px;width: 270px;">NOME</th>
+                                                <th rowspan="2" class="" style="border: 1px solid #aaa6a6;text-align:center;min-width:70px">DT. TRANSAÇÃO</th>
+                                                <th rowspan="2" style="border: 1px solid #aaa6a6;text-align:center;min-width:120px">QTD. REGISTROS</th>
+                                                <th colspan="2" style="border: 1px solid #aaa6a6;text-align:center;min-width:120px">VC EFETIVA</th>
+                                                <th colspan="2" style="border: 1px solid #aaa6a6;text-align:center;min-width:120px">VC NÃO EFETIVA</th>
+                                                @*<th rowspan="2" style="text-align:center;min-width:120px">
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td colspan="2">VC EFETIVA</td>
+                                                        </tr>
+                                                        <tr style="background-color: #fcf4f4;">
+                                                            <td>GANHO</td>
+                                                            <td>PERDA</td>
+                                                        </tr>
+                                                    </table>
+                                                </th>
+                                                <th rowspan="2" style="text-align:center;min-width:120px">
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td colspan="2">VC NÃO EFETIVA</td>
+                                                        </tr>
+                                                        <tr style="background-color: #fcf4f4;">
+                                                            <td>GANHO</td>
+                                                            <td>PERDA</td>
+                                                        </tr>
+                                                    </table>
+                                                </th>*@
+                                            </tr>
+                                            <tr>
+                                                <th style="text-align:center;background: #eceaea;">GANHO</th>
+                                                <th style="text-align:center;background: #eceaea;">PERDA</th>
+                                                <th style="text-align:center;background: #eceaea;">GANHO</th>
+                                                <th style="text-align:center;background: #eceaea;">PERDA</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @*@if (lstCambio != null)
+                                            {
+                                                foreach (Entities.IntegracaoCambioSys item in lstCambio)
+                                                {
+                                                    <tr>
+                                                        <td><input type="radio" id="radio" name="radio" /></td>
+                                                        <td style="text-align:center">@item.Id_integracao</td>
+                                                        <td style="text-align:center;">@item.Data.Value.ToString("dd/MM/yyyy")</td>
+                                                        <td style="text-align:left">@item.Nome</td>
+                                                        <td style="text-align:center">@item.Dt_transacao.Value.ToString("dd/MM/yyyy")</td>
+                                                        <td style="text-align:center">@item.Qtd_registros</td>
+                                                        <td style="text-align:center">@item.Vc_Efetiva_Ganho</td>
+                                                        <td style="text-align:center">@item.Vc_Efetiva_Perda</td>
+                                                        <td style="text-align:center">@item.Vc_Nao_Efetiva_Ganho</td>
+                                                        <td style="text-align:center">@item.Vc_Nao_Efetiva_Perda</td>
+                                                    </tr>
+                                                }
+                                            }*@
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                        <form>
+                            <div class="form-group col-md-12" style="padding: 10px 10px 0 10px;padding-left:0; padding-right:0">
+                                <div class="panel with-nav-tabs panel-default" style="margin-bottom:0">
+                                    <div class="panel-heading" style="background-color:lightgray;font-weight:bold">
+                                        Histórico de Ações
+                                    </div>
+                                    <div class="panel-body" style="padding-bottom:0;">
+                                        <div id="historico" style="height: 100px;border: 1px solid #8d8282;width: 100%;">
+                                            <table>
+                                                <tr>
+                                                    <td style="padding: 5px 40px 0px 10px;">Dt. Abertura</td>
+                                                    <td style="padding: 5px 40px 0px 10px;">Responsável</td>
+                                                </tr>
+                                                <tr>
+                                                    <td id="modal2_dt_abertura" style="padding: 0px 40px 20px 10px;"></td>
+                                                    <td id="modal2_responsavel_abertura" style="padding: 0px 40px 20px 10px;">Responsável</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 5px 40px 0px 10px;">Dt. Fechamento</td>
+                                                    <td style="padding: 5px 40px 0px 10px;">Responsável</td>
+                                                </tr>
+                                                <tr>
+                                                    <td id="modal2_dt_fechamento" style="padding: 0px 40px 20px 10px;"></td>
+                                                    <td id="modal2_responsavel_fechamento" style="padding: 0px 40px 20px 10px;"></td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <button type="button" class="btn btn-primary btn-sm pull-right" style="margin-bottom: 10px;" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+        <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+        <script type="text/javascript" src="~/scripts/importacaoDocumento.js"></script>
+        <link href="~/content/indexCompras.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+        <link href="~/content/indeximportacaodocumento.css" rel="stylesheet" />
+
+
+        <link href="~/content/chosen.css" rel="stylesheet" />
+        <script src="~/scripts/chosen.jquery.js"></script>
+
+        <script>                 
+            $(function () {
+                $(".datepickerInput").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+                $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val(); $("#checkin").datepicker();
+                $("#modal_dt_contabil").datepicker({ dateFormat: 'dd/mm/yy' }).val(); $("#checkin").datepicker();
+            });
+
+            $("#btnExibir").click(function () {
+                let ano = $("ano").val();
+
+                if (ano != "" || ano != null) {
+                    var filtrar = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "exibir").val("filtrar");
+                    $('#myForm').append($(filtrar));
+                    document.getElementById("myForm").submit();
+                }
+                else {
+                    $("anoErroAno").val("Digite o ano.");
+                }
+
+            });
+            function updateModal(fechamento, id_fechamento, id_integracao, dt_contabil, situacao, observacao, ano, mes) {
+                $('#modal_dt_contabil').val("");
+                $('#modal_dt_contabil_disabled').val("");
+                $('#modal_id_integracao').text("");
+                $('#modal_dt_abertura').text("");
+                $('#modal_dt_fechamento').text("");
+                $('#modal_responsavel_abertura').text("");
+                $('#modal_responsavel_fechamento').text("");
+                $('#observacao').text("");
+
+                if (fechamento != "" & fechamento != 'undefined') {
+                    $("#m_situacao option[value='-- Selecione --']").remove();
+                    $('#modal_dt_contabil').val(dt_contabil);
+                    $('#modal_dt_contabil_disabled').val(dt_contabil);
+                    $('#m_fechamento').val(fechamento);
+                    $('#m_situacao option:contains(' + situacao + ')').prop({ selected: true });
+                    $('#m_situacao_disabled').val(situacao);
+                    $('#modal_id_integracao').text(id_integracao);
+                    sessionStorage.setItem("Situação_Modal", situacao);
+                    $.ajax({
+                        url: '@Url.Action("Fechamento", "FechamentoContabil")',
+                        data: {id_fechamento, ano, mes},
+                        traditional: true,
+                        contentType: 'json',
+                        success: function (response) {
+                            let data_di_modal = new Date(parseInt(response.Resultado[0].Dt_Contabilizacao.substr(6)));
+                            dia = data_di_modal.getDate().toString(),
+                            diaF = (dia.length == 1) ? '0' + dia : dia,
+                            mes = (data_di_modal.getMonth() + 1).toString(),
+                            mesF = (mes.length == 1) ? '0' + mes : mes,
+                            anoF = data_di_modal.getFullYear();
+                            let ftm_data_contabil = diaF + "/" + mesF + "/" + anoF;
+
+                            let data_abertura = new Date(parseInt(response.Resultado[0].Data_Abertura.substr(6)));
+                            dia = data_abertura.getDate().toString(),
+                            diaF = (dia.length == 1) ? '0' + dia : dia,
+                            mes = (data_abertura.getMonth() + 1).toString(),
+                            mesF = (mes.length == 1) ? '0' + mes : mes,
+                            anoF = data_abertura.getFullYear();
+                            let ftm_data_abertura = diaF + "/" + mesF + "/" + anoF;
+
+                            let data_fechamento = new Date(parseInt(response.Resultado[0].Data_Abertura.substr(6)));
+                            dia = data_fechamento.getDate().toString(),
+                            diaF = (dia.length == 1) ? '0' + dia : dia,
+                            mes = (data_fechamento.getMonth() + 1).toString(),
+                            mesF = (mes.length == 1) ? '0' + mes : mes,
+                            anoF = data_fechamento.getFullYear();
+                            let ftm_data_fechamento = diaF + "/" + mesF + "/" + anoF;
+
+                            //$('#m_fechamento').val(response.Resultado[0].Fechamento);
+                            $('#modal_dt_contabil').val(ftm_data_contabil);
+                            $('#modal_dt_contabil_disabled').val(ftm_data_contabil);
+                            $('#modal_dt_abertura').text(ftm_data_abertura);
+                            $('#modal_dt_fechamento').text(ftm_data_fechamento);
+                            $('#modal_responsavel_abertura').text(response.Resultado[0].Responsavel_Abertura);
+                            $('#modal_responsavel_fechamento').text(response.Resultado[0].Responsavel_Fechamento);
+                            $('#modal_id_fechamento').val(response.Resultado[0].Id_fechamento);
+                            $('#modal_id_integracao').text(id_integracao);
+                            $('#observacao').val(response.Resultado[0].Observação);
+
+                            if (response.Cambio != null) {
+                                for (var x = 0; x < response.Cambio.length; x++) {
+                                    let dt_transacao_cambio = new Date(parseInt(response.Cambio[x].Dt_transacao.substr(6)));
+                                    dia = dt_transacao_cambio.getDate().toString(),
+                                    diaF = (dia.length == 1) ? '0' + dia : dia,
+                                    mes = (dt_transacao_cambio.getMonth() + 1).toString(),
+                                    mesF = (mes.length == 1) ? '0' + mes : mes,
+                                    anoF = dt_transacao_cambio.getFullYear();
+                                    let ftm_dt_transacao_cambio = diaF + "/" + mesF + "/" + anoF;
+
+                                    let dt_cambio = new Date(parseInt(response.Cambio[x].Data.substr(6)));
+                                    dia = dt_cambio.getDate().toString(),
+                                    diaF = (dia.length == 1) ? '0' + dia : dia,
+                                    mes = (dt_cambio.getMonth() + 1).toString(),
+                                    mesF = (mes.length == 1) ? '0' + mes : mes,
+                                    anoF = dt_cambio.getFullYear();
+                                    hora = dt_cambio.getHours().toString();
+                                    horaF = (hora < 10) ? '0' + hora : hora;
+                                    minuto = dt_cambio.getMinutes().toString();
+                                    minutoF = (minuto < 10) ? '0' + minutoF : minuto;
+                                    segundo = dt_cambio.getSeconds().toString();
+                                    segundoF = (dt_cambio < 10) ? '0' + segundo : segundo;
+                                    milesegundos = dt_cambio.getMilliseconds().toString();
+                                    milesegundosF = (milesegundos < 10) ? '00' + milesegundos : milesegundos;
+                                    let ftm_dt_cambio = diaF + "/" + mesF + "/" + anoF + " " + horaF + ":" + minutoF + ":" + segundoF + ":" + milesegundosF;
+
+                                    var Vc_Efetiva_Ganho = response.Cambio[x].Vc_Efetiva_Ganho;
+                                    Vc_Efetiva_Ganho = Vc_Efetiva_Ganho != 0 ? parseFloat(Vc_Efetiva_Ganho).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+
+                                    var Vc_Efetiva_Perda = response.Cambio[x].Vc_Efetiva_Perda;
+                                    Vc_Efetiva_Perda = Vc_Efetiva_Perda != 0 ? parseFloat(Vc_Efetiva_Perda).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+
+                                    var Vc_Nao_Efetiva_Ganho = response.Cambio[x].Vc_Nao_Efetiva_Ganho;
+                                    Vc_Nao_Efetiva_Ganho = Vc_Nao_Efetiva_Ganho != 0 ? parseFloat(Vc_Nao_Efetiva_Ganho).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+
+                                    var Vc_Nao_Efetiva_Perda = response.Cambio[x].Vc_Nao_Efetiva_Perda;
+                                    Vc_Nao_Efetiva_Perda = Vc_Nao_Efetiva_Perda != 0 ? parseFloat(Vc_Nao_Efetiva_Perda).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+
+                                    if (x % 2 != 0) {
+                                        $('#gridCambio tbody').append('<tr>');
+                                        if (response.Cambio[x].Ativar_RadioBox == "S") {
+                                            if (response.Cambio[x].Valor_RadioBox == "true") {
+                                                $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;padding: 0 10px 0 10px;">' + '<input type="radio" name="ckCambio" value="' + response.Cambio[x].Id_integracao  + '" checked/>' + '</td>');
+                                            }
+                                            else {
+                                                $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;padding: 0 10px 0 10px;">' + '<input type="radio" name="ckCambio" value="' + response.Cambio[x].Id_integracao + '"/>' + '</td>');
+                                            }
+                                        }
+                                        else {
+                                            $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;padding: 0 10px 0 10px;">' + '' + '</td>');
+                                        }
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:center">' + response.Cambio[x].Id_integracao + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:center">' + ftm_dt_cambio + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2">' + response.Cambio[x].Nome + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:center">' + ftm_dt_transacao_cambio + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.Cambio[x].Qtd_registros.toLocaleString() + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + Vc_Efetiva_Ganho + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + Vc_Efetiva_Perda + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + Vc_Nao_Efetiva_Ganho + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + Vc_Nao_Efetiva_Perda + '</td>');
+                                        $('#gridCambio tbody').append('</tr>');
+                                    }
+                                    else {
+                                        $('#gridCambio tbody').append('<tr>');
+                                        if (response.Cambio[x].Ativar_RadioBox == "S") {
+                                            if (response.Cambio[x].Valor_RadioBox == "true") {
+                                                $('#gridCambio tbody').append('<td style="padding: 0 10px 0 10px;">' + '<input type="radio" name="ckCambio" value="' + response.Cambio[x].Id_integracao + '" checked/>' + '</td>');
+                                            }
+                                            else {
+                                                $('#gridCambio tbody').append('<td style="padding: 0 10px 0 10px;">' + '<input type="radio" name="ckCambio" value="' + response.Cambio[x].Id_integracao + '"/>' + '</td>');
+                                            }
+                                        }
+                                        else {
+                                            $('#gridCambio tbody').append('<td style="padding: 0 10px 0 10px;">' + '' + '</td>');
+                                        }
+                                        $('#gridCambio tbody').append('<td style="text-align:center">' + response.Cambio[x].Id_integracao + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:center">' + ftm_dt_cambio + '</td>');
+                                        $('#gridCambio tbody').append('<td>' + response.Cambio[x].Nome + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:center">' + ftm_dt_transacao_cambio + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + response.Cambio[x].Qtd_registros.toLocaleString() + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + Vc_Efetiva_Ganho + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + Vc_Efetiva_Perda + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + Vc_Nao_Efetiva_Ganho + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + Vc_Nao_Efetiva_Perda + '</td>');
+                                        $('#gridCambio tbody').append('</tr>');
+                                    }
+                                }
+                            }
+
+
+                            if (response.Resultado[0].Exibir_Salvar == 'Fechado') {
+                                $('#btnSalvar').hide()
+                            }
+                            else {
+                                $('#btnSalvar').show()
+                            }
+
+
+                                $('#modalUpdate').modal({
+                                    show: true,
+                                    closeOnEscape: true,
+                                    backdrop: 'static',
+                                    keyboard: false
+                                })
+                            }
+                    
+                    });
+
+                }
+                else {
+                    //$("#m_situacao option[value='-- Selecione --']").remove();
+                    //$("#m_situacao").prepend("<option value='-- Selecione --' selected='selected'>-- Selecione --</option>");
+                    $('#m_situacao option:contains(' + "Aberto" + ')').prop({ selected: true });
+                    $('#m_situacao_disabled').val(situacao);
+                    $.ajax({
+                        url: '@Url.Action("Fechamento_Novo", "FechamentoContabil")',
+                        traditional: true,
+                        contentType: 'json',
+                        success: function (response) {
+                           let data_di_modal = new Date(parseInt(response.Resultado[0].Dt_Contabilizacao.substr(6)));
+                           dia = data_di_modal.getDate().toString(),
+                           diaF = (dia.length == 1) ? '0' + dia : dia,
+                           mes = (data_di_modal.getMonth() + 1).toString(), 
+                           mesF = (mes.length == 1) ? '0' + mes : mes,
+                           anoF = data_di_modal.getFullYear();
+                           let ftm_data_contabil = diaF + "/" + mesF + "/" + anoF;
+
+                            $('#m_fechamento').val(response.Resultado[0].Fechamento);
+                            $('#modal_dt_contabil').val(ftm_data_contabil);
+                            $('#modal_dt_contabil_disabled').val(ftm_data_contabil);
+                            $('#modal_responsavel_abertura').text(response.Resultado[0].Usuario);
+                            $('#modal_id_fechamento').val(response.Resultado[0].Id_fechamento);
+
+                            if (response.Resultado[0].Exibir_Salvar == 'Fechado') {
+                                $('#btnSalvar').hide()
+                            }
+                           else {
+                                $('#btnSalvar').show()
+                            }
+
+
+                                $('#modalUpdate').modal({
+                                    show: true,
+                                    closeOnEscape: true,
+                                    backdrop: 'static',
+                                    keyboard: false
+                                })
+
+                        }
+                    });
+                }
+
+            }
+
+            function updateModalSitFechado(fechamento, id_fechamento, id_integracao, dt_contabil, situacao, observacao, ano, mes) {
+                $('#modal_dt_contabil_disabled').val("");
+                $('#modal2_id_integracao').text("");
+                $('#modal2_dt_abertura').text("");
+                $('#m2_fechamento').text("");
+                $('#modal2_responsavel_abertura').text("");
+                $('#modal2_responsavel_fechamento').text("");
+                $('#modal2_observacao').text("");
+
+                if (fechamento != "" & fechamento != 'undefined') {
+                    $('#modal_dt_contabil_disabled').val(dt_contabil);
+                    $('#m2_fechamento').val(fechamento);
+                    $('#m_situacao_disabled').val(situacao);
+                    $('#modal2_id_integracao').text(id_integracao);
+                    sessionStorage.setItem("Situação_Modal", situacao);
+                    $.ajax({
+                        url: '@Url.Action("Fechamento", "FechamentoContabil")',
+                        data: { id_fechamento, ano, mes},
+                        traditional: true,
+                        contentType: 'json',
+                        success: function (response) {
+                            let data_di_modal = new Date(parseInt(response.Resultado[0].Dt_Contabilizacao.substr(6)));
+                            dia = data_di_modal.getDate().toString(),
+                            diaF = (dia.length == 1) ? '0' + dia : dia,
+                            mes = (data_di_modal.getMonth() + 1).toString(),
+                            mesF = (mes.length == 1) ? '0' + mes : mes,
+                            anoF = data_di_modal.getFullYear();
+                            let ftm_data_contabil = diaF + "/" + mesF + "/" + anoF;
+
+                            let data_abertura = new Date(parseInt(response.Resultado[0].Data_Abertura.substr(6)));
+                            dia = data_abertura.getDate().toString(),
+                            diaF = (dia.length == 1) ? '0' + dia : dia,
+                            mes = (data_abertura.getMonth() + 1).toString(),
+                            mesF = (mes.length == 1) ? '0' + mes : mes,
+                            anoF = data_abertura.getFullYear();
+                            let ftm_data_abertura = diaF + "/" + mesF + "/" + anoF;
+
+                            let data_fechamento = new Date(parseInt(response.Resultado[0].Data_Abertura.substr(6)));
+                            dia = data_fechamento.getDate().toString(),
+                            diaF = (dia.length == 1) ? '0' + dia : dia,
+                            mes = (data_fechamento.getMonth() + 1).toString(),
+                            mesF = (mes.length == 1) ? '0' + mes : mes,
+                            anoF = data_fechamento.getFullYear();
+                            let ftm_data_fechamento = diaF + "/" + mesF + "/" + anoF;
+
+                            //$('#m2_fechamento').val(response.Resultado[0].Fechamento);
+                            $('#modal2_dt_contabil').val(ftm_data_contabil);
+                            $('#modal_dt_contabil_disabled').val(ftm_data_contabil);
+                            $('#modal2_dt_abertura').text(ftm_data_abertura);
+                            $('#modal2_dt_fechamento').text(ftm_data_fechamento);
+                            $('#modal2_responsavel_abertura').text(response.Resultado[0].Responsavel_Abertura);
+                            $('#modal2_responsavel_fechamento').text(response.Resultado[0].Responsavel_Fechamento);
+                            $('#modal2_id_fechamento').val(response.Resultado[0].Id_fechamento);
+                            $('#modal2_id_integracao').text(id_integracao);
+                            $('#modal2_observacao').val(response.Resultado[0].Observação);
+
+                            if (response.Cambio != null) {
+                                for (var x = 0; x < response.Cambio.length; x++) {
+                                    let dt_transacao_cambio = new Date(parseInt(response.Cambio[x].Dt_transacao.substr(6)));
+                                    dia = dt_transacao_cambio.getDate().toString(),
+                                    diaF = (dia.length == 1) ? '0' + dia : dia,
+                                    mes = (dt_transacao_cambio.getMonth() + 1).toString(),
+                                    mesF = (mes.length == 1) ? '0' + mes : mes,
+                                    anoF = dt_transacao_cambio.getFullYear();
+                                    let ftm_dt_transacao_cambio = diaF + "/" + mesF + "/" + anoF;
+
+                                    let dt_cambio = new Date(parseInt(response.Cambio[x].Data.substr(6)));
+                                    dia = dt_cambio.getDate().toString(),
+                                    diaF = (dia.length == 1) ? '0' + dia : dia,
+                                    mes = (dt_cambio.getMonth() + 1).toString(),
+                                    mesF = (mes.length == 1) ? '0' + mes : mes,
+                                    anoF = dt_cambio.getFullYear();
+                                    hora = dt_cambio.getHours().toString();
+                                    horaF = (hora < 10) ? '0' + hora : hora;
+                                    minuto = dt_cambio.getMinutes().toString();
+                                    minutoF = (minuto < 10) ? '0' + minutoF : minuto;
+                                    segundo = dt_cambio.getSeconds().toString();
+                                    segundoF = (dt_cambio < 10) ? '0' + segundo : segundo;
+                                    milesegundos = dt_cambio.getMilliseconds().toString();
+                                    milesegundosF = (milesegundos < 10) ? '00' + milesegundos : milesegundos;
+                                    let ftm_dt_cambio = diaF + "/" + mesF + "/" + anoF + " " + horaF + ":" + minutoF + ":" + segundoF + ":" + milesegundosF;
+
+                                    var Vc_Efetiva_Ganho = response.Cambio[x].Vc_Efetiva_Ganho;
+                                    Vc_Efetiva_Ganho = Vc_Efetiva_Ganho != 0 ? parseFloat(Vc_Efetiva_Ganho).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+
+                                    var Vc_Efetiva_Perda = response.Cambio[x].Vc_Efetiva_Perda;
+                                    Vc_Efetiva_Perda = Vc_Efetiva_Perda != 0 ? parseFloat(Vc_Efetiva_Perda).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+
+                                    var Vc_Nao_Efetiva_Ganho = response.Cambio[x].Vc_Nao_Efetiva_Ganho;
+                                    Vc_Nao_Efetiva_Ganho = Vc_Nao_Efetiva_Ganho != 0 ? parseFloat(Vc_Nao_Efetiva_Ganho).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+
+                                    var Vc_Nao_Efetiva_Perda = response.Cambio[x].Vc_Nao_Efetiva_Perda;
+                                    Vc_Nao_Efetiva_Perda = Vc_Nao_Efetiva_Perda != 0 ? parseFloat(Vc_Nao_Efetiva_Perda).toLocaleString('pt-br', { minimumFractionDigits: 2 }) : '';
+
+                                    if (x % 2 != 0) {
+                                        $('#gridCambio tbody').append('<tr>');
+                                        if (response.Cambio[x].Ativar_RadioBox == "S") {
+                                            if (response.Cambio[x].Valor_RadioBox == "true") {
+                                                $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;padding: 0 10px 0 10px;">' + '<input type="radio" name="ckCambio" value="' + response.Cambio[x].Id_integracao + '" checked/>' + '</td>');
+                                            }
+                                            else {
+                                                $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;padding: 0 10px 0 10px;">' + '<input type="radio" name="ckCambio" value="' + response.Cambio[x].Id_integracao + '"/>' + '</td>');
+                                            }
+                                        }
+                                        else {
+                                            $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;padding: 0 10px 0 10px;">' + '' + '</td>');
+                                        }
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:center">' + response.Cambio[x].Id_integracao + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:center">' + ftm_dt_cambio + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2">' + response.Cambio[x].Nome + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:center">' + ftm_dt_transacao_cambio + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + response.Cambio[x].Qtd_registros.toLocaleString() + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + Vc_Efetiva_Ganho + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + Vc_Efetiva_Perda + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + Vc_Nao_Efetiva_Ganho + '</td>');
+                                        $('#gridCambio tbody').append('<td style="background-color:#f2f2f2;text-align:right">' + Vc_Nao_Efetiva_Perda + '</td>');
+                                        $('#gridCambio tbody').append('</tr>');
+                                    }
+                                    else {
+                                        $('#gridCambio tbody').append('<tr>');
+                                        if (response.Cambio[x].Ativar_RadioBox == "S") {
+                                            if (response.Cambio[x].Valor_RadioBox == "true") {
+                                                $('#gridCambio tbody').append('<td style="padding: 0 10px 0 10px;">' + '<input type="radio" name="ckCambio" value="' + response.Cambio[x].Id_integracao + '" checked/>' + '</td>');
+                                            }
+                                            else {
+                                                $('#gridCambio tbody').append('<td style="padding: 0 10px 0 10px;">' + '<input type="radio" name="ckCambio" value="' + response.Cambio[x].Id_integracao + '"/>' + '</td>');
+                                            }
+                                        }
+                                        else {
+                                            $('#gridCambio tbody').append('<td style="padding: 0 10px 0 10px;">' + '' + '</td>');
+                                        }
+                                        $('#gridCambio tbody').append('<td style="text-align:center">' + response.Cambio[x].Id_integracao + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:center">' + ftm_dt_cambio + '</td>');
+                                        $('#gridCambio tbody').append('<td>' + response.Cambio[x].Nome + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:center">' + ftm_dt_transacao_cambio + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + response.Cambio[x].Qtd_registros.toLocaleString() + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + Vc_Efetiva_Ganho + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + Vc_Efetiva_Perda + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + Vc_Nao_Efetiva_Ganho + '</td>');
+                                        $('#gridCambio tbody').append('<td style="text-align:right">' + Vc_Nao_Efetiva_Perda + '</td>');
+                                        $('#gridCambio tbody').append('</tr>');
+                                    }
+                                }
+                            }
+
+
+                            if (response.Resultado[0].Exibir_Salvar == 'Fechado') {
+                                $('#btnSalvar').hide()
+                            }
+                            else {
+                                $('#btnSalvar').show()
+                            }
+
+
+                            $('#modalUpdateSitFechado').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+                        }
+
+                    });
+
+                }
+                else {
+                    //$("#m2_situacao option[value='-- Selecione --']").remove();
+                    //$("#m2_situacao").prepend("<option value='-- Selecione --' selected='selected'>-- Selecione --</option>");
+                    $('#m2_situacao option:contains(' + "Aberto" + ')').prop({ selected: true });
+                    $('#m2_situacao_disabled').val(situacao);
+                    $.ajax({
+                        url: '@Url.Action("Fechamento_Novo", "FechamentoContabil")',
+                        traditional: true,
+                        contentType: 'json',
+                        success: function (response) {
+                            let data_di_modal = new Date(parseInt(response.Resultado[0].Dt_Contabilizacao.substr(6)));
+                            dia = data_di_modal.getDate().toString(),
+                            diaF = (dia.length == 1) ? '0' + dia : dia,
+                            mes = (data_di_modal.getMonth() + 1).toString(),
+                            mesF = (mes.length == 1) ? '0' + mes : mes,
+                            anoF = data_di_modal.getFullYear();
+                            let ftm_data_contabil = diaF + "/" + mesF + "/" + anoF; 
+
+                            $('#m2_fechamento').val(response.Resultado[0].Fechamento);
+                            $('#modal_dt_contabil_disabled').val(ftm_data_contabil);
+                            $('#modal2_responsavel_abertura').text(response.Resultado[0].Usuario);
+                            $('#modal2_id_fechamento').val(response.Resultado[0].Id_fechamento);
+
+                            if (response.Resultado[0].Exibir_Salvar == 'Fechado') {
+                                $('#btnSalvar').hide()
+                            }
+                            else {
+                                $('#btnSalvar').show()
+                            }
+
+
+                            $('#modalUpdateSitFechado').modal({
+                                show: true,
+                                closeOnEscape: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+
+                        }
+                    });
+                }
+
+            }
+
+            $('#modalUpdate').on('hidden.bs.modal', function (e) {
+                $('#modal_dt_contabil').val("");
+                $('#modal_dt_abertura').text("");
+                $('#modal_dt_fechamento').text("");
+                $('#modal_responsavel_abertura').text("");
+                $('#modal_responsavel_fechamento').text("");
+                $('#observacao').val("");
+                $('#gridCambio tbody').empty();
+                $('#erroFechamento').hide();
+                $('#erroDtContabil').hide();
+                $('#erroSituacao').hide();
+            });
+
+            $('#modalUpdateSitFechado').on('hidden.bs.modal', function (e) {
+                $('#modal_dt_contabil').val("");
+                $('#modal_dt_abertura').text("");
+                $('#modal_dt_fechamento').text("");
+                $('#modal_responsavel_abertura').text("");
+                $('#modal_responsavel_fechamento').text("");
+                $('#observacao').val("");
+                $('#gridCambio tbody').empty();
+                $('#erroFechamento').hide();
+                $('#erroDtContabil').hide();
+                $('#erroSituacao').hide();
+            })
+
+
+            function Salvar() {
+                let fechamento = $('#m_fechamento').val();
+                let dt_contabil = $('#modal_dt_contabil').val();
+                let dt_abertura = $('#modal_dt_abertura').text();
+                let dt_fechamento = $('#modal_dt_fechamento').text();
+                let resp_abertura = $('#modal_responsavel_abertura').text();
+                let resp_fechamento = $('#modal_responsavel_fechamento').text();
+                let id_fechamento = $('#modal_id_fechamento').val();
+                let situacao = $('#m_situacao option:selected').val();
+                let obs = $('#observacao').val();
+                let id_integracao = $("input[name='ckCambio']:checked").val();
+
+                if ((fechamento != null & fechamento != "") & (dt_contabil != null & dt_contabil != "") & situacao != "-- Selecione --")
+                {
+                    $.ajax({
+                        url: '@Url.Action("Salvar", "FechamentoContabil")',
+                        traditional: true,
+                        contentType: 'json',
+                        data: { id_fechamento: id_fechamento, id_integracao: id_integracao, fechamento: fechamento, dt_contabil: dt_contabil, situacao: situacao, observacao: obs },
+                        success: function (response) {
+                            if (response.mensagem != "") {
+                                alert(response.mensagem)
+                            }
+                            else {
+                                $('#myForm').submit();
+                            }
+                        }
+                    });
+                }
+                else {
+                    if (fechamento == "") {
+                        $('#m_fechamento').addClass("erroInput");
+                        $('#erroFechamento').addClass("erroDiv");
+                        $('#erroFechamento').show();
+                    }
+
+                    if (dt_contabil == "" || dt_contabil == null) {
+                        $('#modal_dt_contabil').addClass("erroInput");
+                        $('#erroDtContabil').addClass("erroDiv");
+                        $('#erroDtContabil').show();
+                    }
+
+                    if (situacao == "-- Selecione --") {
+                        $('#m_situacao').addClass("erroInput");
+                        $('#erroSituacao').addClass("erroDiv");
+                        $('#erroSituacao').show();
+                    }
+                }
+            }
+
+            $('#m_fechamento').keyup(function () {
+                $('#m_fechamento').removeClass("erroInput");
+                $('#erroFechamento').removeClass("erroDiv");
+                $('#erroFechamento').hide();
+            });
+
+            $('#modal_dt_contabil').change(function () {
+                $('#modal_dt_contabil').removeClass("erroInput");
+                $('#erroDtContabil').removeClass("erroDiv");
+                $('#erroDtContabil').hide();
+            });
+
+            $('#m_situacao').change(function () {
+                $('#m_situacao').removeClass("erroInput");
+                $('#erroSituacao').removeClass("erroDiv");
+                $('#erroSituacao').hide();
+            });
+
+            $('#modalUpdate').on('shown.bs.modal', function () {
+                $(this).find('.modal-dialog').css({
+                    width: '100%',
+                    height: 'auto',
+                    'max-height': '100%',
+                    'padding-right': 0,
+                    'padding-left': 0
+                });
+
+                $(this).css({
+                    'padding-right': 0,
+                    'padding-left': 0
+                });
+
+            });
+
+            $('#modalUpdateSitFechado').on('shown.bs.modal', function () {
+                $(this).find('.modal-dialog').css({
+                    width: '100%',
+                    height: 'auto',
+                    'max-height': '100%',
+                    'padding-right': 0
+                });
+
+                $(this).css({
+                    'padding-right': 0
+                });
+
+            });
+
+
+
+            $("#modal_dt_contabil").keypress(function (event) { event.preventDefault(); });
+
+            $('.menuContabilizacao .sidebar-submenu').addClass("active");
+            $('.menuContabilizacao .sidebar-submenu').toggle();
+
+        </script>
+    </body>
+}
+</html>

@@ -1,0 +1,1920 @@
+﻿@model Entities.StatementGestaoCredito
+
+@{
+    ViewBag.Title = "Painel de metas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var lstAnaliseVar = (List<Entities.StatementConciliacao>)TempData["result"];
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>*@
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+
+    @*@if (lstAnaliseVar != null)
+        {
+            <script type="text/javascript" charset="utf-8">
+            $('#my-modal').modal({
+                        show: true,
+                        closeOnEscape: true,
+                        backdrop: 'static',
+                        keyboard: false,
+                        width: 'auto',
+                        height: 'auto',
+                        'max-height': '100%'
+                    })
+            </script>
+        }*@
+
+    <style>
+        #tableMenu {
+            table-layout: auto;
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .childA {
+            float: left;
+            width: 33.3%;
+            background-color: #f5f5f5;
+            height: 50px;
+        }
+
+        .childB {
+            float: left;
+            width: 33.3%;
+            background-color: gray;
+            height: 50px;
+        }
+
+        .childC {
+            float: left;
+            width: 33.3%;
+            background-color: gray;
+            height: 50px;
+        }
+
+        .fileUpload {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fileUpload {
+            position: relative;
+            overflow: hidden;
+        }
+
+            .fileUpload input.upload {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin: 0;
+                padding: 0;
+                font-size: 20px;
+                cursor: pointer;
+                opacity: 0;
+                filter: alpha(opacity=0);
+            }
+
+        .modal-dialog {
+            position: relative;
+            display: table; /* This is important */
+            /*overflow-y: auto;*/
+            /*overflow-x: auto;*/
+            /*width: auto;
+        min-width: 400px;*/
+        }
+
+        @@media screen and (min-width: 992px) {
+            .modal .modal-dialog {
+                width: 1120px;
+            }
+
+            .espacamento {
+                padding-top: 10px;
+            }
+
+            .panel-body {
+                padding-bottom: 0;
+            }
+        }
+
+        }
+.ui-tooltip {
+    color: green;
+  }
+    </style>
+</head>
+@using (Html.BeginForm("Index", "StatementGestaoCredito", FormMethod.Post, new { id = "myForm", enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+
+
+
+    <body>
+        <input hidden value="@ViewBag.FiltroAnalise" name="idLstConciliacao" id="idLstConciliacao" />
+        <input hidden id="fornecedorSelected" name="fornecedorSelected" />
+        <input hidden id="documentoSelected" name="documentoSelected" />
+        <input hidden id="result" value="@TempData["result"]" />
+        <input hidden id="divShow" value="@ViewBag.DivShow" />
+        <input hidden id="menuAtivo" value="@ViewBag.MenuAtivo" />
+
+
+
+        <div class="page-wrapper chiller-theme">
+            <main class="page-content" style="margin-top:0;padding-top:0;position:absolute;top:5px;left:21px;">
+                <div class="stepwizard" style="padding-bottom:0;padding-left:0;left:20px;position:relative;">
+                    <div class="stepwizard">
+                        <fieldset>
+                            <legend style="margin-bottom:0;top:0;font-size:18px;">Gestão de Créditos</legend>
+                        </fieldset>
+                    </div>
+                </div>
+
+            </main>
+
+            <br />
+
+            <main class="page-content" style="padding-top:0">
+                <div class="container-fluid" style="padding-top:0">
+                    <br />
+
+                    <div id="divFiltro" hidden @*style="margin-left:120px;"*@ style="position:absolute;top:70px;width:97%">
+
+                        <!--Conciliacao-->
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Filtros de qualificação
+                            </div>
+                            <div class="panel-body" style="padding-bottom:20px">
+                                <div class="tab-content">
+                                    <div class="row">
+                                        <div class="col-md-2 mb-2 col-2">
+                                            @Html.Label("Conta", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.ListBox("contaFiltro", (SelectList)ViewBag.Contas, new { @class = "chosen-select" })
+                                        </div>
+                                        <div class="col-md-2 mb-2 col-2">
+                                            @Html.Label("Qualificação", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.ListBox("qualificacaoFiltro", (SelectList)ViewBag.Qualificacao, new { @class = "chosen-select" })
+                                        </div>
+                                        <div class="col-md-2 mb-2 col-2">
+                                            @Html.Label("Composição", new { @class = "form-negrito" })
+                                            @Html.ListBox("composicaoFiltro", (SelectList)ViewBag.Composicao, new { @class = "chosen-select" })
+                                        </div>
+                                        <div class="col-md-2 mb-2 col-2">
+                                            @Html.Label("Saldo", new { @class = "form-negrito" })
+                                            @Html.ListBox("saldoFiltro", (SelectList)ViewBag.Saldo, new { @class = "chosen-select" })
+                                        </div>
+                                        <div class="col-md-2 mb-2 col-2">
+                                            @Html.Label("Aging", new { @class = "form-negrito" })
+                                            @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.ListBox("agingFiltro", (SelectList)ViewBag.Aging, new { @class = "chosen-select" })
+                                        </div>
+                                        <div class="col-md-2 mb-2 col-2">
+                                            @Html.Label("Situação", new { @class = "form-negrito" })
+                                            @Html.ListBox("situacaoFiltro", (SelectList)ViewBag.Situacao, new { @class = "chosen-select" })
+                                        </div>
+
+
+                                        @*<button class="btn btn-primary pull-right" style="margin-bottom:15px;margin-top:15px;" id="btnFiltro" name="btnFiltro" type="submit">Exibir</button>*@
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Filtros de Identificação
+                            </div>
+                            <div class="panel-body" style="padding-bottom:20px">
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-2 col-mb-3 col-2">
+                                            <div class="form-group" style="margin-bottom:0px">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Sales Order</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" @*} })*@
+                                                    @Html.Editor("salesOrderFiltro", new { htmlAttributes = new { @class = "form-control", @maxlengh = "25" } })
+                                                    @*<input id="salesOrderFiltro" name="salesOrderFiltro" class="form-control">*@
+                                                    <div class="" id="erroSalesOrder" style="color:red">
+                                                       
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-2">
+                                            <div class="form-group" style="margin-bottom:0">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Invoice</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("invoiceFiltro", new { htmlAttributes = new { @class = "form-control", @maxlengh = "20" } })
+                                                    <div class="" id="erroInvoice" style="color:red">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-2">
+                                            <div class="form-group" style="margin-bottom:0">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Pedido de Compra</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("pedidoCompraFiltro", new { htmlAttributes = new { @class = "form-control", @maxlengh = "35" } })
+                                                    <div class="" id="erroPedidoCompra" style="color:red">
+
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-2">
+                                            <div class="form-group" style="margin-bottom:0">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Prefixo</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("prefixoFiltro", new { htmlAttributes = new { @class = "form-control", @maxlengh = "25" } })
+                                                    <div class="" id="erroPrefixo" style="color:red">
+
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-1" >
+                                            <div class="form-group" style="margin-bottom:0">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Num D.I.</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("diFiltro", new { htmlAttributes = new { @class = "form-control" } })
+                                                    <div class="" id="erroDI" style="color:red">
+
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-3" style="margin-bottom:10px;">
+                                            <div class="form-group" style="margin-bottom:15px">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Ordem Serviço</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("ordemServicoFiltro", new { htmlAttributes = new { @class = "form-control" } })
+                                                    <div class="" id="erroOrdemServico" style="color:red">
+
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-2" style="margin-bottom:10px;">
+                                            <div class="form-group" style="margin-bottom:15px">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Pré Faturamento</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("preFaturamentoFiltro", new { htmlAttributes = new { @class = "form-control" } })
+                                                    <div class="" id="erroFaturamento" style="color:red">
+
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-2" style="margin-bottom:10px;">
+                                            <div class="form-group" style="margin-bottom:15px">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Num Movto 2.1.35</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("numMovimentoFiltro", new { htmlAttributes = new { @class = "form-control" } })
+                                                    <div class="" id="erroNumMovimento" style="color:red">
+
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-2" style="margin-bottom:10px;">
+                                            <div class="form-group" style="margin-bottom:15px">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Num Processo Imp.</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("processoImportacaoFiltro", new { htmlAttributes = new { @class = "form-control" } })
+                                                    <div class="" id="erroProcessoImp" style="color:red">
+
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-2" style="margin-bottom:10px;">
+                                            <div class="form-group" style="margin-bottom:15px">
+                                                <div class="col-md-12">
+                                                    <label class="form-negrito">Lote Câmbio Sys</label>
+                                                    @*@Html.EditorFor(model => model.data_Inicio, new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    @Html.Editor("numLoteFiltro", new { htmlAttributes = new { @class = "form-control" } })
+                                                    <div class="" id="erroNumLote" style="color:red">
+
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="btn-toolbar">
+                            <button class="btn btn-primary pull-right" style="margin-bottom:15px;margin-top:15px;" id="btnExibir" name="btnExibir" type="button">Exibir Registros</button>
+                            <button class="btn btn-primary pull-right" style="margin-bottom:15px;margin-top:15px;" id="btnExportar" name="btnExportar" type="submit">Exportar</button>
+                        </div>
+                        <div class="my-modal-base">
+                            <div class="my-modal-cont"></div>
+                        </div>
+
+                        <!-- Modal Window content -->
+                        <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">×</button>
+                                        <h3>Modal header</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>My modal content here…</p>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-striped" id="lstHistoricom" style="margin-bottom:0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>SO</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td id="histConta"></td>
+                                                    </tr>
+                                                </tbody>
+                                                @*@if (Model != null)
+                                        {
+                                            if (Model.lstPopulaHistorico != null)
+                                            {
+                                                foreach (Entities.StatementConciliacao wk in Model.lstPopulaHistorico)
+                                                {
+
+                                                    <tbody>
+                                                        <tr>
+                                                            @*<td><a class="btn modalBTN" onclick="populaModal('@wk.PO_Number', '@wk.SO_REF', '@wk.Invoice','@wk.Conta','@wk.Data_Statement','@wk.Data_Imagem_RM','@wk.Situacao','@wk.SITUACAO_ANALISE', @wk.Documento_No, '@wk.Doc_Date', '@wk.Net_Due_Date', @wk.Amount, @wk.RMValor, '@wk.Diferenca')">@wk.SO_REF</a></td>*@
+                                                @*<td>>@wk.Conta</td>
+
+
+
+
+                                                        </tr>
+                                                    </tbody>
+                                                }
+                                            }
+                                        }*@
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div id="divRegistros" hidden  style="position:absolute;top:70px;width:97%">
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                        <div class="panel with-nav-tabs panel-default" id="conciliacao">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="text-align:left">
+                                            Registros/Sales Order 
+                                        </td>
+                                        <td style="text-align:right">
+                                            <span style="font-weight:bold">Débitos: </span><span id="debitosResultado" style="font-weight:normal"></span>;
+                                            <span style="font-weight:bold">WC: </span><span style="font-weight:normal" id="wcResultado"></span>;
+                                            <span style="font-weight:bold">Créditos: </span><span style="font-weight:normal" id="creditosResultado"></span>;
+                                            <span style="font-weight:bold">Diferença: </span><span style="font-weight:normal" id="diferencaResultado"></span>;
+                                            <span style="font-weight:bold">Saldo: </span><span style="font-weight:normal" id="saldoResultado"></span>;
+                                            @if (ViewBag.Diferenca != null)
+                                            {
+                                                if (ViewBag.Diferenca.ToString().Contains("-"))
+                                                {
+                                                    <span style="color:red">@ViewBag.Diferenca</span>
+                                                }
+                                                else
+                                                {
+                                                    @ViewBag.Diferenca
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel-body" style="margin-bottom:0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped" id="lstSalesOrder" style="margin-bottom:0">
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" checked name="chkReferencia" id="chkReferencia" /> Sales Order</th>
+                                                <th>Qualificação</th>
+                                                <th>Composição</th>
+                                                <th>Débitos</th>
+                                                <th>WC</th>
+                                                <th>Creditos</th>
+                                                <th>Diferença</th>
+                                                <th>Saldo</th>
+                                                <th>Lote</th>
+
+                                            </tr>
+                                        </thead>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstSalesOrder != null)
+                                            {
+                                                foreach (Entities.StatementGestaoCredito wk in Model.lstSalesOrder)
+                                                {
+
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><input type="checkbox" checked ID="cbSO" name="cbSO" /><a class="btn modalBTN" onclick="soRefLink(@wk.ID_SALESORDER)">@wk.Referencia</a></td>
+                                                            <td>@wk.Qualificacao</td>
+                                                            <td>@wk.Composicao</td>
+                                                            <td class="debitos">@wk.VAL_DEBITO.ToString("0.00")</td>
+                                                            <td class="warranty_claim">@wk.Val_WC.ToString("0.00")</td>
+                                                            <td class="creditos">@wk.Val_Credito.ToString("0.00")</td>
+                                                            <td class="diferenca">@wk.Val_Diferenca.ToString("0.00")</td>
+                                                            <td style="text-align:right" class="saldos">@string.Format("{0:#,##0.00#}", @wk.Val_Saldo)</td>
+                                                            <td></td>
+                                                            <td hidden>@wk.ID_SALESORDER</td>
+                                                        </tr>
+                                                    </tbody>
+                                                }
+                                               
+                                            }
+                                        }
+                                    </table>
+                                    @if (Model != null)
+                                    {
+                                        for (int i = 1; i <= Model.PageSize; i++)
+                                        {
+                                            
+                                                if (i != Model.PageNumber)
+                                                {
+                                                    <a href="javascript:PagerClick(@i);">[@i]</a> <text>&nbsp;</text>
+                                                }
+                                                else
+                                                {
+                                                    <span>@i &nbsp;</span>
+                                                }
+                                           
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-toolbar">
+                            <button class="btn btn-primary pull-right divRegistros" >Voltar</button>
+                            <button class="btn btn-primary pull-right" id="btnExibirLote" name="btnExibirLote" type="submit">Gerar lote p/ câmbio</button>
+                        </div>
+
+                    </div>
+
+
+                    <div id="carregando"></div>
+                    <div id="divModal" hidden>
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+                        @*<div class="modal fade" id="my-modal" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content" style="height:100%;width:100%">
+                        <div class="modal-header text-center" style="padding:5px">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+
+
+                        @*<div class="modal-body" style="padding:20px 15px 0 15px">*@
+                        <div class="panel-group">
+
+                            <div class="panel with-nav-tabs panel-default">
+                                <div class="panel-heading" style="background-color:lightgray">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#tab1default" data-toggle="tab"><span style="font-weight:bold">Análise</span></a></li>
+                                        <li><a href="#tab2default" data-toggle="tab">Info. Complementares</a></li>
+                                        <li><a href="#tab3default" data-toggle="tab">Histórico</a></li>
+                                        @*<li><a href="#tab3default" data-toggle="tab">Default 3</a></li>
+                                <li class="dropdown">
+                                    <a href="#" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#tab4default" data-toggle="tab">Default 4</a></li>
+                                        <li><a href="#tab5default" data-toggle="tab">Default 5</a></li>
+                                    </ul>
+                                </li>*@
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade in active" id="tab1default">
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    @*@if (Model != null)
+                                            {
+                                                if (Model.lstConciliacaoItem != null)
+                                                {
+                                                    foreach (Entities.StatementConciliacao wk in Model.lstConciliacaoItem)
+                                                    {
+                                                        <table style="width:100%;font-weight:normal">
+                                                            <tr>
+                                                                <td style="text-align:left">
+                                                                    CONTA: @wk.Conta
+                                                                </td>
+                                                                <td style="text-align:center">
+                                                                    STATEMENT: @wk.Doc_Date.ToString("dd/MM/yyyy")
+                                                                </td>
+                                                                <td style="text-align:right">
+                                                                    PO: @wk.PO_Number
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    }
+                                                }
+                                            }*@
+                                                </div>
+
+
+                                            </div>
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Statement/Conciliação
+                                                </div>
+                                                @*@if (Model != null)
+                                        {
+                                            if (Model.lstConciliacaoItem != null)
+                                            {
+                                                foreach (Entities.StatementConciliacao wk in Model.lstConciliacaoItem)
+                                                {
+                                                    <div class="panel-body" style="padding-bottom:0px;">
+                                                        <div class="row">
+                                                            <div class="col-md-2 mb-2 col-2">
+                                                                @Html.Label("DocumentoNo", new { @class = "form-negrito" })
+                                                                <input class="form-control" id="modalDocumentoNo" value="@wk.Documento_No" readonly />
+                                                            </div>
+                                                            <div class="col-md-2 mb-1 col-1">
+                                                                @Html.Label("Doc Date", new { @class = "form-negrito" })
+                                                                <input class="form-control" id="modalDocDate" value="@wk.Doc_Date.ToString("dd/MM/yyyy")" readonly />
+                                                            </div>
+                                                            <div class="col-md-2 mb-2 col-1">
+                                                                @Html.Label("Net Due Date", new { @class = "form-negrito" })
+                                                                <input class="form-control" id="modalNetDueDate" value="@wk.Net_Due_Date.ToString("dd/MM/yyyy")" readonly />
+                                                            </div>
+
+                                                            <div class="col-md-2 mb-2">
+                                                                @Html.Label("Amount", new { @class = "form-negrito" })
+                                                                <input class="form-control" id="modalAmount" value="@wk.Amount.ToString("0.00")" readonly />
+
+                                                            </div>
+                                                            <div class="col-md-2 mb-2">
+                                                                @Html.Label("Valor RM", new { @class = "form-negrito" })
+                                                                <input class="form-control" id="modalValorRM" value="@wk.RMValor.ToString("0.00")" readonly />
+                                                            </div>
+                                                            <div class="col-md-2 mb-2">
+                                                                @Html.Label("Diferença", new { @class = "form-negrito" })
+                                                                <input class="form-control" id="modalDiferenca" value="@wk.Diferenca.ToString("0.00")" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <br />
+                                                    </div>
+                                                }
+                                            }
+                                        }*@
+                                            </div>
+
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Situação da invoice
+                                                </div>
+                                                @*@if (Model != null)
+                                        {
+                                            if (Model.lstConciliacaoItem != null)
+                                            {
+                                                foreach (Entities.StatementConciliacao wk in Model.lstConciliacaoItem)
+                                                {
+                                                    <div class="panel-body" style="padding-bottom:0px;">
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-6 col-6">
+                                                                @Html.Label("Conciliação anterior", new { @class = "form-negrito" })
+                                                                <input class="form-control" id="modalSituacaoAnterior" value="@wk.SITUACAO_CONCILIACAO_ANTERIOR" readonly />
+                                                            </div>
+                                                            <div class="col-md-6 mb-6 col-6">
+                                                                @Html.Label("Conciliação atual", new { @class = "form-negrito" })
+                                                                <input class="form-control" id="modalSituacaoAtual" value="@wk.SITUACAO_ATUAL" readonly />
+                                                            </div>
+
+
+
+
+                                                        </div>
+                                                        <br />
+                                                    </div>
+                                                }
+                                            }
+                                        }*@
+                                            </div>
+
+
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-heading" style="background-color:lightgray">
+                                                    Parecer da análise
+                                                </div>
+                                                <div class="panel-body" style="padding-bottom:0px;">
+
+                                                    <br />
+                                                </div>
+
+                                            </div>
+
+
+                                            <br />
+                                            @*<button type="button" class="btn btn-primary pull-right" id="btnAgendarConciliacao">Salvar</button>*@
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <div class="panel with-nav-tabs panel-default">
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-striped" id="lstAnaliseItem" style="margin-bottom:0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Data Statement</th>
+                                                                    <th>Data Obs</th>
+                                                                    <th>Tipo</th>
+                                                                    <th>Comentário</th>
+                                                                    <th>Responsável</th>
+                                                                </tr>
+                                                            </thead>
+                                                            @*@if (Model != null)
+                                                    {
+                                                        if (Model.lstObservacao != null)
+                                                        {
+                                                            foreach (Entities.StatementConciliacao wk in Model.lstObservacao)
+                                                            {
+
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>@wk.Data_Base</td>
+                                                                        <td>@wk.Data_Obs</td>
+                                                                        <td>@wk.Tipo</td>
+                                                                        <td>@wk.Descricao</td>
+                                                                        <td>@wk.Responsavel</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            }
+                                                        }
+                                                    }*@
+                                                        </table>
+
+                                                    </div>
+                                                    <br />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        @*<div class="tab-pane fade" id="tab3default">Default 3</div>
+                                <div class="tab-pane fade" id="tab4default">Default 4</div>
+                                <div class="tab-pane fade" id="tab5default">Default 5</div>*@
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        @*</div>
+                                <button type="button" class="btn btn-primary pull-right" style="margin-bottom:10px;margin-top:10px;" data-dismiss="modal" onclick="Atualizar()">Fechar</button>
+                            </div>
+
+                                    </div>
+                                </div> /.modal-content
+                </div>*@
+                        @*<button class="btn btn-primary pull-right" id="btnVoltarDivModal">Voltar</button>*@
+                        <input class="btn btn-primary pull-right" id="btnVoltarDivModal" type="button" value="Voltar" onclick="voltarDiv()" />
+                    </div>
+                    <!--Invoices/claim-->
+                    <div id="divInvoices" hidden>
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Sales Order <span id="salesOrderCabecalho"></span>
+                                @if (Model != null)
+                                {
+                                    if (Model.lstSalesOrder != null)
+                                    {
+                                        //foreach (Entities.StatementGestaoCredito wk in Model.lstSalesOrder)
+                                        for (int i = 1; i == 1; i++)
+                                        {
+                                            @*@Html.DisplayTextFor(x => x.lstSalesOrder[i].SO_Ref);*@
+                                        }
+                                    }
+                                }
+                            </div>
+                            <div class="panel-body" style="margin-bottom:0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped" id="lstSalesOrder" style="margin-bottom:0">
+                                        <thead>
+                                            <tr>
+                                                <th>Conta</th>
+                                                <th>Qualificação</th>
+                                                <th>Composição</th>
+                                                <th>Aging</th>
+                                                <th>Situação</th>
+                                                <th>Saldo</th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstSalesOrderAnalise != null)
+                                            {
+                                                foreach (Entities.StatementGestaoCredito wk in Model.lstSalesOrderAnalise)
+                                                {
+
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>@wk.Conta</td>
+                                                            <td>@wk.Qualificacao</td>
+                                                            <td>@wk.Composicao</td>
+                                                            <td>@wk.Aging</td>
+                                                            <td>@wk.Situacao</td>
+                                                            <td>@wk.Val_Saldo.ToString("0.00")</td>
+                                                            <td hidden id="idSalesOrderLstAnalise">@wk.ID_SALESORDER</td>
+                                                            <td hidden id="referencia">@wk.Referencia</td>
+    
+                                                        </tr>
+                                                    </tbody>
+                                                }
+                                            }
+                                        }
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel with-nav-tabs panel-default">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                Invoices/Claim
+                            </div>
+                            <div class="panel-body" style="margin-bottom:0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped" id="lstSalesOrder" style="margin-bottom:0">
+                                        <thead>
+                                            <tr>
+                                                <th>Código</th>
+                                                <th>Doc Date</th>
+                                                <th>Net Due Date</th>
+                                                <th>Amount</th>
+                                                <th>Valor RM</th>
+                                                <th>Diferença</th>
+                                                <th>Arrear</th>
+                                                <th>Classificação</th>
+                                            </tr>
+                                        </thead>
+                                        @if (Model != null)
+                                        {
+                                            if (Model.lstInvoices != null)
+                                            {
+                                                foreach (Entities.StatementGestaoCredito wk in Model.lstInvoices)
+                                                {
+
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>@wk.Invoice</td>
+                                                            <td>@wk.Doc_Date.ToString("dd/MM/yyyy")</td>
+                                                            <td>@wk.Net_Due_Date.ToString("dd/MM/yyyy")</td>
+                                                            <td style="text-align:right">@string.Format("{0:#,##0.00#}", @wk.Amount)</td>
+                                                            <td style="text-align:right">@string.Format("{0:#,##0.00#}", @wk.RMValor)</td>
+                                                            <td style="text-align:right">@string.Format("{0:#,##0.00#}", @wk.Val_Diferenca)</td>
+                                                            <td style="text-align:right">@string.Format("{0:#,##0.00#}", @wk.Arrear)</td>
+                                                            <td>@wk.Classificacao</td>
+                                                        </tr>
+                                                    </tbody>
+                                                }
+                                            }
+                                        }
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel with-nav-tabs panel-default" id="conciliacao">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="text-align:left">
+                                            Análise
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel-body" style="margin-bottom:10px">
+                                <div class="row">
+                                    <div class="col-md-6 mb-6 col-6" style="margin-bottom: 10px">
+                                @if (Model != null)
+                                {
+                                    if (Model.lstSalesOrder != null)
+                                    {
+                                        foreach (Entities.StatementGestaoCredito wk in Model.lstSalesOrderAnalise)
+                                        {
+                                        @Html.Label("Qualificação", new { @class = "form-negrito" })
+                                        @*@Html.EditorFor(model => model.data_Termino, new { htmlAttributes = new { @class = "form-control" } })*@
+                                        @Html.DropDownList("id_qualificacao", (SelectList)ViewBag.Qualificacao2, @wk.Qualificacao, new { @class = "chosen-select" })
+                                        @*<input hidden id="id_qualificacaoVal" value="@wk.ID_QUALIFICACAO" />*@
+                                        }
+                                    }
+
+                                }
+                                    </div>
+                                    <div class="col-md-6 mb-6 col-6">
+                                        <button class="btn btn-primary pull-right" onclick="salvarAnalise()">Salvar</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 mb-12">
+                                        @Html.Label("Comentários", new { @class = "form-negrito" })
+                                        @Html.TextArea("comentarios", new { @class = "form-control" })
+                                        <div id="erroComentarios" style="color:red"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="panel with-nav-tabs panel-default" id="conciliacao">
+                            <div class="panel-heading" style="background-color:lightgray">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="text-align:left">
+                                            Comentários
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel-body" style="margin-bottom:10px">
+                                <div class="table-responsive">
+                                <table class="table table-hover table-striped" id="lstSalesOrder" style="margin-bottom:0">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Responsável</th>
+                                            <th>Comentários</th>
+                                        </tr>
+                                    </thead>
+                                    @if (Model != null)
+                                    {
+                                        if (Model.LstComentarios != null)
+                                        {
+                                            foreach (Entities.StatementGestaoCredito wk in Model.LstComentarios)
+                                            {
+
+                                                <tbody>
+                                                    <tr>
+                                                        <td>@wk.Data</td>
+                                                        <td>@wk.Responsavel</td>
+                                                        <td>@wk.Descricao</td>
+                                                    </tr>
+                                                </tbody>
+                                            }
+                                        }
+                                    }
+                                </table>
+
+                            </div>
+
+                            </div>
+                    </div>
+
+                            <button class="btn btn-primary pull-right" onclick="transicaoDivRegistrosDivInvoices()">Voltar</button>
+                        </div>
+                    
+
+
+
+
+
+                </div>
+
+
+            </main>
+        </div>
+        <input type="hidden" id="hfCurrentPageIndex" name="pageNumber" />
+
+        <!-- Latest compiled and minified CSS -->
+        @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">*@
+
+
+        <script type="text/javascript" src="~/scripts/jquery-ui.js"></script>
+        <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <script type="text/javascript" src="~/scripts/chosen.jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="~/Content/chosen.css" />
+        @*<link href="~/content/indexCompras.css" rel="stylesheet" />
+        <link href="~/content/indexImportacaoProduto.css" rel="stylesheet" />*@
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        @*<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css" rel="stylesheet" />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>*@
+
+        <script>
+            $(document).ready(function () {
+                $('#id_departamento option[value="1"]').attr("selected", "selected");
+                $('#id_departamento option:selected').attr("selected", null);
+            });
+
+            $(function () {
+                $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+                var divShow = $('#divShow').val();
+                $(divShow).show();
+
+                var menuAtivo = $('#menuAtivo').val();
+
+                $('.menuStatement .sidebar-submenu').toggle();
+
+                $(".menuStatement").click(function () {
+
+
+                });
+                //if (divShow == '#divModal')
+                //{
+                //    $('.menuStatement .sidebar-submenu').toggle();
+                //}
+
+                Windows.scroll(0);
+
+            });
+
+            function PagerClick(index) {
+                document.getElementById("hfCurrentPageIndex").value = index;
+                var input = $("<input>")
+                .attr("type", "hidden")
+                .attr("name", "divShow2").val("#divRegistros");
+
+                $('#myForm').append($(input));
+                document.forms[0].submit();
+            }
+
+            $(function () {
+                $(".datepickerInput").datepicker({ dateFormat: 'dd/mm/yy' }).val();
+                var divShow = $('#divShow').val();
+                $(divShow).show();
+
+                var menuAtivo = $('#menuAtivo').val();
+                $(".menuStatement").click(function () {
+                    //alert("Handler for .click() called.");
+
+                });
+                if (divShow == '#divModal')
+                {
+                    $('.menuStatement .sidebar-submenu').toggle();
+                }
+
+
+
+                Windows.scroll(0);
+
+            });
+
+            //Soma total quantidade registros
+            $(document).ready(function()
+            {
+
+                var sum = 0;
+
+                $('.debitos').each(function () {
+                    //sum += Number($(this).text()) || 0;
+
+                    if (parseInt($(this).text(), 10) > 0)
+                    {
+                        sum += parseInt($(this).text(), 10);
+                    }
+                });
+                $('#debitosResultado').text(sum);
+            });
+
+            $(document).ready(function () {
+                var sum = 0;
+
+                $('.creditos').each(function () {
+                    if (parseInt($(this).text(), 10) > 0) {
+                        sum += parseInt($(this).text(), 10);
+                    }
+                });
+                $('#creditosResultado').text(sum);
+            });
+
+            $(document).ready(function () {
+                var sum = 0;
+
+                $('.warranty_claim').each(function () {
+                    if (parseInt($(this).text(), 10) > 0) {
+                        sum += parseInt($(this).text(), 10);
+                    }
+                });
+                $('#wcResultado').text(sum);
+            });
+
+            $(document).ready(function () {
+                var sum = 0;
+
+                $('.diferenca').each(function () {
+                    if (parseInt($(this).text(), 10) > 0) {
+                        sum += parseInt($(this).text(), 10);
+                    }
+                });
+                $('#diferencaResultado').text(sum);
+            });
+
+            $(document).ready(function () {
+                var sum = 0;
+
+                $('.saldos').each(function () {
+                    if (parseInt($(this).text(), 10) > 0) {
+                        sum += parseInt($(this).text(), 10);
+                    }
+                });
+                $('#saldoResultado').text(sum);
+            });
+
+            //$("#lstSalesOrder").on("click", "tr", function () {
+            //$("#chkReferencia").change(function () {
+            //    alert('chkReferencia');
+            //      alert($('#chkReferencia').prop('checked'));
+            //    $("input:checkbox").prop('checked', $(this).prop("checked"));
+
+            //});
+
+            //$("#lstSalesOrder tr td").click(function () {
+            //    alert('cbSO');
+            //    $(this).prop('checked', $(this).prop("checked"));
+
+            //});
+
+            $('#chkReferencia').click(function () {
+                $('input:checkbox').not(this).prop('checked', this.checked);
+            })
+           
+            $("#lstSalesOrder").on("click", "tr input", function () {
+               
+                if( $(this).prop('checked')) 
+                {
+                    //debitos
+                    var $item = $(this).closest('tr').find(".debitos").text();
+                    if ($item == "" ? $item = 0 : $item)
+                    var total = $('#debitosResultado').text();
+                    total = parseInt(total) + parseInt($item);
+                    $('#debitosResultado').text(total);
+
+                    //creditos
+                    var $item2 = $(this).closest('tr').find(".creditos").text();
+                    if ($item2 == "" ? $item2 = 0 : $item2)
+                    var total2 = 0;
+                    total2 = $('#creditosResultado').text();
+                    total2 = parseInt(total2) + parseInt($item2);
+                    $('#creditosResultado').text(total2);
+
+                    //wc
+                    var $item3 = $(this).closest('tr').find(".warranty_claim").text();
+                    if ($item3 == "" ? $item3 = 0 : $item3)
+                    var total3 = 0;
+                    total3 = $('#wcResultado').text();
+                    total3 = parseInt(total3) + parseInt($item3);
+                    $('#wcResultado').text(total3);
+
+                    //saldo
+                    var $item4 = $(this).closest('tr').find(".saldos").text();
+                    if ($item4 == "" ? $item4 = 0 : $item4)
+                    var total4 = 0;
+                    total4 = $('#saldoResultado').text();
+                    total4 = parseInt(total4) + parseInt($item4);
+                    $('#saldoResultado').text(total4);
+
+                    //diferenca
+                    var $item5 = $(this).closest('tr').find(".diferenca").text();
+                    if ($item == "" ? $item5 = 0 : $item5)
+                    var total5 = 0;
+                    total5 = $('#diferencaResultado').text();
+                    total5 = parseInt(total5) + parseInt($item5);
+                    $('#diferencaResultado').text(total5);
+                }
+                else
+                {
+                    //debitos
+                    var $item = $(this).closest('tr').closest('tr').find(".debitos").text();
+                    if ($item == "" ? $item = 0 : $item)
+                    var texto = '';
+                    texto = $('#debitosResultado').text();
+                    var total = parseInt(texto) - parseInt($item);
+                    $('#debitosResultado').text(total);
+
+                    //creditos
+                    var $item2 = $(this).closest('tr').find(".creditos").text();
+                    if ($item2 == "" ? $item2 = 0 : $item2)
+                    var texto = '';
+                    texto = $('#creditosResultado').text();
+                    total2 = parseInt(texto) - parseInt($item2);
+                    $('#creditosResultado').text(total2);
+
+                    //wc
+                    var $item3 = $(this).closest('tr').find(".warranty_claim").text();
+                    if ($item3 == "" ? $item3 = 0 : $item3)
+                    var texto = ''
+                    texto = $('#wcResultado').text();
+                    var total3 = parseInt(texto) - parseInt($item3);
+                    $('#wcResultado').text(total3);
+
+                    //saldo
+                    var $item4 = $(this).closest('tr').find(".saldos").text();
+                    if ($item4 == "" ? $item4 = 0 : $item4)
+                    var texto = '';
+                    texto = $('#saldoResultado').text();
+                    var total4 = parseInt(texto) - parseInt($item4);
+                    $('#saldoResultado').text(total4);
+
+                    var $item5 = $(this).closest('tr').find(".diferenca").text();
+                    if ($item == "" ? $item5 = 0 : $item5)
+                    var texto = '';
+                    texto = $('#diferencaResultado').text();
+                    var total5 = parseInt(texto) - parseInt($item5);
+                    $('#diferencaResultado').text(total5);
+                
+            }
+            });
+           
+
+            // Tooltips Initialization
+
+
+            //$("#btnExibir").keyup(function () {
+            //    $('#myForm').bootstrapValidator({
+            //        message: 'No es valido',
+            //        framework: 'bootstrap',
+
+            //        feedbackIcons: {
+            //            //valid: 'glyphicon glyphicon-ok',
+            //            //invalid: 'glyphicon glyphicon-remove',
+            //            //validating: 'glyphicon glyphicon-refresh'
+            //        },
+            //        submitButtons: 'button[name="btnExibir"]',
+            //        fields: {
+            //            salesOrderFiltro: {
+            //                validators: {
+            //                    //notEmpt:{
+            //                    //    message: "Digite o mês."
+            //                    //},
+            //                    stringLength: {
+            //                        max: 2,
+            //                        message: 'Digite no máximo 25 caracteres.'
+            //                    },
+            //                    //integer: {
+            //                    //    message: 'Mês inválido.'
+            //                    //},
+            //                    //between:
+            //                    //    {
+            //                    //        min: 1,
+            //                    //        max: 12,
+            //                    //        message: 'Mês inválido'
+            //                    //    }
+            //                }
+            //            },
+
+            //            ano: {
+            //                validators: {
+            //                    notEmpt:{
+            //                        message: "Digite o ano."
+            //                    },
+            //                    stringLength: {
+            //                        max: 4,
+            //                        message: 'Ano inválido.'
+            //                    },
+            //                    //greaterThan: {
+            //                    //    message: 'Ano deve ser superior ou igual a 2010.',
+            //                    //    min: 2010,
+            //                    //},
+            //                    integer: {
+            //                        message: 'Ano inválido.'
+            //                    }
+
+            //                }
+
+            //            }
+            //        }
+            //    })
+
+            //});
+
+
+            //$("#salesOrderFiltro").keyup(function () {
+            //    $('#myForm').bootstrapValidator({
+            //        message: 'No es valido',
+            //        framework: 'bootstrap',
+
+            //        feedbackIcons: {
+            //            //valid: 'glyphicon glyphicon-ok',
+            //            //invalid: 'glyphicon glyphicon-remove',
+            //            //validating: 'glyphicon glyphicon-refresh'
+            //        },
+            //        //submitButtons: 'button[name="btnExibir"]',
+            //        fields: {
+            //            salesOrderFiltro: {
+            //                validators: {
+            //                    //notEmpt:{
+            //                    //    message: "Digite o mês."
+            //                    //},
+            //                    stringLength: {
+            //                        max: 2,
+            //                        message: 'Digite no máximo 25 caracteres.'
+            //                    },
+            //                    //integer: {
+            //                    //    message: 'Mês inválido.'
+            //                    //},
+            //                    //between:
+            //                    //    {
+            //                    //        min: 1,
+            //                    //        max: 12,
+            //                    //        message: 'Mês inválido'
+            //                    //    }
+            //                }
+            //            },
+
+            //            ano: {
+            //                validators: {
+            //                    notEmpt: {
+            //                        message: "Digite o ano."
+            //                    },
+            //                    stringLength: {
+            //                        max: 4,
+            //                        message: 'Ano inválido.'
+            //                    },
+            //                    //greaterThan: {
+            //                    //    message: 'Ano deve ser superior ou igual a 2010.',
+            //                    //    min: 2010,
+            //                    //},
+            //                    integer: {
+            //                        message: 'Ano inválido.'
+            //                    }
+
+            //                }
+
+            //            }
+            //        }
+            //    })
+
+            //});
+
+            //$('a.modalBTN').click(function () {
+            //    $('#conciliacaoModal').modal({
+            //        show: true,
+            //        closeOnEscape: true,
+            //        backdrop: 'static',
+            //        keyboard: false
+            //    })
+            //});
+
+
+
+
+            function desbloquearPedido(idIntegracao, idMov) {
+                $.ajax({
+                    url: '@Url.Action("DesbloquearPedido", "ImportacaoProduto")',
+                    type: 'get',
+                    data: { idIntegracao: idIntegracao, idMov: idMov },
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); }
+                });
+            }
+
+            @*function uploadExcel() {
+                //var arquivo = document.getElementById("uploadBtn").value;
+
+                $.ajax({
+                    url: '@Url.Action("Admin", "StatementImportacao")',
+                    type: 'get',
+                    //success: function (data) { $('#exampleModal').toggle(); }
+                    success: function (data) { $('#myForm').submit(); }
+                });*@
+            //}
+
+            $(function () {
+                document.getElementById("uploadBtn").onchange = function () {
+                    document.getElementById("uploadFile").value = this.value.substring(12);
+                    $('#uploadInput').val("statement");
+                };
+
+                document.getElementById("salvarExcel").onclick = function () {
+                    var formdata = new FormData($('#myForm').get(0));
+                    //formData.append('conta', '123');
+                    //formData.append('conta', '123');
+
+                    CallService(formdata);
+                };
+            });
+
+
+
+            function CallService(file) {
+                $.ajax({
+                    url: '@Url.Action("Admin", "StatementImportacao")',
+                    type: 'POST',
+                    data: file,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        alert('Arquivo importado com sucesso!');
+                        $('#myForm').submit();
+                    },
+                    error: function () {
+                        alert('Erro na importação.');
+                    }
+                });
+            }
+
+
+
+
+            function populaModal(po, so, invoice, conta, data_statement, data_Imagem, situacao, situacaoInvoice, documentoNo, docDate, netDueDate, amount, valorRM, diferenca) {
+                $('#modalDocumentoNo').val(documentoNo);
+                $('#modalDocDate').val(docDate);
+                $('#modalNetDueDate').val(netDueDate);
+                $('#modalAmount').val(amount);
+                $('#modalValorRM').val(valorRM);
+                $('#modalDiferenca').val(diferenca);
+                $('#modalSituacaoAnterior').val(situacao);
+                $('#modalSituacaoAtual').val(situacaoInvoice);
+                $('#modalConta').text(conta);
+                $('#modalDataStatement').text(data_statement);
+                $('#modalRMFluxus').text(data_Imagem);
+                $('#modalInvoice').text(invoice);
+                $('#modalPO').text(po);
+                $('#modalSO').text(so);
+            }
+
+            function initializeFileUploads() {
+                $('.file-upload').change(function () {
+                    var file = $(this).val();
+                    $(this).closest('.input-group').find('.file-upload-text').val(file);
+                });
+                $('.file-upload-btn').click(function () {
+                    $(this).find('.file-upload').trigger('click');
+                });
+                $('.file-upload').click(function (e) {
+                    e.stopPropagation();
+                });
+            }
+
+            function salvarNovoStatement(){
+                var conta = $('#contaFiltro').val();
+                var dataBase = $('#dataBaseFiltro').val();
+                $.ajax({
+                    url: '@Url.Action("SalvarStatement", "StatementImportacao")',
+                    data: {conta : conta, DataBase : dataBase},
+                    cache: false,
+                    contentType: false,
+                    success: function (data) {
+                        alert('Statement salvo com sucesso!');
+                        $('#myForm').submit();
+                    },
+                    error: function () {
+                        alert('Erro na importação.');
+                    }
+                });
+            }
+
+
+            function conciliacaoItem2(id_conciliacao, id_conciliacao_item, invoice)
+            {
+                var id_departamento = $('#id_departamento').val();
+                var id_situacao_Filtro = $('#id_situacao_Filtro').val();
+                var id_classificacao = $('#id_classificacao').val();
+                var id_situacao_analise = $('#id_situacao_analise').val();
+                var idLstConciliacao = $('#idLstConciliacao').val();
+                var btnFiltroAnalise = $('#btnFiltroAnalise').val();
+                var ano = $('#ano').val();
+                var mes = $('#mes').val();
+                var divShow = '#divModal';
+                $.ajax({
+                    url: '@Url.Action("Index", "StatementConciliacao")',
+                    data: { divShow: divShow, invoice_analise: invoice,  id_conciliacao_analise:id_conciliacao, id_conciliacao_item_analise: id_conciliacao_item, ano, ano, mes: mes, idLstConciliacao: idLstConciliacao, btnFiltroAnalise: btnFiltroAnalise, id_departamento: id_departamento, id_situacao_Filtro: id_situacao_Filtro, id_classificacao: id_classificacao, id_situacao_analise: id_situacao_analise, },
+                    cache: true,
+                    contentType: false,
+                    traditional: true,
+                    success: function (data) {
+                        $('#divFiltro').hide();
+                        $('#divRegistros').hide();
+
+                        //$("#divModal").load(location.href + " #divModal>*", "");
+
+
+                        var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "divShow2").val("#divModal");
+
+
+                        //var id_conciliacao_item_analise2 = $("<input>")
+                        //.attr("type", "hidden")
+                        //.attr("name", "id_conciliacao_item_analise").val(id_conciliacao_item);
+
+                        $('#myForm').append($(input));
+                        //$('#myForm').append($(id_conciliacao_item_analise2));
+                        $("#myForm").submit();
+                        //$("#divModal").load(location.href + "body", { 'divShow': '#divModal' });
+                        $('#divModal').show();
+                    },
+                    error: function () {
+                        alert('Erro na busca.');
+                    }
+                });
+
+                ('#divShow').val('#divModal');
+                //$("#myForm").submit();
+                $('#divModal').show();
+            }
+
+            $('#btnExibir').click(function () {
+                    //var id_departamento = $('#id_departamento').find(":selected").text();
+                    var conta = $('#contaFiltro').val();
+                    var qualificacao = $('#qualificacaoFiltro').val();
+                    var tipoInvoice = $('#tipoInvoiceFiltro').val();
+                    var saldo = $('#saldoFiltro').val();
+
+                    var salesOrder = $('#salesOrderFiltro').val();
+                    var aging = $('#agingFiltro').val();
+                    var situacao = $('#situacaoFiltro').val();
+                    var invoice = $('#invoiceFiltro').val();
+                    var pedidoCompra = $('#pedidoCompraFiltro').val();
+                    var prefixo = $('#prefixoFiltro').val();
+                    var di = $('#diFiltro').val();
+                    var ordemServico = $('#ordemServicoFiltro').val();
+                    var preFaturamento = $('#preFaturamentoFiltro').val();
+                    var numMovto = $('#numMovimentoFiltro').val();
+                    var numProcessoImportacao = $('#processoImportacaoFiltro').val();
+                    var numLoteFiltro = $('#numLoteFiltro').val();
+
+                    //if (conta != "" || (salesOrder != "" || invoice != "" || pedidocompra != "" || prefixo != "" || di != "" || ordemServico != "" || preFaturamento != ""
+                //|| numMovto != "" != numProcessoImportacao != "" || numLoteFiltro != ""))
+                    if (conta != "" || (salesOrder != "" || invoice != "" || pedidoCompra != "" || prefixo != "" || di != "" || ordemServico != "" || preFaturamento != ""
+                        || numMovto != "" != numProcessoImportacao != "" || numLoteFiltro != ""))
+                    {
+                        $.ajax({
+                            url: '@Url.Action("Index", "StatementGestaoCredito")',
+                            data: {
+                                divShow: '#divInvoices', contaFiltro: conta, qualificacaoFiltro: qualificacao, tipoInvoiceFiltro: tipoInvoice, saldoFiltro: saldo, agingFiltro: aging, situacaoFiltro: situacao, invoiceFiltro: invoice, saldoFiltro: saldo,
+                                salesOrderFiltro: salesOrder, pedidoCompraFiltro: pedidoCompra, prefixoFiltro: prefixo, numDIFiltro: di, ordemServicoFiltro: ordemServico, preFaturamentoFiltro: preFaturamento,
+                                numMovtoFiltro: numMovto, numProcessoImportacaoFiltro: numProcessoImportacao, numLoteFiltro: numLoteFiltro
+                            },
+
+                            cache: false,
+                            contentType: false,
+                            traditional: true,
+                            success: function (data) {
+
+                                $('#divFiltro').hide();
+
+
+                                var input = $("<input>")
+                               .attr("type", "hidden")
+                               .attr("name", "divShowPesquisa").val("#divRegistros");
+                                $('#myForm').append($(input));
+
+                                var so = $("<input>")
+                              .attr("type", "hidden")
+                              .attr("name", "salesOrderFiltro").val(salesOrder);
+                                $('#myForm').append($(so));
+
+                                //$("#divRegistros").load(location.href + " #divRegistros>*", "");
+                                $("#myForm").submit();
+                            },
+                            error: function () {
+                                alert('Erro na busca.');
+                            }
+                        });
+                    }
+                    else
+                    {
+                        alert("É necessário preencher o número da conta e/ou um dos filtros de identificação.");
+                    }
+                    
+            });
+
+            $('#btnExibirLote').click(function () {
+                //var id_departamento = $('#id_departamento').find(":selected").text();
+                var conta = $('#contaFiltro').val();
+                var qualificacao = $('#qualificacaoFiltro').val();
+                var tipoInvoice = $('#tipoInvoiceFiltro').val();
+                var saldo = $('#saldoFiltro').val();
+                var aging = $('#agingFiltro').val();
+                var situacao = $('#situacaoFiltro').val();
+
+                $.ajax({
+                    url: '@Url.Action("Index", "StatementGestaoCredito")',
+                    data: { divShow: '#divInvoices', contaFiltro: conta, qualificacaoFiltro: qualificacao, tipoInvoiceFiltro: tipoInvoice, saldoFiltro: saldo, agingFiltro: aging, situacaoFiltro: situacao },
+                    cache: false,
+                    contentType: false,
+                    traditional: true,
+                    success: function (data) {
+                        $('#divFiltro').hide();
+                        $('#divRegistros').hide();
+
+                        var input = $("<input>")
+                   .attr("type", "hidden")
+                   .attr("name", "divShow2").val("#divInvoices");
+                        $('#myForm').append($(input));
+                        //$("#divRegistros").load(location.href + " #divRegistros>*", "");
+                        $("#myForm").submit();
+                        $('#divInvoices').show();
+                    },
+                    error: function () {
+                        alert('Erro na busca.');
+                    }
+                });
+            });
+            //$('a.modalBTN').click(function () {
+            //    $('#my-modal').modal({
+            //        show: true,
+            //        closeOnEscape: true,
+            //        backdrop: 'static',
+            //        keyboard: false
+            //    })
+            //});
+
+            function populaHistorico(invoice) {
+
+                $.ajax({
+                    url: '@Url.Action("PopulaHistorico", "StatementConciliacao")',
+                    data: { invoice: invoice },
+                    dataType: 'json',
+
+                    success: function (data) {
+
+                        if (data.success) {
+
+                        } else {
+                            // DoSomethingElse()
+
+                        }
+
+                    },
+                    error: function () {
+                        $('#my-modal').modal({
+                            show: true,
+                            closeOnEscape: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                    }
+                })
+
+            };
+
+
+            function voltarDiv() {
+
+
+                var divShow = '#divRegistros';
+                $('#divShow').val('#divRegistros');
+                $.ajax({
+                    url: '@Url.Action("Index", "StatementConciliacao")',
+                    data: { divShow: divShow},
+                    cache: false,
+                    contentType: false,
+                    traditional: true,
+                    success: function (data) {
+
+                        $("#divModal").hide();
+                        $("#divModal").empty();
+                        $('#carregando').val('Aguarde, carregando...');
+                        $("#divRegistros").show();
+                        $('#carregando').val('');
+                    },
+                    error: function () {
+                        alert('Erro na busca.');
+                    }
+                });
+
+            };
+
+
+
+            function salvarAnaliseConciliacao() {
+                var comentarios = $('#comentarios').val();
+                $.ajax({
+                    cache: true,
+                    contentType: false,
+                    traditional: true,
+                    url: '@Url.Action("salvarAnaliseConcilicacao", "StatementGestaoCredito")',
+                    data: {comentarios: comentarios},
+                    dataType: 'json',
+
+                    success: function (data) {
+
+
+
+                    },
+                    error: function () {
+
+                    }
+                })
+                var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "divShow2").val("#divModal");
+
+                var id_conciliacao_item_analise = $("<input>")
+                       .attr("type", "hidden")
+                       .attr("name", "id_conciliacao_item_analise").val(id_Conciliacao_Item);
+
+                $('#myForm').append($(input));
+                $('#myForm').append($(id_conciliacao_item_analise));
+                $("#myForm").submit();
+            };
+
+            //$('.soRefLink').click(function () {
+            function soRefLink(id_salesorder)
+            {
+                $.ajax({
+                    cache: true,
+                    contentType: false,
+                    traditional: true,
+                    url: '@Url.Action("Invoices", "StatementGestaoCredito")',
+                    data: { id_salesorder: id_salesorder, divShow: "#divInvoices" },
+
+                    success: function (data) {
+                        $('#divRegistros').hide();
+                        var input = $("<input>")
+                              .attr("type", "hidden")
+                              .attr("name", "divShow2").val("#divInvoices");
+                        $('#myForm').append($(input));
+                        $("#myForm").submit();
+
+                    },
+                    error: function () {
+                        alert('Erro na busca.');
+                    }
+                })
+
+
+            }
+            //});
+
+            function transicaoDivRegistrosDivInvoices() {
+                var divShow = '#divInvoices';
+                $('#divShow').val('#divInvoices');
+                $.ajax({
+                    url: '@Url.Action("Index", "StatementGestaoCredito")',
+                    data: { divShow: divShow },
+                    cache: false,
+                    contentType: false,
+                    traditional: true,
+                    success: function (data) {
+
+                        $('#divInvoices').hide();
+                        var input = $("<input>")
+                              .attr("type", "hidden")
+                              .attr("name", "divShow2").val("#divRegistros");
+                        $('#myForm').append($(input));
+                        $("#myForm").submit();
+                    },
+                    error: function () {
+                        alert('Erro na busca.');
+                    }
+                });
+            };
+
+            //$('#salesOrderFiltro').on({
+            //    //"click": function () {
+            //    //    $(this).tooltip({ items: "#salesOrderFiltro", content: "Digite até 25 caracteres" });
+            //    //    //$(this).tooltip("open");
+            //    //},
+            //    //"mouseout": function () {
+            //    //    $(this).tooltip("disable");
+            //    //},
+            //    "keyup": function () {
+            //        if($(this).val().length > 2)
+            //        {
+            //            $(this).tooltip({ items: "#salesOrderFiltro", content: "<div>Hello Wooooooooooooooooooooooorld</div>", placement: "auto", tooltipClass: "classTeste" });
+
+            //            $(this).css('color','#333').tooltip("open");
+                        
+            //         }
+
+            //    }
+            //});
+
+           
+
+            $('#salesOrderFiltro').keyup(function () {
+                if($(this).val().length > 25)
+                {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroSalesOrder').html("Máx: 25 caracteres.");
+                }
+                else
+                {
+                    $('#erroSalesOrder').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#invoiceFiltro').keyup(function () {
+                if ($(this).val().length > 25) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroInvoice').html("Máx: 20 caracteres.");
+                }
+                else {
+                    $('#erroInvoice').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#pedidoCompraFiltro').keyup(function () {
+                if ($(this).val().length > 35) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroPedidoCompra').html("Máx: 35 caracteres.");
+                }
+                else {
+                    $('#erroPedidoCompra').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#prefixoFiltro').keyup(function () {
+                if ($(this).val().length > 64) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroPrefixo').html("Máx: 64 caracteres.");
+                }
+                else {
+                    $('#erroPrefixo').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#diFiltro').keyup(function () {
+                if ($(this).val().length > 25) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroDI').html("Máx: 25 caracteres.");
+                }
+                else {
+                    $('#erroDI').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#ordemServicoFiltro').keyup(function () {
+                if ($(this).val().length > 25) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroOrdemServico').html("Máx: 25 caracteres.");
+                }
+                else {
+                    $('#erroOrdemServico').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#preFaturamentoFiltro').keyup(function () {
+                if ($(this).val().length > 25) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroFaturamento').html("Máx: 25 caracteres.");
+                }
+                else {
+                    $('#erroFaturamento').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#numMovimentoFiltro').keyup(function () {
+                if ($(this).val().length > 35) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroNumMovimento').html("Máx: 35 caracteres.");
+                }
+                else {
+                    $('#erroNumMovimento').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#processoImportacaoFiltro').keyup(function () {
+                if ($(this).val().length > 25) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroProcessoImp').html("Máx: 25 caracteres.");
+                }
+                else {
+                    $('#erroProcessoImp').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#numLoteFiltro').keyup(function () {
+                if ($(this).val().length > 25) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroNumLote').html("Máx: 25 caracteres.");
+                }
+                else {
+                    $('#erroNumLote').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+            $('#comentarios').keyup(function () {
+                if ($(this).val().length > 1000) {
+                    $('#btnExibir').prop("disabled", true);
+                    $('#erroComentarios').html("Máx: 1000 caracteres.");
+                }
+                else {
+                    $('#erroComentarios').html("");
+                    $('#btnExibir').prop("disabled", false);
+                }
+            });
+
+            function salvarAnalise()
+            {
+                var id_salesorder = $('#idSalesOrderLstAnalise').html();
+                var comentario = $('#comentarios').val();
+                var id_qualificacao = $('#id_qualificacao').val();
+
+                $.ajax({
+                    url: '@Url.Action("SalvarComentario", "StatementGestaoCredito")',
+                    data: { divShow: "#divModal", id_salesorder: id_salesorder, comentario: comentario, id_qualificacao: id_qualificacao },
+                    cache: false,
+                    contentType: false,
+                    traditional: true,
+                    success: function (data) {
+
+                        $('#divInvoices').hide();
+                        var input = $("<input>")
+                              .attr("type", "hidden")
+                              .attr("name", "divShow2").val("#divInvoices");
+                        $('#myForm').append($(input));
+                        $("#myForm").submit();
+                    },
+                    error: function () {
+                        alert('Erro na busca.');
+                    }
+                });
+            }
+           
+            $(document).ready(function () {
+                var referencia = document.getElementById("referencia").innerHTML;
+                $('#salesOrderCabecalho').text(referencia);
+            })
+
+            //$('.chkReferencia').click(function () {
+            //    if ($('input[name="cbSO"]').prop('checked', true).length > 0) {
+                   
+            //        $('input[type="checkbox]').prop('checked', false)
+            //    }
+            //    else {
+           
+            //        $('input[name="cbSO"]').prop('checked', true)
+            //        $('input:checkbox').removeAttr('checked');
+            //    }
+
+                
+            //})
+            //$("#chkReferencia").change(function () {
+            //    $("input:checkbox").prop('checked', $(this).prop("checked"));
+            //});
+
+            //function voltarFiltro() {
+            //    $('#divRegistros').hide();
+            //    $('#divFiltro').show();
+
+            //}
+        </script>
+
+
+    </body>
+}
+</html>
